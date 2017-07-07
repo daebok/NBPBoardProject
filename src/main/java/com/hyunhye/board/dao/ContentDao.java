@@ -33,18 +33,19 @@ public class ContentDao implements IDao {
 		return dtos;
 	}
 
+	
 	@Override
-	public void writeDao(final String mWriter, final String mContent) {
-		System.out.println("writeDao()");
+	public void writeDao(final String id, final String password, final String name) {
 
 		this.template.update(new PreparedStatementCreator() {
 
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				String query = "insert into user (id, password, name) values (board_seq.nextval, ?, ?)";
+				String query = "insert into USER (ID, PASSWORD, NAME) values (?, ?, ?)";
 				PreparedStatement pstmt = con.prepareStatement(query);
-				pstmt.setString(1, mWriter);
-				pstmt.setString(2, mContent);
+				pstmt.setString(1, id);
+				pstmt.setString(2, password);
+				pstmt.setString(3, name);
 				return pstmt;
 			}
 		});
@@ -73,4 +74,5 @@ public class ContentDao implements IDao {
 		});
 
 	}
+
 }

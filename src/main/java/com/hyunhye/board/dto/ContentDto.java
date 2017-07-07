@@ -1,42 +1,44 @@
 package com.hyunhye.board.dto;
 
 public class ContentDto {
-	String id;
-	String password;
-	String name;
+
+	String ID;
+	String PASSWORD;
+	String NAME;
 
 	public ContentDto() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ContentDto(String id, String password, String name) {
+	public ContentDto(String iD, String pASSWORD, String nAME) {
 		super();
-		this.id = id;
-		this.password = password;
-		this.name = name;
+		ID = iD;
+		PASSWORD = pASSWORD;
+		NAME = nAME;
 	}
 
-	public String getId() {
-		return id;
+	public String getID() {
+		return ID;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setID(String iD) {
+		ID = iD;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPASSWORD() {
+		return PASSWORD;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
 	}
 
-	public String getName() {
-		return name;
+	public String getNAME() {
+		return NAME;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNAME(String nAME) {
+		NAME = nAME;
 	}
+
 }

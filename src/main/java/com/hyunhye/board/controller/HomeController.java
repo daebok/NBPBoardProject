@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,17 +39,9 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-		model.addAttribute("serverTime", formattedDate);
-
-		return "home";
+	@RequestMapping(value = "/login")
+	public String home() {
+		return "login";
 	}
 
 	@RequestMapping(value = "/list")
@@ -58,4 +52,10 @@ public class HomeController {
 		return "list";
 	}
 
+	@RequestMapping("/insert")
+	public String write(HttpServletRequest request, Model model) {
+		IDao dao = sqlSession.getMapper(IDao.class);
+		dao.writeDao(request.getParameter("id"),request.getParameter("password"), request.getParameter("name"));
+		return "redirect:list";
+	}
 }

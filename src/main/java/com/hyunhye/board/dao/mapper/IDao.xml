@@ -10,13 +10,12 @@
 	
 	
 	<insert id="writeDao">
-		
+		INSERT INTO USER (ID, PASSWORD, NAME) VALUES (#{param1}, #{param2}, #{param3})
 	</insert>
 	
 	
 	<delete id="deleteDao">
-	
+		DELETE FROM USER WHERE MID = #{param1}
 	</delete>
-	
 	
 </mapper>
