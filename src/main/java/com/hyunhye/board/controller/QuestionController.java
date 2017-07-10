@@ -85,7 +85,6 @@ public class QuestionController {
 		return "forward:/answer.do?id="+dto.getBID();
 	}
 	
-	// 05. 게시글 삭제
     @RequestMapping("delete.do")
     public String delete(@RequestParam int bid) throws Exception{
         service.delete(bid);
