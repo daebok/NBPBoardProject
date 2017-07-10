@@ -25,8 +25,16 @@
 	</insert>
 
 	<select id="selectDao" resultMap="list">
-		SELECT UID, CID, TITLE, CONTENT, DATE
+		SELECT BID, UID, CID, TITLE, CONTENT, DATE
 		FROM BOARD WHERE BID = #{BID}
+	</select>
+	
+	<select id="updateDao" resultMap="list">
+		UPDATE BOARD SET 
+		TITLE = #{TITLE},
+		CONTENT = #{CONTENT},
+		DATE = #{DATE}
+		WHERE BID = #{BID}
 	</select>
 	
 	<!-- <delete id="deleteDao"> DELETE FROM USER WHERE ID = #{ID} </delete> -->

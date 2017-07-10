@@ -53,13 +53,15 @@
 							<c:out value="${map.searchOption == 'CONTENT'?'selected':''}"/>>내용</option>
 						<option value="TITLE"
 							<c:out value="${map.searchOption == 'TITLE'?'selected':''}"/>>제목</option>
-					</select> 
-					<input name="keyword" value="${map.keyword}"> 
+					</select> <input name="keyword" value="${map.keyword}">
 				</form>
 				<a href="<c:url value='/question.do'/>" id="QUESTION"
 					class="btn btn-danger">Ask Question</a>
 			</div>
 		</div>
+
+		<!-- 레코드의 갯수를 출력 -->
+		${map.count}개의 게시물이 있습니다.
 		<!-- 레코드의 갯수를 출력 -->
 		<div class="container-fluid">
 			<div class="col-md-12">

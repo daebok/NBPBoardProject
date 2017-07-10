@@ -16,9 +16,10 @@
 </head>
 <body>
 
-	<form action="question/ask" method="post">
+	<form action="question/modify" method="post">
 		Title <input type="text" name="title" value="${dto.TITLE}"/> <br />
 		<textarea cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
+		<input type="hidden" name="bid" value="${dto.BID}">
 		<br /> <input type="submit" />
 	</form>
 

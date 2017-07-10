@@ -19,7 +19,7 @@
 	<div class="container">
 		<!-- 본인이 쓴 게시물만 수정, 삭제가 가능하도록 처리 -->
 		<c:if test="${sessionScope.UID == dto.UID}">
-			<a href="/board/modify.jsp" id="MODIFY"
+			<a href="<c:url value='/modify.do?id=${dto.BID}'/>" id="MODIFY"
 				class="btn btn-danger">Modify</a>
 			<a href="/board/delete.jsp" id="DELETE"
 				class="btn btn-danger">Delete</a>

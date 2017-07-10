@@ -67,9 +67,21 @@ public class QuestionController {
 	}
 
 	@RequestMapping("modify.do")
-	public String modify(Model model) {
-		service.listAll(model);
+	public ModelAndView modify(HttpServletRequest request, Model model, QuestionDto dto) {
+		model.addAttribute("request", request);
+		service.read(model, dto);
 
-		return "modify";
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("modify");
+		mv.addObject("dto", service.read(model, dto));
+		return mv;
+	}
+	
+	@RequestMapping("/question/modify")
+	public String modify(HttpSession session, HttpServletRequest request, Model model, QuestionDto dto) {
+		model.addAttribute("request", request);
+		service.modify(session, model, dto);
+
+		return "forward:/answer.do?id="+dto.getBID();
 	}
 }

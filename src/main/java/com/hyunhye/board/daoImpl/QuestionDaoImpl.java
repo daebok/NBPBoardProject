@@ -56,4 +56,9 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	    map.put("keyword", keyword);
 	    return sqlSession.selectOne(namespace + ".countArticleDao", map);
 	}
+
+	public QuestionDto modify(QuestionDto dto) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + ".updateDao", dto);
+	}
 }

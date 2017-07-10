@@ -59,8 +59,6 @@
 						type="submit" value="조회">
 				</form>
 
-				<!-- 레코드의 갯수를 출력 -->
-				${map.count}개의 게시물이 있습니다.
 
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
 				<c:if test="${sessionScope.ID != null}">

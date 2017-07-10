@@ -20,7 +20,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 
 	@Autowired
 	public QuestionDaoImpl dao;
-	
+
 	@Override
 	public void listAll(Model model) {
 		// TODO Auto-generated method stub
@@ -34,14 +34,13 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		// TODO Auto-generated method stub
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
-		
+
 		String TITLE = request.getParameter("title");
 		String CONTENT = request.getParameter("content");
 		int UID = (Integer) session.getAttribute("UID");
 
 		Date dt = new Date();
-		SimpleDateFormat sdf = 
-		     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
 		dto.setTITLE(TITLE);
@@ -58,27 +57,52 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		// TODO Auto-generated method stub
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
-		
+
 		int BID = Integer.parseInt(request.getParameter("id"));
 		dto.setBID(BID);
-		
+
 		return dao.read(dto);
 	}
-	
+
 	// 05. All Questions List
 	@Override
 	public void listAll(Model model, String searchOption, String keyword) throws Exception {
 		List<QuestionDto> list;
 		list = dao.listAll(searchOption, keyword);
-		
+
 		model.addAttribute("list", list);
 	}
-	
+
 	// 06. Questions Count
 	@Override
 	public int countArticle(String searchOption, String keyword) throws Exception {
-	     return dao.countArticle(searchOption, keyword);
+		return dao.countArticle(searchOption, keyword);
 	}
 
+	// 07. Question Modify
+	@Override
+	public QuestionDto modify(HttpSession session, Model model, QuestionDto dto) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request = (HttpServletRequest) map.get("request");
+
+		int BID = Integer.parseInt(request.getParameter("bid"));
+		int UID = (Integer) session.getAttribute("UID");
+		String TITLE = request.getParameter("title");
+		String CONTENT = request.getParameter("content");
+
+		Date dt = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = sdf.format(dt);
+		
+		dto.setBID(BID);
+		dto.setTITLE(TITLE);
+		dto.setCONTENT(CONTENT);
+		dto.setDATE(currentTime);
+		dto.setUID(UID);
+		dto.setCID(1);
+
+		return dao.modify(dto);
+	}
 
 }
