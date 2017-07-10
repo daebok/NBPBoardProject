@@ -44,7 +44,7 @@
 		<hr />
 		<div class="container-fluid">
 			<div class="row">
-				<form name="form1" method="post" action="${path}/board/search.do">
+				<form name="form1" method="get" action="${path}/board/search.do">
 					<select name="searchOption">
 						<!-- 검색조건을 검색처리후 결과화면에 보여주기위해  c:out 출력태그 사용, 삼항연산자 -->
 						<option value="all"
@@ -55,7 +55,6 @@
 							<c:out value="${map.searchOption == 'TITLE'?'selected':''}"/>>제목</option>
 					</select> 
 					<input name="keyword" value="${map.keyword}"> 
-					<input type="submit" value="조회"> ${map.count}개의 게시물이 있습니다.
 				</form>
 				<a href="<c:url value='/question.do'/>" id="QUESTION"
 					class="btn btn-danger">Ask Question</a>

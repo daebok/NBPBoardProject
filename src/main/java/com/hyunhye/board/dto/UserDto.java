@@ -1,16 +1,16 @@
 package com.hyunhye.board.dto;
 
-public class ContentDto {
+public class UserDto {
 
 	String ID;
 	String PASSWORD;
 	String NAME;
 
-	public ContentDto() {
+	public UserDto() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ContentDto(String iD, String pASSWORD, String nAME) {
+	public UserDto(String iD, String pASSWORD, String nAME) {
 		super();
 		ID = iD;
 		PASSWORD = pASSWORD;

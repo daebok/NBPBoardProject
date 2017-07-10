@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.board.questionMapper">
+
+	<resultMap id="list" type="com.hyunhye.board.dto.QuestionDto">
+		<result property="BID" column="BID" javaType="java.lang.Integer" />
+		<result property="TITLE" column="TITLE" javaType="java.lang.String" />
+		<result property="CONTENT" column="CONTENT" javaType="java.lang.String" />
+		<result property="DATE" column="DATE" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="listDao" resultMap="list">
+		SELECT BID, TITLE, CONTENT, DATE
+		FROM BOARD
+	</select>
+
+	<insert id="insertDao">
+		INSERT INTO BOARD (TITLE, CONTENT, DATE) VALUES
+		(#{TITLE}, #{CONTENT}, #{DATE})
+	</insert>
+
+	<select id="selectDao" resultMap="list">
+		SELECT TITLE, CONTENT, DATE
+		FROM BOARD WHERE BID = #{BID}
+	</select>
+	
+	<!-- <delete id="deleteDao"> DELETE FROM USER WHERE ID = #{ID} </delete> -->
+	
+	<!-- 01_01. 게시글 전체목록 조회 및 검색 조회까지 -->
+	<select id="listAllDao" resultMap="list">
+		SELECT BID, TITLE, CONTENT, DATE
+		FROM BOARD
+		<!-- WHERE절을 include 태그로 삽입 -->
+		<include refid="search"></include>
+		ORDER BY BID desc, DATE desc
+	</select>
+	
+	<!-- 01_02. 게시글 레코드 갯수 -->
+	<select id="countArticleDao" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+		<!-- WHERE절을 include 태그로 삽입 -->
+		<include refid="search"></include>
+	</select>
+	
+	<!-- sql code 조각 -->
+	<!-- 반복되는 sql의 일부를 sql태그를 이용하여 따로 빼둘수 있다. -->
+	<sql id="search">
+		<choose>
+			<!-- 검색옵션이 전체 검색일 경우 -->
+			<when test="searchOption == 'all'">
+				WHERE CONTENT like '%${keyword}%'
+				OR TITLE like '%${keyword}%'
+			</when>
+			<!-- 전체 검색이 아닐 경우 -->
+			<otherwise>
+				WHERE ${searchOption} like '%${keyword}%'
+			</otherwise>
+		</choose>
+	</sql>
+</mapper>

@@ -5,6 +5,13 @@
 <html>
 <head>
 <title>Insert title here</title>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value='/css/bootstrap.min.css'/>">
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"
+	type="text/javascript"></script>
+
+<script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
+
 </head>
 <body>
 	<table width="500" cellpadding="0" cellspacing="0" border="1">
@@ -13,11 +20,12 @@
 			<td>PASSWORD</td>
 			<td>NAME</td>
 		</tr>
-		<c:forEach items="${list}" var="user">
+		<c:forEach var="user" items="${list}" >
 			<tr>
 				<td>${user.ID}</td>
 				<td>${user.PASSWORD}</td>
 				<td>${user.NAME}</td>
+				<td><a href="/board/delete?id=${user.ID}">삭제</a></td>
 			</tr>
 		</c:forEach>
 	</table>
