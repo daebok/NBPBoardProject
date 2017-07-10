@@ -19,7 +19,6 @@ public class UserController {
 	@Autowired
 	public UserServiceImpl service;
 	
-	// 01. Sign Up
 	@RequestMapping("/insert")
 	public String write(HttpServletRequest request, Model model, UserDto dto) {
 		model.addAttribute("request", request);
@@ -28,7 +27,6 @@ public class UserController {
 		return "redirect:/home.do";
 	}
 	
-	// 02. Login
 	@RequestMapping(value="/logincheck.do", method=RequestMethod.POST)
 	public ModelAndView loginCheck(HttpServletRequest request, Model model,UserDto dto){
 		System.out.println(request.getAttribute("ID"));
@@ -52,7 +50,6 @@ public class UserController {
 		return mv;
 	}
 	
-	// 03. Logout
     @RequestMapping("logout.do")
     public ModelAndView logout(HttpSession session){
         service.logout(session);
@@ -62,7 +59,6 @@ public class UserController {
         return mv;
     }
 
-    // 04. È¸¿ø Å»Åð
 	@RequestMapping("/delete")
 	public String delete(HttpServletRequest request, Model model, UserDto dto) {
 		model.addAttribute("request", request);

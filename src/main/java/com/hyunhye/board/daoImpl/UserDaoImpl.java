@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.dto.UserDto;
 

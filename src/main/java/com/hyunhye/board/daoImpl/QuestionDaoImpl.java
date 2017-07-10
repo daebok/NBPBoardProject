@@ -36,21 +36,21 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 		return sqlSession.selectOne(namespace + ".selectDao", dto);
 	}
 
-	// 05. 게시글 전체 목록
+	// 05. Question All List
 	@Override
 	public List<QuestionDto> listAll(String searchOption, String keyword) throws Exception {
-		// 검색옵션, 키워드 맵에 저장
+
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("searchOption", searchOption);
 		map.put("keyword", keyword);
 		return sqlSession.selectList(namespace + ".listAllDao", map);
 	}
 	
-	// 07. 게시글 레코드 갯수
+	// 07. Questions Count
 	@Override
 	public int countArticle(String searchOption, String keyword) {
 		// TODO Auto-generated method stub
-		// 검색옵션, 키워드 맵에 저장
+
 	    Map<String, String> map = new HashMap<String, String>();
 	    map.put("searchOption", searchOption);
 	    map.put("keyword", keyword);
