@@ -10,4 +10,5 @@ public interface QuestionDao {
 	public QuestionDto read(QuestionDto dto);
 	List<QuestionDto> listAll(String searchOption, String keyword) throws Exception;
 	int countArticle(String searchOption, String keyword);
+	void delete(QuestionDto dto);
 }

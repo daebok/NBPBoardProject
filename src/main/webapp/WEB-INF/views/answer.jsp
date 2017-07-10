@@ -21,7 +21,7 @@
 		<c:if test="${sessionScope.UID == dto.UID}">
 			<a href="<c:url value='/modify.do?id=${dto.BID}'/>" id="MODIFY"
 				class="btn btn-danger">Modify</a>
-			<a href="/board/delete.jsp" id="DELETE"
+			<a href="<c:url value='/delete.do?id=${dto.BID}'/>" id="DELETE"
 				class="btn btn-danger">Delete</a>
 		</c:if>
 		<div class="container-fluid">

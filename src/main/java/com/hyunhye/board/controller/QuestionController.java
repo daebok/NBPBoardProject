@@ -86,8 +86,8 @@ public class QuestionController {
 	}
 	
     @RequestMapping("delete.do")
-    public String delete(@RequestParam int bid) throws Exception{
-        service.delete(bid);
+    public String delete(@RequestParam int id, QuestionDto dto) throws Exception{
+        service.delete(id, dto);
         return "redirect:home.do";
     }
 }

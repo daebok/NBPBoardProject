@@ -106,9 +106,9 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 	}
 
 	@Override
-	public void delete(int bid) {
+	public void delete(int bid, QuestionDto dto) {
 		// TODO Auto-generated method stub
-		
+		dto.setBID(bid);
+		dao.delete(dto);
 	}
-
 }

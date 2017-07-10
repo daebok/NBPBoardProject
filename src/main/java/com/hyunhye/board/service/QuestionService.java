@@ -21,7 +21,7 @@ public interface QuestionService {
 
 	public QuestionDto modify(HttpSession session, Model model, QuestionDto dto);
 
-	public void delete(int bid);
+	void delete(int bid, QuestionDto dto);
 
 	
 }

@@ -61,4 +61,10 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + ".updateDao", dto);
 	}
+
+	@Override
+	public void delete(QuestionDto dto) {
+		// TODO Auto-generated method stub
+		sqlSession.delete(namespace + ".deleteDao", dto);
+	}
 }
