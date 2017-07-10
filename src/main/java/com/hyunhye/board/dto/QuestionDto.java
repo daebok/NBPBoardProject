@@ -27,6 +27,16 @@ public class QuestionDto {
 		UID = uID;
 	}
 
+	public int getCID() {
+		return CID;
+	}
+
+	public void setCID(int cID) {
+		CID = cID;
+	}
+
+	private int CID;
+
 	public String getTITLE() {
 		return TITLE;
 	}

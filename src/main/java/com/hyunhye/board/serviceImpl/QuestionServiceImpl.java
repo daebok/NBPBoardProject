@@ -48,6 +48,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		dto.setCONTENT(CONTENT);
 		dto.setDATE(currentTime);
 		dto.setUID(UID);
+		dto.setCID(1);
 
 		dao.regist(dto);
 	}
