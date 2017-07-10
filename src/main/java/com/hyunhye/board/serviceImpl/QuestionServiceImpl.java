@@ -105,4 +105,10 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		return dao.modify(dto);
 	}
 
+	@Override
+	public void delete(int bid) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
