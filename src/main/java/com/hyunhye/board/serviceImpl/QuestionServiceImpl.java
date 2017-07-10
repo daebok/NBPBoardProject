@@ -65,7 +65,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		return dao.read(dto);
 	}
 	
-	// 05. 게시글 전체 목록 
+	// 05. All Questions List
 	@Override
 	public void listAll(Model model, String searchOption, String keyword) throws Exception {
 		List<QuestionDto> list;
@@ -74,7 +74,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		model.addAttribute("list", list);
 	}
 	
-	// 06. 게시글 레코드 갯수
+	// 06. Questions Count
 	@Override
 	public int countArticle(String searchOption, String keyword) throws Exception {
 	     return dao.countArticle(searchOption, keyword);

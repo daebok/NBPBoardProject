@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	public UserDaoImpl dao;
 
-	// 회원가입
+	// Sign Up
 	@Override
 	public void regist(Model model, UserDto dto) {
 		// TODO Auto-generated method stub
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 		dto.setID(ID);
 	}
 
-	// 회원 로그인
+	// Login
 	public boolean loginCheck(HttpSession session, Model model, UserDto dto) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = model.asMap();
@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
 		if (result) {
 			UserDto dto2 = viewUser(dto);
 			
-			// 세션 변수 등록
 			session.setAttribute("UID",dto2.getUID());
 			session.setAttribute("ID", dto2.getID());
 			session.setAttribute("NAME", dto2.getNAME());
@@ -70,15 +69,14 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
-	// 회원 로그인 정보
+	// Login Info
 	public UserDto viewUser(UserDto dto) {
 		return dao.viewUser(dto);
 	}
 
-	// 회원 로그아웃
+	// Logout
 	public void logout(HttpSession session) {
 		// TODO Auto-generated method stub
-		// 세션 정보를 초기화 시킴
 		session.invalidate();
 	}
 

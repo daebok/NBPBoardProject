@@ -38,7 +38,7 @@ public class UserDaoImpl implements com.hyunhye.board.dao.UserDao{
 		sqlSession.delete(namespace + ".deleteDao", dto);
 	}
 
-	// 회원 로그인 체크
+	// Login Check
 	@Override
 	public boolean loginCheck(UserDto dto) {
 		// TODO Auto-generated method stub
@@ -46,14 +46,14 @@ public class UserDaoImpl implements com.hyunhye.board.dao.UserDao{
         return (name == null) ? false : true;
 	}
 
-	// 회원 로그인 정보
+	// Login Info
 	@Override
 	public UserDto viewUser(UserDto dto) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("viewUser", dto);
 	}
 
-	// 회원 로그아웃
+	// Login logout
     @Override
     public void logout(HttpSession session) {
     }
