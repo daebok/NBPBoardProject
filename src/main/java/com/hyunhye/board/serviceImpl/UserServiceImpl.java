@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
 			UserDto dto2 = viewUser(dto);
 			
 			// 세션 변수 등록
+			session.setAttribute("UID",dto2.getUID());
 			session.setAttribute("ID", dto2.getID());
 			session.setAttribute("NAME", dto2.getNAME());
 		}

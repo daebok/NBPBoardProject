@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,14 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 	}
 
 	@Override
-	public void regist(Model model, QuestionDto dto) {
+	public void regist(HttpSession session, Model model, QuestionDto dto) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
 		
 		String TITLE = request.getParameter("title");
 		String CONTENT = request.getParameter("content");
+		int UID = (Integer) session.getAttribute("UID");
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = 
@@ -48,12 +50,13 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		dto.setTITLE(TITLE);
 		dto.setCONTENT(CONTENT);
 		dto.setDATE(currentTime);
+		dto.setUID(UID);
 
 		dao.regist(dto);
 	}
 
 	@Override
-	public void read(Model model, QuestionDto dto) {
+	public QuestionDto read(Model model, QuestionDto dto) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
@@ -61,8 +64,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		int BID = Integer.parseInt(request.getParameter("id"));
 		dto.setBID(BID);
 		
-		List<QuestionDto> list = dao.read(dto);
-		model.addAttribute("list", list);
+		return dao.read(dto);
 	}
 	
 	// 05. 게시글 전체 목록 boardDAO.listAll메서드 호출

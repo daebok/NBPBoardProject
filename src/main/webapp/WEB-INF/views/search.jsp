@@ -18,7 +18,7 @@
 </head>
 <body>
 
-	<h1>BOARD</h1>
+	<h1>SEARCH</h1>
 	<c:if test="${sessionScope.ID != null}">
 		<h5>${sessionScope.NAME}(${sessionScope.ID})님환영합니다.</h5>
 	</c:if>

@@ -43,7 +43,6 @@ public class UserDaoImpl implements com.hyunhye.board.dao.UserDao{
 	public boolean loginCheck(UserDto dto) {
 		// TODO Auto-generated method stub
 		String name = sqlSession.selectOne("loginCheck", dto);
-		System.out.println("name"+name);
         return (name == null) ? false : true;
 	}
 

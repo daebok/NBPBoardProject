@@ -6,6 +6,7 @@
 <mapper namespace="com.hyunhye.board.userMapper">
 
 	<resultMap id="list" type="com.hyunhye.board.dto.UserDto">
+		<result property="UID" column="UID" javaType="java.lang.Integer" />
 		<result property="ID" column="ID" javaType="java.lang.String" />
 		<result property="PASSWORD" column="PASSWORD" javaType="java.lang.String" />
 		<result property="NAME" column="NAME" javaType="java.lang.String" />
@@ -33,6 +34,7 @@
     
     <select id="viewUser" resultType="com.hyunhye.board.dto.UserDto">
         SELECT 
+        	UID,
             NAME,
             ID
         FROM USER

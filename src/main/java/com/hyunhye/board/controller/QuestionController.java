@@ -1,15 +1,14 @@
 package com.hyunhye.board.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,19 +34,25 @@ public class QuestionController {
 	}
 
 	@RequestMapping("/question/ask")
-	public String write(HttpServletRequest request, Model model, QuestionDto dto) {
+	public String write(HttpSession session, HttpServletRequest request, Model model, QuestionDto dto) {
 		model.addAttribute("request", request);
-		service.regist(model, dto);
+		service.regist(session, model, dto);
 
 		return "redirect:/home.do";
 	}
 
 	@RequestMapping("/answer.do")
-	public String read(HttpServletRequest request, Model model, QuestionDto dto) {
+	public ModelAndView read(HttpServletRequest request, Model model, QuestionDto dto) {
 		model.addAttribute("request", request);
 		service.read(model, dto);
 
-		return "answer";
+        // 모델(데이터)+뷰(화면)를 함께 전달하는 객체
+        ModelAndView mv = new ModelAndView();
+        // 뷰의 이름
+        mv.setViewName("answer");
+        // 뷰에 전달할 데이터
+        mv.addObject("dto", service.read(model, dto));
+        return mv;
 	}
 
 	// 01. 게시글 목록
@@ -58,8 +63,6 @@ public class QuestionController {
 		service.listAll(model, searchOption, keyword);
 		// 레코드의 갯수
 		int count = service.countArticle(searchOption, keyword);
-
-		System.out.println(searchOption + keyword + "");
 
 		// 데이터를 맵에 저장
 		Map<String, Object> map = new HashMap<String, Object>();

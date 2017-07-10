@@ -2,6 +2,7 @@ package com.hyunhye.board.dto;
 
 public class QuestionDto {
 	private int BID;
+	private int UID;
 	private String TITLE;
 	private String CATEGORY;
 	private String CONTENT;
@@ -16,6 +17,14 @@ public class QuestionDto {
 
 	public void setBID(int bID) {
 		BID = bID;
+	}
+
+	public int getUID() {
+		return UID;
+	}
+
+	public void setUID(int uID) {
+		UID = uID;
 	}
 
 	public String getTITLE() {

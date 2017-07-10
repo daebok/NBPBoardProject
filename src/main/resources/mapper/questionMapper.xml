@@ -6,6 +6,7 @@
 <mapper namespace="com.hyunhye.board.questionMapper">
 
 	<resultMap id="list" type="com.hyunhye.board.dto.QuestionDto">
+		<result property="UID" column="UID" javaType="java.lang.Integer" />
 		<result property="BID" column="BID" javaType="java.lang.Integer" />
 		<result property="TITLE" column="TITLE" javaType="java.lang.String" />
 		<result property="CONTENT" column="CONTENT" javaType="java.lang.String" />
@@ -18,12 +19,12 @@
 	</select>
 
 	<insert id="insertDao">
-		INSERT INTO BOARD (TITLE, CONTENT, DATE) VALUES
-		(#{TITLE}, #{CONTENT}, #{DATE})
+		INSERT INTO BOARD (UID, TITLE, CONTENT, DATE) VALUES
+		(${UID}, #{TITLE}, #{CONTENT}, #{DATE})
 	</insert>
 
 	<select id="selectDao" resultMap="list">
-		SELECT TITLE, CONTENT, DATE
+		SELECT UID, TITLE, CONTENT, DATE
 		FROM BOARD WHERE BID = #{BID}
 	</select>
 	

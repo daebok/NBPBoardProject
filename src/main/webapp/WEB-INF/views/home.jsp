@@ -31,14 +31,16 @@
 					<c:when test="${sessionScope.ID == null}">
 						<a href="<c:url value='/login.do'/>" id="LOGIN"
 							class="btn btn-primary">LogIn</a>
+						<a href="<c:url value='/signup.do'/>" id="SIGNUP"
+							class="btn btn-danger">SingUp</a>
+
 					</c:when>
 					<c:otherwise> ${sessionScope.NAME}님이 로그인중입니다.
-					<a href="<c:url value='/logout.do'/>" id="LOGOUT"
+						<a href="<c:url value='/logout.do'/>" id="LOGOUT"
 							class="btn btn-primary">LogOut</a>
 					</c:otherwise>
 				</c:choose>
-				<a href="<c:url value='/signup.do'/>" id="SIGNUP"
-					class="btn btn-danger">SingUp</a>
+
 			</div>
 		</div>
 		<hr />
@@ -53,15 +55,22 @@
 							<c:out value="${map.searchOption == 'CONTENT'?'selected':''}"/>>내용</option>
 						<option value="TITLE"
 							<c:out value="${map.searchOption == 'TITLE'?'selected':''}"/>>제목</option>
-					</select> 
-					<input name="keyword" value="${map.keyword}"> 
-					<input type="submit" value="조회"> ${map.count}개의 게시물이 있습니다.
+					</select> <input name="keyword" value="${map.keyword}"> <input
+						type="submit" value="조회">
 				</form>
-				<a href="<c:url value='/question.do'/>" id="QUESTION"
-					class="btn btn-danger">Ask Question</a>
+
+				<!-- 레코드의 갯수를 출력 -->
+				${map.count}개의 게시물이 있습니다.
+
+				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
+				<c:if test="${sessionScope.ID != null}">
+					<a href="<c:url value='/question.do'/>" id="QUESTION"
+						class="btn btn-danger">Ask Question</a>
+				</c:if>
+
 			</div>
 		</div>
-		<!-- 레코드의 갯수를 출력 -->
+
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<c:forEach var="question" items="${list}">

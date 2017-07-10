@@ -31,9 +31,9 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	}
 
 	@Override
-	public List<QuestionDto> read(QuestionDto dto) {
+	public QuestionDto read(QuestionDto dto) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList(namespace + ".selectDao", dto);
+		return sqlSession.selectOne(namespace + ".selectDao", dto);
 	}
 
 	// 05. 게시글 전체 목록
