@@ -13,25 +13,14 @@
 
 <script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
 
-
 </head>
 <body>
-	<div class="container">
-		<!-- 본인이 쓴 게시물만 수정, 삭제가 가능하도록 처리 -->
-		<c:if test="${sessionScope.UID == dto.UID}">
-			<a href="/board/modify.jsp" id="MODIFY"
-				class="btn btn-danger">Modify</a>
-			<a href="/board/delete.jsp" id="DELETE"
-				class="btn btn-danger">Delete</a>
-		</c:if>
-		<div class="container-fluid">
-			<div class="col-md-12">
-					<h1>${dto.TITLE}</h1>
-					<p>${dto.CONTENT}</p>
 
-					<hr>
-			</div>
-		</div>
-	</div>
+	<form action="question/ask" method="post">
+		Title <input type="text" name="title" value="${dto.TITLE}"/> <br />
+		<textarea cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
+		<br /> <input type="submit" />
+	</form>
+
 </body>
 </html>

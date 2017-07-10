@@ -19,13 +19,10 @@ import com.hyunhye.board.serviceImpl.QuestionServiceImpl;
 @Controller
 public class QuestionController {
 
-	/*
-	 * @Inject private QuestionService service;
-	 */
-
 	@Autowired
 	public QuestionServiceImpl service;
 
+	// 01. 홈 화면 (전체 리스트)
 	@RequestMapping(value = "/home.do")
 	public String home(Model model) {
 		service.listAll(model);
@@ -33,6 +30,7 @@ public class QuestionController {
 		return "home";
 	}
 
+	// 02. 질문 등록
 	@RequestMapping("/question/ask")
 	public String write(HttpSession session, HttpServletRequest request, Model model, QuestionDto dto) {
 		model.addAttribute("request", request);
@@ -41,25 +39,26 @@ public class QuestionController {
 		return "redirect:/home.do";
 	}
 
+	// 03.특정 게시글 보기 (답변 화면)
 	@RequestMapping("/answer.do")
 	public ModelAndView read(HttpServletRequest request, Model model, QuestionDto dto) {
 		model.addAttribute("request", request);
 		service.read(model, dto);
 
-        // 모델(데이터)+뷰(화면)를 함께 전달하는 객체
-        ModelAndView mv = new ModelAndView();
-        // 뷰의 이름
-        mv.setViewName("answer");
-        // 뷰에 전달할 데이터
-        mv.addObject("dto", service.read(model, dto));
-        return mv;
+		// 모델(데이터)+뷰(화면)를 함께 전달하는 객체
+		ModelAndView mv = new ModelAndView();
+		// 뷰의 이름
+		mv.setViewName("answer");
+		// 뷰에 전달할 데이터
+		mv.addObject("dto", service.read(model, dto));
+		return mv;
 	}
 
-	// 01. 게시글 목록
+	// 04. 게시글 검색
 	@RequestMapping("search.do")
 	public ModelAndView list(Model model, @RequestParam(defaultValue = "TITLE") String searchOption,
 			@RequestParam(defaultValue = "") String keyword) throws Exception {
-		
+
 		service.listAll(model, searchOption, keyword);
 		// 레코드의 갯수
 		int count = service.countArticle(searchOption, keyword);
@@ -69,7 +68,7 @@ public class QuestionController {
 		map.put("count", count); // 레코드의 갯수
 		map.put("searchOption", searchOption); // 검색옵션
 		map.put("keyword", keyword); // 검색키워드
-		
+
 		// ModelAndView - 모델과 뷰
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("map", map); // 맵에 저장된 데이터를 mav에 저장
@@ -77,4 +76,11 @@ public class QuestionController {
 		return mv; // list.jsp로 List가 전달된다.
 	}
 
+	// 05. 게시글 수정
+	@RequestMapping("modify.do")
+	public String modify(Model model) {
+		service.listAll(model);
+
+		return "modify";
+	}
 }

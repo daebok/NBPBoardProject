@@ -20,8 +20,6 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 
 	@Autowired
 	public QuestionDaoImpl dao;
-
-	// QuestionDto dto = new QuestionDto();
 	
 	@Override
 	public void listAll(Model model) {
@@ -46,7 +44,6 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		
 		dto.setTITLE(TITLE);
 		dto.setCONTENT(CONTENT);
 		dto.setDATE(currentTime);
@@ -67,7 +64,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		return dao.read(dto);
 	}
 	
-	// 05. 게시글 전체 목록 boardDAO.listAll메서드 호출
+	// 05. 게시글 전체 목록 
 	@Override
 	public void listAll(Model model, String searchOption, String keyword) throws Exception {
 		List<QuestionDto> list;
@@ -76,7 +73,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		model.addAttribute("list", list);
 	}
 	
-	// 07. 게시글 레코드 갯수 boardDao.countArticle메서드 
+	// 06. 게시글 레코드 갯수
 	@Override
 	public int countArticle(String searchOption, String keyword) throws Exception {
 	     return dao.countArticle(searchOption, keyword);
