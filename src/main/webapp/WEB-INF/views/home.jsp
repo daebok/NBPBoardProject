@@ -34,10 +34,10 @@
 						type="submit" value="조회">
 				</form>
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
-				<c:if test="${sessionScope.ID != null}">
+				<%-- <c:if test="${sessionScope.ID != null}"> --%>
 					<a href="<c:url value='/question.do'/>" id="QUESTION"
 						class="btn btn-danger">Ask Question</a>
-				</c:if>
+				<%-- </c:if> --%>
 				<a href="<c:url value='/list.do'/>" id="LIST"
 					class="btn btn-danger">Questions</a>
 			</div>
