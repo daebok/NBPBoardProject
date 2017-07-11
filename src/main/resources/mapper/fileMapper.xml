@@ -12,7 +12,7 @@
 		<result property="FILESIZE" column="FILESIZE" javaType="java.lang.String" />
 	</resultMap>
 	
-	<insert id="fileInsertDao">
+	<insert id="insertFile">
 		INSERT INTO FILE (CID, FILENAME, ORIGINNAME, EXTENSION, FILESIZE)
 		VALUES
 		( ${CID}, #{FILENAME}, #{ORIGINNAME}, #{EXTENSION}, #{FILESIZE} )

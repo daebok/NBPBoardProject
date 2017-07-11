@@ -33,8 +33,8 @@ public class QuestionController {
 	@Autowired
 	public QuestionServiceImpl service;
 
-	@Resource(name = "uploadPath")
-	String uploadPath;
+	/*@Resource(name = "uploadPath")
+	String uploadPath;*/
 
 	@RequestMapping(value = { "/", "/home.do" })
 	public String home(Model model) {
@@ -82,30 +82,31 @@ public class QuestionController {
 		model.addAttribute("request", request);
 		service.regist(session, model, dto);
 
-		logger.info("file name :" + file.getOriginalFilename());
+		/*logger.info("file name :" + file.getOriginalFilename());
 		logger.info("file size : " + file.getSize());
 		logger.info("content type : " + file.getContentType());
 
 		String savedName = file.getOriginalFilename();
 
         savedName = uploadFile(savedName, file.getBytes());
-
+		 */
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/home.do");
-		mv.addObject("savedName", savedName);
+		// mv.addObject("savedName", savedName);
 
 		return mv; 
 	}
 	
 	// file name overlap prevent
-   @SuppressWarnings("unused")
+  /* @SuppressWarnings("unused")
 	private String uploadFile(String originalName, byte[] fileData) throws Exception{
         UUID uuid = UUID.randomUUID();
         String savedName = uuid.toString()+"_"+originalName;
         File target = new File(uploadPath, savedName);
         FileCopyUtils.copy(fileData, target);
         return savedName;
-    }
+    }*/
 
 	@RequestMapping("/answer.do")
 	public ModelAndView read(HttpServletRequest request, Model model, QuestionDto dto) {

@@ -1,6 +1,7 @@
 package com.hyunhye.board.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hyunhye.board.dto.QuestionDto;
 
@@ -13,4 +14,5 @@ public interface QuestionDao {
 	void delete(QuestionDto dto);
 	// List<QuestionDto> listAll(int start, int end, String searchOption, String keyword);
 	List<QuestionDto> listAll(int start, int end, String searchOption, String keyword, QuestionDto dto);
+	void insertFile(Map<String, Object> map);
 }

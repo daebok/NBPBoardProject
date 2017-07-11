@@ -18,6 +18,7 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	SqlSession sqlSession;
 
 	private static final String namespace = "com.hyunhye.board.questionMapper";
+	private static final String namespace2 = "com.hyunhye.board.fileMapper";
 
 	@Override
 	public List<QuestionDto> listAll() {
@@ -78,4 +79,10 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	    map.put("start", start);
 	    map.put("end", end);
 	    return sqlSession.selectList(namespace + ".listAllPagingDao", map);	}
+
+	@Override
+	public void insertFile(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		sqlSession.insert(namespace2 + ".insertFile", map);
+	}
 }

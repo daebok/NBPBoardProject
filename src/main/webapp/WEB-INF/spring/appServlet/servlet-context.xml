@@ -16,6 +16,7 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/css/**" location="/resources/css/" />
 	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/lang/**" location="/resources/lang/" />
 	<resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
@@ -75,10 +76,10 @@
 		<!-- FileUpload Size -->
 		<beans:property name="maxUploadSize" value="10485760" />
 	</beans:bean>
+	
 	<!-- 파일업로드를 위한 디렉토리 설정 -->
-	<!-- String uploadPath = new String("업로드 경로") -->
-	<beans:bean id="uploadPath" class="java.lang.String">
-		<!-- 파일업로드 디렉토리 -->
-		<beans:constructor-arg value="C:\Users\NAVER\Desktop\tmp" />
-	</beans:bean>
+	<!-- <beans:bean id="uploadPath" class="java.lang.String">
+		파일업로드 디렉토리
+		<beans:constructor-arg value="/board/file/" />
+	</beans:bean> -->
 </beans:beans>

@@ -2,25 +2,38 @@ package com.hyunhye.board.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.hyunhye.board.common.FileUtils;
 import com.hyunhye.board.daoImpl.QuestionDaoImpl;
 import com.hyunhye.board.dto.QuestionDto;
 
 @Service(value = "QuestionService")
 public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
+	
 	@Autowired
 	public QuestionDaoImpl dao;
 
+	 @Resource(name="fileUtils")
+	    private FileUtils fileUtils;
+
+		
 	@Override
 	public void listAll(Model model) {
 		// TODO Auto-generated method stub
@@ -48,6 +61,17 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		dto.setDATE(currentTime);
 		dto.setUID(UID);
 		dto.setCID(1);
+
+		// File Upload
+		List<Map<String, Object>> list = null;
+		try {
+			list = fileUtils.parseInsertFileInfo(map, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        for(int i=0, size=list.size(); i<size; i++){
+            dao.insertFile(list.get(i));
+        }
 
 		dao.regist(dto);
 	}
@@ -94,7 +118,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
-		
+
 		dto.setBID(BID);
 		dto.setTITLE(TITLE);
 		dto.setCONTENT(CONTENT);
