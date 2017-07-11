@@ -38,7 +38,6 @@
 
 	</interceptors>
 
-
 	<!-- MyBatis -->
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">

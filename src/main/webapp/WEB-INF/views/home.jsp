@@ -17,33 +17,10 @@
 
 </head>
 <body>
-
-	<h1>BOARD</h1>
-	<c:if test="${sessionScope.ID != null}">
-		<h5>${sessionScope.NAME}(${sessionScope.ID})님환영합니다.</h5>
-	</c:if>
+	<!-- header start -->
+	<%@include file="header.jsp"%>
+	<!-- header end -->
 	<div class="container">
-		<!-- /.row -->
-		<div class="container-fluid">
-
-			<div class="row">
-				<c:choose>
-					<c:when test="${sessionScope.ID == null}">
-						<a href="<c:url value='/login.do'/>" id="LOGIN"
-							class="btn btn-primary">LogIn</a>
-						<a href="<c:url value='/signup.do'/>" id="SIGNUP"
-							class="btn btn-danger">SingUp</a>
-
-					</c:when>
-					<c:otherwise> ${sessionScope.NAME}님이 로그인중입니다.
-						<a href="<c:url value='/logout.do'/>" id="LOGOUT"
-							class="btn btn-primary">LogOut</a>
-					</c:otherwise>
-				</c:choose>
-
-			</div>
-		</div>
-		<hr />
 		<div class="container-fluid">
 			<div class="row">
 				<form name="form1" method="post" action="${path}/board/search.do">
@@ -59,7 +36,6 @@
 						type="submit" value="조회">
 				</form>
 
-
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
 				<c:if test="${sessionScope.ID != null}">
 					<a href="<c:url value='/question.do'/>" id="QUESTION"
@@ -68,7 +44,6 @@
 
 			</div>
 		</div>
-
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<c:forEach var="question" items="${list}">
@@ -90,24 +65,25 @@
 					<hr>
 				</c:forEach>
 			</div>
+			<div class="page-nation">
+				<ul class="pagination pagination-large">
+					<li class="disabled"><span>Prev</span></li>
+					<li class="active"><span>1</span></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">6</a></li>
+					<li><a href="#">7</a></li>
+					<li><a href="#">8</a></li>
+					<li><a href="#">9</a></li>
+					<li class="disabled"><span>...</span></li>
+					<li>
+					<li><a rel="next" href="#">Next</a></li>
+
+				</ul>
+			</div>
 		</div>
 	</div>
-	<div class="page-nation">
-		<ul class="pagination pagination-large">
-			<li class="disabled"><span>Prev</span></li>
-			<li class="active"><span>1</span></li>
-			<li><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">6</a></li>
-			<li><a href="#">7</a></li>
-			<li><a href="#">8</a></li>
-			<li><a href="#">9</a></li>
-			<li class="disabled"><span>...</span></li>
-			<li>
-			<li><a rel="next" href="#">Next</a></li>
 
-		</ul>
-	</div>
 </body>
 </html>
