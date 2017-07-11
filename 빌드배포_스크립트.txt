@@ -1,0 +1,19 @@
+#!/bin/sh
+
+cd /home1/irteam/repositories/HyunHye
+sudo git pull
+sudo mvn clean package
+
+cd /home1/irteam/apps/tomcat/webapps
+sudo rm -r board-1.0.0-BUILD-SNAPSHOT.war
+sudo rm -r board
+sudo rm -r board-1.0.0-BUILD-SNAPSHOT
+
+cd /home1/irteam/repositories/HyunHye/target
+sudo cp board-1.0.0-BUILD-SNAPSHOT.war /home1/irteam/apps/tomcat/webapps
+
+#tomcat restart
+cd /home1/irteam/apps/tomcat/bin
+sudo ./shutdown.sh
+sudo ./startup.sh
+
