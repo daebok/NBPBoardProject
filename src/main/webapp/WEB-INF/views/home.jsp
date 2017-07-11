@@ -11,9 +11,7 @@
 	href="<c:url value='/css/bootstrap.min.css'/>">
 <script src="http://code.jquery.com/jquery-2.1.1.min.js"
 	type="text/javascript"></script>
-
 <script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
-
 
 </head>
 <body>
@@ -23,7 +21,7 @@
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
-				<form name="form1" method="post" action="${path}/board/search.do">
+				<form name="form1" method="post" action="${path}/board/list.do">
 					<select name="searchOption">
 						<!-- 검색조건을 검색처리후 결과화면에 보여주기위해  c:out 출력태그 사용, 삼항연산자 -->
 						<option value="all"
@@ -35,13 +33,13 @@
 					</select> <input name="keyword" value="${map.keyword}"> <input
 						type="submit" value="조회">
 				</form>
-
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
 				<c:if test="${sessionScope.ID != null}">
 					<a href="<c:url value='/question.do'/>" id="QUESTION"
 						class="btn btn-danger">Ask Question</a>
 				</c:if>
-
+				<a href="<c:url value='/list.do'/>" id="LIST"
+					class="btn btn-danger">Questions</a>
 			</div>
 		</div>
 		<div class="container-fluid">
@@ -65,7 +63,7 @@
 					<hr>
 				</c:forEach>
 			</div>
-			<div class="page-nation">
+			<!-- <div class="page-nation">
 				<ul class="pagination pagination-large">
 					<li class="disabled"><span>Prev</span></li>
 					<li class="active"><span>1</span></li>
@@ -81,7 +79,7 @@
 					<li><a rel="next" href="#">Next</a></li>
 
 				</ul>
-			</div>
+			</div> -->
 		</div>
 	</div>
 

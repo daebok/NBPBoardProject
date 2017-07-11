@@ -111,4 +111,10 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 		dto.setBID(bid);
 		dao.delete(dto);
 	}
+
+	@Override
+	public List<QuestionDto> listAll(int start, int end, String searchOption, String keyword, QuestionDto dto) {
+		// TODO Auto-generated method stub
+		return dao.listAll(start, end, searchOption, keyword, dto);
+	}
 }

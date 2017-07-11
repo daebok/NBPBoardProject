@@ -2,6 +2,8 @@ package com.hyunhye.board.service;
 
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
@@ -22,6 +24,10 @@ public interface QuestionService {
 	public QuestionDto modify(HttpSession session, Model model, QuestionDto dto);
 
 	void delete(int bid, QuestionDto dto);
+
+	// List<QuestionDto> listAll(int start, int end, String searchOption, String keyword);
+
+	List<QuestionDto> listAll(int start, int end, String searchOption, String keyword, QuestionDto dto);
 
 	
 }

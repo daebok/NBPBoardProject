@@ -22,7 +22,6 @@
 	<!-- header end -->
 	<div class="container">
 		<h1>SEARCH</h1>
-		<hr />
 		<div class="container-fluid">
 			<div class="row">
 				<form name="form1" method="get" action="${path}/board/search.do">
@@ -34,10 +33,9 @@
 							<c:out value="${map.searchOption == 'CONTENT'?'selected':''}"/>>내용</option>
 						<option value="TITLE"
 							<c:out value="${map.searchOption == 'TITLE'?'selected':''}"/>>제목</option>
-					</select> <input name="keyword" value="${map.keyword}">
+					</select> <input name="keyword" value="${map.keyword}"> <input
+						type="submit" value="조회"/>
 				</form>
-				<a href="<c:url value='/question.do'/>" id="QUESTION"
-					class="btn btn-danger">Ask Question</a>
 			</div>
 		</div>
 
