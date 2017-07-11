@@ -80,9 +80,9 @@ public class QuestionController {
 		model.addAttribute("request", request);
 		service.regist(session, model, dto);
 
-		logger.info("파일이름 :" + file.getOriginalFilename());
-		logger.info("파일크기 : " + file.getSize());
-		logger.info("컨텐트 타입 : " + file.getContentType());
+		logger.info("file name :" + file.getOriginalFilename());
+		logger.info("file size : " + file.getSize());
+		logger.info("content type : " + file.getContentType());
 
 		String savedName = file.getOriginalFilename();
 

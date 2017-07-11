@@ -13,17 +13,11 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		// 세션 객체 생성
 		HttpSession session = request.getSession();
-		// 세션에 id가 null이면
 		if (session.getAttribute("ID") == null) {
-			// 로그인 페이지로 이동
 			response.sendRedirect(request.getContextPath() + "/login.do");
-			// 컨트롤러를 실행하지 않는다.(요청페이지로 이동하지 않는다)
 			return false;
-			// null이 아니면
 		} else {
-			// 컨트롤러를 실행(요청페이지로 이동한다.)
 			return true;
 		}
 	}
