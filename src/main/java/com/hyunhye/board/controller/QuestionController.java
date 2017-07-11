@@ -32,8 +32,6 @@ public class QuestionController {
 	@Autowired
 	public QuestionServiceImpl service;
 
-	// xml에 설정된 리소스 참조
-	// bean의 id가 uploadPath인 태그를 참조
 	@Resource(name = "uploadPath")
 	String uploadPath;
 
@@ -46,15 +44,12 @@ public class QuestionController {
 
 	// Paging
 	@RequestMapping("list.do")
-	// @RequestParam(defaultValue="") ==> 기본값 할당 : 현재페이지를 1로 초기화
 	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
 			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage,
 			QuestionDto dto) throws Exception {
 
-		// 레코드의 갯수 계산
 		int count = service.countArticle(searchOption, keyword);
 
-		// 페이지 나누기 관련 처리
 		BoardPager boardPager = new BoardPager(count, curPage);
 		int start = boardPager.getPageBegin();
 		int end = boardPager.getPageEnd();
@@ -75,10 +70,8 @@ public class QuestionController {
 		return mv;
 	}
 
-	// 업로드 흐름 : 업로드 버튼클릭 => 임시디렉토리에 업로드=> 지정된 디렉토리에 저장 => 파일정보가 file에 저장
 	@RequestMapping(value = "/upload/uploadForm", method = RequestMethod.GET)
 	public void uplodaForm() {
-		// upload/uploadForm.jsp(업로드 페이지)로 포워딩
 	}
 
 	@RequestMapping("/question/ask")
@@ -95,15 +88,13 @@ public class QuestionController {
 
 		File target = new File(uploadPath, savedName);
 
-		// 임시디렉토리에 저장된 업로드된 파일을 지정된 디렉토리로 복사
-		// FileCopyUtils.copy(바이트배열, 파일객체)
 		FileCopyUtils.copy(file.getBytes(), target);
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/home.do");
 		mv.addObject("savedName", savedName);
 
-		return mv; // uploadResult.jsp(결과화면)로 포워딩
+		return mv; 
 	}
 
 	@RequestMapping("/answer.do")
