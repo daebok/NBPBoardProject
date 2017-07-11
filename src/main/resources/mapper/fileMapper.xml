@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyunhye.board.fileMapper">
+	<resultMap id="list" type="com.hyunhye.board.dto.FileDto">
+		<result property="FID" column="FID" javaType="java.lang.Integer" />
+		<result property="BID" column="BID" javaType="java.lang.Integer" />
+		<result property="FILENAME" column="FILENAME" javaType="java.lang.String" />
+		<result property="ORIGINNAME" column="ORIGINNAME" javaType="java.lang.String" />
+		<result property="EXTENSION" column="EXTENSION" javaType="java.lang.String" />
+		<result property="FILESIZE" column="FILESIZE" javaType="java.lang.String" />
+	</resultMap>
+	
+	<insert id="fileInsertDao">
+		INSERT INTO FILE (CID, FILENAME, ORIGINNAME, EXTENSION, FILESIZE)
+		VALUES
+		( ${CID}, #{FILENAME}, #{ORIGINNAME}, #{EXTENSION}, #{FILESIZE} )
+	</insert>
+</mapper>

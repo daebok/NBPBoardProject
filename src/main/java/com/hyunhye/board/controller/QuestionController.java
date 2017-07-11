@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ public class QuestionController {
 			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage,
 			QuestionDto dto) throws Exception {
 
+		// questions count
 		int count = service.countArticle(searchOption, keyword);
 
 		BoardPager boardPager = new BoardPager(count, curPage);
@@ -96,6 +98,16 @@ public class QuestionController {
 
 		return mv; 
 	}
+	
+	// file name overlap prevent
+   @SuppressWarnings("unused")
+	private String uploadFile(String originalName, byte[] fileData) throws Exception{
+        UUID uuid = UUID.randomUUID();
+        String savedName = uuid.toString()+"_"+originalName;
+        File target = new File(uploadPath, savedName);
+        FileCopyUtils.copy(fileData, target);
+        return savedName;
+    }
 
 	@RequestMapping("/answer.do")
 	public ModelAndView read(HttpServletRequest request, Model model, QuestionDto dto) {

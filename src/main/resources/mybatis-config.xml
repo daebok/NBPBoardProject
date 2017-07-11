@@ -10,6 +10,7 @@
 	<mappers>
 		<mapper resource="mapper/userMapper.xml"></mapper>
 		<mapper resource="mapper/questionMapper.xml"></mapper>
+		<mapper resource="mapper/fileMapper.xml"></mapper>
 	</mappers>
 
 </configuration>

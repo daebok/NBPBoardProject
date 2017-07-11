@@ -7,7 +7,7 @@ public class QuestionDto {
 	private String CATEGORY;
 	private String CONTENT;
 	private String DATE;
-
+	
 	public QuestionDto() {
 	}
 
@@ -68,4 +68,5 @@ public class QuestionDto {
 	public void setDATE(String dATE) {
 		DATE = dATE;
 	}
+	
 }

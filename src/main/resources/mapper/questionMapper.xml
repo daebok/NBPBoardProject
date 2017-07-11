@@ -89,11 +89,13 @@
 	<!-- 페이징 sql -->
 	<sql id="pagingHeader">
 		SELECT * FROM (
-		SELECT @ROWNUM := @ROWNUM + 1 AS rn, A.* FROM (
+		SELECT @ROWNUM := @ROWNUM + 1 AS rn, A.*
+		FROM (
 	</sql>
 	<sql id="pagingFooter">
 		) A, (SELECT @ROWNUM := 0) TMP ) B
-		WHERE rn BETWEEN ${start} AND ${end}
+		WHERE rn BETWEEN ${start}
+		AND ${end}
 	</sql>
 
 </mapper>
