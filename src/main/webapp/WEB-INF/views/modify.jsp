@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
@@ -15,13 +15,18 @@
 
 </head>
 <body>
-
-	<form action="question/modify" method="post">
-		Title <input type="text" name="title" value="${dto.TITLE}"/> <br />
-		<textarea cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
-		<input type="hidden" name="bid" value="${dto.BID}">
-		<br /> <input type="submit" />
-	</form>
-
+	<!-- header start -->
+	<%@include file="header.jsp"%>
+	<!-- header end -->
+	<div class="container">
+		<div class="container-fluid">
+			<form action="question/modify" method="post">
+				Title <input type="text" name="title" value="${dto.TITLE}" /> <br />
+				<textarea cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
+				<input type="hidden" name="bid" value="${dto.BID}"> <br />
+				<input type="submit" />
+			</form>
+		</div>
+	</div>
 </body>
 </html>

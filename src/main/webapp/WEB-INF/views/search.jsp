@@ -17,30 +17,11 @@
 
 </head>
 <body>
-
-	<h1>SEARCH</h1>
-	<c:if test="${sessionScope.ID != null}">
-		<h5>${sessionScope.NAME}(${sessionScope.ID})님환영합니다.</h5>
-	</c:if>
+	<!-- header start -->
+	<%@include file="header.jsp"%>
+	<!-- header end -->
 	<div class="container">
-		<!-- /.row -->
-		<div class="container-fluid">
-
-			<div class="row">
-				<c:choose>
-					<c:when test="${sessionScope.ID == null}">
-						<a href="<c:url value='/login.do'/>" id="LOGIN"
-							class="btn btn-primary">LogIn</a>
-					</c:when>
-					<c:otherwise> ${sessionScope.NAME}님이 로그인중입니다.
-					<a href="<c:url value='/logout.do'/>" id="LOGOUT"
-							class="btn btn-primary">LogOut</a>
-					</c:otherwise>
-				</c:choose>
-				<a href="<c:url value='/signup.do'/>" id="SIGNUP"
-					class="btn btn-danger">SingUp</a>
-			</div>
-		</div>
+		<h1>SEARCH</h1>
 		<hr />
 		<div class="container-fluid">
 			<div class="row">

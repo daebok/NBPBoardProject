@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
@@ -10,14 +10,14 @@
 	href="<c:url value='/css/bootstrap.min.css'/>">
 <script src="http://code.jquery.com/jquery-2.1.1.min.js"
 	type="text/javascript"></script>
-
 <script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
-
-
 </head>
 <body>
+	<!-- header start -->
+	<%@include file="header.jsp"%>
+	<!-- header end -->
 	<div class="container">
-		<!-- º»ÀÎÀÌ ¾´ °Ô½Ã¹°¸¸ ¼öÁ¤, »èÁ¦°¡ °¡´ÉÇÏµµ·Ï Ã³¸® -->
+		<!-- ë³¸ì¸ì´ ì“´ ê²Œì‹œë¬¼ë§Œ ìˆ˜ì •, ì‚­ì œê°€ ê°€ëŠ¥í•˜ë„ë¡ ì²˜ë¦¬ -->
 		<c:if test="${sessionScope.UID == dto.UID}">
 			<a href="<c:url value='/modify.do?id=${dto.BID}'/>" id="MODIFY"
 				class="btn btn-danger">Modify</a>
@@ -26,10 +26,9 @@
 		</c:if>
 		<div class="container-fluid">
 			<div class="col-md-12">
-					<h1>${dto.TITLE}</h1>
-					<p>${dto.CONTENT}</p>
-
-					<hr>
+				<h1>${dto.TITLE}</h1>
+				<p>${dto.CONTENT}</p>
+				<hr>
 			</div>
 		</div>
 	</div>
