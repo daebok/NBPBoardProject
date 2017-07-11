@@ -19,10 +19,11 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form action="question/ask" method="post">
+			<form action="question/ask" method="post" enctype="multipart/form-data">
 				Title <input type="text" name="title" /> <br />
-				<textarea cols="100" rows="30" name="content"></textarea>
-				<br /> <input type="submit" />
+				<textarea cols="100" rows="30" name="content"></textarea> <br /> 
+				 <input type="file" name="file">
+				<input type="submit" />
 			</form>
 		</div>
 	</div>

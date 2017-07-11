@@ -63,23 +63,6 @@
 					<hr>
 				</c:forEach>
 			</div>
-			<!-- <div class="page-nation">
-				<ul class="pagination pagination-large">
-					<li class="disabled"><span>Prev</span></li>
-					<li class="active"><span>1</span></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">6</a></li>
-					<li><a href="#">7</a></li>
-					<li><a href="#">8</a></li>
-					<li><a href="#">9</a></li>
-					<li class="disabled"><span>...</span></li>
-					<li>
-					<li><a rel="next" href="#">Next</a></li>
-
-				</ul>
-			</div> -->
 		</div>
 	</div>
 

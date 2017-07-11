@@ -1,18 +1,24 @@
 package com.hyunhye.board.controller;
 
+import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hyunhye.board.dto.QuestionDto;
@@ -21,9 +27,15 @@ import com.hyunhye.board.serviceImpl.QuestionServiceImpl;
 
 @Controller
 public class QuestionController {
+	private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
 	@Autowired
 	public QuestionServiceImpl service;
+
+	// xml에 설정된 리소스 참조
+	// bean의 id가 uploadPath인 태그를 참조
+	@Resource(name = "uploadPath")
+	String uploadPath;
 
 	@RequestMapping(value = { "/", "/home.do" })
 	public String home(Model model) {
@@ -36,13 +48,11 @@ public class QuestionController {
 	@RequestMapping("list.do")
 	// @RequestParam(defaultValue="") ==> 기본값 할당 : 현재페이지를 1로 초기화
 	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
-			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage, QuestionDto dto)
-			throws Exception {
+			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage,
+			QuestionDto dto) throws Exception {
 
 		// 레코드의 갯수 계산
 		int count = service.countArticle(searchOption, keyword);
-		
-		System.out.println("count: "+count);
 
 		// 페이지 나누기 관련 처리
 		BoardPager boardPager = new BoardPager(count, curPage);
@@ -51,32 +61,49 @@ public class QuestionController {
 
 		List<QuestionDto> list = service.listAll(start, end, searchOption, keyword, dto);
 
-		Iterator<QuestionDto> it = list.iterator();
-		System.out.println("list.size(): "+ list.size());
-		while(it.hasNext())
-			System.out.println(it.next().getTITLE());
-		
-		// 데이터를 맵에 저장
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list); // list
-		map.put("count", count); // 레코드의 갯수
-		map.put("searchOption", searchOption); // 검색옵션
-		map.put("keyword", keyword); // 검색키워드
+		map.put("list", list);
+		map.put("count", count);
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
 		map.put("boardPager", boardPager);
 
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("map", map); // 맵에 저장된 데이터를 mav에 저장
-		mav.setViewName("list"); // 뷰를 list.jsp로 설정
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("map", map);
+		mv.setViewName("list");
 
-		return mav; // list.jsp로 List가 전달된다.
+		return mv;
+	}
+
+	// 업로드 흐름 : 업로드 버튼클릭 => 임시디렉토리에 업로드=> 지정된 디렉토리에 저장 => 파일정보가 file에 저장
+	@RequestMapping(value = "/upload/uploadForm", method = RequestMethod.GET)
+	public void uplodaForm() {
+		// upload/uploadForm.jsp(업로드 페이지)로 포워딩
 	}
 
 	@RequestMapping("/question/ask")
-	public String write(HttpSession session, HttpServletRequest request, Model model, QuestionDto dto) {
+	public ModelAndView write(MultipartFile file, HttpSession session, HttpServletRequest request, Model model,
+			QuestionDto dto) throws Exception {
 		model.addAttribute("request", request);
 		service.regist(session, model, dto);
 
-		return "redirect:/home.do";
+		logger.info("파일이름 :" + file.getOriginalFilename());
+		logger.info("파일크기 : " + file.getSize());
+		logger.info("컨텐트 타입 : " + file.getContentType());
+
+		String savedName = file.getOriginalFilename();
+
+		File target = new File(uploadPath, savedName);
+
+		// 임시디렉토리에 저장된 업로드된 파일을 지정된 디렉토리로 복사
+		// FileCopyUtils.copy(바이트배열, 파일객체)
+		FileCopyUtils.copy(file.getBytes(), target);
+
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("redirect:/home.do");
+		mv.addObject("savedName", savedName);
+
+		return mv; // uploadResult.jsp(결과화면)로 포워딩
 	}
 
 	@RequestMapping("/answer.do")
