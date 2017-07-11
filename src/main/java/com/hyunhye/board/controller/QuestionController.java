@@ -88,9 +88,7 @@ public class QuestionController {
 
 		String savedName = file.getOriginalFilename();
 
-		File target = new File(uploadPath, savedName);
-
-		FileCopyUtils.copy(file.getBytes(), target);
+        savedName = uploadFile(savedName, file.getBytes());
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/home.do");
