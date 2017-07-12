@@ -9,11 +9,13 @@
 <title>BOARD</title>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value='/css/bootstrap.min.css'/>">
-<script src="http://code.jquery.com/jquery-2.1.1.min.js"
-	type="text/javascript"></script>
-
 <script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
 
+<script src="http://code.jquery.com/jquery-3.2.1.min.js"
+	type="text/javascript"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"
+	type="text/javascript"></script>
 
 </head>
 <body>

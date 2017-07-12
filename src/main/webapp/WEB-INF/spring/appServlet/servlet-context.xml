@@ -16,7 +16,6 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/css/**" location="/resources/css/" />
 	<resources mapping="/js/**" location="/resources/js/" />
-	<resources mapping="/lang/**" location="/resources/lang/" />
 	<resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
@@ -48,10 +47,14 @@
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url"
+		<!-- <beans:property name="url"
 			value="jdbc:mysql://10.105.170.230:13306/BOARD" />
 		<beans:property name="username" value="hyunhye" />
-		<beans:property name="password" value="" />
+		<beans:property name="password" value="" /> -->
+		<beans:property name="url"
+			value="jdbc:mysql://127.0.0.1:3306/BOARD" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="root" />
 	</beans:bean>
 
 	<beans:bean name="template"

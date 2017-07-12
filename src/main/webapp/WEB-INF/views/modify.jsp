@@ -8,11 +8,24 @@
 <title>BOARD</title>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value='/css/bootstrap.min.css'/>">
-<script src="http://code.jquery.com/jquery-2.1.1.min.js"
-	type="text/javascript"></script>
-
 <script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
 
+<script src="http://code.jquery.com/jquery-3.2.1.min.js"
+	type="text/javascript"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"
+	type="text/javascript"></script>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value='/resources/summernote/summernote.css'/>">
+<script type="text/script"
+	src="<c:url value='/resources/summernote/summernote.js'/>"></script>
+<script>
+	$(document).ready(function() {
+		$('.summernote').summernote({
+			height : 300
+		});
+	});
+</script>
 </head>
 <body>
 	<!-- header start -->
@@ -22,7 +35,8 @@
 		<div class="container-fluid">
 			<form action="question/modify" method="post">
 				Title <input type="text" name="title" value="${dto.TITLE}" /> <br />
-				<textarea cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
+				<textarea class="summernote" cols="100" rows="30" name="content">${dto.CONTENT}</textarea>
+
 				<input type="hidden" name="bid" value="${dto.BID}"> <br />
 				<input type="submit" />
 			</form>
