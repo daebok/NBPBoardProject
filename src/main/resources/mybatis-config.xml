@@ -9,8 +9,9 @@
 	</typeAliases>
 	<mappers>
 		<mapper resource="mapper/userMapper.xml"></mapper>
-		<mapper resource="mapper/questionMapper.xml"></mapper>
+		<mapper resource="mapper/boardMapper.xml"></mapper>
 		<mapper resource="mapper/fileMapper.xml"></mapper>
+		<mapper resource="mapper/categoryMapper.xml"></mapper>
 	</mappers>
 
 </configuration>

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.hyunhye.board.userMapper">
 
-	<resultMap id="list" type="com.hyunhye.board.dto.UserDto">
+	<resultMap id="list" type="com.hyunhye.user.model.UserModel">
 		<result property="UID" column="UID" javaType="java.lang.Integer" />
 		<result property="ID" column="ID" javaType="java.lang.String" />
 		<result property="PASSWORD" column="PASSWORD" javaType="java.lang.String" />
@@ -13,32 +13,33 @@
 	</resultMap>
 
 	<select id="listDao" resultMap="list">
-		SELECT ID, NAME, PASSWORD FROM USER
+		SELECT ID, NAME, PASSWORD FROM
+		USER
 	</select>
 
 
 	<insert id="insertDao">
 		INSERT INTO USER (ID, PASSWORD, NAME) VALUES
-		(#{ID}, #{PASSWORD}, #{NAME})
+		(#{ID},
+		#{PASSWORD}, #{NAME})
 	</insert>
 
 
 	<delete id="deleteDao">
 		DELETE FROM USER WHERE ID = #{ID}
 	</delete>
-	
-	<select id="loginCheck" resultType="String">
-        SELECT NAME FROM USER
-        WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
-    </select>
-    
-    <select id="viewUser" resultType="com.hyunhye.board.dto.UserDto">
-        SELECT 
-        	UID,
-            NAME,
-            ID
-        FROM USER
-        WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
-    </select>
 
+	<select id="loginCheck" resultType="String">
+		SELECT NAME FROM USER
+		WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
+	</select>
+
+	<select id="viewUser" resultMap="list">
+		SELECT
+		UID,
+		NAME,
+		ID
+		FROM USER
+		WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
+	</select>
 </mapper>
