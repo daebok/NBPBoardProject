@@ -12,6 +12,6 @@ public interface UserDao {
 	public void regist(UserDto dto);
 	public void delete(UserDto dto);
 	boolean loginCheck(UserDto dto);
-	UserDto viewUser(UserDto vo);
-	void logout(HttpSession session);
+	public UserDto viewUser(UserDto vo);
+	public void logout(HttpSession session);
 }

@@ -1,13 +1,9 @@
 package com.hyunhye.board.serviceImpl;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.hyunhye.board.daoImpl.UserDaoImpl;
 import com.hyunhye.board.dto.UserDto;
@@ -21,43 +17,28 @@ public class UserServiceImpl implements UserService {
 
 	// Sign Up
 	@Override
-	public void regist(Model model, UserDto dto) {
+	public void regist(UserDto dto) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest) map.get("request");
-
-		String ID = request.getParameter("id");
-		String PW = request.getParameter("password");
-		String NM = request.getParameter("name");
-
-		// UserDto dto = new UserDto();
-		dto.setID(ID);
-		dto.setPASSWORD(PW);
-		dto.setNAME(NM);
-
 		dao.regist(dto);
-	}
-
-	public void delete(Model model, UserDto dto) {
-		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
+		
+		/*Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
+		
+		String id = request.getParameter("id");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String name = request.getParameter("name");
 
-		String ID = request.getParameter("id");
-		dto.setID(ID);
+		UserDto userVo = new UserDto(); 
+		userVo.setID(id);
+		userVo.setPASSWORD(password);
+		userVo.setNAME(name);*/
 	}
 
 	// Login
-	public boolean loginCheck(HttpSession session, Model model, UserDto dto) {
+	@Override
+	public boolean loginCheck(HttpSession session, UserDto dto) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest) map.get("request");
-
-		String ID = request.getParameter("id");
-		String PW = request.getParameter("password");
-		dto.setID(ID);
-		dto.setPASSWORD(PW);
-		
 		boolean result = dao.loginCheck(dto);
 		if (result) {
 			UserDto dto2 = viewUser(dto);
@@ -70,11 +51,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// Login Info
+	@Override
 	public UserDto viewUser(UserDto dto) {
 		return dao.viewUser(dto);
 	}
 
 	// Logout
+	@Override
 	public void logout(HttpSession session) {
 		// TODO Auto-generated method stub
 		session.invalidate();

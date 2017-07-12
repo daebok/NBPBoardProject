@@ -1,0 +1,12 @@
+.container header{
+	overflow: hidden;
+}
+.home btn{
+	float: left;
+	text-decoration: none;
+	
+	font-size: 3em;
+}
+.home welcome{
+	float: left;
+}

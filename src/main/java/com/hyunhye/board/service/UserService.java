@@ -7,11 +7,13 @@ import org.springframework.ui.Model;
 import com.hyunhye.board.dto.UserDto;
 
 public interface UserService {
-	public void regist(Model model, UserDto dto);
-
-	public void delete(Model model, UserDto dto);
+	// public void regist(Model model, UserDto dto);
 	
-	public boolean loginCheck(HttpSession session, Model model,  UserDto dto);
-
 	public void logout(HttpSession session);
+
+	void regist(UserDto dto);
+
+	UserDto viewUser(UserDto dto);
+
+	boolean loginCheck(HttpSession session, UserDto dto);
 }

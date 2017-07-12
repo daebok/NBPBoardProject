@@ -32,9 +32,9 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	}
 
 	@Override
-	public QuestionDto read(QuestionDto dto) {
+	public QuestionDto read(int id) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne(namespace + ".selectDao", dto);
+		return sqlSession.selectOne(namespace + ".selectDao", id);
 	}
 
 	// 05. Question All List
@@ -70,10 +70,9 @@ public class QuestionDaoImpl implements com.hyunhye.board.dao.QuestionDao {
 	}
 
 	@Override
-	public List<QuestionDto> listAll(int start, int end, String searchOption, String keyword, QuestionDto dto) {
+	public List<QuestionDto> listAll(int start, int end, String searchOption, String keyword) {
 		// TODO Auto-generated method stub
 	    Map<String, Object> map = new HashMap<String, Object>();
-	    map.put("dto", dto);
 	    map.put("searchOption", searchOption);
 	    map.put("keyword", keyword);
 	    map.put("start", start);

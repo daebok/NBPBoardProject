@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -15,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +26,7 @@ import com.hyunhye.board.serviceImpl.QuestionServiceImpl;
 
 @Controller
 public class QuestionController {
-	private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+	// private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
 	@Autowired
 	public QuestionServiceImpl service;
@@ -46,8 +44,7 @@ public class QuestionController {
 	// Paging
 	@RequestMapping("list.do")
 	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
-			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage,
-			QuestionDto dto) throws Exception {
+			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage) throws Exception {
 
 		// questions count
 		int count = service.countArticle(searchOption, keyword);
@@ -56,7 +53,7 @@ public class QuestionController {
 		int start = boardPager.getPageBegin();
 		int end = boardPager.getPageEnd();
 
-		List<QuestionDto> list = service.listAll(start, end, searchOption, keyword, dto);
+		List<QuestionDto> list = service.listAll(start, end, searchOption, keyword);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
@@ -76,11 +73,11 @@ public class QuestionController {
 	public void uplodaForm() {
 	}
 
-	@RequestMapping("/question/ask")
-	public ModelAndView write(MultipartFile file, HttpSession session, HttpServletRequest request, Model model,
-			QuestionDto dto) throws Exception {
-		model.addAttribute("request", request);
-		service.regist(session, model, dto);
+	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
+	public ModelAndView write(@ModelAttribute QuestionDto dto,
+			MultipartFile file, HttpSession session) throws Exception {
+		System.out.println("title:"+dto.getTITLE());
+		service.regist(session, dto);
 
 		/*logger.info("file name :" + file.getOriginalFilename());
 		logger.info("file size : " + file.getSize());
@@ -109,13 +106,12 @@ public class QuestionController {
     }*/
 
 	@RequestMapping("/answer.do")
-	public ModelAndView read(HttpServletRequest request, Model model, QuestionDto dto) {
-		model.addAttribute("request", request);
-		service.read(model, dto);
+	public ModelAndView read(@RequestParam int id) {
+		service.read(id);
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("answer");
-		mv.addObject("dto", service.read(model, dto));
+		mv.addObject("dto", service.read(id));
 		return mv;
 	}
 
@@ -138,20 +134,16 @@ public class QuestionController {
 	}
 
 	@RequestMapping("modify.do")
-	public ModelAndView modify(HttpServletRequest request, Model model, QuestionDto dto) {
-		model.addAttribute("request", request);
-		service.read(model, dto);
-
+	public ModelAndView modify(@RequestParam int id) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("modify");
-		mv.addObject("dto", service.read(model, dto));
+		mv.addObject("dto", service.read(id));
 		return mv;
 	}
 
-	@RequestMapping("/question/modify")
-	public String modify(HttpSession session, HttpServletRequest request, Model model, QuestionDto dto) {
-		model.addAttribute("request", request);
-		service.modify(session, model, dto);
+	@RequestMapping(value="/question/modify", method=RequestMethod.POST)
+	public String modify(HttpSession session, @ModelAttribute QuestionDto dto) {
+		service.modify(session,dto);
 
 		return "forward:/answer.do?id=" + dto.getBID();
 	}

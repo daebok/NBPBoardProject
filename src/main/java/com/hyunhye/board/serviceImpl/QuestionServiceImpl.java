@@ -2,12 +2,9 @@ package com.hyunhye.board.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -30,7 +27,7 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 	@Autowired
 	public QuestionDaoImpl dao;
 
-	 @Resource(name="fileUtils")
+	@Resource(name="fileUtils")
 	    private FileUtils fileUtils;
 
 		
@@ -43,49 +40,35 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 	}
 
 	@Override
-	public void regist(HttpSession session, Model model, QuestionDto dto) {
+	public void regist(HttpSession session, QuestionDto dto) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest) map.get("request");
-
-		String TITLE = request.getParameter("title");
-		String CONTENT = request.getParameter("content");
 		int UID = (Integer) session.getAttribute("UID");
-
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
-
-		dto.setTITLE(TITLE);
-		dto.setCONTENT(CONTENT);
+		
 		dto.setDATE(currentTime);
 		dto.setUID(UID);
 		dto.setCID(1);
 
 		// File Upload
-		List<Map<String, Object>> list = null;
+		/*List<Map<String, Object>> list = null;
 		try {
-			list = fileUtils.parseInsertFileInfo(map, request);
+			// list = fileUtils.parseInsertFileInfo(map, request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         for(int i=0, size=list.size(); i<size; i++){
             dao.insertFile(list.get(i));
-        }
+        }*/
 
 		dao.regist(dto);
 	}
 
 	@Override
-	public QuestionDto read(Model model, QuestionDto dto) {
+	public QuestionDto read(int id) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest) map.get("request");
-
-		int BID = Integer.parseInt(request.getParameter("id"));
-		dto.setBID(BID);
-
-		return dao.read(dto);
+		return dao.read(id);
 	}
 
 	// 05. All Questions List
@@ -105,23 +88,14 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 
 	// 07. Question Modify
 	@Override
-	public QuestionDto modify(HttpSession session, Model model, QuestionDto dto) {
+	public QuestionDto modify(HttpSession session, QuestionDto dto) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest) map.get("request");
-
-		int BID = Integer.parseInt(request.getParameter("bid"));
 		int UID = (Integer) session.getAttribute("UID");
-		String TITLE = request.getParameter("title");
-		String CONTENT = request.getParameter("content");
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		dto.setBID(BID);
-		dto.setTITLE(TITLE);
-		dto.setCONTENT(CONTENT);
 		dto.setDATE(currentTime);
 		dto.setUID(UID);
 		dto.setCID(1);
@@ -137,8 +111,8 @@ public class QuestionServiceImpl implements com.hyunhye.board.service.QuestionSe
 	}
 
 	@Override
-	public List<QuestionDto> listAll(int start, int end, String searchOption, String keyword, QuestionDto dto) {
+	public List<QuestionDto> listAll(int start, int end, String searchOption, String keyword) {
 		// TODO Auto-generated method stub
-		return dao.listAll(start, end, searchOption, keyword, dto);
+		return dao.listAll(start, end, searchOption, keyword);
 	}
 }

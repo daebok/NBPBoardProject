@@ -2,20 +2,10 @@
 <%@ page session="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <title>Home</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/css/bootstrap.min.css'/>">
-<script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
-
-<script src="http://code.jquery.com/jquery-3.2.1.min.js"
-	type="text/javascript"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"
-	type="text/javascript"></script>
 <script>
 	$(document).ready(function() {
 		$("#btnLogin").click(function() {
@@ -48,8 +38,8 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form name="form" action="logincheck.do" method="post">
-				아이디: <input type="text" name="id" id="id" /> <br /> 비밀번호: <input
-					type="text" name="password" id="password" /> <br />
+				아이디: <input type="text" name="ID" id="id" /> <br /> 비밀번호: <input
+					type="text" name="PASSWORD" id="password" /> <br />
 				<!-- <button id="btnLogin">로그인</button>-->
 				<input type="submit" id="btnLogin" />
 

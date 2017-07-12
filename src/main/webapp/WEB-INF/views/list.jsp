@@ -1,20 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>BOARD</title>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/css/bootstrap.min.css'/>">
-<script type="text/script" src="<c:url value='/js/bootstrap.min.js'/>"></script>
-
-<script src="http://code.jquery.com/jquery-3.2.1.min.js"
-	type="text/javascript"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"
-	type="text/javascript"></script>
 <script>
     // **원하는 페이지로 이동시 검색조건, 키워드 값을 유지하기 위해 
     function list(page){
