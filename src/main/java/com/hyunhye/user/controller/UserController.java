@@ -30,18 +30,18 @@ public class UserController {
 
 	@RequestMapping(value = "/login.do")
 	public String login() {
-		return "userlogin";
+		return "user/login";
 	}
 
 	@RequestMapping("/insert")
-	public String write(@ModelAttribute UserModel dto) {
-		service.regist(dto);
+	public String write(@ModelAttribute UserModel model) {
+		service.regist(model);
 		return "redirect:/home.do";
 	}
 
 	@RequestMapping(value = "/logincheck.do", method = RequestMethod.POST)
-	public ModelAndView loginCheck(@ModelAttribute UserModel dto, HttpSession session) {
-		boolean result = service.loginCheck(session, dto);
+	public ModelAndView loginCheck(@ModelAttribute UserModel model, HttpSession session) {
+		boolean result = service.loginCheck(session, model);
 		ModelAndView mv = new ModelAndView();
 		if (result) {
 			System.out.println("true");

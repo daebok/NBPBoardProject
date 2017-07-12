@@ -10,7 +10,7 @@
 		<result property="ITEM" column="ITEM" javaType="java.lang.String" />
 	</resultMap>
 
-	<select id="categoryListDao" resultMap="list">
+	<select id="categoryList" resultMap="list">
 		SELECT ITEM
 		FROM CATEGORY
 	</select>

@@ -20,10 +20,10 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/modify" method="post">
-				Title <input type="text" name="TITLE" value="${dto.TITLE}" /> <br />
-				<textarea class="summernote" cols="100" rows="30" name="CONTENT">${dto.CONTENT}</textarea>
+				Title <input type="text" name="TITLE" value="${model.TITLE}" /> <br />
+				<textarea class="summernote" cols="100" rows="30" name="CONTENT">${model.CONTENT}</textarea>
 
-				<input type="hidden" name="BID" value="${dto.BID}"> <br />
+				<input type="hidden" name="BID" value="${model.BID}"> <br />
 				<input type="submit" />
 			</form>
 		</div>

@@ -41,18 +41,18 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	}
 
 	@Override
-	public void regist(HttpSession session, BoardModel dto) {
+	public void regist(HttpSession session, BoardModel model) {
 		// TODO Auto-generated method stub
 		int UID = (Integer) session.getAttribute("UID");
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 		
-		dto.setDATE(currentTime);
-		dto.setUID(UID);
-		dto.setCID(1);
+		model.setDATE(currentTime);
+		model.setUID(UID);
+		model.setCID(1);
 
-		dao.regist(dto);
+		dao.regist(model);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 
 	// 07. Question Modify
 	@Override
-	public BoardModel modify(HttpSession session, BoardModel dto) {
+	public BoardModel modify(HttpSession session, BoardModel model) {
 		// TODO Auto-generated method stub
 		int UID = (Integer) session.getAttribute("UID");
 
@@ -86,18 +86,18 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		dto.setDATE(currentTime);
-		dto.setUID(UID);
-		dto.setCID(1);
+		model.setDATE(currentTime);
+		model.setUID(UID);
+		model.setCID(1);
 
-		return dao.modify(dto);
+		return dao.modify(model);
 	}
 
 	@Override
-	public void delete(int bid, BoardModel dto) {
+	public void delete(int bid, BoardModel model) {
 		// TODO Auto-generated method stub
-		dto.setBID(bid);
-		dao.delete(dto);
+		model.setBID(bid);
+		dao.delete(model);
 	}
 
 	@Override

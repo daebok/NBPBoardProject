@@ -24,24 +24,24 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public List<BoardModel> listAll() {
-		return sqlSession.selectList(namespace + ".listDao");
+		return sqlSession.selectList(namespace + ".list");
 	}
 
 	@Override
 	public List<CategoryModel> categoryListAll() {
-		return sqlSession.selectList(namespace3 + ".categoryListDao");
+		return sqlSession.selectList(namespace3 + ".categoryList");
 	}
 	
 	@Override
-	public void regist(BoardModel dto) {
+	public void regist(BoardModel model) {
 		// TODO Auto-generated method stub
-		sqlSession.insert(namespace + ".insertDao", dto);
+		sqlSession.insert(namespace + ".regist", model);
 	}
 
 	@Override
 	public BoardModel read(int id) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne(namespace + ".selectDao", id);
+		return sqlSession.selectOne(namespace + ".read", id);
 	}
 
 	// 05. Question All List
@@ -51,7 +51,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("searchOption", searchOption);
 		map.put("keyword", keyword);
-		return sqlSession.selectList(namespace + ".listAllDao", map);
+		return sqlSession.selectList(namespace + ".listAll", map);
 	}
 	
 	// 07. Questions Count
@@ -62,18 +62,18 @@ public class BoardRepositoryImpl implements BoardRepository {
 	    Map<String, String> map = new HashMap<String, String>();
 	    map.put("searchOption", searchOption);
 	    map.put("keyword", keyword);
-	    return sqlSession.selectOne(namespace + ".countArticleDao", map);
+	    return sqlSession.selectOne(namespace + ".count", map);
 	}
 
-	public BoardModel modify(BoardModel dto) {
+	public BoardModel modify(BoardModel model) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne(namespace + ".updateDao", dto);
+		return sqlSession.selectOne(namespace + ".modify", model);
 	}
 
 	@Override
-	public void delete(BoardModel dto) {
+	public void delete(BoardModel model) {
 		// TODO Auto-generated method stub
-		sqlSession.delete(namespace + ".deleteDao", dto);
+		sqlSession.delete(namespace + ".delete", model);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 	    map.put("keyword", keyword);
 	    map.put("start", start);
 	    map.put("end", end);
-	    return sqlSession.selectList(namespace + ".listAllPagingDao", map);	}
+	    return sqlSession.selectList(namespace + ".listAllPaging", map);	}
 
 	@Override
 	public void insertFile(Map<String, Object> map) {

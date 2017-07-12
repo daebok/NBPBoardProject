@@ -12,20 +12,20 @@
 		<result property="NAME" column="NAME" javaType="java.lang.String" />
 	</resultMap>
 
-	<select id="listDao" resultMap="list">
+	<select id="list" resultMap="list">
 		SELECT ID, NAME, PASSWORD FROM
 		USER
 	</select>
 
 
-	<insert id="insertDao">
+	<insert id="regist">
 		INSERT INTO USER (ID, PASSWORD, NAME) VALUES
 		(#{ID},
 		#{PASSWORD}, #{NAME})
 	</insert>
 
 
-	<delete id="deleteDao">
+	<delete id="delete">
 		DELETE FROM USER WHERE ID = #{ID}
 	</delete>
 

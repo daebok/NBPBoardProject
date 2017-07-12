@@ -21,35 +21,35 @@ public class UserRepositoryImpl implements UserRepository{
 	@Override
 	public List<UserModel> listAll() {
 
-		return sqlSession.selectList(namespace + ".listDao");
+		return sqlSession.selectList(namespace + ".list");
 
 	}
 
 	@Override
-	public void regist(UserModel dto) {
+	public void regist(UserModel model) {
 		// TODO Auto-generated method stub
-		sqlSession.insert(namespace + ".insertDao", dto);
+		sqlSession.insert(namespace + ".regist", model);
 	}
 
 	@Override
-	public void delete(UserModel dto) {
+	public void delete(UserModel model) {
 		// TODO Auto-generated method stub
-		sqlSession.delete(namespace + ".deleteDao", dto);
+		sqlSession.delete(namespace + ".delete", model);
 	}
 
 	// Login Check
 	@Override
-	public boolean loginCheck(UserModel dto) {
+	public boolean loginCheck(UserModel model) {
 		// TODO Auto-generated method stub
-		String name = sqlSession.selectOne("loginCheck", dto);
+		String name = sqlSession.selectOne("loginCheck", model);
         return (name == null) ? false : true;
 	}
 
 	// Login Info
 	@Override
-	public UserModel viewUser(UserModel dto) {
+	public UserModel viewUser(UserModel model) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("viewUser", dto);
+		return sqlSession.selectOne("viewUser", model);
 	}
 
 	// Login logout

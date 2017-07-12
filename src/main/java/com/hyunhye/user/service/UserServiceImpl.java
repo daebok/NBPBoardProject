@@ -12,34 +12,34 @@ import com.hyunhye.user.repository.UserRepositoryImpl;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	public UserRepositoryImpl dao;
+	public UserRepositoryImpl repository;
 
 	// Sign Up
 	@Override
-	public void regist(UserModel dto) {
+	public void regist(UserModel model) {
 		// TODO Auto-generated method stub
-		dao.regist(dto);
+		repository.regist(model);
 	}
 
 	// Login
 	@Override
-	public boolean loginCheck(HttpSession session, UserModel dto) {
+	public boolean loginCheck(HttpSession session, UserModel model) {
 		// TODO Auto-generated method stub
-		boolean result = dao.loginCheck(dto);
+		boolean result = repository.loginCheck(model);
 		if (result) {
-			UserModel dto2 = viewUser(dto);
+			UserModel model2 = viewUser(model);
 			
-			session.setAttribute("UID",dto2.getUID());
-			session.setAttribute("ID", dto2.getID());
-			session.setAttribute("NAME", dto2.getNAME());
+			session.setAttribute("UID",model2.getUID());
+			session.setAttribute("ID", model2.getID());
+			session.setAttribute("NAME", model2.getNAME());
 		}
 		return result;
 	}
 
 	// Login Info
 	@Override
-	public UserModel viewUser(UserModel dto) {
-		return dao.viewUser(dto);
+	public UserModel viewUser(UserModel model) {
+		return repository.viewUser(model);
 	}
 
 	// Logout

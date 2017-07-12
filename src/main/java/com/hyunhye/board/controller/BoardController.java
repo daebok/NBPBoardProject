@@ -1,7 +1,6 @@
 package com.hyunhye.board.controller;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +41,6 @@ public class BoardController {
 	public ModelAndView question() {
 		List<CategoryModel> list = service.categoryListAll();
 	
-		Iterator<CategoryModel> it = list.iterator();
-		while(it.hasNext())
-			System.out.println(it.next());
-		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("list", list);
 		mv.setViewName("board/question");
@@ -85,10 +80,10 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
-	public ModelAndView write(@ModelAttribute BoardModel dto,
+	public ModelAndView write(@ModelAttribute BoardModel model,
 			MultipartFile file, HttpSession session) throws Exception {
-		System.out.println("title:"+dto.getTITLE());
-		service.regist(session, dto);
+		System.out.println("title:"+model.getTITLE());
+		service.regist(session, model);
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/home.do");
@@ -102,7 +97,7 @@ public class BoardController {
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/answer");
-		mv.addObject("dto", service.read(id));
+		mv.addObject("model", service.read(id));
 		return mv;
 	}
 
@@ -128,20 +123,20 @@ public class BoardController {
 	public ModelAndView modify(@RequestParam int id) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/modify");
-		mv.addObject("dto", service.read(id));
+		mv.addObject("model", service.read(id));
 		return mv;
 	}
 
 	@RequestMapping(value="/question/modify", method=RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute BoardModel dto) {
-		service.modify(session,dto);
+	public String modify(HttpSession session, @ModelAttribute BoardModel model) {
+		service.modify(session,model);
 
-		return "forward:/answer.do?id=" + dto.getBID();
+		return "forward:/answer.do?id=" + model.getBID();
 	}
 
 	@RequestMapping("delete.do")
-	public String delete(@RequestParam int id, BoardModel dto) throws Exception {
-		service.delete(id, dto);
+	public String delete(@RequestParam int id, BoardModel model) throws Exception {
+		service.delete(id, model);
 		return "redirect:home.do";
 	}
 }

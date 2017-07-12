@@ -10,7 +10,7 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
-	<import resource="application-datasource-context.xml" />
+	<import resource="applicationContext-datasource.xml" />
 	
 	<!-- FileUpload -->
 	<bean id="multipartResolver"

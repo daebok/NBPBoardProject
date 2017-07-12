@@ -8,9 +8,9 @@ public interface UserService {
 	
 	public void logout(HttpSession session);
 
-	void regist(UserModel dto);
+	void regist(UserModel model);
 
-	UserModel viewUser(UserModel dto);
+	UserModel viewUser(UserModel model);
 
-	boolean loginCheck(HttpSession session, UserModel dto);
+	boolean loginCheck(HttpSession session, UserModel model);
 }
