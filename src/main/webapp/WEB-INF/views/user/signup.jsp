@@ -11,6 +11,13 @@
 	var pwdCheck = 0;
 	function checkId() {
 		var id = $('.id').val();
+		
+		var special_pattern =  /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		if(special_pattern.test(id) == true || id == " "){
+		    alert('특수문자 및 공백은 사용할 수 없습니다.');
+		    $('.id').val(id.substring(0, id.length - 1));
+		    return false;
+		}
 		$.ajax({
 			data : id,
 			contentType : "application/json",
@@ -95,11 +102,10 @@
 					placeholder="Enter ID" name="ID" class="id" oninput="checkId()"
 					id="id"> <br /> <label for="name"><b>Name</b></label> <input
 					type="text" placeholder="Enter NAME" name="NAME" id="name">
-				<br />
-				<label for="pass"><b>Password</b></label> <input type="password"
-					placeholder="Enter PASSWORD" name="PASSWORD" class="pass" id="pass"
-					oninput="checkPwd()"> <br /> <label for="repass">
-					<b>Repeat Password</b>
+				<br /> <label for="pass"><b>Password</b></label> <input
+					type="password" placeholder="Enter PASSWORD" name="PASSWORD"
+					class="pass" id="pass" oninput="checkPwd()"> <br /> <label
+					for="repass"> <b>Repeat Password</b>
 				</label> <input type="password" placeholder="Repeat Password"
 					name="psw-repeat" class="pass" id="repass" oninput="checkPwd()">
 				<br /> <input type="checkbox" checked="checked"> Remember

@@ -45,12 +45,10 @@ public class UserController {
 		boolean result = service.loginCheck(session, model);
 		ModelAndView mv = new ModelAndView();
 		if (result) {
-			System.out.println("true");
 			mv.setViewName("forward:/home.do");
 			mv.addObject("msg", "success");
 		} else {
-			System.out.println("false");
-			mv.setViewName("login");
+			mv.setViewName("user/login");
 			mv.addObject("msg", "failure");
 		}
 		return mv;
