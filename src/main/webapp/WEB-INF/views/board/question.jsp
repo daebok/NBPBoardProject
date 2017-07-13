@@ -26,8 +26,8 @@ $(document).ready(function() {
 						<option>${category.ITEM}</option>
 					</c:forEach>
 				</select>
-				Title <input type="text" name="TITLE" /> <br />
-				<textarea class="summernote" name="CONTENT"></textarea>
+				Title <input type="text" name="TITLE" maxlength="80"/> <br />
+				<textarea class="summernote" name="CONTENT" maxlength="500"></textarea>
 				<br /> 첨부파일 등록<input type="file" name="FILE"> 
 				<input type="submit" />
 			</form>
