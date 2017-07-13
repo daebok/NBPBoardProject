@@ -5,12 +5,12 @@ import javax.servlet.http.HttpSession;
 import com.hyunhye.user.model.UserModel;
 
 public interface UserService {
-	
+
 	public void logout(HttpSession session);
 
-	void regist(UserModel model);
+	public void regist(UserModel model);
 
-	UserModel viewUser(UserModel model);
+	public boolean loginCheck(HttpSession session, UserModel model);
 
-	boolean loginCheck(HttpSession session, UserModel model);
+	public UserModel viewUser(UserModel model);
 }

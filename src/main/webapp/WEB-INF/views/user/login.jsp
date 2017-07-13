@@ -8,24 +8,21 @@
 <title>Home</title>
 <script>
 	$(document).ready(function() {
-		$("#btnLogin").click(function() {
-			// 태크.val() : 태그에 입력된 값
-			// 태크.val("값") : 태그의 값을 변경 
-			var userId = $("#id").val();
-			var userPw = $("#password").val();
-			if (userId == "") {
+		$("#loginButton").click(function() {
+			var id = $("#id").val();
+			var password = $("#password").val();
+			var name = $("#name").val();
+			if (id == "") {
 				alert("아이디를 입력하세요.");
-				$("#id").focus(); // 입력포커스 이동
-				return; // 함수 종료
+				$("#id").focus(); 
+				return; 
 			}
-			if (userPw == "") {
+			if (password == "") {
 				alert("비밀번호를 입력하세요.");
 				$("#password").focus();
 				return;
 			}
-			// 폼 내부의 데이터를 전송할 주소
-			document.form.action = "logincheck.do"
-			// 제출
+			document.form.action = "logincheck"
 			document.form.submit();
 		});
 	});
@@ -37,11 +34,11 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form name="form" action="logincheck.do" method="post">
-				아이디: <input type="text" name="ID" id="id" /> <br /> 비밀번호: <input
+			<form name="form" action="logincheck" method="post">
+				<label for="id"><b>ID</b></label><input type="text" name="ID" id="id" /> <br /> <label for="password"><b>Password</b></label><input
 					type="text" name="PASSWORD" id="password" /> <br />
 				<!-- <button id="btnLogin">로그인</button>-->
-				<input type="submit" id="btnLogin" />
+				<button type="button" id="loginButton">Log In</button>
 
 				<c:if test="${msg == 'failure'}">
 					<div style="color: red">아이디 또는 비밀번호가 일치하지 않습니다.</div>

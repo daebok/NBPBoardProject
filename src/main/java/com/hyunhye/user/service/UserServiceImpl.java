@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 		boolean result = repository.loginCheck(model);
 		if (result) {
 			UserModel model2 = viewUser(model);
-			
+
 			session.setAttribute("UID",model2.getUID());
 			session.setAttribute("ID", model2.getID());
 			session.setAttribute("NAME", model2.getNAME());
@@ -49,4 +49,8 @@ public class UserServiceImpl implements UserService {
 		session.invalidate();
 	}
 
+	public int select(String id) {
+		// TODO Auto-generated method stub
+		return repository.select(id);
+	}
 }

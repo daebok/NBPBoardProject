@@ -4,12 +4,13 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hyunhye.user.model.UserModel;
@@ -33,13 +34,13 @@ public class UserController {
 		return "user/login";
 	}
 
-	@RequestMapping("/insert")
+	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
 	public String write(@ModelAttribute UserModel model) {
 		service.regist(model);
-		return "redirect:/home.do";
+		return "redirect:/login.do";
 	}
 
-	@RequestMapping(value = "/logincheck.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/logincheck", method = RequestMethod.POST)
 	public ModelAndView loginCheck(@ModelAttribute UserModel model, HttpSession session) {
 		boolean result = service.loginCheck(session, model);
 		ModelAndView mv = new ModelAndView();
@@ -55,12 +56,18 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping("logout.do")
+	@RequestMapping("/logout.do")
 	public ModelAndView logout(HttpSession session) {
 		service.logout(session);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("user/login");
 		mv.addObject("msg", "logout");
 		return mv;
+	}
+
+	// 아이디 중복 체크
+	@RequestMapping(value = "/duplicationId", method = RequestMethod.POST)
+	public @ResponseBody int duplicationId(@RequestBody String id) {
+		return service.select(id);
 	}
 }

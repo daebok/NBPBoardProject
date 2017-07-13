@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.hyunhye.user.model.UserModel;
 
 @Repository(value = "UserRepository")
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
 	@Inject
 	SqlSession sqlSession;
@@ -41,20 +41,24 @@ public class UserRepositoryImpl implements UserRepository{
 	@Override
 	public boolean loginCheck(UserModel model) {
 		// TODO Auto-generated method stub
-		String name = sqlSession.selectOne("loginCheck", model);
-        return (name == null) ? false : true;
+		String name = sqlSession.selectOne(namespace + ".loginCheck", model);
+		return (name == null) ? false : true;
 	}
 
 	// Login Info
 	@Override
 	public UserModel viewUser(UserModel model) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("viewUser", model);
+		return sqlSession.selectOne(namespace + ".viewUser", model);
 	}
 
 	// Login logout
-    @Override
-    public void logout(HttpSession session) {
-    }
+	@Override
+	public void logout(HttpSession session) {}
+
+	public int select(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + ".select", id);
+	}
 
 }
