@@ -12,23 +12,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import com.hyunhye.board.model.CategoryModel;
+
 import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.repository.BoardRepositoryImpl;
 import com.hyunhye.common.FileUtils;
 
 @Service(value = "BoardService")
 public class BoardServiceImpl implements com.hyunhye.board.service.BoardService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
-	
+
 	@Autowired
 	public BoardRepositoryImpl dao;
 
 	@Resource(name="fileUtils")
 	    private FileUtils fileUtils;
 
-		
+
 	@Override
 	public void listAll(Model model) {
 		// TODO Auto-generated method stub
@@ -40,14 +41,14 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	@Override
 	public void regist(HttpSession session, BoardModel model) {
 		// TODO Auto-generated method stub
+
 		int UID = (Integer) session.getAttribute("UID");
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
-		
+
 		model.setDATE(currentTime);
 		model.setUID(UID);
-		model.setCID(1);
 
 		dao.regist(model);
 	}

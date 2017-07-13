@@ -3,11 +3,13 @@ package com.hyunhye.board.model;
 public class BoardModel {
 	private int BID;
 	private int UID;
+	private int CID;
+	private String ITEM;
 	private String TITLE;
 	private String CATEGORY;
 	private String CONTENT;
 	private String DATE;
-	
+
 	public BoardModel() {
 	}
 
@@ -35,7 +37,13 @@ public class BoardModel {
 		CID = cID;
 	}
 
-	private int CID;
+	public String getITEM() {
+		return ITEM;
+	}
+
+	public void setITEM(String iTEM) {
+		ITEM = iTEM;
+	}
 
 	public String getTITLE() {
 		return TITLE;
@@ -68,5 +76,5 @@ public class BoardModel {
 	public void setDATE(String dATE) {
 		DATE = dATE;
 	}
-	
+
 }

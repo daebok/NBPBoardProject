@@ -8,7 +8,8 @@
 <script>
 $(document).ready(function() {
 	$('.summernote').summernote({
-		height : 300
+		height : 300,
+		
 	});
 });
 </script>
@@ -21,9 +22,9 @@ $(document).ready(function() {
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/ask" method="post" enctype="multipart/form-data">
-				<select>
+				<select name="ITEM">
 					<c:forEach var="category" items="${list}">
-						<option>${category.ITEM}</option>
+						<option value="${category.ITEM}">${category.ITEM}</option>
 					</c:forEach>
 				</select>
 				Title <input type="text" name="TITLE" maxlength="80"/> <br />

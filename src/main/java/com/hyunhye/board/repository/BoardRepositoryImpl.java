@@ -79,4 +79,5 @@ public class BoardRepositoryImpl implements BoardRepository {
 	public void insertFile(Map<String, Object> map) {
 		sqlSession.insert(namespace2 + ".insertFile", map);
 	}
+
 }

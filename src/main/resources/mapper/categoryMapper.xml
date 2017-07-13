@@ -14,4 +14,10 @@
 		SELECT ITEM
 		FROM CATEGORY
 	</select>
+	
+	<select id="select" resultMap="list">
+		SELECT CID
+		FROM CATEGORY
+		WHERE ITEM = #{ITEM}
+	</select>
 </mapper>

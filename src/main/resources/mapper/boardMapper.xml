@@ -9,6 +9,7 @@
 		<result property="UID" column="UID" javaType="java.lang.Integer" />
 		<result property="BID" column="BID" javaType="java.lang.Integer" />
 		<result property="CID" column="CID" javaType="java.lang.Integer" />
+		<result property="ITEM" column="ITEM" javaType="java.lang.String" />
 		<result property="TITLE" column="TITLE" javaType="java.lang.String" />
 		<result property="CONTENT" column="CONTENT" javaType="java.lang.String" />
 		<result property="DATE" column="DATE" javaType="java.lang.String" />
@@ -20,10 +21,13 @@
 		FROM BOARD
 	</select>
 
+	<!-- <insert id="regist"> INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE) 
+		VALUES (${UID}, ${CID}, #{TITLE}, #{CONTENT}, #{DATE}) </insert> -->
+
 	<insert id="regist">
 		INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE)
 		VALUES
-		(${UID}, ${CID}, #{TITLE}, #{CONTENT}, #{DATE})
+		(${UID}, (SELECT CID FROM CATEGORY WHERE ITEM = #{ITEM}), #{TITLE}, #{CONTENT}, #{DATE})
 	</insert>
 
 	<select id="read" resultMap="list">
@@ -63,7 +67,7 @@
 		ORDER BY BID desc, DATE desc
 		<include refid="pagingFooter"></include>
 	</select>
-	 
+
 	<sql id="search">
 		<choose>
 			<when test="searchOption == 'all'">

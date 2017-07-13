@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.service.BoardPager;
 import com.hyunhye.board.service.BoardServiceImpl;
 
@@ -82,7 +82,6 @@ public class BoardController {
 	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
 	public ModelAndView write(@ModelAttribute BoardModel model,
 			MultipartFile file, HttpSession session) throws Exception {
-		System.out.println("title:"+model.getTITLE());
 		service.regist(session, model);
 		
 		ModelAndView mv = new ModelAndView();
