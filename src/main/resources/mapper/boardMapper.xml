@@ -16,9 +16,10 @@
 	</resultMap>
 
 	<select id="list" resultMap="list">
-		SELECT BID, CID, TITLE, CONTENT,
-		DATE
+		SELECT BOARD.BID, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
+		LEFT JOIN CATEGORY
+		ON BOARD.CID = CATEGORY.CID
 	</select>
 
 	<!-- <insert id="regist"> INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE) 
@@ -31,8 +32,7 @@
 	</insert>
 
 	<select id="read" resultMap="list">
-		SELECT BID, UID, CID, TITLE,
-		CONTENT, DATE
+		SELECT BID, UID, CID, TITLE, CONTENT, DATE
 		FROM BOARD WHERE BID = #{BID}
 	</select>
 
@@ -61,11 +61,14 @@
 
 	<select id="listAllPaging" resultMap="list">
 		<include refid="pagingHeader"></include>
-		SELECT BID, CID, TITLE, CONTENT, DATE
+		SELECT BOARD.BID, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
+		LEFT JOIN CATEGORY
+		ON BOARD.CID = CATEGORY.CID
 		<include refid="search"></include>
-		ORDER BY BID desc, DATE desc
+		ORDER BY BOARD.BID desc, BOARD.DATE desc
 		<include refid="pagingFooter"></include>
+		
 	</select>
 
 	<sql id="search">

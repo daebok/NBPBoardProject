@@ -92,8 +92,6 @@ public class BoardController {
 
 	@RequestMapping("/answer.do")
 	public ModelAndView read(@RequestParam int id) {
-		service.read(id);
-
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/answer");
 		mv.addObject("model", service.read(id));

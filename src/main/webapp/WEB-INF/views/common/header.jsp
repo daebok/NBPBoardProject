@@ -5,12 +5,10 @@
 <html>
 <head>
 <title>BOARD</title>
-<link href="<c:url value="/resources/custom/css/custom.css" />"
-	rel="stylesheet">
 </head>
 <body>
 	<div class="container header">
-		<h1 class="home btn"><a href="<c:url value='/'/>" class="home btn">BOARD</a></h1>
+		<h1><a href="<c:url value='/'/>">BOARD</a></h1>
 		<c:if test="${sessionScope.ID != null}">
 			<h5 class="home welcome">${sessionScope.NAME}(${sessionScope.ID})님환영합니다.</h5>
 		</c:if>

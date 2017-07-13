@@ -35,20 +35,15 @@
 		</div>
 		<div class="container-fluid">
 			<div class="col-md-12">
-				<c:forEach var="question" items="${list}">
+				<c:forEach var="board" items="${list}">
 					<h1>
-						<a href="<c:url value='/answer.do?id=${question.BID}'/>" id="BID">${question.TITLE}</a>
+						<a href="<c:url value='/answer.do?id=${board.BID}'/>" id="BID">${board.TITLE}</a>
 					</h1>
-					<p>${question.CONTENT}</p>
+					<p>${board.CONTENT}</p>
 					<div>
-						<span class="badge">Posted ${question.DATE}</span>
+						<span class="badge">Posted ${board.DATE}</span>
 						<div class="pull-right">
-							<span class="label label-default">alice</span> <span
-								class="label label-primary">story</span> <span
-								class="label label-success">blog</span> <span
-								class="label label-info">personal</span> <span
-								class="label label-warning">Warning</span> <span
-								class="label label-danger">Danger</span>
+							<span class="label label-warning">${board.ITEM}</span>
 						</div>
 					</div>
 					<hr>
