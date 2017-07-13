@@ -12,16 +12,10 @@
 		<result property="NAME" column="NAME" javaType="java.lang.String" />
 	</resultMap>
 
-	<select id="list" resultMap="list">
-		SELECT ID, NAME, PASSWORD FROM
-		USER
-	</select>
-
-
 	<insert id="regist">
 		INSERT INTO USER (ID, PASSWORD, NAME) VALUES
 		(#{ID},
-		#{PASSWORD}, #{NAME})
+		PASSWORD(#{PASSWORD}), #{NAME})
 	</insert>
 
 
@@ -31,7 +25,7 @@
 
 	<select id="loginCheck" resultType="String">
 		SELECT NAME FROM USER
-		WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
+		WHERE ID = #{ID} AND PASSWORD = PASSWORD(#{PASSWORD})
 	</select>
 
 	<select id="viewUser" resultMap="list">
@@ -40,7 +34,7 @@
 		NAME,
 		ID
 		FROM USER
-		WHERE ID = #{ID} AND PASSWORD = #{PASSWORD}
+		WHERE ID = #{ID} AND PASSWORD = PASSWORD(#{PASSWORD})
 	</select>
 	
 	<select id="select" resultType="Integer" parameterType="String">

@@ -36,7 +36,7 @@
 		<div class="container-fluid">
 			<form name="form" action="logincheck" method="post">
 				<label for="id"><b>ID</b></label><input type="text" name="ID" id="id" /> <br /> <label for="password"><b>Password</b></label><input
-					type="text" name="PASSWORD" id="password" /> <br />
+					type="password" name="PASSWORD" id="password" /> <br />
 				<!-- <button id="btnLogin">로그인</button>-->
 				<button type="button" id="loginButton">Log In</button>
 

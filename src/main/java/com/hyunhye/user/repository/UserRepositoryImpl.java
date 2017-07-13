@@ -1,7 +1,5 @@
 package com.hyunhye.user.repository;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -18,12 +16,6 @@ public class UserRepositoryImpl implements UserRepository {
 
 	private static final String namespace = "com.hyunhye.board.userMapper";
 
-	@Override
-	public List<UserModel> listAll() {
-
-		return sqlSession.selectList(namespace + ".list");
-
-	}
 
 	@Override
 	public void regist(UserModel model) {
