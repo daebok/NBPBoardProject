@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.FileModel;
 
 @Repository(value = "BoardRepository")
 public class BoardRepositoryImpl implements BoardRepository {
@@ -76,8 +77,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public void addAttach(String fullName) {
-		sqlSession.insert(namespace2 + ".insertFile", fullName);
+	public void addAttach(FileModel model) {
+		sqlSession.insert(namespace2 + ".addAttach", model);
 	}
 
 }

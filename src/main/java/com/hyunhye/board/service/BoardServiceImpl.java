@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.repository.BoardRepositoryImpl;
 import com.hyunhye.common.UploadFileUtils;
 
@@ -56,8 +57,18 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 		if (files == null) {
 			return;
 		}
-		for (String fileName : files) { // each file add
-			repository.addAttach(fileName);
+
+		// for (String fileName : files) { // each file add
+		for (int i = 1; i < files.length; i++) {
+			String fileName = files[i];
+			logger.info("fileName: " + fileName + " model.getBID(): " + model.getBID());
+
+			FileModel fileModel = new FileModel();
+			fileModel.setFILENAME(fileName.substring(fileName.indexOf("=") + 1));
+			fileModel.setORIGINNAME(fileName.substring(fileName.lastIndexOf("_") + 1));
+			fileModel.setEXTENSION(fileName.substring(fileName.lastIndexOf(".") + 1));
+
+			repository.addAttach(fileModel);
 		}
 	}
 

@@ -1,10 +1,10 @@
 package com.hyunhye.board.repository;
 
 import java.util.List;
-import java.util.Map;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.FileModel;
 
 public interface BoardRepository {
 	public List<BoardModel> listAll();
@@ -23,5 +23,5 @@ public interface BoardRepository {
 
 	public List<CategoryModel> categoryListAll();
 
-	public void addAttach(String fullName);
+	public void addAttach(FileModel model);
 }

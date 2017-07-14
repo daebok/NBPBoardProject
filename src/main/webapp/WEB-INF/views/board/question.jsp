@@ -48,14 +48,15 @@ small {
 				success : function(data) {
 					var str="";
 					if(checkImageType(data)){ 
-						str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
+						str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
 						str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
 						str += "<small data-src="+data+">X</small></div>";
 					} else { // download if not image file
-						 str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a>"
+						 str = "<div><a href='/board/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
 								+"<small data-src="+data+">X</small></div>";
 					}
 					$(".uploadedList").append(str);
+
 				}
 			});
 		});
@@ -74,20 +75,32 @@ small {
 				}
 			});
 		});
-		$("#registerForm").submit(function(event){
-			event.preventDefault();
-			
-			var that = $(this);
-			
-			var str ="";
-			$(".uploadedList .delbtn").each(function(index){
-				 str += "<input type='hidden' name='files["+index+"]' value='"+$(this).attr("href") +"'> ";
-			});
-			
-			that.append(str);
-			that.get(0).submit();
-		});
 
+		$("#questionButton").click(function() {
+			var title = $("#title").val();
+			var content = $("#content").val();
+			if (title == "") {
+				alert("제목을 입력하세요.");
+				$("#title").focus();
+				return;
+			}
+			if (content == "") {
+				alert("내용를 입력하세요.");
+				$("#content").focus();
+				return;
+			}
+			
+			var that = $("#registerForm");
+			var str = "";
+
+			$(".uploadedList").each(function(index){
+				str += "<input type='hidden' name='files' value='"+ $(".file").attr("href") +"'> ";
+			});
+			that.append(str);
+			
+			document.form.action = "question/ask"
+			document.form.submit();
+		});
 		
 		/* summernote */
 		$('.summernote').summernote({
@@ -113,22 +126,6 @@ small {
 			});
 		}
 
-		$("#questionButton").click(function() {
-			var title = $("#title").val();
-			var content = $("#content").val();
-			if (title == "") {
-				alert("제목을 입력하세요.");
-				$("#title").focus();
-				return;
-			}
-			if (content == "") {
-				alert("내용를 입력하세요.");
-				$("#content").focus();
-				return;
-			}
-			document.form.action = "question/ask"
-			document.form.submit();
-		});
 	});
 </script>
 
@@ -140,8 +137,7 @@ small {
 
 	<div class="container">
 		<div class="container-fluid">
-			<form action="question/ask" method="post"
-				enctype="multipart/form-data" name="form" id="registerForm">
+			<form action="question/ask" method="post" name="form" id="registerForm">
 				Title <input type="text" name="TITLE" maxlength="80" id="title" />
 				<select name="ITEM">
 					<c:forEach var="category" items="${list}">
@@ -150,17 +146,13 @@ small {
 				</select> <br /> <br />
 				<textarea class="summernote" name="CONTENT" maxlength="500"
 					id="content"></textarea>
-				<br /> 첨부파일 등록<input type="file" name="FILE">
+				<br /> 
 				<div class="form-group">
-					<label for="fileDrop">File Drop Here</label>
-					<div class="fileDrop"></div>
+					<div class="fileDrop"><label for="fileDrop">File Drop Here</label></div>
 				</div>
 				<div class="box-footer">
-					<div>
-						<hr>
-					</div>
-					<ul class="uploadedList">
-					</ul>
+					<hr>
+					<div class="uploadedList"></div>
 				</div>
 				<div class="pull-right">
 					<button type="button" id="questionButton" class="btn btn-default">Question</button>

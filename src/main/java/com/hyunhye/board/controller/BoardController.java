@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hyunhye.board.model.BoardModel;
@@ -75,22 +74,16 @@ public class BoardController {
 
 
 	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
-	public ModelAndView write(@ModelAttribute BoardModel model,
-		MultipartFile file, HttpSession session) throws Exception {
+	public String write(@ModelAttribute BoardModel model, HttpSession session) throws Exception {
+		logger.info("model: " + model.getFiles());
 		service.regist(session, model);
-
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/home.do");
-
-		return mv;
+		return "redirect:/list.do";
 	}
 
 	@RequestMapping("/answer.do")
-	public ModelAndView read(@RequestParam int id) {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("board/answer");
-		mv.addObject("model", service.read(id));
-		return mv;
+	public String read(@RequestParam int id, Model model) {
+		model.addAttribute("model", service.read(id));
+		return "board/answer";
 	}
 
 	@RequestMapping("search.do")
@@ -112,12 +105,10 @@ public class BoardController {
 	}
 
 	@RequestMapping("modify.do")
-	public ModelAndView modify(@RequestParam int id) {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("model", service.read(id));
-		mv.addObject("list", service.categoryListAll()); // category
-		mv.setViewName("board/modify");
-		return mv;
+	public String modify(@RequestParam int id, Model model) {
+		model.addAttribute("model", service.read(id));
+		model.addAttribute("list", service.categoryListAll()); // category
+		return "board/modify";
 	}
 
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)

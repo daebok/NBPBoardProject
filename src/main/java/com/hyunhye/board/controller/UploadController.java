@@ -40,10 +40,6 @@ public class UploadController {
 
 	@RequestMapping(value = "/uploadForm", method = RequestMethod.POST)
 	public void uploadForm(MultipartFile file, Model model) throws Exception {
-		logger.info("originalName: " + file.getOriginalFilename());
-		logger.info("size: " + file.getSize());
-		logger.info("contentType: " + file.getContentType());
-
 		String savedName = uploadfile(file.getOriginalFilename(), file.getBytes());
 		model.addAttribute("savedName", savedName);
 	}
@@ -51,10 +47,6 @@ public class UploadController {
 	@ResponseBody
 	@RequestMapping(value = "/uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
-		logger.info("originalName: " + file.getOriginalFilename());
-		logger.info("size: " + file.getSize());
-		logger.info("contentType: " + file.getContentType());
-
 		return new ResponseEntity<>(
 			UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()),
 			HttpStatus.CREATED);

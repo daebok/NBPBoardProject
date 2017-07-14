@@ -8,8 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
-import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.CategoryModel;
 
 public interface BoardService {
 	public void listAll(Model model);
@@ -20,7 +20,7 @@ public interface BoardService {
 
 	public void delete(int bid, BoardModel dto);
 
-	public void regist(HttpSession session, BoardModel dto);
+	public void regist(HttpSession session, BoardModel boardModel);
 
 	public BoardModel read(int id);
 
