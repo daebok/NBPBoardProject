@@ -9,6 +9,6 @@ public class FileModel {
 	private String FILENAME;
 	private String ORIGINNAME;
 	private String EXTENSION;
-	private String FILESIZE;
+	private int FILESIZE;
 
 }

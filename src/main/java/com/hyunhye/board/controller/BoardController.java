@@ -30,7 +30,7 @@ public class BoardController {
 	@Autowired
 	public BoardServiceImpl service;
 
-	@RequestMapping(value = { "/", "/home.do" })
+	@RequestMapping(value = {"/", "/home.do"})
 	public String home(Model model) {
 		service.listAll(model);
 
@@ -50,7 +50,8 @@ public class BoardController {
 	// Paging
 	@RequestMapping("list.do")
 	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
-			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage) throws Exception {
+		@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage)
+		throws Exception {
 
 		// questions count
 		int count = service.countArticle(searchOption, keyword);
@@ -75,13 +76,10 @@ public class BoardController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/upload/uploadForm", method = RequestMethod.GET)
-	public void uplodaForm() {
-	}
 
 	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
 	public ModelAndView write(@ModelAttribute BoardModel model,
-			MultipartFile file, HttpSession session) throws Exception {
+		MultipartFile file, HttpSession session) throws Exception {
 		service.regist(session, model);
 
 		ModelAndView mv = new ModelAndView();
@@ -100,7 +98,7 @@ public class BoardController {
 
 	@RequestMapping("search.do")
 	public ModelAndView list(Model model, @RequestParam(defaultValue = "TITLE") String searchOption,
-			@RequestParam(defaultValue = "") String keyword) throws Exception {
+		@RequestParam(defaultValue = "") String keyword) throws Exception {
 
 		service.listAll(model, searchOption, keyword);
 		int count = service.countArticle(searchOption, keyword);
@@ -125,9 +123,9 @@ public class BoardController {
 		return mv;
 	}
 
-	@RequestMapping(value="/question/modify", method=RequestMethod.POST)
+	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
 	public String modify(HttpSession session, @ModelAttribute BoardModel model) {
-		service.modify(session,model);
+		service.modify(session, model);
 
 		return "forward:/answer.do?id=" + model.getBID();
 	}

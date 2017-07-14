@@ -63,7 +63,6 @@ public class UserController {
 		return mv;
 	}
 
-	// 아이디 중복 체크
 	@RequestMapping(value = "/duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int duplicationId(@RequestBody String id) {
 		return service.select(id);

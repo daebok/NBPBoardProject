@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.repository.BoardRepositoryImpl;
-import com.hyunhye.common.FileUtils;
+import com.hyunhye.common.UploadFileUtils;
 
 @Service(value = "BoardService")
 public class BoardServiceImpl implements com.hyunhye.board.service.BoardService {
@@ -27,7 +27,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	public BoardRepositoryImpl repository;
 
 	@Resource(name="fileUtils")
-	    private FileUtils fileUtils;
+	    private UploadFileUtils fileUtils;
 
 
 	@Override

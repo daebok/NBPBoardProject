@@ -9,11 +9,26 @@
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height : 300,
-			 height : 350,
-		        onImageUpload : function(files, editor, welEditable) {
-		            sendFile(files[0], editor, welEditable);
-		        },
+			onImageUpload : function(files, editor, welEditable) {
+				sendFile(files[0], editor, welEditable);
+			}
 		});
+		function sendFile(file, editor, welEditable) {
+			data = new FormData();
+			data.append("uploadFile", file);
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/imageUpload",
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function(data) {
+					editor.insertImage(welEditable, data.url);
+				}
+			});
+		}
+
 		$("#questionButton").click(function() {
 			var title = $("#title").val();
 			var content = $("#content").val();
@@ -34,6 +49,7 @@
 </script>
 
 </head>
+추가
 <body>
 	<!-- header start -->
 	<%@include file="../common/header.jsp"%>
@@ -48,8 +64,8 @@
 					<c:forEach var="category" items="${list}">
 						<option value="${category.ITEM}">${category.ITEM}</option>
 					</c:forEach>
-				</select> 
-				<br /><br />
+				</select> <br />
+				<br />
 				<textarea class="summernote" name="CONTENT" maxlength="500"
 					id="content"></textarea>
 				<br /> 첨부파일 등록<input type="file" name="FILE">
