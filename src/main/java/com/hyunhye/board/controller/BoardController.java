@@ -46,7 +46,7 @@ public class BoardController {
 
 	// Paging
 	@RequestMapping("list.do")
-	public ModelAndView list(@RequestParam(defaultValue = "") String searchOption,
+	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
 		@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage)
 		throws Exception {
 

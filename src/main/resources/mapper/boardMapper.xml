@@ -18,8 +18,8 @@
 
 	<select id="list" resultMap="list">
 		SELECT BOARD.BID, CATEGORY.ITEM, USER.NAME, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		FROM BOARD
 		<include refid="category_user_join"></include>
-		ON BOARD.UID = USER.UID
 	</select>
 
 	<!-- <insert id="regist"> INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE) 
