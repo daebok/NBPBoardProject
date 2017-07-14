@@ -38,18 +38,15 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/question.do")
-	public ModelAndView question() {
+	public String question(Model model) {
 		List<CategoryModel> list = service.categoryListAll();
-
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("list", list);
-		mv.setViewName("board/question");
-		return mv;
+		model.addAttribute("list", list);
+		return "/board/question";
 	}
 
 	// Paging
 	@RequestMapping("list.do")
-	public ModelAndView list(@RequestParam(defaultValue = "TITLE") String searchOption,
+	public ModelAndView list(@RequestParam(defaultValue = "") String searchOption,
 		@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage)
 		throws Exception {
 

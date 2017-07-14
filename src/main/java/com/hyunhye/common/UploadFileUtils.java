@@ -18,6 +18,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component("fileUtils")
 public class UploadFileUtils {
+
+	public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception {
+		UUID uuid = UUID.randomUUID();
+		String savedName = uuid.toString() + "_" + originalName;
+		String savedPath = calcPath(uploadPath); // calc saved path
+		File target = new File(uploadPath + savedPath, savedName);
+		FileCopyUtils.copy(fileData, target); // copy file in temp directory (save)
+		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1); // contentType check to make thumbnail
+		String uploadedFileName = null;
+		if (MediaUtils.getMediaType(formatName) != null) { // if image ?
+			/* create thumbnail*/
+			uploadedFileName = makeThumbnail(uploadPath, savedPath, savedName);
+		} else { // image no
+			/* create icon*/
+			uploadedFileName = makeIcon(uploadPath, savedPath, savedName);
+		}
+		return uploadedFileName;
+	}
+
+	private static String makeIcon(String uploadPath, String path, String fileName) throws Exception {
+		String iconName = uploadPath + path + File.separator + fileName; // icon name
+		return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');
+	}
+
 	private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
 	public static String fileSave(String uploadPath, MultipartFile file) throws IllegalStateException, IOException {
@@ -54,7 +78,8 @@ public class UploadFileUtils {
 		}
 	}
 
-	private static String calcPath(String uploadPath) {
+	/* folder create */
+	private static String calcPath(String uploadPath) { // uploadPath: inner path
 
 		Calendar cal = Calendar.getInstance();
 
@@ -71,7 +96,7 @@ public class UploadFileUtils {
 
 	private static void makeDir(String uploadPath, String... paths) {
 
-		System.out.println(paths[paths.length - 1] + " : " + new File(paths[paths.length - 1]).exists());
+		logger.info(paths[paths.length - 1] + " : " + new File(paths[paths.length - 1]).exists());
 		if (new File(paths[paths.length - 1]).exists()) {
 			return;
 		}
@@ -91,14 +116,15 @@ public class UploadFileUtils {
 		return filePath.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
+	/* create Thumbnail */
 	@SuppressWarnings("unused")
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 
-		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
+		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName)); // image in memory
 
-		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
+		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100); // origin image copy
 
-		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
+		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName; // thumbnail image name (s_)
 
 		File newFile = new File(thumbnailName);
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);

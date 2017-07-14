@@ -5,8 +5,76 @@
 <html>
 <head>
 <title>Home</title>
+<style>
+.fileDrop {
+	width: 100%;
+	height: 200px;
+	border: 1px dotted blue;
+}
+
+small {
+	margin-left: 3px;
+	font-weight: bold;
+	color: gray;
+}
+</style>
 <script>
+	function checkImageType(fileName) {
+	    var pattern = /jpg|gif|png|jpeg/i; 
+	    return fileName.match(pattern); 
+	}
+	function getOriginalName(fileName) {
+	    if(checkImageType(fileName)) { // if image file
+	        return;
+	    }
+	    var idx = fileName.indexOf("_")+1;
+	    return fileName.substr(idx);
+	}
+	function getImageLink(fileName) {
+	    if(!checkImageType(fileName)) { // if not image file
+	        return; 
+	    }
+	    var front = fileName.substr(0, 12); // 년원일 경로 추출
+	    var end = fileName.substr(14); // 년원일 경로와 s_를 제거한 원본 파일명을 추출
+	    return front+end; 
+	}
+
 	$(document).ready(function() {
+		$(".fileDrop").on("dragenter dragover", function(event) {
+			event.preventDefault();
+			var files = event.originalEvent.dataTransfer.files;
+			var file = files[0];
+			console.log(file);
+		});
+			$(".fileDrop").on("drop", function(event) {
+				event.preventDefault();
+				var files = event.originalEvent.dataTransfer.files;
+				var file = files[0];
+				console.log(file);
+
+				var formData = new FormData();
+				formData.append("file",file);
+
+				$.ajax({
+					url : '/board/uploadAjax',
+					data : formData,
+					dataType : 'text',
+					processData : false,
+					contentType : false,
+					type : 'POST',
+					success : function(data) {
+						var str="";
+						  if(checkImageType(data)){ 
+				                str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
+				                str += "<img src='/board/upload/displayFile?fileName="+data+"'></a></div>";
+				                console.log(data);
+				            } else { // download if not image file
+				                str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a></div>";
+				            }
+						  $(".uploadedList").append(str);
+					}
+				});
+			});
 		$('.summernote').summernote({
 			height : 300,
 			onImageUpload : function(files, editor, welEditable) {
@@ -19,7 +87,8 @@
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/imageUpload",
+				url : "/board/imageUpload",
+				dataType : 'text',
 				cache : false,
 				contentType : false,
 				processData : false,
@@ -49,7 +118,6 @@
 </script>
 
 </head>
-추가
 <body>
 	<!-- header start -->
 	<%@include file="../common/header.jsp"%>
@@ -64,11 +132,12 @@
 					<c:forEach var="category" items="${list}">
 						<option value="${category.ITEM}">${category.ITEM}</option>
 					</c:forEach>
-				</select> <br />
-				<br />
+				</select> <br /> <br />
 				<textarea class="summernote" name="CONTENT" maxlength="500"
 					id="content"></textarea>
 				<br /> 첨부파일 등록<input type="file" name="FILE">
+				<div class="fileDrop"></div>
+				<div class='uploadedList'></div>
 				<div class="pull-right">
 					<button type="button" id="questionButton" class="btn btn-default">Question</button>
 				</div>
