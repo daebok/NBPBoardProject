@@ -18,10 +18,7 @@
 
 	<select id="list" resultMap="list">
 		SELECT BOARD.BID, CATEGORY.ITEM, USER.NAME, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
-		FROM BOARD
-		LEFT JOIN CATEGORY
-		ON BOARD.CID = CATEGORY.CID
-		LEFT JOIN  USER
+		<include refid="category_user_join"></include>
 		ON BOARD.UID = USER.UID
 	</select>
 
@@ -37,10 +34,7 @@
 	<select id="read" resultMap="list">
 		SELECT BOARD.BID, BOARD.UID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD 
-		LEFT JOIN CATEGORY
-		ON BOARD.CID = CATEGORY.CID 
-		LEFT JOIN  USER
-		ON BOARD.UID = USER.UID
+		<include refid="category_user_join"></include>
 		WHERE BID = #{BID}
 	</select>
 
@@ -71,10 +65,7 @@
 		<include refid="pagingHeader"></include>
 		SELECT BOARD.BID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
-		LEFT JOIN CATEGORY
-		ON BOARD.CID = CATEGORY.CID
-		LEFT JOIN  USER
-		ON BOARD.UID = USER.UID
+		<include refid="category_user_join"></include>
 		<include refid="search"></include>
 		ORDER BY BOARD.BID desc, BOARD.DATE desc
 		<include refid="pagingFooter"></include>
@@ -103,6 +94,13 @@
 		) A, (SELECT @ROWNUM := 0) TMP ) B
 		WHERE rn BETWEEN ${start}
 		AND ${end}
+	</sql>
+	
+	<sql id="category_user_join">
+		JOIN CATEGORY
+		ON BOARD.CID = CATEGORY.CID
+		JOIN  USER
+		ON BOARD.UID = USER.UID
 	</sql>
 
 </mapper>

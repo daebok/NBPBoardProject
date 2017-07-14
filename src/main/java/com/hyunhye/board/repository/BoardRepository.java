@@ -17,11 +17,11 @@ public interface BoardRepository {
 
 	public void delete(BoardModel model);
 
-	public void insertFile(Map<String, Object> map);
-
 	public BoardModel read(int id);
 
 	public List<BoardModel> listAll(int start, int end, String searchOption, String keyword);
 
 	public List<CategoryModel> categoryListAll();
+
+	public void addAttach(String fullName);
 }

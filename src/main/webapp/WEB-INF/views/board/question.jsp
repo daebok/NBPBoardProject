@@ -7,9 +7,11 @@
 <title>Home</title>
 <style>
 .fileDrop {
-	width: 100%;
-	height: 200px;
-	border: 1px dotted blue;
+	width: 70%;
+	height: 100px;
+	border: 1px dotted gray;
+	background-color: lightslategray;
+	margin: auto; 
 }
 
 small {
@@ -18,27 +20,8 @@ small {
 	color: gray;
 }
 </style>
+<script src="<c:url value="/resources/common/js/upload.js" />"></script>
 <script>
-	function checkImageType(fileName) {
-	    var pattern = /jpg|gif|png|jpeg/i; 
-	    return fileName.match(pattern); 
-	}
-	function getOriginalName(fileName) {
-	    if(checkImageType(fileName)) { // if image file
-	        return;
-	    }
-	    var idx = fileName.indexOf("_")+1;
-	    return fileName.substr(idx);
-	}
-	function getImageLink(fileName) {
-	    if(!checkImageType(fileName)) { // if not image file
-	        return; 
-	    }
-	    var front = fileName.substr(0, 12); // 년원일 경로 추출
-	    var end = fileName.substr(14); // 년원일 경로와 s_를 제거한 원본 파일명을 추출
-	    return front+end; 
-	}
-
 	$(document).ready(function() {
 		$(".fileDrop").on("dragenter dragover", function(event) {
 			event.preventDefault();
@@ -64,15 +47,15 @@ small {
 				type : 'POST',
 				success : function(data) {
 					var str="";
-					  if(checkImageType(data)){ 
-			                str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
-			                str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
-			                str += "<small data-src="+data+">X</small></div>";
-			            } else { // download if not image file
-			                str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a>"
-			                		+"<small data-src="+data+">X</small></div>";
-			            }
-					  $(".uploadedList").append(str);
+					if(checkImageType(data)){ 
+						str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
+						str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
+						str += "<small data-src="+data+">X</small></div>";
+					} else { // download if not image file
+						 str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a>"
+								+"<small data-src="+data+">X</small></div>";
+					}
+					$(".uploadedList").append(str);
 				}
 			});
 		});
@@ -91,6 +74,22 @@ small {
 				}
 			});
 		});
+		$("#registerForm").submit(function(event){
+			event.preventDefault();
+			
+			var that = $(this);
+			
+			var str ="";
+			$(".uploadedList .delbtn").each(function(index){
+				 str += "<input type='hidden' name='files["+index+"]' value='"+$(this).attr("href") +"'> ";
+			});
+			
+			that.append(str);
+			that.get(0).submit();
+		});
+
+		
+		/* summernote */
 		$('.summernote').summernote({
 			height : 300,
 			onImageUpload : function(files, editor, welEditable) {
@@ -142,7 +141,7 @@ small {
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/ask" method="post"
-				enctype="multipart/form-data" name="form">
+				enctype="multipart/form-data" name="form" id="registerForm">
 				Title <input type="text" name="TITLE" maxlength="80" id="title" />
 				<select name="ITEM">
 					<c:forEach var="category" items="${list}">
@@ -152,8 +151,17 @@ small {
 				<textarea class="summernote" name="CONTENT" maxlength="500"
 					id="content"></textarea>
 				<br /> 첨부파일 등록<input type="file" name="FILE">
-				<div class="fileDrop"></div>
-				<div class='uploadedList'></div>
+				<div class="form-group">
+					<label for="fileDrop">File Drop Here</label>
+					<div class="fileDrop"></div>
+				</div>
+				<div class="box-footer">
+					<div>
+						<hr>
+					</div>
+					<ul class="uploadedList">
+					</ul>
+				</div>
 				<div class="pull-right">
 					<button type="button" id="questionButton" class="btn btn-default">Question</button>
 				</div>
@@ -162,3 +170,4 @@ small {
 	</div>
 </body>
 </html>
+					 

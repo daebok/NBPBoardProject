@@ -76,8 +76,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public void insertFile(Map<String, Object> map) {
-		sqlSession.insert(namespace2 + ".insertFile", map);
+	public void addAttach(String fullName) {
+		sqlSession.insert(namespace2 + ".insertFile", fullName);
 	}
 
 }
