@@ -13,8 +13,8 @@
 - PASSWORD 
 
 ## URL
-http://10.105.170.230:9001/board/
-http://localhost:8080/board/
+- http://10.105.170.230:9001/board/
+- http://localhost:8080/board/
 
 ## test account
 - ID: test
