@@ -12,9 +12,9 @@
 		<result property="FILESIZE" column="FILESIZE" javaType="java.lang.String" />
 	</resultMap>
 	
-	<insert id="insertFile">
-		INSERT INTO FILE (CID, FILENAME, ORIGINNAME, EXTENSION, FILESIZE)
+	<insert id="addAttach">
+		INSERT INTO FILE (BID, FILENAME, ORIGINNAME, EXTENSION, FILESIZE)
 		VALUES
-		( ${CID}, #{FILENAME}, #{ORIGINNAME}, #{EXTENSION}, #{FILESIZE} )
+		( ${BID}, #{FILENAME}, #{ORIGINNAME}, #{EXTENSION}, #{FILESIZE} )
 	</insert>
 </mapper>

@@ -46,35 +46,51 @@ small {
 			var file = files[0];
 			console.log(file);
 		});
-			$(".fileDrop").on("drop", function(event) {
-				event.preventDefault();
-				var files = event.originalEvent.dataTransfer.files;
-				var file = files[0];
-				console.log(file);
+		$(".fileDrop").on("drop", function(event) {
+			event.preventDefault();
+			var files = event.originalEvent.dataTransfer.files;
+			var file = files[0];
+			console.log(file);
 
-				var formData = new FormData();
-				formData.append("file",file);
+			var formData = new FormData();
+			formData.append("file",file);
 
-				$.ajax({
-					url : '/board/uploadAjax',
-					data : formData,
-					dataType : 'text',
-					processData : false,
-					contentType : false,
-					type : 'POST',
-					success : function(data) {
-						var str="";
-						  if(checkImageType(data)){ 
-				                str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
-				                str += "<img src='/board/upload/displayFile?fileName="+data+"'></a></div>";
-				                console.log(data);
-				            } else { // download if not image file
-				                str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a></div>";
-				            }
-						  $(".uploadedList").append(str);
-					}
-				});
+			$.ajax({
+				url : '/board/uploadAjax',
+				data : formData,
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				type : 'POST',
+				success : function(data) {
+					var str="";
+					  if(checkImageType(data)){ 
+			                str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"'>"; // link
+			                str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
+			                str += "<small data-src="+data+">X</small></div>";
+			            } else { // download if not image file
+			                str = "<div><a href='/board/upload/displayFile?fileName="+data+"'>"+getOriginalName(data)+"</a>"
+			                		+"<small data-src="+data+">X</small></div>";
+			            }
+					  $(".uploadedList").append(str);
+				}
 			});
+		});
+		$(".uploadedList").on("click","small",function(event){
+			var that = $(this);
+			
+			$.ajax({
+				url: "deleteFile",
+				type:"post",
+				data: {fileName: $(this).attr("data-src")},
+				dataType: "text",
+				success:function(result){
+					if(result == 'deleted'){
+						that.parent('div').remove();
+					}
+				}
+			});
+		});
 		$('.summernote').summernote({
 			height : 300,
 			onImageUpload : function(files, editor, welEditable) {

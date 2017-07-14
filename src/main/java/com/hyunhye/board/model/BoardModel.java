@@ -13,4 +13,5 @@ public class BoardModel {
 	private String CATEGORY;
 	private String CONTENT;
 	private String DATE;
+	private String[] files;
 }

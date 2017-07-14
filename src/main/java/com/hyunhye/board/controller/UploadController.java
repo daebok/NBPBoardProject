@@ -72,14 +72,14 @@ public class UploadController {
 		try {
 			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // extract contentType
 
-			MediaType mType = MediaUtils.getMediaType(formatName); // image or not check
+			MediaType mediaType = MediaUtils.getMediaType(formatName); // image or not check
 
 			HttpHeaders headers = new HttpHeaders(); // header
 
 			logger.info("uploadPath: " + uploadPath);
 			in = new FileInputStream(uploadPath + fileName);
-			if (mType != null) { // if image
-				headers.setContentType(mType);
+			if (mediaType != null) { // if image
+				headers.setContentType(mediaType);
 			} else { // if not
 				fileName = fileName.substring(fileName.indexOf("_") + 1);
 				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // contentType for downloading
@@ -94,6 +94,27 @@ public class UploadController {
 			in.close();
 		}
 		return entity;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/deleteFile", method = RequestMethod.POST)
+	public ResponseEntity<String> deleteFile(String fileName) {
+		logger.info("delete file: " + fileName);
+
+		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+		MediaType mediaType = MediaUtils.getMediaType(formatName);
+
+		if (mediaType != null) {
+			String front = fileName.substring(0, 12);
+			String end = fileName.substring(14);
+			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete();
+		}
+
+		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+
 	}
 
 	private String uploadfile(String originalName, byte[] fileData) throws IOException {
