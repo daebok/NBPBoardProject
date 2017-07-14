@@ -9,7 +9,10 @@
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height : 300,
-			
+			 height : 350,
+		        onImageUpload : function(files, editor, welEditable) {
+		            sendFile(files[0], editor, welEditable);
+		        },
 		});
 		$("#questionButton").click(function() {
 			var title = $("#title").val();
