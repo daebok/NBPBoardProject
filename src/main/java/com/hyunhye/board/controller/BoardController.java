@@ -33,14 +33,14 @@ public class BoardController {
 	@RequestMapping(value = { "/", "/home.do" })
 	public String home(Model model) {
 		service.listAll(model);
-		
+
 		return "home";
 	}
-	
+
 	@RequestMapping(value = "/question.do")
 	public ModelAndView question() {
 		List<CategoryModel> list = service.categoryListAll();
-	
+
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("list", list);
 		mv.setViewName("board/question");
@@ -83,11 +83,11 @@ public class BoardController {
 	public ModelAndView write(@ModelAttribute BoardModel model,
 			MultipartFile file, HttpSession session) throws Exception {
 		service.regist(session, model);
-		
+
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/home.do");
 
-		return mv; 
+		return mv;
 	}
 
 	@RequestMapping("/answer.do")
@@ -119,8 +119,9 @@ public class BoardController {
 	@RequestMapping("modify.do")
 	public ModelAndView modify(@RequestParam int id) {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("board/modify");
 		mv.addObject("model", service.read(id));
+		mv.addObject("list", service.categoryListAll()); // category
+		mv.setViewName("board/modify");
 		return mv;
 	}
 
@@ -134,6 +135,6 @@ public class BoardController {
 	@RequestMapping("delete.do")
 	public String delete(@RequestParam int id, BoardModel model) throws Exception {
 		service.delete(id, model);
-		return "redirect:home.do";
+		return "redirect:list.do";
 	}
 }

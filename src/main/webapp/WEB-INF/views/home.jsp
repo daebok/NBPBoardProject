@@ -12,18 +12,7 @@
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
-				<form name="form1" method="post" action="${path}/board/list.do">
-					<select name="searchOption">
-						<!-- 검색조건을 검색처리후 결과화면에 보여주기위해  c:out 출력태그 사용, 삼항연산자 -->
-						<option value="all"
-							<c:out value="${map.searchOption == 'all'?'selected':''}"/>>제목+내용</option>
-						<option value="CONTENT"
-							<c:out value="${map.searchOption == 'CONTENT'?'selected':''}"/>>내용</option>
-						<option value="TITLE"
-							<c:out value="${map.searchOption == 'TITLE'?'selected':''}"/>>제목</option>
-					</select> <input name="keyword" value="${map.keyword}"> <input
-						type="submit" value="조회">
-				</form>
+				<%@include file="common/search.jsp"%>
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
 				<%-- <c:if test="${sessionScope.ID != null}"> --%>
 					<a href="<c:url value='/question.do'/>" id="QUESTION"
@@ -42,6 +31,7 @@
 					<p>${board.CONTENT}</p>
 					<div>
 						<span class="badge">Posted ${board.DATE}</span>
+						<span class="badge">Posted By ${board.NAME}</span>
 						<div class="pull-right">
 							<span class="label label-warning">${board.ITEM}</span>
 						</div>

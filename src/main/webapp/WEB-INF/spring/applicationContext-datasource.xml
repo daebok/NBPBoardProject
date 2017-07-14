@@ -10,7 +10,11 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://10.105.170.230:13306/BOARD" />
 		<property name="username" value="hyunhye" />
-		<property name="password" value="" />
+		<property name="password" value="" /> 
+		<!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/BOARD" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />-->
 	</bean>
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

@@ -38,7 +38,7 @@
 				<label for="id"><b>ID</b></label><input type="text" name="ID" id="id" /> <br /> <label for="password"><b>Password</b></label><input
 					type="password" name="PASSWORD" id="password" /> <br />
 				<!-- <button id="btnLogin">로그인</button>-->
-				<button type="button" id="loginButton">Log In</button>
+				<button type="button" id="loginButton" class="btn btn-default" >Log In</button>
 
 				<c:if test="${msg == 'failure'}">
 					<div style="color: red">아이디 또는 비밀번호가 일치하지 않습니다.</div>

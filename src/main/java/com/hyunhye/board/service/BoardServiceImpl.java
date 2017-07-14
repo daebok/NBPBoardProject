@@ -24,7 +24,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
 	@Autowired
-	public BoardRepositoryImpl dao;
+	public BoardRepositoryImpl repository;
 
 	@Resource(name="fileUtils")
 	    private FileUtils fileUtils;
@@ -34,7 +34,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	public void listAll(Model model) {
 		// TODO Auto-generated method stub
 		List<BoardModel> list;
-		list = dao.listAll();
+		list = repository.listAll();
 		model.addAttribute("list", list);
 	}
 
@@ -50,20 +50,20 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 		model.setDATE(currentTime);
 		model.setUID(UID);
 
-		dao.regist(model);
+		repository.regist(model);
 	}
 
 	@Override
 	public BoardModel read(int id) {
 		// TODO Auto-generated method stub
-		return dao.read(id);
+		return repository.read(id);
 	}
 
 	// 05. All Questions List
 	@Override
 	public void listAll(Model model, String searchOption, String keyword) throws Exception {
 		List<BoardModel> list;
-		list = dao.listAll(searchOption, keyword);
+		list = repository.listAll(searchOption, keyword);
 
 		model.addAttribute("list", list);
 	}
@@ -71,7 +71,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	// 06. Questions Count
 	@Override
 	public int countArticle(String searchOption, String keyword) throws Exception {
-		return dao.countArticle(searchOption, keyword);
+		return repository.countArticle(searchOption, keyword);
 	}
 
 	// 07. Question Modify
@@ -88,25 +88,25 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 		model.setUID(UID);
 		model.setCID(1);
 
-		return dao.modify(model);
+		return repository.modify(model);
 	}
 
 	@Override
 	public void delete(int bid, BoardModel model) {
 		// TODO Auto-generated method stub
 		model.setBID(bid);
-		dao.delete(model);
+		repository.delete(model);
 	}
 
 	@Override
 	public List<BoardModel> listAll(int start, int end, String searchOption, String keyword) {
 		// TODO Auto-generated method stub
-		return dao.listAll(start, end, searchOption, keyword);
+		return repository.listAll(start, end, searchOption, keyword);
 	}
 
 	@Override
 	public List<CategoryModel> categoryListAll() {
 		// TODO Auto-generated method stub
-		return dao.categoryListAll();
+		return repository.categoryListAll();
 	}
 }

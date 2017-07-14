@@ -9,6 +9,7 @@
 		<result property="UID" column="UID" javaType="java.lang.Integer" />
 		<result property="BID" column="BID" javaType="java.lang.Integer" />
 		<result property="CID" column="CID" javaType="java.lang.Integer" />
+		<result property="NAME" column="NAME" javaType="java.lang.String" />
 		<result property="ITEM" column="ITEM" javaType="java.lang.String" />
 		<result property="TITLE" column="TITLE" javaType="java.lang.String" />
 		<result property="CONTENT" column="CONTENT" javaType="java.lang.String" />
@@ -16,10 +17,12 @@
 	</resultMap>
 
 	<select id="list" resultMap="list">
-		SELECT BOARD.BID, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		SELECT BOARD.BID, CATEGORY.ITEM, USER.NAME, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
 		LEFT JOIN CATEGORY
 		ON BOARD.CID = CATEGORY.CID
+		LEFT JOIN  USER
+		ON BOARD.UID = USER.UID
 	</select>
 
 	<!-- <insert id="regist"> INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE) 
@@ -32,8 +35,13 @@
 	</insert>
 
 	<select id="read" resultMap="list">
-		SELECT BID, UID, CID, TITLE, CONTENT, DATE
-		FROM BOARD WHERE BID = #{BID}
+		SELECT BOARD.BID, BOARD.UID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		FROM BOARD 
+		LEFT JOIN CATEGORY
+		ON BOARD.CID = CATEGORY.CID 
+		LEFT JOIN  USER
+		ON BOARD.UID = USER.UID
+		WHERE BID = #{BID}
 	</select>
 
 	<select id="modify" resultMap="list">
@@ -61,10 +69,12 @@
 
 	<select id="listAllPaging" resultMap="list">
 		<include refid="pagingHeader"></include>
-		SELECT BOARD.BID, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		SELECT BOARD.BID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
 		LEFT JOIN CATEGORY
 		ON BOARD.CID = CATEGORY.CID
+		LEFT JOIN  USER
+		ON BOARD.UID = USER.UID
 		<include refid="search"></include>
 		ORDER BY BOARD.BID desc, BOARD.DATE desc
 		<include refid="pagingFooter"></include>

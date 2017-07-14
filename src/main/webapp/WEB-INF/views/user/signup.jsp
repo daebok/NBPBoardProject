@@ -10,13 +10,12 @@
 	var idCheck = 0;
 	var pwdCheck = 0;
 	function checkId() {
-		var id = $('.id').val();
-		
-		var special_pattern =  /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-		if(special_pattern.test(id) == true || id == " "){
-		    alert('특수문자 및 공백은 사용할 수 없습니다.');
-		    $('.id').val(id.substring(0, id.length - 1));
-		    return false;
+		var id = $('#id').val();
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		if (special_pattern.test(id) == true || id == " ") {
+			alert('특수문자 및 공백은 사용할 수 없습니다.');
+			$('#id').val(id.substring(0, id.length - 1));
+			return false;
 		}
 		$.ajax({
 			data : id,
@@ -24,7 +23,6 @@
 			type : "POST",
 			url : "duplicationId",
 			success : function(data) {
-				console.log(data);
 				if (id == "" && data == 0) {
 					$(".signupbtn").prop("disabled", true);
 					$(".signupbtn").css("background-color", "#aaaaaa");

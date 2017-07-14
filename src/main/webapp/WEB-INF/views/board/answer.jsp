@@ -14,8 +14,10 @@
 			var result = confirm('Are you sure you want to delete this?');
 			if (result) {
 				location.replace('/board/delete.do?id=${model.BID}');
-			} else {
 			}
+		});
+		$('#List').click(function() {
+			location.href = '/board/list.do';
 		});
 	});
 </script>
@@ -32,9 +34,16 @@
 		</c:if>
 		<div class="container-fluid">
 			<div class="col-md-12">
+				<div class="pull-right">
+					<span class="label label-warning">${model.ITEM}</span>
+				</div>
 				<h1>${model.TITLE}</h1>
 				<p>${model.CONTENT}</p>
+				<div class="pull-right">
+					<span class="badge">Posted By ${model.NAME}</span>
+				</div>
 				<hr>
+				<button id="List" class="btn btn-warning">List</button>
 			</div>
 		</div>
 	</div>

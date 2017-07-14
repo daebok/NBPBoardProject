@@ -10,6 +10,23 @@
 		$('.summernote').summernote({
 			height : 300
 		});
+		$("#modifyButton").click(function() {
+			var title = $("#title").val();
+			var content = $("#content").val();
+			if (title == "") {
+				alert("제목을 입력하세요.");
+				$("#title").focus();
+				return;
+			}
+			if (content == "") {
+				alert("내용를 입력하세요.");
+				$("#content").focus();
+				return;
+			}
+			document.form.action = "question/modify"
+			document.form.submit();
+		});
+		$("#category").val('${model.ITEM}').prop("selected", true);
 	});
 </script>
 </head>
@@ -19,12 +36,30 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form action="question/modify" method="post">
-				Title <input type="text" name="TITLE" value="${model.TITLE}"  maxlength="80"/> <br />
-				<textarea class="summernote" cols="100" rows="30" name="CONTENT"  maxlength="500">${model.CONTENT}</textarea>
+			<form action="question/modify" method="post" name="form">
+				Title <input type="text" name="TITLE" value="${model.TITLE}"
+					maxlength="80" id="title" /> 
+				<select name="ITEM" id="category">
+					<c:forEach var="category" items="${list}">
+						<option value="${category.ITEM}">${category.ITEM}</option>
+						<%-- <c:choose>
+							<c:when test="${category.ITEM} eq '${model.ITEM}'">
+								<option value="${category.ITEM}" selected>${category.ITEM}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${category.ITEM}">${category.ITEM}</option>
+							</c:otherwise>
+						</c:choose> --%>
+					</c:forEach>
+				</select> 
+				<br /><br />
+				<textarea class="summernote" cols="100" rows="30" name="CONTENT"
+					maxlength="500" id="content">${model.CONTENT}</textarea>
 
 				<input type="hidden" name="BID" value="${model.BID}"> <br />
-				<input type="submit" />
+				<div class="pull-right">
+					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>
+				</div>
 			</form>
 		</div>
 	</div>
