@@ -51,7 +51,7 @@
 			var data="boardId="+boardId+"&userId="+userId+"&content="+content;
 			$.ajax({
 				type: 'GET',
-				url : 'comment/regist',
+				url : '/comment/regist',
 				dataType : 'text',
 				processData : false,
 				contentType : false,
