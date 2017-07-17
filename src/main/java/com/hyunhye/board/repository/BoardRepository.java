@@ -12,7 +12,7 @@ public interface BoardRepository {
 
 	public void regist(BoardModel model);
 
-	public void delete(BoardModel model);
+	public void delete(int boardId);
 
 	public BoardModel read(int boardId);
 

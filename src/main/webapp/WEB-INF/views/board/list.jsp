@@ -51,6 +51,7 @@
 						<span class="badge">Posted ${board.date}</span>
 						<span class="badge">Posted By ${board.name}</span>
 						<div class="pull-right">
+							<span class="label label-primary">조회수: ${board.viewCount}</span>
 							<span class="label label-warning">${board.item}</span>
 						</div>
 					</div>

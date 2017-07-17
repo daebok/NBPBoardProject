@@ -14,12 +14,15 @@
 		<result property="title" column="title" javaType="java.lang.String" />
 		<result property="content" column="content" javaType="java.lang.String" />
 		<result property="date" column="date" javaType="java.lang.String" />
+		<result property="viewCount" column="viewCount" javaType="java.lang.Integer" />
 	</resultMap>
 
 	<select id="list" resultMap="list">
-		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date
+		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD
 		<include refid="category_user_join"></include>
+		ORDER BY BOARD.viewCount desc
+		limit 0, 100
 	</select>
 
 	<insert id="regist">
@@ -29,7 +32,7 @@
 	</insert>
 
 	<select id="read" resultMap="list">
-		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date
+		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD 
 		<include refid="category_user_join"></include>
 		WHERE boardId = #{boardId}
@@ -37,8 +40,7 @@
 
 	<select id="modify" resultMap="list">
 		UPDATE BOARD SET
-		title =
-		#{title},
+		title = #{title},
 		content = #{content},
 		date = #{date}
 		WHERE boardId = #{boardId}
@@ -47,7 +49,7 @@
 	<delete id="delete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
 	
 	<select id="listCriteria" resultMap="list">
-		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date
+		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD
 		<include refid="category_user_join"></include>
 		<include refid="search"></include>
@@ -60,6 +62,11 @@
 		SELECT COUNT(boardId) FROM BOARD
 		<include refid="search"></include>
 	</select>
+	
+	<update id="increaseViewcount">
+		UPDATE BOARD SET viewCount = viewCount + 1 
+		WHERE boardId = #{boardId}
+    </update>
 
 	<sql id="search">
 		<choose>

@@ -14,8 +14,8 @@
 			var name = $("#name").val();
 			if (id == "") {
 				alert("아이디를 입력하세요.");
-				$("#id").focus(); 
-				return; 
+				$("#id").focus();
+				return;
 			}
 			if (password == "") {
 				alert("비밀번호를 입력하세요.");
@@ -34,19 +34,32 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form name="form" method="post">
-				<label for="id"><b>ID</b></label><input type="text" name="id" id="id" placeholder="Enter ID"/> <br /> <label for="password"><b>Password</b></label><input
-					type="password" name="password" id="password" placeholder="Enter PASSWORD"/> <br />
-				<!-- <button id="btnLogin">로그인</button>-->
-				<button type="button" id="loginButton" class="btn btn-default" >Log In</button>
-
-				<c:if test="${msg == 'failure'}">
-					<div style="color: red">아이디 또는 비밀번호가 일치하지 않습니다.</div>
-				</c:if>
-				<c:if test="${msg == 'logout'}">
-					<div style="color: red">로그아웃되었습니다.</div>
-				</c:if>
-			</form>
+				<form name="form" method="post" class="form-horizontal">
+					<div class="form-group">
+						<label for="id" class="col-sm-2 control-label"><b>ID</b></label>
+						<div class="col-sm-10">
+							<input type="text" name="id" id="id" placeholder="Enter ID" class="form-control" /> <br /> 
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password" class="col-sm-2 control-label"><b>Password</b></label>
+						<div class="col-sm-10">
+							<input type="password" name="password" id="password" placeholder="Enter PASSWORD" class="form-control" /> <br />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="button" id="loginButton" class="btn btn-default">Log In</button>
+						</div>
+					</div>
+					<c:if test="${msg == 'failure'}">
+						<div style="color: red; margin-top: 10px;">아이디 또는 비밀번호가 일치하지 않습니다.</div>
+					</c:if>
+					<c:if test="${msg == 'logout'}">
+						<div style="color: red; margin-top: 10px;">로그아웃되었습니다.</div>
+					</c:if>
+				</form>
+			
 		</div>
 	</div>
 </body>

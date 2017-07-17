@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
@@ -34,7 +35,7 @@ public class BoardController {
 
 	@RequestMapping(value = {"/", "home"})
 	public String home(Model model) {
-		service.listAll(model);
+		model.addAttribute("model", service.listAll(model));
 
 		return "home";
 	}
@@ -68,6 +69,7 @@ public class BoardController {
 	@RequestMapping("answer")
 	public String read(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri, Model model)
 		throws Exception {
+		service.increaseViewCount(boardId);
 		model.addAttribute("model", service.read(boardId));
 		model.addAttribute("attach", service.getAttach(boardId));
 		model.addAttribute("comment", commentService.listComment(boardId));
@@ -82,15 +84,18 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute BoardModel model) {
+	public String modify(HttpSession session, @ModelAttribute BoardModel model, RedirectAttributes rttr) {
 		service.modify(session, model);
 
+		rttr.addFlashAttribute("msg", "SUCCESS");
 		return "forward:/answer?boardId=" + model.getBoardId();
 	}
 
 	@RequestMapping("delete")
-	public String delete(@RequestParam int boardId, BoardModel model) throws Exception {
-		service.delete(boardId, model);
+	public String delete(@RequestParam int boardId, RedirectAttributes rttr) throws Exception {
+		service.delete(boardId);
+
+		rttr.addFlashAttribute("msg", "SUCCESS");
 		return "redirect:list";
 	}
 }

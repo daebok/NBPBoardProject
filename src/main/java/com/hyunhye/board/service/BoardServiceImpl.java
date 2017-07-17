@@ -34,10 +34,8 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public void listAll(Model model) {
-		List<BoardModel> list;
-		list = repository.listAll();
-		model.addAttribute("list", list);
+	public List<BoardModel> listAll(Model model) {
+		return repository.listAll();
 	}
 
 	@Transactional
@@ -96,9 +94,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void delete(int boardId, BoardModel model) {
-		model.setBoardId(boardId);
-		repository.delete(model);
+	public void delete(int boardId) {
+		repository.delete(boardId);
 	}
 
 	@Override
@@ -116,5 +113,9 @@ public class BoardServiceImpl implements BoardService {
 	public int listCountCriteria(SearchCriteria cri) throws Exception {
 		// TODO Auto-generated method stub
 		return repository.countPaging(cri);
+	}
+
+	public void increaseViewCount(int boardId) throws Exception {
+		repository.increaseViewCount(boardId);
 	}
 }

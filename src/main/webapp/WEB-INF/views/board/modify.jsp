@@ -37,7 +37,7 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/modify" method="post" name="form">
-				Title <input type="text" name="TITLE" value="${model.title}"
+				Title <input type="text" name="title" value="${model.title}"
 					maxlength="80" id="title" /> 
 				<select name="item" id="category">
 					<c:forEach var="category" items="${list}">

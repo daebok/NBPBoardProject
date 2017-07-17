@@ -95,22 +95,48 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form name="form" action="insertUser" method="post">
-				<label for="id"><b>ID</b></label> <input type="text"
-					placeholder="Enter ID" name="id" class="id" oninput="checkId()"
-					id="id"> <br /> <label for="name"><b>Name</b></label> <input
-					type="text" placeholder="Enter NAME" name="name" id="name">
-				<br /> <label for="pass"><b>Password</b></label> <input
-					type="password" placeholder="Enter PASSWORD" name="password"
-					class="pass" id="pass" oninput="checkPwd()"> <br /> <label
-					for="repass"> <b>Repeat Password</b>
-				</label> <input type="password" placeholder="Repeat Password"
-					name="psw-repeat" class="pass" id="repass" oninput="checkPwd()">
-				<br /> <input type="checkbox" checked="checked"> Remember
-				me
+			<form name="form" action="insertUser" method="post" class="form-horizontal">
+				<div class="form-group">
+					<label for="id" class="col-sm-2 control-label"><b>ID</b></label> 
+					<div class="col-sm-10">
+						<input type="text" placeholder="Enter ID" name="id" class="id form-control" oninput="checkId()" id="id"> <br /> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label"><b>Name</b></label> 
+					<div class="col-sm-10">
+						<input type="text" placeholder="Enter NAME" name="name" id="name" class="form-control"> <br /> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="pass" class="col-sm-2 control-label"><b>Password</b></label> 
+					<div class="col-sm-10">
+						<input type="password" placeholder="Enter PASSWORD" name="password" class="pass form-control" id="pass" oninput="checkPwd()"> <br /> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="repass" class="col-sm-2 control-label"> <b>Repeat Password</b></label> 
+					<div class="col-sm-10">
+						<input type="password" placeholder="Repeat Password" name="psw-repeat" class="pass form-control" id="repass" oninput="checkPwd()">
+					</div>
+					<br /> 
+				</div>
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <div class="checkbox">
+				        <label>
+				          <input type="checkbox"> Remember me
+				        </label>
+				      </div>
+				    </div>
+				</div>
 				<div class="clearfix">
-					<button type="button" class="cancelbtn" onclick="cancel">Cancel</button>
-					<button type="submit" class="signupbtn" disabled="disabled">SignUp</button>
+					<div class="form-group">
+   						 <div class="col-sm-offset-2 col-sm-10">
+							<button type="button" class="cancelbtn btn btn-default" onclick="cancel">Cancel</button>
+							<button type="submit" class="signupbtn btn btn-default" disabled="disabled">SignUp</button>
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>

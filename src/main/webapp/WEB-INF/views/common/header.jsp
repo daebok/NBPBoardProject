@@ -4,7 +4,7 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <div class="container header">
 	<h1>
-		<a href="<c:url value='/'/>">BOARD</a>
+		<a href="<c:url value='/'/>" style="text-decoration:none; color:">BOARD</a>
 	</h1>
 	<c:if test="${sessionScope.userId != null}">
 		<h5 class="home welcome">${sessionScope.name}(${sessionScope.id})님환영합니다.</h5>

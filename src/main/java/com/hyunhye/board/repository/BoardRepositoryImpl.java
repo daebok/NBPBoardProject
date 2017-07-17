@@ -47,8 +47,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public void delete(BoardModel model) {
-		sqlSession.delete(namespace + ".delete", model);
+	public void delete(int boardId) {
+		sqlSession.delete(namespace + ".delete", boardId);
 	}
 
 	@Override
@@ -69,5 +69,10 @@ public class BoardRepositoryImpl implements BoardRepository {
 	@Override
 	public int countPaging(SearchCriteria cri) throws Exception {
 		return sqlSession.selectOne(namespace + ".countPaging", cri);
+	}
+
+	public void increaseViewCount(int boardId) {
+		// TODO Auto-generated method stub
+		sqlSession.insert(namespace + ".increaseViewcount", boardId);
 	}
 }

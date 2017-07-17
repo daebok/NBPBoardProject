@@ -14,13 +14,13 @@ import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 
 public interface BoardService {
-	public void listAll(Model model);
+	public List<BoardModel> listAll(Model model);
 
-	public void delete(int bid, BoardModel dto);
+	public void delete(int boardId);
 
 	public void regist(HttpSession session, BoardModel boardModel);
 
-	public BoardModel read(int id);
+	public BoardModel read(int boardId);
 
 	public BoardModel modify(HttpSession session, BoardModel dto);
 
