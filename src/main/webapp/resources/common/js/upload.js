@@ -11,7 +11,8 @@ function getOriginalName(fileName) {
 	return fileName.substr(idx);
 }
 
-function getImageLink(fileName) {
+/* thumbnail click -> original imgae */
+function getImageLink(fileName) { 
 	if (!checkImageType(fileName)) { // if not image file
 		return;
 	}

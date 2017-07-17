@@ -12,6 +12,7 @@
 		<mapper resource="mapper/boardMapper.xml"></mapper>
 		<mapper resource="mapper/fileMapper.xml"></mapper>
 		<mapper resource="mapper/categoryMapper.xml"></mapper>
+		<mapper resource="mapper/commentMapper.xml"></mapper>
 	</mappers>
 
 </configuration>

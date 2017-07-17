@@ -10,13 +10,11 @@ import org.springframework.ui.Model;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.FileModel;
+import com.hyunhye.board.model.SearchCriteria;
 
 public interface BoardService {
 	public void listAll(Model model);
-
-	public int countArticle(String searchOption, String keyword) throws Exception;
-
-	public void listAll(Model model, String searchOption, String keyword) throws Exception;
 
 	public void delete(int bid, BoardModel dto);
 
@@ -26,7 +24,12 @@ public interface BoardService {
 
 	public BoardModel modify(HttpSession session, BoardModel dto);
 
-	public List<BoardModel> listAll(int start, int end, String searchOption, String keyword);
-
 	public List<CategoryModel> categoryListAll();
+
+	public List<FileModel> getAttach(int boardId);
+
+	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception;
+
+	public int listCountCriteria(SearchCriteria cri) throws Exception;
+
 }

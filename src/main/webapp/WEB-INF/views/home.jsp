@@ -15,10 +15,10 @@
 				<%@include file="common/search.jsp"%>
 				<!-- 로그인한 사용자만 글쓰기 버튼을 활성화 -->
 				<%-- <c:if test="${sessionScope.ID != null}"> --%>
-					<a href="<c:url value='/question.do'/>" id="QUESTION"
+					<a href="<c:url value='/question'/>" id="QUESTION"
 						class="btn btn-danger">Ask Question</a>
 				<%-- </c:if> --%>
-				<a href="<c:url value='/list.do'/>" id="LIST"
+				<a href="<c:url value='/list'/>" id="LIST"
 					class="btn btn-danger">Questions</a>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h1>
-						<a href="<c:url value='/answer.do?id=${board.BID}'/>" id="BID">${board.TITLE}</a>
+						<a href="<c:url value='/answer?id=${board.BID}'/>" id="BID">${board.TITLE}</a>
 					</h1>
 					<p>${board.CONTENT}</p>
 					<div>

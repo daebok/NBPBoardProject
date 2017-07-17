@@ -117,7 +117,6 @@ public class UploadFileUtils {
 	}
 
 	/* create Thumbnail */
-	@SuppressWarnings("unused")
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName)); // image in memory

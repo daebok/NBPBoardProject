@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,16 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hyunhye.board.service.FileServiceImpl;
 import com.hyunhye.common.MediaUtils;
 import com.hyunhye.common.UploadFileUtils;
 
 @Controller
 public class UploadController {
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
-
-	@Autowired
-	public FileServiceImpl service;
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
@@ -68,7 +63,6 @@ public class UploadController {
 
 			HttpHeaders headers = new HttpHeaders(); // header
 
-			logger.info("uploadPath: " + uploadPath);
 			in = new FileInputStream(uploadPath + fileName);
 			if (mediaType != null) { // if image
 				headers.setContentType(mediaType);

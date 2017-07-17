@@ -13,13 +13,13 @@
 		<div class="row">
 			<c:choose>
 				<c:when test="${sessionScope.ID == null}">
-					<a href="<c:url value='/login.do'/>" id="LOGIN"
+					<a href="<c:url value='/login'/>" id="LOGIN"
 						class="btn btn-primary">LogIn</a>
-					<a href="<c:url value='/signup.do'/>" id="SIGNUP"
+					<a href="<c:url value='/signup'/>" id="SIGNUP"
 						class="btn btn-danger">SingUp</a>
 				</c:when>
 				<c:otherwise> ${sessionScope.NAME}님이 로그인중입니다.
-						<a href="<c:url value='/logout.do'/>" id="LOGOUT"
+						<a href="<c:url value='/logout'/>" id="LOGOUT"
 						class="btn btn-primary">LogOut</a>
 				</c:otherwise>
 			</c:choose>

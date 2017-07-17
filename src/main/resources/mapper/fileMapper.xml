@@ -15,4 +15,8 @@
 		VALUES
 		( (SELECT BID FROM BOARD ORDER BY BID desc limit 1) , '${FILENAME}', '${ORIGINNAME}', '${EXTENSION}' )
 	</insert>
+	
+	<select id="getAttach" resultMap="list">
+		select FILENAME from FILE where BID = #{BID}; 
+	</select>
 </mapper>

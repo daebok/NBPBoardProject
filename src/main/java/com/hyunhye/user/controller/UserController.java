@@ -24,12 +24,12 @@ public class UserController {
 	@Autowired
 	public UserServiceImpl service;
 
-	@RequestMapping(value = "/signup.do")
+	@RequestMapping(value = "/signup")
 	public String signup() {
 		return "user/signup";
 	}
 
-	@RequestMapping(value = "/login.do")
+	@RequestMapping(value = "/login")
 	public String login() {
 		return "user/login";
 	}
@@ -37,7 +37,7 @@ public class UserController {
 	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
 	public String write(@ModelAttribute UserModel model) {
 		service.regist(model);
-		return "redirect:/login.do";
+		return "redirect:/login";
 	}
 
 	@RequestMapping(value = "/logincheck", method = RequestMethod.POST)
@@ -45,7 +45,7 @@ public class UserController {
 		boolean result = service.loginCheck(session, model);
 		ModelAndView mv = new ModelAndView();
 		if (result) {
-			mv.setViewName("forward:/home.do");
+			mv.setViewName("forward:/home");
 			mv.addObject("msg", "success");
 		} else {
 			mv.setViewName("user/login");
@@ -54,7 +54,7 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping("/logout.do")
+	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		service.logout(session);
 		ModelAndView mv = new ModelAndView();

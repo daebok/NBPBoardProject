@@ -22,9 +22,6 @@
 		<include refid="category_user_join"></include>
 	</select>
 
-	<!-- <insert id="regist"> INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE) 
-		VALUES (${UID}, ${CID}, #{TITLE}, #{CONTENT}, #{DATE}) </insert> -->
-
 	<insert id="regist">
 		INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE)
 		VALUES
@@ -48,52 +45,36 @@
 	</select>
 
 	<delete id="delete"> DELETE FROM BOARD WHERE BID = #{BID} </delete>
-
-	<select id="listAll" resultMap="list">
-		SELECT BID, CID, TITLE, CONTENT, DATE
-		FROM BOARD
-		<include refid="search"></include>
-		ORDER BY BID desc, DATE desc
-	</select>
-
-	<select id="count" resultType="int">
-		SELECT COUNT(*) FROM BOARD
-		<include refid="search"></include>
-	</select>
-
-	<select id="listAllPaging" resultMap="list">
-		<include refid="pagingHeader"></include>
+	
+	<select id="listCriteria" resultMap="list">
 		SELECT BOARD.BID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
 		FROM BOARD
 		<include refid="category_user_join"></include>
 		<include refid="search"></include>
 		ORDER BY BOARD.BID desc, BOARD.DATE desc
-		<include refid="pagingFooter"></include>
-		
+		limit #{startPage}, #{perPageNum}
+	</select>
+	
+	
+	<select id="countPaging" resultType="int">
+		SELECT COUNT(BID) FROM BOARD
+		<include refid="search"></include>
 	</select>
 
 	<sql id="search">
 		<choose>
-			<when test="searchOption == 'all'">
+			<when test="searchType == 'title_content'">
 				WHERE CONTENT like '%${keyword}%'
 				OR TITLE like
 				'%${keyword}%'
 			</when>
-			<otherwise>
-				WHERE ${searchOption} like '%${keyword}%'
-			</otherwise>
+			<when test="searchType == 'content'">
+				WHERE CONTENT like '%${keyword}%'
+			</when>
+			<when test="searchType == 'title'">
+				WHERE TITLE like '%${keyword}%'
+			</when>
 		</choose>
-	</sql>
-
-	<sql id="pagingHeader">
-		SELECT * FROM (
-		SELECT @ROWNUM := @ROWNUM + 1 AS rn, A.*
-		FROM (
-	</sql>
-	<sql id="pagingFooter">
-		) A, (SELECT @ROWNUM := 0) TMP ) B
-		WHERE rn BETWEEN ${start}
-		AND ${end}
 	</sql>
 	
 	<sql id="category_user_join">

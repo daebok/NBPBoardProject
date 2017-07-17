@@ -5,8 +5,20 @@
 <html>
 <head>
 <script>
+	$(document).ready(
+		function(){
+			$('#searchButton').on("click", function(event){
+				self.location = "list"
+					+ '${pageMaker.makeQuery(1)}'
+					+ "&searchType="
+					+ $("slelect option:selected").val()
+					+ "&keyword="+encodeURIComponent($('#keyword').val());
+				
+			});	
+		
+		});
 	function list(page) {
-		location.href = "${path}/board/list.do?curPage=" + page
+		location.href = "${path}/board/list?curPage=" + page
 				+ "&searchOption=${map.searchOption}"
 				+ "&keyword=${map.keyword}";
 	}
@@ -21,7 +33,7 @@
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
 				<c:if test="${sessionScope.ID != null}">
-					<a href="<c:url value='/question.do'/>" id="QUESTION"
+					<a href="<c:url value='/question'/>" id="QUESTION"
 						class="btn btn-danger">Ask Question</a>
 				</c:if>
 
@@ -29,9 +41,9 @@
 		</div>
 		<div class="container-fluid">
 			<div class="col-md-12">
-				<c:forEach var="board" items="${map.list}">
+				<c:forEach var="board" items="${list}">
 					<h1>
-						<a href="${path}/board/answer.do?id=${board.BID}&curPage=${map.boardPager.curPage}&searchOption=${map.searchOption}&keyword=${map.keyword}"
+						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&id=${board.BID}"
 							id="BID">${board.TITLE}</a>
 					</h1>
 					<p>${board.CONTENT}</p>
@@ -48,34 +60,20 @@
 
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
-					<c:if test="${map.boardPager.curBlock > 1}">
-						<li class="disabled"><span><a href="javascript:list('1')">[처음]</a></span></li>
+					<c:if test="${pageMaker.prev}">
+						<li class="disabled"><span><a href="list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
 					</c:if>
 
-					<c:if test="${map.boardPager.curBlock > 1}">
-						<li class="disabled"><span><a href="javascript:list('${map.boardPager.prevPage}')">[이전]</a></span></li>
-					</c:if>
-
-					<c:forEach var="num" begin="${map.boardPager.blockBegin}" end="${map.boardPager.blockEnd}">
-						<c:choose>
-							<c:when test="${num == map.boardPager.curPage}">
-								<li class="active"><span>${num}</span></li>
-							</c:when>
-							<c:otherwise>
-								<li><span><a href="javascript:list('${num}')">${num}</a></span></li>
-							</c:otherwise>
-						</c:choose>
+					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+						<li 
+							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+							<a href="list${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+						</li>
 					</c:forEach>
-
-					<c:if test="${map.boardPager.curBlock <= map.boardPager.totBlock}">
-						<a href="javascript:list('${map.boardPager.nextPage}')">[다음]</a>
-					</c:if>
-
-					<c:if test="${map.boardPager.curPage <= map.boardPager.totPage}">
-						<li><a href="javascript:list('${map.boardPager.totPage}')">[끝]</a></li>
+					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+						<li class="disabled"><span><a href="list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 					</c:if>
 				</ul>
-
 			</div>
 		</div>
 	</div>

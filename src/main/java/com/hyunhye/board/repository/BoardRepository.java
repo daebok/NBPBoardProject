@@ -5,23 +5,25 @@ import java.util.List;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
+import com.hyunhye.board.model.SearchCriteria;
 
 public interface BoardRepository {
 	public List<BoardModel> listAll();
 
 	public void regist(BoardModel model);
 
-	public List<BoardModel> listAll(String searchOption, String keyword) throws Exception;
-
-	public int countArticle(String searchOption, String keyword);
-
 	public void delete(BoardModel model);
 
-	public BoardModel read(int id);
-
-	public List<BoardModel> listAll(int start, int end, String searchOption, String keyword);
+	public BoardModel read(int boardId);
 
 	public List<CategoryModel> categoryListAll();
 
 	public void addAttach(FileModel model);
+
+	public List<FileModel> getAttach(int boardId);
+
+	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception;
+
+	public int countPaging(SearchCriteria cri) throws Exception;
+
 }

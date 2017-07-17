@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.board.commentMapper">
+
+	<resultMap id="list" type="com.hyunhye.comment.model.CommentModel">
+		<result property="UID" column="UID" javaType="java.lang.Integer" />
+		<result property="BID" column="BID" javaType="java.lang.Integer" />
+		<result property="commentId" column="commentId" javaType="java.lang.Integer" />
+		<result property="content" column="content" javaType="java.lang.String" />
+		<result property="date" column="date" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="list" resultMap="list">
+		SELECT * 
+		FROM comment
+		WHERE BID = #{BID}
+		ORDER BY commentId
+	</select>
+
+	<insert id="create">
+		INSERT INTO comment (BID, UID, content, date)
+		VALUES
+		(${BID}, ${UID}, '${content}', '${date}')
+	</insert>
+
+	<select id="update" resultMap="list">
+		UPDATE comment SET
+		content = #{content},
+		date = #{date}
+		WHERE commentId = #{commentId}
+	</select>
+
+	<delete id="delete"> 
+		DELETE FROM comment WHERE commentId = #{commentId} 
+	</delete>
+
+</mapper>

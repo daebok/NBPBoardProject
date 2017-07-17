@@ -17,11 +17,12 @@ import org.springframework.ui.Model;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
+import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepositoryImpl;
 import com.hyunhye.common.UploadFileUtils;
 
 @Service(value = "BoardService")
-public class BoardServiceImpl implements com.hyunhye.board.service.BoardService {
+public class BoardServiceImpl implements BoardService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
@@ -29,7 +30,7 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	public BoardRepositoryImpl repository;
 
 	@Resource(name="fileUtils")
-	    private UploadFileUtils fileUtils;
+	private UploadFileUtils fileUtils;
 
 
 	@Override
@@ -43,26 +44,23 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	@Override
 	public void regist(HttpSession session, BoardModel model) {
 		int UID = (Integer) session.getAttribute("UID");
-		Date dt = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = sdf.format(dt);
+		Date date = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = simpleDateFormat.format(date);
 
 		model.setDATE(currentTime);
 		model.setUID(UID);
 
 		repository.regist(model);
 
-		/* file upload */
 		String[] files = model.getFiles();
 		if (files == null) {
 			return;
 		}
 
-		// for (String fileName : files) { // each file add
+		String fileName = null;
 		for (int i = 1; i < files.length; i++) {
-			String fileName = files[i];
-			logger.info("fileName: " + fileName + " model.getBID(): " + model.getBID());
-
+			fileName = files[i];
 			FileModel fileModel = new FileModel();
 			fileModel.setFILENAME(fileName.substring(fileName.indexOf("=") + 1));
 			fileModel.setORIGINNAME(fileName.substring(fileName.lastIndexOf("_") + 1));
@@ -73,26 +71,15 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	}
 
 	@Override
-	public BoardModel read(int id) {
-		return repository.read(id);
+	public BoardModel read(int boardId) {
+		return repository.read(boardId);
 	}
 
-	// 05. All Questions List
 	@Override
-	public void listAll(Model model, String searchOption, String keyword) throws Exception {
-		List<BoardModel> list;
-		list = repository.listAll(searchOption, keyword);
-
-		model.addAttribute("list", list);
+	public List<FileModel> getAttach(int boardId) {
+		return repository.getAttach(boardId);
 	}
 
-	// 06. Questions Count
-	@Override
-	public int countArticle(String searchOption, String keyword) throws Exception {
-		return repository.countArticle(searchOption, keyword);
-	}
-
-	// 07. Question Modify
 	@Override
 	public BoardModel modify(HttpSession session, BoardModel model) {
 		int UID = (Integer) session.getAttribute("UID");
@@ -109,14 +96,9 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 	}
 
 	@Override
-	public void delete(int bid, BoardModel model) {
-		model.setBID(bid);
+	public void delete(int boardId, BoardModel model) {
+		model.setBID(boardId);
 		repository.delete(model);
-	}
-
-	@Override
-	public List<BoardModel> listAll(int start, int end, String searchOption, String keyword) {
-		return repository.listAll(start, end, searchOption, keyword);
 	}
 
 	@Override
@@ -124,4 +106,15 @@ public class BoardServiceImpl implements com.hyunhye.board.service.BoardService 
 		return repository.categoryListAll();
 	}
 
+	@Override
+	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return repository.listCriteria(cri);
+	}
+
+	@Override
+	public int listCountCriteria(SearchCriteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return repository.countPaging(cri);
+	}
 }

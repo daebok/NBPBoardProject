@@ -47,13 +47,16 @@ small {
 				type : 'POST',
 				success : function(data) {
 					var str="";
+					console.log(data);
 					if(checkImageType(data)){ 
 						str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
 						str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
-						str += "<small data-src="+data+">X</small></div>";
+						str += "<small data-src="+data+">X</small>";
+						str += "<input type='hidden' name='files' value='"+getImageLink(data)+"'> </div>";
 					} else { // download if not image file
-						 str = "<div><a href='/board/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
-								+"<small data-src="+data+">X</small></div>";
+						str = "<div><a href='/board/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
+								+"<small data-src="+data+">X</small>";
+						str += "<input type='hidden' name='files' value='"+data+"'> </div>";
 					}
 					$(".uploadedList").append(str);
 
@@ -93,18 +96,14 @@ small {
 			var that = $("#registerForm");
 			var str = "";
 
-			$(".uploadedList").each(function(index){
-				str += "<input type='hidden' name='files' value='"+ $(".file").attr("href") +"'> ";
-			});
-			that.append(str);
-			
 			document.form.action = "question/ask"
 			document.form.submit();
 		});
 		
 		/* summernote */
 		$('.summernote').summernote({
-			height : 300,
+			height : 200,
+			width: 100,
 			onImageUpload : function(files, editor, welEditable) {
 				sendFile(files[0], editor, welEditable);
 			}
