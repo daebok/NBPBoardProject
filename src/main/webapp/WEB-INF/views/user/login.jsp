@@ -22,7 +22,7 @@
 				$("#password").focus();
 				return;
 			}
-			document.form.action = "logincheck"
+			document.form.action = "/user/logincheck"
 			document.form.submit();
 		});
 	});
@@ -52,10 +52,10 @@
 							<button type="button" id="loginButton" class="btn btn-default">Log In</button>
 						</div>
 					</div>
-					<c:if test="${msg == 'failure'}">
+					<c:if test="${msg == 'FAILURE'}">
 						<div style="color: red; margin-top: 10px;">아이디 또는 비밀번호가 일치하지 않습니다.</div>
 					</c:if>
-					<c:if test="${msg == 'logout'}">
+					<c:if test="${msg == 'LOGOUT'}">
 						<div style="color: red; margin-top: 10px;">로그아웃되었습니다.</div>
 					</c:if>
 				</form>

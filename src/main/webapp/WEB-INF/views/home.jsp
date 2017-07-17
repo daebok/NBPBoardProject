@@ -13,9 +13,9 @@
 		<div class="container-fluid">
 			<div class="row">
 				<%@include file="common/search.jsp"%>
-					<a href="<c:url value='/question'/>" id="question"
+					<a href="<c:url value='/board/question'/>" id="question"
 						class="btn btn-danger">Ask Question</a>
-				<a href="<c:url value='/list'/>" id="list"
+				<a href="<c:url value='/board/list'/>" id="list"
 					class="btn btn-danger">Questions</a>
 			</div>
 		</div>
@@ -24,7 +24,7 @@
 				<h1>Top 50</h1>
 				<c:forEach var="board" items="${model}">
 					<h1>
-						<a href="<c:url value='/answer?boardId=${board.boardId}'/>" id="boardId">${board.title}</a>
+						<a href="<c:url value='/board/answer?boardId=${board.boardId}'/>" id="boardId">${board.title}</a>
 					</h1>
 					
 					<p>${board.content}</p>

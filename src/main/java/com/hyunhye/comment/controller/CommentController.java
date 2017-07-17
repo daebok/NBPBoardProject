@@ -15,16 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.comment.model.CommentModel;
-import com.hyunhye.comment.service.CommentServiceImpl;
+import com.hyunhye.comment.service.CommentService;
 
 @Controller
+@RequestMapping("/comment")
 public class CommentController {
 
 	@Autowired
-	CommentServiceImpl service;
+	CommentService service;
 
 	@ResponseBody
-	@RequestMapping(value = "/comment", method = RequestMethod.GET)
+	@RequestMapping(value = "regist", method = RequestMethod.GET)
 	public ResponseEntity<List<CommentModel>> register(@ModelAttribute CommentModel model) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
@@ -39,7 +40,7 @@ public class CommentController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/comment/list", method = RequestMethod.GET)
+	@RequestMapping(value = "list", method = RequestMethod.GET)
 	public ResponseEntity<List<CommentModel>> list(@RequestParam("boardId") int boardId) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
@@ -52,7 +53,7 @@ public class CommentController {
 		return entity;
 	}
 
-	@RequestMapping(value = "/comment/update/{commentId}", method = RequestMethod.GET)
+	@RequestMapping(value = "update/{commentId}", method = RequestMethod.GET)
 	public ResponseEntity<String> update(@PathVariable("id") int commentId,
 		@RequestBody CommentModel model) {
 		ResponseEntity<String> entity = null;
@@ -68,7 +69,7 @@ public class CommentController {
 		return entity;
 	}
 
-	@RequestMapping(value = "/comment/delete/{commentId}", method = RequestMethod.GET)
+	@RequestMapping(value = "delete/{commentId}", method = RequestMethod.GET)
 	public ResponseEntity<String> delete(@PathVariable("id") int commentId) {
 		ResponseEntity<String> entity = null;
 		try {

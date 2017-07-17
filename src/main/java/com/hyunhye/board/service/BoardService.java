@@ -12,22 +12,24 @@ import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 
 public interface BoardService {
-	public List<BoardModel> listAll(Model model);
+	public List<BoardModel> listAll(Model model) throws Exception;
 
-	public void delete(int boardId);
+	public void delete(int boardId) throws Exception;
 
-	public void regist(HttpSession session, BoardModel boardModel);
+	public void regist(HttpSession session, BoardModel boardModel) throws Exception;
 
-	public BoardModel read(int boardId);
+	public BoardModel read(int boardId) throws Exception;
 
-	public BoardModel modify(HttpSession session, BoardModel dto);
+	public BoardModel modify(HttpSession session, BoardModel dto) throws Exception;
 
-	public List<CategoryModel> categoryListAll();
+	public List<CategoryModel> categoryListAll() throws Exception;
 
-	public List<FileModel> getAttach(int boardId);
+	public List<FileModel> getAttach(int boardId) throws Exception;
 
 	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception;
 
 	public int listCountCriteria(SearchCriteria cri) throws Exception;
+
+	public void increaseViewCount(int boardId) throws Exception;
 
 }

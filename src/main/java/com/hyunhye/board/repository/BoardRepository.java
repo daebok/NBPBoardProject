@@ -8,22 +8,26 @@ import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 
 public interface BoardRepository {
-	public List<BoardModel> listAll();
+	public List<BoardModel> listAll() throws Exception;
 
-	public void regist(BoardModel model);
+	public void regist(BoardModel model) throws Exception;
 
-	public void delete(int boardId);
+	public void delete(int boardId) throws Exception;
 
-	public BoardModel read(int boardId);
+	public BoardModel read(int boardId) throws Exception;
 
-	public List<CategoryModel> categoryListAll();
+	public List<CategoryModel> categoryListAll() throws Exception;
 
-	public void addAttach(FileModel model);
+	public void addAttach(FileModel model) throws Exception;
 
-	public List<FileModel> getAttach(int boardId);
+	public List<FileModel> getAttach(int boardId) throws Exception;
 
 	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception;
 
 	public int countPaging(SearchCriteria cri) throws Exception;
+
+	public void increaseViewCount(int boardId) throws Exception;
+
+	public BoardModel modify(BoardModel model) throws Exception;
 
 }

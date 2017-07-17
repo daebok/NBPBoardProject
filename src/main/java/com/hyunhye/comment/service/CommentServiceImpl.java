@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.comment.model.CommentModel;
-import com.hyunhye.comment.repository.CommentRepositoryImpl;
+import com.hyunhye.comment.repository.CommentRepository;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
 	@Autowired
-	CommentRepositoryImpl repository;
+	CommentRepository repository;
 
 	@Override
 	public void addComment(CommentModel model) throws Exception {

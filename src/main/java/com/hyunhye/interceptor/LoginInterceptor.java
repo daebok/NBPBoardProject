@@ -7,25 +7,34 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class Interceptor extends HandlerInterceptorAdapter {
-	// protected Log log = LogFactory.getLog(LoggerInterceptor.class);
+public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
-			return false;
-		} else {
-			return true;
+		if (session.getAttribute("id") != null) {
+			session.removeAttribute("id");
+			session.removeAttribute("uid");
+			session.removeAttribute("name");
 		}
+		return true;
+
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		super.postHandle(request, response, handler, modelAndView);
+		HttpSession session = request.getSession();
+		/*
+				ModelMap modelMap = modelAndView.getModelMap();
+				Object userModel = modelMap.get("userModel");
+				if (userModel != null) {
+					session.setAttribute("login", userModel);
+				}*/
+
+		Object dest = session.getAttribute("dest");
+		response.sendRedirect(dest != null ? (String)dest : "/board");
 	}
 
 }

@@ -19,9 +19,10 @@
 		}
 		$.ajax({
 			data : id,
-			contentType : "application/json",
+			contentType : "application/json; charset=utf-8",
+			dataType: "json",
 			type : "POST",
-			url : "duplicationId",
+			url : "/user/duplicationId",
 			success : function(data) {
 				if (id == "" && data == 0) {
 					$(".signupbtn").prop("disabled", true);
@@ -95,7 +96,7 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form name="form" action="insertUser" method="post" class="form-horizontal">
+			<form name="form" action="insert" method="post" class="form-horizontal">
 				<div class="form-group">
 					<label for="id" class="col-sm-2 control-label"><b>ID</b></label> 
 					<div class="col-sm-10">

@@ -6,11 +6,13 @@ import com.hyunhye.user.model.UserModel;
 
 public interface UserService {
 
-	public void logout(HttpSession session);
+	public void logout(HttpSession session) throws Exception;
 
-	public void regist(UserModel model);
+	public void regist(UserModel model) throws Exception;
 
-	public boolean loginCheck(HttpSession session, UserModel model);
+	public boolean loginCheck(HttpSession session, UserModel model) throws Exception;
 
-	public UserModel viewUser(UserModel model);
+	public UserModel viewUser(UserModel model) throws Exception;
+
+	public int select(String id) throws Exception;
 }

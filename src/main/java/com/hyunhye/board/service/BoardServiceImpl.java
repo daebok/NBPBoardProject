@@ -16,26 +16,26 @@ import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
-import com.hyunhye.board.repository.BoardRepositoryImpl;
+import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.common.UploadFileUtils;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 
 	@Autowired
-	public BoardRepositoryImpl repository;
+	public BoardRepository repository;
 
 	@Resource(name = "fileUtils")
 	private UploadFileUtils fileUtils;
 
 	@Override
-	public List<BoardModel> listAll(Model model) {
+	public List<BoardModel> listAll(Model model) throws Exception {
 		return repository.listAll();
 	}
 
 	@Transactional
 	@Override
-	public void regist(HttpSession session, BoardModel model) {
+	public void regist(HttpSession session, BoardModel model) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -64,17 +64,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardModel read(int boardId) {
+	public BoardModel read(int boardId) throws Exception {
 		return repository.read(boardId);
 	}
 
 	@Override
-	public List<FileModel> getAttach(int boardId) {
+	public List<FileModel> getAttach(int boardId) throws Exception {
 		return repository.getAttach(boardId);
 	}
 
 	@Override
-	public BoardModel modify(HttpSession session, BoardModel model) {
+	public BoardModel modify(HttpSession session, BoardModel model) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
 
 		Date dt = new Date();
@@ -89,12 +89,12 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void delete(int boardId) {
+	public void delete(int boardId) throws Exception {
 		repository.delete(boardId);
 	}
 
 	@Override
-	public List<CategoryModel> categoryListAll() {
+	public List<CategoryModel> categoryListAll() throws Exception {
 		return repository.categoryListAll();
 	}
 
@@ -110,6 +110,7 @@ public class BoardServiceImpl implements BoardService {
 		return repository.countPaging(cri);
 	}
 
+	@Override
 	public void increaseViewCount(int boardId) throws Exception {
 		repository.increaseViewCount(boardId);
 	}

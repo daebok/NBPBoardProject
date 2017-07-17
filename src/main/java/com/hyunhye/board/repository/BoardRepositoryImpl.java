@@ -41,6 +41,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 		return sqlSession.selectOne(namespace + ".read", boardId);
 	}
 
+	@Override
 	public BoardModel modify(BoardModel model) {
 		return sqlSession.selectOne(namespace + ".modify", model);
 	}
@@ -70,6 +71,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 		return sqlSession.selectOne(namespace + ".countPaging", cri);
 	}
 
+	@Override
 	public void increaseViewCount(int boardId) {
 		// TODO Auto-generated method stub
 		sqlSession.insert(namespace + ".increaseViewcount", boardId);

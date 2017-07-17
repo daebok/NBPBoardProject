@@ -9,58 +9,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hyunhye.user.model.UserModel;
-import com.hyunhye.user.service.UserServiceImpl;
+import com.hyunhye.user.service.UserService;
 
 @Controller
+@RequestMapping("user")
 public class UserController {
 
 	@Autowired
-	public UserServiceImpl service;
+	public UserService service;
 
-	@RequestMapping(value = "/signup")
+	@RequestMapping("signup")
 	public String signup() {
 		return "user/signup";
 	}
 
-	@RequestMapping(value = "/login")
+	@RequestMapping("login")
 	public String login() {
 		return "user/login";
 	}
 
-	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
-	public String write(@ModelAttribute UserModel model) {
+	@RequestMapping(value = "insert", method = RequestMethod.POST)
+	public String write(@ModelAttribute UserModel model, RedirectAttributes rttr) throws Exception {
 		service.regist(model);
-		return "redirect:/login";
+		rttr.addFlashAttribute("msg", "SUCCESS");
+		return "redirect:/user/login";
 	}
 
-	@RequestMapping(value = "/logincheck", method = RequestMethod.POST)
-	public ModelAndView loginCheck(@ModelAttribute UserModel model, HttpSession session) {
+	@RequestMapping(value = "logincheck", method = RequestMethod.POST)
+	public String loginCheck(@ModelAttribute UserModel model, HttpSession session, RedirectAttributes rttr)
+		throws Exception {
 		boolean result = service.loginCheck(session, model);
-		ModelAndView mv = new ModelAndView();
 		if (result) {
-			mv.setViewName("forward:/home");
-			mv.addObject("msg", "success");
+			rttr.addFlashAttribute("msg", "SUCCESS");
+			return "home";
 		} else {
-			mv.setViewName("user/login");
-			mv.addObject("msg", "failure");
+			rttr.addFlashAttribute("msg", "FAILURE");
+			return "redirect:/user/login";
 		}
-		return mv;
 	}
 
-	@RequestMapping("/logout")
-	public ModelAndView logout(HttpSession session) {
+	@RequestMapping("logout")
+	public String logout(HttpSession session, RedirectAttributes rttr) throws Exception {
 		service.logout(session);
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("user/login");
-		mv.addObject("msg", "logout");
-		return mv;
+		rttr.addFlashAttribute("msg", "LOGOUT");
+		return "redirect:/user/login";
 	}
 
-	@RequestMapping(value = "/duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody int duplicationId(@RequestBody String id) {
+	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
+	public @ResponseBody int duplicationId(@RequestBody String id) throws Exception {
 		return service.select(id);
 	}
 }

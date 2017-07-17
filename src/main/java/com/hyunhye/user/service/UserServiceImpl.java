@@ -6,25 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.user.model.UserModel;
-import com.hyunhye.user.repository.UserRepositoryImpl;
+import com.hyunhye.user.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	public UserRepositoryImpl repository;
+	public UserRepository repository;
 
-	// Sign Up
 	@Override
-	public void regist(UserModel model) {
-		// TODO Auto-generated method stub
+	public void regist(UserModel model) throws Exception {
 		repository.regist(model);
 	}
 
-	// Login
 	@Override
-	public boolean loginCheck(HttpSession session, UserModel model) {
-		// TODO Auto-generated method stub
+	public boolean loginCheck(HttpSession session, UserModel model) throws Exception {
 		boolean result = repository.loginCheck(model);
 		if (result) {
 			UserModel model2 = viewUser(model);
@@ -36,21 +32,18 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
-	// Login Info
 	@Override
-	public UserModel viewUser(UserModel model) {
+	public UserModel viewUser(UserModel model) throws Exception {
 		return repository.viewUser(model);
 	}
 
-	// Logout
 	@Override
 	public void logout(HttpSession session) {
-		// TODO Auto-generated method stub
 		session.invalidate();
 	}
 
-	public int select(String id) {
-		// TODO Auto-generated method stub
+	@Override
+	public int select(String id) throws Exception {
 		return repository.select(id);
 	}
 }

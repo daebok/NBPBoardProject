@@ -51,7 +51,7 @@
 			var data="boardId="+boardId+"&userId="+userId+"&content="+content;
 			$.ajax({
 				type: 'GET',
-				url : 'comment',
+				url : 'comment/regist',
 				dataType : 'text',
 				processData : false,
 				contentType : false,
@@ -73,7 +73,7 @@
 	<!-- header end -->
 	<div class="container">
 		<c:if test="${sessionScope.userId == model.userId}">
-			<a href="<c:url value='/modify?boardId=${model.boardId}'/>" id="modify"
+			<a href="<c:url value='/board/modify?boardId=${model.boardId}'/>" id="modify"
 				class="btn btn-danger">Modify</a>
 			<button id="delete" class="btn btn-danger">Delete</button>
 		</c:if>

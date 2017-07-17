@@ -33,7 +33,7 @@
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
 				<c:if test="${sessionScope.userId != null}">
-					<a href="<c:url value='/question'/>" id="question"
+					<a href="<c:url value='/board/question'/>" id="question"
 						class="btn btn-danger">Ask Question</a>
 				</c:if>
 
@@ -62,17 +62,17 @@
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
 					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
 					</c:if>
 
 					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 						<li 
 							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="list${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+							<a href="/board/list${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
 						</li>
 					</c:forEach>
 					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 					</c:if>
 				</ul>
 			</div>

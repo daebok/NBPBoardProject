@@ -18,27 +18,28 @@ import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
-import com.hyunhye.board.service.BoardServiceImpl;
+import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentServiceImpl;
 
 @Controller
+@RequestMapping("board")
 public class BoardController {
 
 	@Autowired
-	public BoardServiceImpl service;
+	public BoardService service;
 
 	@Autowired
 	public CommentServiceImpl commentService;
 
-	@RequestMapping(value = {"/", "home"})
-	public String home(Model model) {
+	@RequestMapping(value = {"", "/"})
+	public String home(Model model) throws Exception {
 		model.addAttribute("model", service.listAll(model));
 
 		return "home";
 	}
 
 	@RequestMapping(value = "question")
-	public String readCategory(Model model) { // get category
+	public String readCategory(Model model) throws Exception { // get category
 		List<CategoryModel> list = service.categoryListAll();
 		model.addAttribute("list", list);
 		return "/board/question";
@@ -60,7 +61,7 @@ public class BoardController {
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
 	public String write(@ModelAttribute BoardModel model, HttpSession session) throws Exception {
 		service.regist(session, model);
-		return "redirect:/list.do";
+		return "redirect:/board/list";
 	}
 
 	@RequestMapping("answer")
@@ -74,18 +75,19 @@ public class BoardController {
 	}
 
 	@RequestMapping("modify")
-	public String update(@RequestParam int boardId, Model model) {
+	public String update(@RequestParam int boardId, Model model) throws Exception {
 		model.addAttribute("model", service.read(boardId));
 		model.addAttribute("list", service.categoryListAll()); // category
 		return "board/modify";
 	}
 
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute BoardModel model, RedirectAttributes rttr) {
+	public String modify(HttpSession session, @ModelAttribute BoardModel model, RedirectAttributes rttr)
+		throws Exception {
 		service.modify(session, model);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "forward:/answer?boardId=" + model.getBoardId();
+		return "forward:/board/answer?boardId=" + model.getBoardId();
 	}
 
 	@RequestMapping("delete")
@@ -93,6 +95,6 @@ public class BoardController {
 		service.delete(boardId);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "redirect:list";
+		return "redirect:/board/list";
 	}
 }

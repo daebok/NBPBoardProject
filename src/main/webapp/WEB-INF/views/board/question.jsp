@@ -39,7 +39,7 @@ small {
 			formData.append("file",file);
 
 			$.ajax({
-				url : '/board/uploadAjax',
+				url : '/board/upload/uploadAjax',
 				data : formData,
 				dataType : 'text',
 				processData : false,
@@ -96,7 +96,7 @@ small {
 			var that = $("#registerForm");
 			var str = "";
 
-			document.form.action = "question/ask"
+			document.form.action = "/board/question/ask"
 			document.form.submit();
 		});
 		
@@ -114,7 +114,7 @@ small {
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/board/imageUpload",
+				url : "/board/upload/imageUpload",
 				dataType : 'text',
 				cache : false,
 				contentType : false,
@@ -136,7 +136,7 @@ small {
 
 	<div class="container">
 		<div class="container-fluid">
-			<form action="question/ask" method="post" name="form" id="registerForm">
+			<form action="/board/question/ask" method="post" name="form" id="registerForm">
 				Title <input type="text" name="title" maxlength="80" id="title" />
 				<select name="item">
 					<c:forEach var="category" items="${list}">

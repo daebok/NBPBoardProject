@@ -27,20 +27,21 @@ import com.hyunhye.common.MediaUtils;
 import com.hyunhye.common.UploadFileUtils;
 
 @Controller
+@RequestMapping("/upload")
 public class UploadController {
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	@RequestMapping(value = "/uploadForm", method = RequestMethod.POST)
+	@RequestMapping(value = "uploadForm", method = RequestMethod.POST)
 	public void uploadForm(MultipartFile file, Model model) throws Exception {
 		String savedName = uploadfile(file.getOriginalFilename(), file.getBytes());
 		model.addAttribute("savedName", savedName);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
 		return new ResponseEntity<String>(
 			UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()),
@@ -52,7 +53,7 @@ public class UploadController {
 	 * image mapping
 	 */
 	@ResponseBody // send byte[]
-	@RequestMapping("/upload/displayFile")
+	@RequestMapping("displayFile")
 	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception { // return file data
 		InputStream in = null; // download server file
 		ResponseEntity<byte[]> entity = null;
@@ -83,7 +84,7 @@ public class UploadController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteFile", method = RequestMethod.POST)
+	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(String fileName) {
 		logger.info("delete file: " + fileName);
 

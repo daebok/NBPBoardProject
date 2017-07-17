@@ -23,7 +23,7 @@
 				$("#content").focus();
 				return;
 			}
-			document.form.action = "question/modify"
+			document.form.action = "/board/question/modify"
 			document.form.submit();
 		});
 		$("#category").val('${model.item}').prop("selected", true);
