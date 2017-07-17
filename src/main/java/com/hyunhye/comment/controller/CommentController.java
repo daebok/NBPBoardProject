@@ -26,7 +26,7 @@ public class CommentController {
 	@Autowired
 	CommentServiceImpl service;
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
 	public ResponseEntity<List<CommentModel>> register(@ModelAttribute CommentModel model) {
 		logger.info("comment register");
@@ -41,6 +41,11 @@ public class CommentController {
 		}
 
 		return entity;
+	}*/
+
+	@RequestMapping(value = "/comment", method = RequestMethod.GET)
+	public void register(@ModelAttribute CommentModel model) throws Exception {
+		service.addComment(model);
 	}
 
 	@ResponseBody
