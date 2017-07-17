@@ -7,8 +7,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +22,11 @@ import com.hyunhye.common.UploadFileUtils;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
-
 	@Autowired
 	public BoardRepositoryImpl repository;
 
-	@Resource(name="fileUtils")
+	@Resource(name = "fileUtils")
 	private UploadFileUtils fileUtils;
-
 
 	@Override
 	public List<BoardModel> listAll(Model model) {

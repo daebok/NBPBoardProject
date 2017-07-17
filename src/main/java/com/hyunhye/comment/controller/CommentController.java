@@ -2,8 +2,6 @@ package com.hyunhye.comment.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,6 @@ import com.hyunhye.comment.service.CommentServiceImpl;
 
 @Controller
 public class CommentController {
-	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
 	@Autowired
 	CommentServiceImpl service;
@@ -33,7 +30,7 @@ public class CommentController {
 		try {
 			service.addComment(model);
 			entity = new ResponseEntity<List<CommentModel>>(service.listComment(model.getBoardId()), HttpStatus.OK);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
 		}

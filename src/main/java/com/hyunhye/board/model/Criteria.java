@@ -8,6 +8,7 @@ public class Criteria {
 	public Criteria() {
 		this.page = 1;
 		this.perPageNum = 10;
+		setStartPage();
 	}
 
 	public void setPage(int page) {
@@ -29,7 +30,7 @@ public class Criteria {
 	}
 
 	public void setStartPage() {
-		this.startPage = (this.page - 1) * perPageNum;
+		this.startPage = (page - 1) * perPageNum;
 	}
 
 	public int getPage() {
@@ -38,7 +39,7 @@ public class Criteria {
 
 	// method for MyBatis SQL Mapper
 	public int getStartPage() {
-		return (this.page - 1) * perPageNum;
+		return this.startPage;
 	}
 
 	// method for MyBatis SQL Mapper

@@ -1,7 +1,5 @@
 package com.hyunhye.board.service;
 
-
-
 import java.util.List;
 
 import javax.servlet.http.HttpSession;

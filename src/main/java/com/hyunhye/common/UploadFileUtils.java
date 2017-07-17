@@ -25,7 +25,8 @@ public class UploadFileUtils {
 		String savedPath = calcPath(uploadPath); // calc saved path
 		File target = new File(uploadPath + savedPath, savedName);
 		FileCopyUtils.copy(fileData, target); // copy file in temp directory (save)
-		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1); // contentType check to make thumbnail
+		// contentType check to make thumbnail
+		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1);
 		String uploadedFileName = null;
 		if (MediaUtils.getMediaType(formatName) != null) { // if image ?
 			/* create thumbnail*/
@@ -121,7 +122,8 @@ public class UploadFileUtils {
 
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName)); // image in memory
 
-		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100); // origin image copy
+		// origin image copy
+		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
 
 		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName; // thumbnail image name (s_)
 
