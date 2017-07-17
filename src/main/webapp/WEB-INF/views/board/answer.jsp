@@ -6,6 +6,22 @@
 <html>
 <head>
 <title>BOARD</title>
+<style type="text/css">
+	.comment-wrapper{
+		margin: 20px;
+		padding: 10px;
+		border: 1px dotted #989898;
+		border-radius: 10px;
+	}
+	
+	.commentTitle{
+		font-weight: bolder;
+	}
+	
+	.commentName {
+		background-color: #000000;
+	}
+</style>
 <script>
 	$(document).ready(function() {
 		$('#delete').click(function() {
@@ -42,7 +58,8 @@
 				data : data,
 				success : function(result) {
 					alert('답글이 달렸습니다.');
-					$("#listComment").append("<div>"+content+"</div>");
+					$("#listComment").append("<div class='comment-wrapper'> <div class='comment'>"+content+"</div><span class='badge'>Commented By  ${sessionScope.id}</span></div>");
+											
 					contentObj.value = "";
 				}
 			});
@@ -92,15 +109,19 @@
 		<!-- comment -->
 		<div class="container-fluid">
 			<div class="col-lg-8" style="margin-top: 70px; margin-bottom: 20px">
-					<div id="listComment" class="col-lg-8" >
-					<c:forEach var="comment" items="${comment}">
-						<div>${comment.content}</div>
+					<span class="commentTitle">Comment</span>
+					<div id="listComment" class="col-lg-12" >
+						<c:forEach var="comment" items="${comment}" >
+							<div class="comment-wrapper">
+								<div class="comment"> ${comment.content} </div>
+								<span class="badge commentName">Commented By ${comment.name}</span> 
+							</div>
 						</c:forEach>
 					</div>
 			</div>
-			<div class="col-lg-8" style="margin-top: 30px; margin-bottom: 100px">
-				<label for="content">Comment</label>
-				<textarea class="summernote" name="content" maxlength="500" id="content"></textarea>
+			<div class="col-lg-12" style="margin-top: 50px; margin-bottom: 100px">
+				<label for="content">Your Answer</label>
+				<textarea class="summernote" name="content" id="content"></textarea>
 				<br />
 				<div class="pull-right">
 					<button id="commentButton" class="btn btn-default">Comment</button>

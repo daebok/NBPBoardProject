@@ -8,5 +8,6 @@ public class CommentModel {
 	private int userId;
 	private int boardId;
 	private String content;
+	private String name;
 	private String date;
 }
