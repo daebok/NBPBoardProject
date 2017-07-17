@@ -6,8 +6,8 @@
 <mapper namespace="com.hyunhye.board.commentMapper">
 
 	<resultMap id="list" type="com.hyunhye.comment.model.CommentModel">
-		<result property="UID" column="UID" javaType="java.lang.Integer" />
-		<result property="BID" column="BID" javaType="java.lang.Integer" />
+		<result property="userId" column="userId" javaType="java.lang.Integer" />
+		<result property="boardId" column="boardId" javaType="java.lang.Integer" />
 		<result property="commentId" column="commentId" javaType="java.lang.Integer" />
 		<result property="content" column="content" javaType="java.lang.String" />
 		<result property="date" column="date" javaType="java.lang.String" />
@@ -15,26 +15,26 @@
 
 	<select id="list" resultMap="list">
 		SELECT * 
-		FROM comment
-		WHERE BID = #{BID}
+		FROM COMMENT
+		WHERE boardId = #{boardId}
 		ORDER BY commentId
 	</select>
 
 	<insert id="create">
-		INSERT INTO comment (BID, UID, content, date)
+		INSERT INTO COMMENT (boardId, userId, content, date)
 		VALUES
-		(${BID}, ${UID}, '${content}', '${date}')
+		(${boardId}, ${userId}, '${content}', '${date}')
 	</insert>
 
 	<select id="update" resultMap="list">
-		UPDATE comment SET
+		UPDATE COMMENT SET
 		content = #{content},
 		date = #{date}
 		WHERE commentId = #{commentId}
 	</select>
 
 	<delete id="delete"> 
-		DELETE FROM comment WHERE commentId = #{commentId} 
+		DELETE FROM COMMENT WHERE commentId = #{commentId} 
 	</delete>
 
 </mapper>

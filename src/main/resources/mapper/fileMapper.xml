@@ -4,19 +4,19 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyunhye.board.fileMapper">
 	<resultMap id="list" type="com.hyunhye.board.model.FileModel">
-		<result property="BID" column="BID" javaType="java.lang.Integer" />
-		<result property="FILENAME" column="FILENAME" javaType="java.lang.String" />
-		<result property="ORIGINNAME" column="ORIGINNAME" javaType="java.lang.String" />
-		<result property="EXTENSION" column="EXTENSION" javaType="java.lang.String" />
+		<result property="boardId" column="boardId" javaType="java.lang.Integer" />
+		<result property="fileName" column="fileName" javaType="java.lang.String" />
+		<result property="originName" column="originName" javaType="java.lang.String" />
+		<result property="extension" column="extension" javaType="java.lang.String" />
 	</resultMap>
 	
 	<insert id="addAttach">
-		INSERT INTO FILE (BID, FILENAME, ORIGINNAME, EXTENSION)
+		INSERT INTO FILE (boardId, fileName, originName, extension)
 		VALUES
-		( (SELECT BID FROM BOARD ORDER BY BID desc limit 1) , '${FILENAME}', '${ORIGINNAME}', '${EXTENSION}' )
+		( (SELECT boardId FROM BOARD ORDER BY boardId desc limit 1) , '${fileName}', '${originName}', '${extension}' )
 	</insert>
 	
 	<select id="getAttach" resultMap="list">
-		select FILENAME from FILE where BID = #{BID}; 
+		select fileName from FILE where boardId = #{boardId}; 
 	</select>
 </mapper>

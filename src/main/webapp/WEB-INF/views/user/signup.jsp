@@ -97,11 +97,11 @@
 		<div class="container-fluid">
 			<form name="form" action="insertUser" method="post">
 				<label for="id"><b>ID</b></label> <input type="text"
-					placeholder="Enter ID" name="ID" class="id" oninput="checkId()"
+					placeholder="Enter ID" name="id" class="id" oninput="checkId()"
 					id="id"> <br /> <label for="name"><b>Name</b></label> <input
-					type="text" placeholder="Enter NAME" name="NAME" id="name">
+					type="text" placeholder="Enter NAME" name="name" id="name">
 				<br /> <label for="pass"><b>Password</b></label> <input
-					type="password" placeholder="Enter PASSWORD" name="PASSWORD"
+					type="password" placeholder="Enter PASSWORD" name="password"
 					class="pass" id="pass" oninput="checkPwd()"> <br /> <label
 					for="repass"> <b>Repeat Password</b>
 				</label> <input type="password" placeholder="Repeat Password"

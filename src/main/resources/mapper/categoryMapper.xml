@@ -6,18 +6,18 @@
 <mapper namespace="com.hyunhye.board.categoryMapper">
 
 	<resultMap id="list" type="com.hyunhye.board.model.CategoryModel">
-		<result property="CID" column="CID" javaType="java.lang.Integer" />
-		<result property="ITEM" column="ITEM" javaType="java.lang.String" />
+		<result property="categoryId" column="categoryId" javaType="java.lang.Integer" />
+		<result property="item" column="item" javaType="java.lang.String" />
 	</resultMap>
 
 	<select id="categoryList" resultMap="list">
-		SELECT ITEM
+		SELECT item
 		FROM CATEGORY
 	</select>
 	
 	<select id="select" resultMap="list">
-		SELECT CID
+		SELECT categoryId
 		FROM CATEGORY
-		WHERE ITEM = #{ITEM}
+		WHERE item = #{item}
 	</select>
 </mapper>

@@ -8,19 +8,18 @@
 <title>BOARD</title>
 <script>
 	$(document).ready(function() {
-		$('#DELETE').click(function() {
+		$('#delete').click(function() {
 			var result = confirm('Are you sure you want to delete this?');
 			if (result) {
-				location.replace('/board/delete?id=${model.BID}');
+				location.replace('/board/delete?boardId=${model.boardId}');
 			}
 		});
-		$('#List').click(function() {
+		$('#list').click(function() {
 			document.form.method = "get";
 			document.form.action = "/board/list"
 			document.form.submit();
 		});
 
-		/* summernote */
 		$('.summernote').summernote({
 			height : 200,
 			onImageUpload : function(files, editor, welEditable) {
@@ -31,10 +30,9 @@
 		$('#commentButton').click(function() {
 			var contentObj = $('#content');
 			var content = $('#content').val();
-			var BID = ${model.BID};
-			var UID = ${sessionScope.UID};
-			var data="BID="+BID+"&UID="+UID+"&content="+content;
-			console.log(BID);
+			var boardId = ${model.boardId};
+			var userId = ${sessionScope.userId};
+			var data="boardId="+boardId+"&userId="+userId+"&content="+content;
 			$.ajax({
 				type: 'GET',
 				url : 'comment',
@@ -57,34 +55,34 @@
 	<%@include file="../common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
-		<c:if test="${sessionScope.UID == model.UID}">
-			<a href="<c:url value='/modify?id=${model.BID}'/>" id="MODIFY"
+		<c:if test="${sessionScope.userId == model.userId}">
+			<a href="<c:url value='/modify?boardId=${model.boardId}'/>" id="modify"
 				class="btn btn-danger">Modify</a>
-			<button id="DELETE" class="btn btn-danger">Delete</button>
+			<button id="delete" class="btn btn-danger">Delete</button>
 		</c:if>
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<div class="pull-right">
-					<span class="label label-warning">${model.ITEM}</span>
+					<span class="label label-warning">${model.item}</span>
 				</div>
-				<h1>${model.TITLE}</h1>
-				<p>${model.CONTENT}</p>
+				<h1>${model.title}</h1>
+				<p>${model.content}</p>
 				<div class="pull-right">
-					<span class="badge">Posted By ${model.NAME}</span>
+					<span class="badge">Posted By ${model.name}</span>
 				</div>
 				<hr>
 				<c:forEach var="attach" items="${attach}">
-					<a href='/board/upload/displayFile?fileName=${attach.FILENAME}'>
-						<img src='/board/upload/displayFile?fileName=${attach.FILENAME}'
-						onerror="this.style.display='none'" alt='' />${attach.FILENAME}
+					<a href='/board/upload/displayFile?fileName=${attach.fileName}'>
+						<img src='/board/upload/displayFile?fileName=${attach.fileName}'
+						onerror="this.style.display='none'" alt='' />${attach.fileName}
 					</a>
 					<br>
 				</c:forEach>
 				<form name="form" action="list" method="post">
-					<input type="hidden" name="id" value="${model.BID}" /> <input
+					<input type="hidden" name="id" value="${model.boardId}" /> <input
 						type="hidden" name="page" value="${cri.page}" /> <input
 						type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-					<button type="submit" id="List" class="btn btn-warning">List</button>
+					<button type="submit" id="list" class="btn btn-warning">list</button>
 				</form>
 
 			</div>

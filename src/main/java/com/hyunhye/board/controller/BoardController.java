@@ -66,7 +66,7 @@ public class BoardController {
 	}
 
 	@RequestMapping("answer")
-	public String read(@RequestParam("id") int boardId, @ModelAttribute("cri") Criteria cri, Model model)
+	public String read(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri, Model model)
 		throws Exception {
 		model.addAttribute("model", service.read(boardId));
 		model.addAttribute("attach", service.getAttach(boardId));
@@ -75,8 +75,8 @@ public class BoardController {
 	}
 
 	@RequestMapping("modify")
-	public String update(@RequestParam int id, Model model) {
-		model.addAttribute("model", service.read(id));
+	public String update(@RequestParam int boardId, Model model) {
+		model.addAttribute("model", service.read(boardId));
 		model.addAttribute("list", service.categoryListAll()); // category
 		return "board/modify";
 	}
@@ -85,12 +85,12 @@ public class BoardController {
 	public String modify(HttpSession session, @ModelAttribute BoardModel model) {
 		service.modify(session, model);
 
-		return "forward:/answer?id=" + model.getBID();
+		return "forward:/answer?boardId=" + model.getBoardId();
 	}
 
 	@RequestMapping("delete")
-	public String delete(@RequestParam int id, BoardModel model) throws Exception {
-		service.delete(id, model);
+	public String delete(@RequestParam int boardId, BoardModel model) throws Exception {
+		service.delete(boardId, model);
 		return "redirect:list";
 	}
 }

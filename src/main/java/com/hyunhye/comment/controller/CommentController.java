@@ -26,26 +26,19 @@ public class CommentController {
 	@Autowired
 	CommentServiceImpl service;
 
-	/*@ResponseBody
+	@ResponseBody
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
 	public ResponseEntity<List<CommentModel>> register(@ModelAttribute CommentModel model) {
-		logger.info("comment register");
-		logger.info("model.getBID(): " + model.getBID());
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
 			service.addComment(model);
-			entity = new ResponseEntity<>(service.listComment(model.getBID()), HttpStatus.OK);
+			entity = new ResponseEntity<>(service.listComment(model.getBoardId()), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;
-	}*/
-
-	@RequestMapping(value = "/comment", method = RequestMethod.GET)
-	public void register(@ModelAttribute CommentModel model) throws Exception {
-		service.addComment(model);
 	}
 
 	@ResponseBody

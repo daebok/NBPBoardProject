@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
 		if (result) {
 			UserModel model2 = viewUser(model);
 
-			session.setAttribute("UID",model2.getUID());
-			session.setAttribute("ID", model2.getID());
-			session.setAttribute("NAME", model2.getNAME());
+			session.setAttribute("userId", model2.getUserId());
+			session.setAttribute("id", model2.getId());
+			session.setAttribute("name", model2.getName());
 		}
 		return result;
 	}

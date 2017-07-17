@@ -4,11 +4,9 @@ import lombok.Data;
 
 @Data
 public class FileModel {
-	private int FID;
-	private int BID;
-	private String FILENAME;
-	private String ORIGINNAME;
-	private String EXTENSION;
-	private int FILESIZE;
-
+	private int fileId;
+	private int boardId;
+	private String fileName;
+	private String originName;
+	private String extension;
 }

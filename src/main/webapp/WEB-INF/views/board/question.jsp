@@ -137,13 +137,13 @@ small {
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/ask" method="post" name="form" id="registerForm">
-				Title <input type="text" name="TITLE" maxlength="80" id="title" />
-				<select name="ITEM">
+				Title <input type="text" name="title" maxlength="80" id="title" />
+				<select name="item">
 					<c:forEach var="category" items="${list}">
-						<option value="${category.ITEM}">${category.ITEM}</option>
+						<option value="${category.item}">${category.item}</option>
 					</c:forEach>
 				</select> <br /> <br />
-				<textarea class="summernote" name="CONTENT" maxlength="500"
+				<textarea class="summernote" name="content" maxlength="500"
 					id="content"></textarea>
 				<br /> 
 				<div class="form-group">

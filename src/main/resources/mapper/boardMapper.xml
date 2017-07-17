@@ -6,82 +6,82 @@
 <mapper namespace="com.hyunhye.board.boardMapper">
 
 	<resultMap id="list" type="com.hyunhye.board.model.BoardModel">
-		<result property="UID" column="UID" javaType="java.lang.Integer" />
-		<result property="BID" column="BID" javaType="java.lang.Integer" />
-		<result property="CID" column="CID" javaType="java.lang.Integer" />
-		<result property="NAME" column="NAME" javaType="java.lang.String" />
-		<result property="ITEM" column="ITEM" javaType="java.lang.String" />
-		<result property="TITLE" column="TITLE" javaType="java.lang.String" />
-		<result property="CONTENT" column="CONTENT" javaType="java.lang.String" />
-		<result property="DATE" column="DATE" javaType="java.lang.String" />
+		<result property="userId" column="userId" javaType="java.lang.Integer" />
+		<result property="boardId" column="boardId" javaType="java.lang.Integer" />
+		<result property="categoryId" column="categoryId" javaType="java.lang.Integer" />
+		<result property="name" column="name" javaType="java.lang.String" />
+		<result property="item" column="item" javaType="java.lang.String" />
+		<result property="title" column="title" javaType="java.lang.String" />
+		<result property="content" column="content" javaType="java.lang.String" />
+		<result property="date" column="date" javaType="java.lang.String" />
 	</resultMap>
 
 	<select id="list" resultMap="list">
-		SELECT BOARD.BID, CATEGORY.ITEM, USER.NAME, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date
 		FROM BOARD
 		<include refid="category_user_join"></include>
 	</select>
 
 	<insert id="regist">
-		INSERT INTO BOARD (UID, CID, TITLE, CONTENT, DATE)
+		INSERT INTO BOARD (userId, categoryId, title, content, date)
 		VALUES
-		(${UID}, (SELECT CID FROM CATEGORY WHERE ITEM = #{ITEM}), #{TITLE}, #{CONTENT}, #{DATE})
+		(${userId}, (SELECT categoryId FROM CATEGORY WHERE item = #{item}), #{title}, #{content}, #{date})
 	</insert>
 
 	<select id="read" resultMap="list">
-		SELECT BOARD.BID, BOARD.UID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date
 		FROM BOARD 
 		<include refid="category_user_join"></include>
-		WHERE BID = #{BID}
+		WHERE boardId = #{boardId}
 	</select>
 
 	<select id="modify" resultMap="list">
 		UPDATE BOARD SET
-		TITLE =
-		#{TITLE},
-		CONTENT = #{CONTENT},
-		DATE = #{DATE}
-		WHERE BID = #{BID}
+		title =
+		#{title},
+		content = #{content},
+		date = #{date}
+		WHERE boardId = #{boardId}
 	</select>
 
-	<delete id="delete"> DELETE FROM BOARD WHERE BID = #{BID} </delete>
+	<delete id="delete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
 	
 	<select id="listCriteria" resultMap="list">
-		SELECT BOARD.BID, USER.NAME, CATEGORY.ITEM, BOARD.TITLE, BOARD.CONTENT, BOARD.DATE
+		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date
 		FROM BOARD
 		<include refid="category_user_join"></include>
 		<include refid="search"></include>
-		ORDER BY BOARD.BID desc, BOARD.DATE desc
+		ORDER BY BOARD.boardId desc, BOARD.date desc
 		limit #{startPage}, #{perPageNum}
 	</select>
 	
 	
 	<select id="countPaging" resultType="int">
-		SELECT COUNT(BID) FROM BOARD
+		SELECT COUNT(boardId) FROM BOARD
 		<include refid="search"></include>
 	</select>
 
 	<sql id="search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				WHERE CONTENT like '%${keyword}%'
-				OR TITLE like
+				WHERE content like '%${keyword}%'
+				OR title like
 				'%${keyword}%'
 			</when>
 			<when test="searchType == 'content'">
-				WHERE CONTENT like '%${keyword}%'
+				WHERE content like '%${keyword}%'
 			</when>
 			<when test="searchType == 'title'">
-				WHERE TITLE like '%${keyword}%'
+				WHERE title like '%${keyword}%'
 			</when>
 		</choose>
 	</sql>
 	
 	<sql id="category_user_join">
 		JOIN CATEGORY
-		ON BOARD.CID = CATEGORY.CID
+		ON BOARD.categoryId = CATEGORY.categoryId
 		JOIN  USER
-		ON BOARD.UID = USER.UID
+		ON BOARD.userId = USER.userId
 	</sql>
 
 </mapper>

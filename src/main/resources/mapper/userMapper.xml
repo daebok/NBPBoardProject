@@ -6,41 +6,41 @@
 <mapper namespace="com.hyunhye.board.userMapper">
 
 	<resultMap id="list" type="com.hyunhye.user.model.UserModel">
-		<result property="UID" column="UID" javaType="java.lang.Integer" />
-		<result property="ID" column="ID" javaType="java.lang.String" />
-		<result property="PASSWORD" column="PASSWORD" javaType="java.lang.String" />
-		<result property="NAME" column="NAME" javaType="java.lang.String" />
+		<result property="userId" column="userId" javaType="java.lang.Integer" />
+		<result property="id" column="id" javaType="java.lang.String" />
+		<result property="password" column="password" javaType="java.lang.String" />
+		<result property="name" column="name" javaType="java.lang.String" />
 	</resultMap>
 
 	<insert id="regist">
-		INSERT INTO USER (ID, PASSWORD, NAME) VALUES
-		(#{ID},
-		PASSWORD(#{PASSWORD}), #{NAME})
+		INSERT INTO USER (id, password, name) VALUES
+		(#{id},
+		password(#{password}), #{name})
 	</insert>
 
 
 	<delete id="delete">
-		DELETE FROM USER WHERE ID = #{ID}
+		DELETE FROM USER WHERE id = #{id}
 	</delete>
 
 	<select id="loginCheck" resultType="String">
-		SELECT NAME FROM USER
-		WHERE ID = #{ID} AND PASSWORD = PASSWORD(#{PASSWORD})
+		SELECT name FROM USER
+		WHERE id = #{id} AND password = password(#{password})
 	</select>
 
 	<select id="viewUser" resultMap="list">
 		SELECT
-		UID,
-		NAME,
-		ID
+		userId,
+		name,
+		id
 		FROM USER
-		WHERE ID = #{ID} AND PASSWORD = PASSWORD(#{PASSWORD})
+		WHERE id = #{id} AND password = password(#{password})
 	</select>
 	
 	<select id="select" resultType="Integer" parameterType="String">
 		SELECT
 		COUNT(*)
 		FROM USER
-		WHERE ID = #{id}
+		WHERE id = #{id}
 	</select>
 </mapper>

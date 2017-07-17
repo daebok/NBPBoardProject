@@ -14,8 +14,8 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("ID") == null) {
-			response.sendRedirect(request.getContextPath() + "/login.do");
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/login");
 			return false;
 		} else {
 			return true;

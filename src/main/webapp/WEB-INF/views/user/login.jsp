@@ -35,8 +35,8 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form name="form" method="post">
-				<label for="id"><b>ID</b></label><input type="text" name="ID" id="id" placeholder="Enter ID"/> <br /> <label for="password"><b>Password</b></label><input
-					type="password" name="PASSWORD" id="password" placeholder="Enter PASSWORD"/> <br />
+				<label for="id"><b>ID</b></label><input type="text" name="id" id="id" placeholder="Enter ID"/> <br /> <label for="password"><b>Password</b></label><input
+					type="password" name="password" id="password" placeholder="Enter PASSWORD"/> <br />
 				<!-- <button id="btnLogin">로그인</button>-->
 				<button type="button" id="loginButton" class="btn btn-default" >Log In</button>
 

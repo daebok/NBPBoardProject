@@ -26,7 +26,7 @@
 			document.form.action = "question/modify"
 			document.form.submit();
 		});
-		$("#category").val('${model.ITEM}').prop("selected", true);
+		$("#category").val('${model.item}').prop("selected", true);
 	});
 </script>
 </head>
@@ -37,26 +37,18 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form action="question/modify" method="post" name="form">
-				Title <input type="text" name="TITLE" value="${model.TITLE}"
+				Title <input type="text" name="TITLE" value="${model.title}"
 					maxlength="80" id="title" /> 
-				<select name="ITEM" id="category">
+				<select name="item" id="category">
 					<c:forEach var="category" items="${list}">
-						<option value="${category.ITEM}">${category.ITEM}</option>
-						<%-- <c:choose>
-							<c:when test="${category.ITEM} eq '${model.ITEM}'">
-								<option value="${category.ITEM}" selected>${category.ITEM}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${category.ITEM}">${category.ITEM}</option>
-							</c:otherwise>
-						</c:choose> --%>
+						<option value="${category.item}">${category.item}</option>
 					</c:forEach>
 				</select> 
 				<br /><br />
-				<textarea class="summernote" cols="100" rows="30" name="CONTENT"
-					maxlength="500" id="content">${model.CONTENT}</textarea>
+				<textarea class="summernote" cols="100" rows="30" name="content"
+					maxlength="500" id="content">${model.content}</textarea>
 
-				<input type="hidden" name="BID" value="${model.BID}"> <br />
+				<input type="hidden" name="boardId" value="${model.boardId}"> <br />
 				<div class="pull-right">
 					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>
 				</div>

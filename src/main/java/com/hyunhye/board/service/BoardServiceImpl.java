@@ -43,13 +43,13 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public void regist(HttpSession session, BoardModel model) {
-		int UID = (Integer) session.getAttribute("UID");
+		int userId = (Integer)session.getAttribute("userId");
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = simpleDateFormat.format(date);
 
-		model.setDATE(currentTime);
-		model.setUID(UID);
+		model.setDate(currentTime);
+		model.setUserId(userId);
 
 		repository.regist(model);
 
@@ -62,9 +62,9 @@ public class BoardServiceImpl implements BoardService {
 		for (int i = 1; i < files.length; i++) {
 			fileName = files[i];
 			FileModel fileModel = new FileModel();
-			fileModel.setFILENAME(fileName.substring(fileName.indexOf("=") + 1));
-			fileModel.setORIGINNAME(fileName.substring(fileName.lastIndexOf("_") + 1));
-			fileModel.setEXTENSION(fileName.substring(fileName.lastIndexOf(".") + 1));
+			fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
+			fileModel.setOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
+			fileModel.setExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
 
 			repository.addAttach(fileModel);
 		}
@@ -82,22 +82,22 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardModel modify(HttpSession session, BoardModel model) {
-		int UID = (Integer) session.getAttribute("UID");
+		int userId = (Integer)session.getAttribute("userId");
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		model.setDATE(currentTime);
-		model.setUID(UID);
-		model.setCID(1);
+		model.setDate(currentTime);
+		model.setUserId(userId);
+		model.setCategoryId(1);
 
 		return repository.modify(model);
 	}
 
 	@Override
 	public void delete(int boardId, BoardModel model) {
-		model.setBID(boardId);
+		model.setBoardId(boardId);
 		repository.delete(model);
 	}
 
