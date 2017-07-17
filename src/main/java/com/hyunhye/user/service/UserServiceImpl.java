@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.repository.UserRepositoryImpl;
 
-@Service(value = "UserService")
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired

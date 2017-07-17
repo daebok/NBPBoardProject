@@ -2,9 +2,8 @@ package com.hyunhye.board.repository;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hyunhye.board.model.BoardModel;
@@ -12,10 +11,10 @@ import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 
-@Repository(value = "BoardRepository")
+@Repository
 public class BoardRepositoryImpl implements BoardRepository {
 
-	@Inject
+	@Autowired
 	SqlSession sqlSession;
 
 	private static final String namespace = "com.hyunhye.board.boardMapper";

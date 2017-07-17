@@ -1,17 +1,17 @@
 package com.hyunhye.user.repository;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hyunhye.user.model.UserModel;
 
-@Repository(value = "UserRepository")
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
-	@Inject
+	@Autowired
 	SqlSession sqlSession;
 
 	private static final String namespace = "com.hyunhye.board.userMapper";

@@ -32,10 +32,10 @@ public class CommentController {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
 			service.addComment(model);
-			entity = new ResponseEntity<>(service.listComment(model.getBoardId()), HttpStatus.OK);
+			entity = new ResponseEntity<List<CommentModel>>(service.listComment(model.getBoardId()), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;
@@ -46,10 +46,10 @@ public class CommentController {
 	public ResponseEntity<List<CommentModel>> list(@RequestParam("boardId") int boardId) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
-			entity = new ResponseEntity<>(service.listComment(boardId), HttpStatus.OK);
+			entity = new ResponseEntity<List<CommentModel>>(service.listComment(boardId), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;
@@ -79,7 +79,7 @@ public class CommentController {
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;
