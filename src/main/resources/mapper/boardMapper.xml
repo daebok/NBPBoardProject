@@ -54,12 +54,14 @@
 		<include refid="category_user_join"></include>
 		<include refid="search"></include>
 		ORDER BY BOARD.boardId desc, BOARD.date desc
-		limit #{startPage}, #{perPageNum}
+		limit ${startPage}, ${perPageNum}
 	</select>
 	
 	
 	<select id="countPaging" resultType="int">
 		SELECT COUNT(boardId) FROM BOARD
+		JOIN CATEGORY
+		ON BOARD.categoryId = CATEGORY.categoryId
 		<include refid="search"></include>
 	</select>
 	
@@ -82,7 +84,9 @@
 				WHERE title like '%${keyword}%'
 			</when>
 		</choose>
-		AND categoryId = (SELECT categoryId FROM CATEGORY WHERE item = ${categoryType})
+		<if test="categoryType != 'null'">
+			AND CATEGORY.item = '${categoryType}'
+		</if>
 	</sql>
 	
 	<sql id="category_user_join">

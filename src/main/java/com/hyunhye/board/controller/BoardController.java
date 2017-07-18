@@ -34,7 +34,7 @@ public class BoardController {
 	@RequestMapping(value = {"", "/"})
 	public String home(Model model) throws Exception {
 		model.addAttribute("model", service.listAll(model));
-		model.addAttribute("list", service.categoryListAll());
+		model.addAttribute("categoryList", service.categoryListAll());
 		return "home";
 	}
 
@@ -53,6 +53,7 @@ public class BoardController {
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(service.listCountCriteria(cri));
 
+		model.addAttribute("categoryList", service.categoryListAll());
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "board/list";
