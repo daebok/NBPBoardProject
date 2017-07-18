@@ -17,6 +17,10 @@
 	</insert>
 	
 	<select id="getAttach" resultMap="list">
-		select fileName from FILE where boardId = #{boardId}; 
+		select fileId, fileName, originName from FILE where boardId = #{boardId}; 
 	</select>
+	
+	<delete id="deleteAttach">
+		DELETE FROM FILE WHERE fileId = #{fileId}
+	</delete>
 </mapper>

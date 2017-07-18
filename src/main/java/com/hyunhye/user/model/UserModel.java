@@ -5,8 +5,11 @@ import lombok.Data;
 @Data
 public class UserModel {
 
-	int userId;
-	String id;
-	String password;
-	String name;
+	private int userId;
+	private String id;
+	private String password;
+	private String name;
+	private String sessionKey;
+	private String sessionLimit;
+	private boolean useCookie;
 }

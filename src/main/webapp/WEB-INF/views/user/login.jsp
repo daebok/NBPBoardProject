@@ -52,12 +52,11 @@
 							<button type="button" id="loginButton" class="btn btn-default">Log In</button>
 						</div>
 					</div>
-					<c:if test="${msg == 'FAILURE'}">
-						<div style="color: red; margin-top: 10px;">아이디 또는 비밀번호가 일치하지 않습니다.</div>
-					</c:if>
-					<c:if test="${msg == 'LOGOUT'}">
-						<div style="color: red; margin-top: 10px;">로그아웃되었습니다.</div>
-					</c:if>
+					<div class="form-group">
+						<c:if test="${msg == 'LOGOUT'}">
+							<div style="color: red; margin-top: 10px;">로그아웃되었습니다.</div>
+						</c:if>
+					</div>
 				</form>
 			
 		</div>

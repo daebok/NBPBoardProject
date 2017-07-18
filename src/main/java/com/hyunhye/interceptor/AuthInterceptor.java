@@ -4,29 +4,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.hyunhye.user.service.UserService;
+
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-	protected Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+
+	@Autowired
+	UserService service;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+		throws Exception {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-
+		if (session.getAttribute("login") == null) {
 			saveDest(request);
-			logger.info(session.getAttribute("dest") + "");
-
 			response.sendRedirect("/user/login");
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
-
 
 	private void saveDest(HttpServletRequest req) {
 		String uri = req.getRequestURI();

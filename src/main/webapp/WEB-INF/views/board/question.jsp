@@ -10,14 +10,18 @@
 	width: 70%;
 	height: 100px;
 	border: 1px dotted gray;
-	background-color: lightslategray;
+	border: 1px dotted lightslategray;
+	border-radius: 20px;
 	margin: auto; 
+	text-align: center;
+	line-height: 100px;
+	font-weight: border;
 }
 
-small {
-	margin-left: 3px;
-	font-weight: bold;
-	color: gray;
+.delete {
+	color: black;
+	font-size:15px;
+	text-decoration: none;
 }
 </style>
 <script src="<c:url value="/resources/common/js/upload.js" />"></script>
@@ -39,7 +43,7 @@ small {
 			formData.append("file",file);
 
 			$.ajax({
-				url : '/board/upload/uploadAjax',
+				url : '/upload/uploadAjax',
 				data : formData,
 				dataType : 'text',
 				processData : false,
@@ -49,13 +53,13 @@ small {
 					var str="";
 					console.log(data);
 					if(checkImageType(data)){ 
-						str = "<div><a href='/board/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
-						str += "<img src='/board/upload/displayFile?fileName="+data+"'/></a>";
-						str += "<small data-src="+data+">X</small>";
+						str = "<div><a href='/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
+						str += "<img src='/upload/displayFile?fileName="+data+"'/></a>";
+						str += "&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
 						str += "<input type='hidden' name='files' value='"+getImageLink(data)+"'> </div>";
-					} else { // download if not image file
-						str = "<div><a href='/board/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
-								+"<small data-src="+data+">X</small>";
+					} else { 
+						str = "<div><a href='/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
+								+"&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
 						str += "<input type='hidden' name='files' value='"+data+"'> </div>";
 					}
 					$(".uploadedList").append(str);
@@ -63,11 +67,11 @@ small {
 				}
 			});
 		});
-		$(".uploadedList").on("click","small",function(event){
+		$(".uploadedList").on("click","a",function(event){
 			var that = $(this);
 			
 			$.ajax({
-				url: "deleteFile",
+				url: "/upload/deleteFile",
 				type:"post",
 				data: {fileName: $(this).attr("data-src")},
 				dataType: "text",
@@ -100,7 +104,6 @@ small {
 			document.form.submit();
 		});
 		
-		/* summernote */
 		$('.summernote').summernote({
 			height : 200,
 			width: 100,
@@ -114,7 +117,7 @@ small {
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/board/upload/imageUpload",
+				url : "/upload/imageUpload",
 				dataType : 'text',
 				cache : false,
 				contentType : false,
@@ -135,22 +138,27 @@ small {
 	<!-- header end -->
 
 	<div class="container">
-		<div class="container-fluid">
-			<form action="/board/question/ask" method="post" name="form" id="registerForm">
-				Title <input type="text" name="title" maxlength="80" id="title" />
-				<select name="item">
-					<c:forEach var="category" items="${list}">
-						<option value="${category.item}">${category.item}</option>
-					</c:forEach>
-				</select> <br /> <br />
+		<div class="container-fluid" style="margin-bottom: 30px">
+			<form action="/board/question/ask" method="post" name="form" id="registerForm" class="form-horizontal">
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input type="text" name="title" maxlength="100" id="title" size="20" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="category">Category</label>
+					<select name="item" id="category">
+						<c:forEach var="category" items="${list}">
+							<option value="${category.item}">${category.item}</option>
+						</c:forEach>
+					</select> 
+				</div>
 				<textarea class="summernote" name="content" maxlength="500"
 					id="content"></textarea>
 				<br /> 
 				<div class="form-group">
-					<div class="fileDrop"><label for="fileDrop">File Drop Here</label></div>
+					<div class="fileDrop">File Drop Here</div>
 				</div>
 				<div class="box-footer">
-					<hr>
 					<div class="uploadedList"></div>
 				</div>
 				<div class="pull-right">

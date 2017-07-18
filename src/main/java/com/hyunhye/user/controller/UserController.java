@@ -43,11 +43,12 @@ public class UserController {
 		throws Exception {
 		boolean result = service.loginCheck(session, model);
 		if (result) {
-			rttr.addFlashAttribute("msg", "SUCCESS");
+			session.setAttribute("loginCheck", result);
 			return "home";
 		} else {
 			rttr.addFlashAttribute("msg", "FAILURE");
-			return "redirect:/user/login";
+			session.setAttribute("loginCheck", result);
+			return "user/login";
 		}
 	}
 

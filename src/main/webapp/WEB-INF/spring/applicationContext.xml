@@ -19,7 +19,7 @@
 		<property name="maxUploadSize" value="10485760" /> <!-- 10MB -->
 	</bean>
 	<bean id="uploadPath" class="java.lang.String">
-		<constructor-arg value="hyunhye/board/files">
+		<constructor-arg value="C:\Users\NAVER\Desktop\tmp">
 		</constructor-arg>
 	</bean>
 </beans>

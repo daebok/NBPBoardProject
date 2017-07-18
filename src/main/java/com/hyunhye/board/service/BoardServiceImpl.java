@@ -73,6 +73,7 @@ public class BoardServiceImpl implements BoardService {
 		return repository.getAttach(boardId);
 	}
 
+	@Transactional
 	@Override
 	public BoardModel modify(HttpSession session, BoardModel model) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
@@ -83,8 +84,29 @@ public class BoardServiceImpl implements BoardService {
 
 		model.setDate(currentTime);
 		model.setUserId(userId);
-		model.setCategoryId(1);
 
+		int[] filesId = model.getFilesId();
+		if (filesId != null) {
+			int fileId = 0;
+			for (int i = 0; i < filesId.length; i++) {
+				fileId = filesId[i];
+				repository.deleteAttach(fileId);
+			}
+		}
+
+		String[] files = model.getFiles();
+		if (files != null) {
+			String fileName = null;
+			for (int i = 1; i < files.length; i++) {
+				fileName = files[i];
+				FileModel fileModel = new FileModel();
+				fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
+				fileModel.setOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
+				fileModel.setExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
+
+				repository.addAttach(fileModel);
+			}
+		}
 		return repository.modify(model);
 	}
 

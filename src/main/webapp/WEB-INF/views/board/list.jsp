@@ -10,18 +10,21 @@
 			$('#searchButton').on("click", function(event){
 				self.location = "list"
 					+ '${pageMaker.makeQuery(1)}'
+					+ "&categoryType="
+					+ $("#categoryType option:selected").val()
 					+ "&searchType="
-					+ $("slelect option:selected").val()
+					+ $("#searchType option:selected").val()
 					+ "&keyword="+encodeURIComponent($('#keyword').val());
 				
 			});	
 		
-		});
+		});/* 
 	function list(page) {
 		location.href = "${path}/board/list?curPage=" + page
+				+ "&categoryType=${map.categoryOption}"
 				+ "&searchOption=${map.searchOption}"
 				+ "&keyword=${map.keyword}";
-	}
+	} */
 </script>
 </head>
 <body>

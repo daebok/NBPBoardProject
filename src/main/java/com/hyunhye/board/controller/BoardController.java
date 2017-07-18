@@ -34,12 +34,12 @@ public class BoardController {
 	@RequestMapping(value = {"", "/"})
 	public String home(Model model) throws Exception {
 		model.addAttribute("model", service.listAll(model));
-
+		model.addAttribute("list", service.categoryListAll());
 		return "home";
 	}
 
 	@RequestMapping(value = "question")
-	public String readCategory(Model model) throws Exception { // get category
+	public String readCategory(Model model) throws Exception {
 		List<CategoryModel> list = service.categoryListAll();
 		model.addAttribute("list", list);
 		return "/board/question";
@@ -77,17 +77,17 @@ public class BoardController {
 	@RequestMapping("modify")
 	public String update(@RequestParam int boardId, Model model) throws Exception {
 		model.addAttribute("model", service.read(boardId));
-		model.addAttribute("list", service.categoryListAll()); // category
+		model.addAttribute("list", service.categoryListAll());
+		model.addAttribute("attach", service.getAttach(boardId));
 		return "board/modify";
 	}
 
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute BoardModel model, RedirectAttributes rttr)
+	public String modify(HttpSession session, @ModelAttribute BoardModel model)
 		throws Exception {
 		service.modify(session, model);
 
-		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "forward:/board/answer?boardId=" + model.getBoardId();
+		return "redirect:/board/answer?boardId=" + model.getBoardId();
 	}
 
 	@RequestMapping("delete")

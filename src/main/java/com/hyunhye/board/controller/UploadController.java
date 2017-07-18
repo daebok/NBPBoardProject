@@ -9,8 +9,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +27,6 @@ import com.hyunhye.common.UploadFileUtils;
 @Controller
 @RequestMapping("/upload")
 public class UploadController {
-	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
@@ -48,30 +45,26 @@ public class UploadController {
 			HttpStatus.CREATED);
 	}
 
-	/*
-	 * send file to browser
-	 * image mapping
-	 */
-	@ResponseBody // send byte[]
+	@ResponseBody
 	@RequestMapping("displayFile")
-	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception { // return file data
-		InputStream in = null; // download server file
+	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
+		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
 		try {
-			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // extract contentType
+			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-			MediaType mediaType = MediaUtils.getMediaType(formatName); // image or not check
+			MediaType mediaType = MediaUtils.getMediaType(formatName);
 
-			HttpHeaders headers = new HttpHeaders(); // header
+			HttpHeaders headers = new HttpHeaders();
 
 			in = new FileInputStream(uploadPath + fileName);
-			if (mediaType != null) { // if image
+			if (mediaType != null) {
 				headers.setContentType(mediaType);
-			} else { // if not
+			} else {
 				fileName = fileName.substring(fileName.indexOf("_") + 1);
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // contentType for downloading
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 				headers.add("Content-Disposition",
-					"attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "iso-8859-1") + "\""); // korean
+					"attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "iso-8859-1") + "\"");
 			}
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
 		} catch (Exception e) {
@@ -86,8 +79,6 @@ public class UploadController {
 	@ResponseBody
 	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(String fileName) {
-		logger.info("delete file: " + fileName);
-
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 		MediaType mediaType = MediaUtils.getMediaType(formatName);
@@ -105,7 +96,6 @@ public class UploadController {
 	}
 
 	private String uploadfile(String originalName, byte[] fileData) throws IOException {
-		// TODO Auto-generated method stub
 		UUID uid = UUID.randomUUID();
 
 		String savedName = uid.toString() + "_" + originalName;

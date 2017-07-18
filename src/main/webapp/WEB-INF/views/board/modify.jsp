@@ -5,6 +5,26 @@
 <html>
 <head>
 <title>BOARD</title>
+<style>
+.fileDrop {
+	width: 70%;
+	height: 100px;
+	border: 1px dotted gray;
+	border: 1px dotted lightslategray;
+	border-radius: 20px;
+	margin: auto; 
+	text-align: center;
+	line-height: 100px;
+	font-weight: border;
+}
+
+.delete {
+	color: black;
+	font-size:15px;
+	text-decoration: none;
+}
+</style>
+<script src="<c:url value="/resources/common/js/upload.js" />"></script>
 <script>
 	$(document).ready(function() {
 		$('.summernote').summernote({
@@ -27,6 +47,73 @@
 			document.form.submit();
 		});
 		$("#category").val('${model.item}').prop("selected", true);
+		$(".fileDrop").on("dragenter dragover", function(event) {
+			event.preventDefault();
+			var files = event.originalEvent.dataTransfer.files;
+			var file = files[0];
+		});
+		
+		$(".fileDrop").on("drop", function(event) {
+			event.preventDefault();
+			var files = event.originalEvent.dataTransfer.files;
+			var file = files[0];
+
+			var formData = new FormData();
+			formData.append("file",file);
+
+			$.ajax({
+				url : '/upload/uploadAjax',
+				data : formData,
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				type : 'POST',
+				success : function(data) {
+					var str="";
+					if(checkImageType(data)){ 
+						str = "<div><a href='/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
+						str += "<img src='/upload/displayFile?fileName="+data+"'/></a>";
+						str += "&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
+						str += "<input type='hidden' name='files' value='"+getImageLink(data)+"'> </div>";
+					} else { 
+						str = "<div><a href='/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
+								+"&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
+						str += "<input type='hidden' name='files' value='"+data+"'> </div>";
+					}
+					$(".newUploadedList").append(str);
+
+				}
+			});
+		});
+		$(".newUploadedList").on("click","a",function(){
+			var that = $(this);
+			$.ajax({
+				url: "/upload/deleteFile",
+				type:"post",
+				data: {fileName: $(this).attr("data-src")},
+				dataType: "text",
+				success:function(result){
+					if(result == 'deleted'){
+						that.parent('div').remove();
+					}
+				}
+			});
+		});
+		$(".uploadedList").on("click","a",function(){
+			var that = $(this);
+			$('#form').append("<input type='hidden' name='filesId' value="+$(this).attr("data-id")+">");
+			$.ajax({
+				url: "/upload/deleteFile",
+				type:"post",
+				data: {fileName: $(this).attr("data-src")},
+				dataType: "text",
+				success:function(result){
+					if(result == 'deleted'){
+						that.parent('div').remove();
+					}
+				}
+			});
+		});
 	});
 </script>
 </head>
@@ -35,20 +122,43 @@
 	<%@include file="../common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
-		<div class="container-fluid">
-			<form action="question/modify" method="post" name="form">
-				Title <input type="text" name="title" value="${model.title}"
-					maxlength="80" id="title" /> 
-				<select name="item" id="category">
-					<c:forEach var="category" items="${list}">
-						<option value="${category.item}">${category.item}</option>
-					</c:forEach>
-				</select> 
-				<br /><br />
+		<div class="container-fluid" style="margin-bottom: 30px">
+			<form action="question/modify" method="post" name="form" id="form" class="form-horizontal">
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input type="text" name="title" value="${model.title}" maxlength="80" id="title" /> 
+				</div>
+				<div class="form-group">
+					<label for="category">Category</label>
+					<select name="item" id="category">
+						<c:forEach var="category" items="${list}">
+							<option value="${category.item}">${category.item}</option>
+						</c:forEach>
+					</select> 
+				</div>
 				<textarea class="summernote" cols="100" rows="30" name="content"
 					maxlength="500" id="content">${model.content}</textarea>
+				<div class="form-group">
+					<div class="fileDrop">File Drop Here</div>
+				</div>
+				<div>
+					<div class="box-footer">
+						<c:forEach var="attach" items="${attach}">
+							<div class="uploadedList">
+								<div>
+									<a href='/upload/displayFile?fileName=${attach.fileName}'> ${attach.originName}</a> 
+									&nbsp;&nbsp;
+									<a class='delete' data-src="${attach.fileName}" data-id="${attach.fileId}">[삭제]</a>
+									<br>
+								</div>
+							</div>
+						</c:forEach>
+						<div class="newUploadedList"></div>
+					</div>
+				</div>
+	
 
-				<input type="hidden" name="boardId" value="${model.boardId}"> <br />
+				<input type="hidden" name="boardId" value="${model.boardId}">
 				<div class="pull-right">
 					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>
 				</div>

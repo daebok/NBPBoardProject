@@ -22,24 +22,21 @@ public class UploadFileUtils {
 	public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception {
 		UUID uuid = UUID.randomUUID();
 		String savedName = uuid.toString() + "_" + originalName;
-		String savedPath = calcPath(uploadPath); // calc saved path
+		String savedPath = calcPath(uploadPath);
 		File target = new File(uploadPath + savedPath, savedName);
-		FileCopyUtils.copy(fileData, target); // copy file in temp directory (save)
-		// contentType check to make thumbnail
+		FileCopyUtils.copy(fileData, target);
 		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1);
 		String uploadedFileName = null;
-		if (MediaUtils.getMediaType(formatName) != null) { // if image ?
-			/* create thumbnail*/
+		if (MediaUtils.getMediaType(formatName) != null) {
 			uploadedFileName = makeThumbnail(uploadPath, savedPath, savedName);
-		} else { // image no
-			/* create icon*/
+		} else {
 			uploadedFileName = makeIcon(uploadPath, savedPath, savedName);
 		}
 		return uploadedFileName;
 	}
 
 	private static String makeIcon(String uploadPath, String path, String fileName) throws Exception {
-		String iconName = uploadPath + path + File.separator + fileName; // icon name
+		String iconName = uploadPath + path + File.separator + fileName;
 		return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
@@ -79,8 +76,7 @@ public class UploadFileUtils {
 		}
 	}
 
-	/* folder create */
-	private static String calcPath(String uploadPath) { // uploadPath: inner path
+	private static String calcPath(String uploadPath) {
 
 		Calendar cal = Calendar.getInstance();
 
@@ -117,15 +113,13 @@ public class UploadFileUtils {
 		return filePath.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
-	/* create Thumbnail */
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 
-		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName)); // image in memory
+		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
 
-		// origin image copy
 		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
 
-		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName; // thumbnail image name (s_)
+		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
 
 		File newFile = new File(thumbnailName);
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);

@@ -37,12 +37,11 @@ public class Criteria {
 		return page;
 	}
 
-	// method for MyBatis SQL Mapper
 	public int getStartPage() {
+		this.startPage = (page - 1) * perPageNum;
 		return this.startPage;
 	}
 
-	// method for MyBatis SQL Mapper
 	public int getPerPageNum() {
 		return this.perPageNum;
 	}

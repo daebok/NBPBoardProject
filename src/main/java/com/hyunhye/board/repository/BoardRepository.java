@@ -30,4 +30,6 @@ public interface BoardRepository {
 
 	public BoardModel modify(BoardModel model) throws Exception;
 
+	public void deleteAttach(int boardId) throws Exception;
+
 }

@@ -22,7 +22,7 @@
 		FROM BOARD
 		<include refid="category_user_join"></include>
 		ORDER BY BOARD.viewCount desc
-		limit 0, 100
+		limit 0, 10
 	</select>
 
 	<insert id="regist">
@@ -82,6 +82,7 @@
 				WHERE title like '%${keyword}%'
 			</when>
 		</choose>
+		AND categoryId = (SELECT categoryId FROM CATEGORY WHERE item = ${categoryType})
 	</sql>
 	
 	<sql id="category_user_join">

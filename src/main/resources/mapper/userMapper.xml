@@ -10,6 +10,8 @@
 		<result property="id" column="id" javaType="java.lang.String" />
 		<result property="password" column="password" javaType="java.lang.String" />
 		<result property="name" column="name" javaType="java.lang.String" />
+		<result property="sessionKey" column="sessionKey" javaType="java.lang.String" />
+		<result property="sessionLimit" column="sessionLimit" javaType="java.lang.String" />
 	</resultMap>
 
 	<insert id="regist">
@@ -42,5 +44,23 @@
 		COUNT(*)
 		FROM USER
 		WHERE id = #{id}
+	</select>
+	
+	<update id="keepLogin" parameterType="hashMap">
+		UPDATE USER SET
+		sessionKey = #{sessionId}, sessionLimit = #{next}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="checkUserWithSessionKey" resultType="list">
+		SELECT 
+		userId,
+		name,
+		id,
+		sessionKey,
+		sessionLimit
+		FROM USER
+		WHERE sessionKey = '${value}'
+		AND sessionLimit > 'now()'
 	</select>
 </mapper>

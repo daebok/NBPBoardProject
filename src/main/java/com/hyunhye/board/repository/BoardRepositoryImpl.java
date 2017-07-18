@@ -57,8 +57,13 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public List<FileModel> getAttach(int boardId) {
-		return sqlSession.selectList(namespace2 + ".getAttach", boardId);
+	public List<FileModel> getAttach(int fileId) {
+		return sqlSession.selectList(namespace2 + ".getAttach", fileId);
+	}
+
+	@Override
+	public void deleteAttach(int fileId) throws Exception {
+		sqlSession.delete(namespace2 + ".deleteAttach", fileId);
 	}
 
 	@Override

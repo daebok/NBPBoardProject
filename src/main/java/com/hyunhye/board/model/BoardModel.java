@@ -13,5 +13,6 @@ public class BoardModel {
 	private String content;
 	private String date;
 	private String[] files;
+	private int[] filesId;
 	private int viewCount;
 }

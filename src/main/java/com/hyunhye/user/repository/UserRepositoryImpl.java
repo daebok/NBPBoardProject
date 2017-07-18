@@ -1,5 +1,9 @@
 package com.hyunhye.user.repository;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,38 +23,48 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public void regist(UserModel model) {
-		// TODO Auto-generated method stub
 		sqlSession.insert(namespace + ".regist", model);
 	}
 
 	@Override
 	public void delete(UserModel model) {
-		// TODO Auto-generated method stub
 		sqlSession.delete(namespace + ".delete", model);
 	}
 
-	// Login Check
 	@Override
 	public boolean loginCheck(UserModel model) {
-		// TODO Auto-generated method stub
 		String name = sqlSession.selectOne(namespace + ".loginCheck", model);
 		return (name == null) ? false : true;
 	}
 
-	// Login Info
 	@Override
 	public UserModel viewUser(UserModel model) {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + ".viewUser", model);
 	}
 
-	// Login logout
 	@Override
 	public void logout(HttpSession session) {}
 
+	@Override
 	public int select(String id) {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + ".select", id);
+	}
+
+	@Override
+	public void keepLogin(String id, String sessionId, Date next) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
+		map.put("sessionId", sessionId);
+		map.put("next", next);
+
+		sqlSession.update(namespace + ".keepLogin", map);
+	}
+
+	@Override
+	public UserModel checkUserWithSessionKey(String value) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + ".checkUserWithSessionKey", value);
 	}
 
 }

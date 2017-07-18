@@ -2,25 +2,26 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
-<div class="container header">
-	<h1>
-		<a href="<c:url value='/board'/>" style="text-decoration:none; color:">BOARD</a>
-	</h1>
-	<c:if test="${sessionScope.userId != null}">
-		<h5 class="home welcome">${sessionScope.name}(${sessionScope.id})님환영합니다.</h5>
-	</c:if>
-	<div class="container-fluid">
-		<div class="row">
+<div class="container"  style="margin-top:40px;">
+	<div class="container-fluid" >
+		<h1>
+			<a href="<c:url value='/board'/>" style="text-decoration: none;">BOARD</a>
+		</h1>
+		<div>
 			<c:choose>
-				<c:when test="${sessionScope.id == null}">
+				<c:when test="${sessionScope.login == null}">
 					<a href="<c:url value='/user/login'/>" id="LOGIN"
-						class="btn btn-primary">LogIn</a>
+						class="btn btn-default">LogIn</a>
 					<a href="<c:url value='/user/signup'/>" id="SIGNUP"
-						class="btn btn-danger">SingUp</a>
+						class="btn btn-default">SingUp</a>
 				</c:when>
-				<c:otherwise> ${sessionScope.name}님이 로그인중입니다.
-						<a href="<c:url value='/user/logout'/>" id="LOGOUT"
-						class="btn btn-primary">LogOut</a>
+				<c:otherwise> 
+							${sessionScope.name}(${sessionScope.id})님 환영합니다. &nbsp;
+							<a href="<c:url value='/user/logout'/>" id="LOGOUT" class="btn btn-default">LogOut</a>
+							<div  class="pull-right">
+								<a href="<c:url value='/user/myQuestions'/>" id="LOGOUT" class="btn btn-default">My Questions</a>
+								<a href="<c:url value='/user/favorite'/>" id="LOGOUT" class="btn btn-default">Favorite</a>
+							</div>
 				</c:otherwise>
 			</c:choose>
 		</div>

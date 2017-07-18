@@ -21,7 +21,8 @@
 		</div>
 		<div class="container-fluid">
 			<div class="col-md-12">
-				<h1>Top 50</h1>
+				<h3 class="top10" >Top 10</h3>
+				<hr>
 				<c:forEach var="board" items="${model}">
 					<h1>
 						<a href="<c:url value='/board/answer?boardId=${board.boardId}'/>" id="boardId">${board.title}</a>

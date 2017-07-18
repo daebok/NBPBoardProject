@@ -1,5 +1,7 @@
 package com.hyunhye.user.service;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +41,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void logout(HttpSession session) {
+		session.removeAttribute("login");
+		session.removeAttribute("id");
+		session.removeAttribute("name");
+		session.removeAttribute("userId");
 		session.invalidate();
 	}
 
 	@Override
 	public int select(String id) throws Exception {
 		return repository.select(id);
+	}
+
+	@Override
+	public void keepLogin(String id, String sessionId, Date next) throws Exception {
+		repository.keepLogin(id, sessionId, next);
+	}
+
+	@Override
+	public UserModel checkLoginBefore(String value) {
+		return repository.checkUserWithSessionKey(value);
 	}
 }
