@@ -122,13 +122,18 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception {
-		// TODO Auto-generated method stub
+		if (cri.getCategoryType() == null) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null) {
+			cri.setSearchType("");
+		}
+		System.out.println("cri: " + cri);
 		return repository.listCriteria(cri);
 	}
 
 	@Override
 	public int listCountCriteria(SearchCriteria cri) throws Exception {
-		// TODO Auto-generated method stub
 		return repository.countPaging(cri);
 	}
 

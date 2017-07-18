@@ -45,22 +45,4 @@
 		FROM USER
 		WHERE id = #{id}
 	</select>
-	
-	<update id="keepLogin" parameterType="hashMap">
-		UPDATE USER SET
-		sessionKey = #{sessionId}, sessionLimit = #{next}
-		WHERE id = #{id}
-	</update>
-	
-	<select id="checkUserWithSessionKey" resultType="list">
-		SELECT 
-		userId,
-		name,
-		id,
-		sessionKey,
-		sessionLimit
-		FROM USER
-		WHERE sessionKey = '${value}'
-		AND sessionLimit > 'now()'
-	</select>
 </mapper>

@@ -18,13 +18,7 @@
 				
 			});	
 		
-		});/* 
-	function list(page) {
-		location.href = "${path}/board/list?curPage=" + page
-				+ "&categoryType=${map.categoryOption}"
-				+ "&searchOption=${map.searchOption}"
-				+ "&keyword=${map.keyword}";
-	} */
+		})
 </script>
 </head>
 <body>

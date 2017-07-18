@@ -47,7 +47,6 @@ public class BoardController {
 
 	@RequestMapping("list")
 	public String list(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
-		System.out.println("cri: " + cri);
 		model.addAttribute("list", service.listCriteria(cri));
 
 		PageMaker pageMaker = new PageMaker();

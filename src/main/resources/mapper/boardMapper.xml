@@ -55,16 +55,20 @@
 		FROM BOARD
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
-		<include refid="search"></include>
+		<if test="searchType != '' or categoryType != '' ">
+			<include refid="search"></include>
+		</if>
 		ORDER BY BOARD.boardId desc, BOARD.date desc
-		limit ${startPage}, ${perPageNum}
+		limit #{startPage}, #{perPageNum}
 	</select>
 	
 	
 	<select id="countPaging" resultType="int">
 		SELECT COUNT(boardId) FROM BOARD
 		<include refid="join_category"></include>
-		<include refid="search"></include>
+		<if test="searchType != '' or categoryType != '' ">
+			<include refid="search"></include>
+		</if>
 	</select>
 	
 	<update id="increaseViewcount">
@@ -73,24 +77,25 @@
     </update>
 
 	<sql id="search">
-		<if test="searchType != null">
+		<if test="categoryType != 'null'">
+			WHERE CATEGORY.item = '${categoryType}'
+		</if>
+		<if test="searchType != 'null'">
+			AND 
 			<choose>
 				<when test="searchType == 'title_content'">
-					WHERE content like '%${keyword}%'
-					OR title like
-					'%${keyword}%'
+					( content like '%${keyword}%'
+					OR title like '%${keyword}%')
 				</when>
 				<when test="searchType == 'content'">
-					WHERE content like '%${keyword}%'
+					 content like '%${keyword}%'
 				</when>
 				<when test="searchType == 'title'">
-					WHERE title like '%${keyword}%'
+					 title like '%${keyword}%'
 				</when>
 			</choose>
 		</if>
-		<if test="categoryType != null">
-			AND CATEGORY.item = '${categoryType}'
-		</if>
+		
 	</sql>
 	
 	<sql id="join_user">
