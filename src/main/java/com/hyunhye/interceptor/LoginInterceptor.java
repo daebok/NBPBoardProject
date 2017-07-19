@@ -26,9 +26,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			session.setAttribute("login", userModel);
 
 			Object dest = session.getAttribute("dest");
+			session.removeAttribute("dest");
 			response.sendRedirect(dest != null ? (String)dest : "/board");
 		}
-
 	}
 
 }

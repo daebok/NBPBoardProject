@@ -13,6 +13,7 @@
 	</context:component-scan>
 
 	<beans:import resource="applicationContext-datasource.xml" />
+	<beans:import resource="applicationContext-interceptor.xml" />
 
 	<!-- FileUpload -->
 	<beans:bean id="multipartResolver"
@@ -23,4 +24,5 @@
 			<beans:constructor-arg value="C:\Users\NAVER\Desktop\tmp">
 			</beans:constructor-arg>
 	</beans:bean>
+	
 </beans:beans>

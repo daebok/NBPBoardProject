@@ -128,7 +128,6 @@ public class BoardServiceImpl implements BoardService {
 		if (cri.getSearchType() == null) {
 			cri.setSearchType("");
 		}
-		System.out.println("cri: " + cri);
 		return repository.listCriteria(cri);
 	}
 
