@@ -23,7 +23,7 @@ import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
-import com.hyunhye.comment.service.CommentServiceImpl;
+import com.hyunhye.comment.service.CommentService;
 
 @Controller
 @RequestMapping("board")
@@ -33,7 +33,7 @@ public class BoardController {
 	public BoardService service;
 
 	@Autowired
-	public CommentServiceImpl commentService;
+	public CommentService commentService;
 
 	@RequestMapping(value = {"", "/"})
 	public String home(Model model) throws Exception {
