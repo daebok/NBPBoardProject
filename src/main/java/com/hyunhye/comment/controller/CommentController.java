@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.comment.model.CommentModel;
@@ -26,11 +25,12 @@ public class CommentController {
 
 	@ResponseBody
 	@RequestMapping(value = "regist", method = RequestMethod.GET)
-	public ResponseEntity<List<CommentModel>> register(@ModelAttribute CommentModel model) {
+	public ResponseEntity<List<CommentModel>> commentRegist(@ModelAttribute CommentModel commentModel) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
-			service.addComment(model);
-			entity = new ResponseEntity<List<CommentModel>>(service.listComment(model.getBoardId()), HttpStatus.OK);
+			service.commentRegist(commentModel);
+			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(commentModel.getBoardId()),
+				HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
@@ -40,11 +40,12 @@ public class CommentController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "list", method = RequestMethod.GET)
-	public ResponseEntity<List<CommentModel>> list(@RequestParam("boardId") int boardId) {
+	@RequestMapping("list/{boardId}")
+	public ResponseEntity<List<CommentModel>> commentList(@PathVariable("boardId") int boardId) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
-			entity = new ResponseEntity<List<CommentModel>>(service.listComment(boardId), HttpStatus.OK);
+			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(boardId),
+				HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
@@ -54,12 +55,11 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "update/{commentId}", method = RequestMethod.GET)
-	public ResponseEntity<String> update(@PathVariable("id") int commentId,
-		@RequestBody CommentModel model) {
+	public ResponseEntity<String> commentUpdate(@PathVariable("id") int commentId, @RequestBody CommentModel model) {
 		ResponseEntity<String> entity = null;
 		try {
 			model.setCommentId(commentId);
-			service.modifyComment(model);
+			service.commentUpdate(model);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,10 +70,10 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "delete/{commentId}", method = RequestMethod.GET)
-	public ResponseEntity<String> delete(@PathVariable("id") int commentId) {
+	public ResponseEntity<String> commentDelete(@PathVariable("commentId") int commentId) {
 		ResponseEntity<String> entity = null;
 		try {
-			service.removeComment(commentId);
+			service.commentDelete(commentId);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,8 +1,11 @@
 package com.hyunhye.user.model;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
 @Data
+@Alias("user")
 public class UserModel {
 
 	private int userId;

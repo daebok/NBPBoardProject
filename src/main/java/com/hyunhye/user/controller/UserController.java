@@ -32,8 +32,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
-	public String write(@ModelAttribute UserModel model, RedirectAttributes rttr) throws Exception {
-		service.regist(model);
+	public String userRegist(@ModelAttribute UserModel model, RedirectAttributes rttr) throws Exception {
+		service.userRegist(model);
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		return "redirect:/user/login";
 	}
@@ -61,6 +61,6 @@ public class UserController {
 
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int duplicationId(@RequestBody String id) throws Exception {
-		return service.select(id);
+		return service.userSelect(id);
 	}
 }

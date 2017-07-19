@@ -1,8 +1,11 @@
 package com.hyunhye.comment.model;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
 @Data
+@Alias("comment")
 public class CommentModel {
 	private int commentId;
 	private int userId;

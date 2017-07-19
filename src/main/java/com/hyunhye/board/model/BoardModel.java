@@ -1,8 +1,11 @@
 package com.hyunhye.board.model;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
 @Data
+@Alias("board")
 public class BoardModel {
 	private int boardId;
 	private int userId;

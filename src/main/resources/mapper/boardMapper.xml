@@ -3,21 +3,21 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hyunhye.board.boardMapper">
+<mapper namespace="com.hyunhye.board.repository.BoardRepository">
 
-	<resultMap id="list" type="com.hyunhye.board.model.BoardModel">
-		<result property="userId" column="userId" javaType="java.lang.Integer" />
-		<result property="boardId" column="boardId" javaType="java.lang.Integer" />
-		<result property="categoryId" column="categoryId" javaType="java.lang.Integer" />
-		<result property="name" column="name" javaType="java.lang.String" />
-		<result property="item" column="item" javaType="java.lang.String" />
-		<result property="title" column="title" javaType="java.lang.String" />
-		<result property="content" column="content" javaType="java.lang.String" />
-		<result property="date" column="date" javaType="java.lang.String" />
-		<result property="viewCount" column="viewCount" javaType="java.lang.Integer" />
+	<resultMap id="list" type="board">
+		<result property="userId" column="userId" />
+		<result property="boardId" column="boardId" />
+		<result property="categoryId" column="categoryId" />
+		<result property="name" column="name" />
+		<result property="item" column="item" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="date" column="date"/>
+		<result property="viewCount" column="viewCount" />
 	</resultMap>
 
-	<select id="list" resultMap="list">
+	<select id="boardListAll" resultType="board">
 		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD
 		<include refid="join_category"></include>
@@ -26,13 +26,13 @@
 		limit 0, 10
 	</select>
 
-	<insert id="regist">
+	<insert id="boardRegist">
 		INSERT INTO BOARD (userId, categoryId, title, content, date)
 		VALUES
-		(${userId}, (SELECT categoryId FROM CATEGORY WHERE item = #{item}), #{title}, #{content}, #{date})
+		(#{userId}, (SELECT categoryId FROM CATEGORY WHERE item = #{item}), #{title}, #{content}, #{date})
 	</insert>
 
-	<select id="read" resultMap="list">
+	<select id="boardSelect" resultMap="list">
 		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD 
 		<include refid="join_category"></include>
@@ -40,7 +40,7 @@
 		WHERE boardId = #{boardId}
 	</select>
 
-	<select id="modify" resultMap="list">
+	<select id="boardModify" resultMap="list">
 		UPDATE BOARD SET
 		title = #{title},
 		content = #{content},
@@ -48,7 +48,7 @@
 		WHERE boardId = #{boardId}
 	</select>
 
-	<delete id="delete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
+	<delete id="boardDelete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
 	
 	<select id="listCriteria" resultMap="list">
 		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
@@ -80,23 +80,23 @@
 		UPDATE BOARD SET viewCount = viewCount + 1 
 		WHERE boardId = #{boardId}
     </update>
-
+    
 	<sql id="search">
 		<if test="categoryType != 'null'">
-			WHERE CATEGORY.item = '${categoryType}'
+			WHERE CATEGORY.item = #{categoryType}
 		</if>
 		<if test="searchType != 'null'">
 			AND 
 			<choose>
 				<when test="searchType == 'title_content'">
-					( content like '%${keyword}%'
-					OR title like '%${keyword}%')
+					( content like %$#{keyword}%
+					OR title like %#{keyword}%)%
 				</when>
 				<when test="searchType == 'content'">
-					 content like '%${keyword}%'
+					 content like %#{keyword}%
 				</when>
 				<when test="searchType == 'title'">
-					 title like '%${keyword}%'
+					 title like %$#{keyword}%
 				</when>
 			</choose>
 		</if>

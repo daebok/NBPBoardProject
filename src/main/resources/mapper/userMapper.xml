@@ -3,25 +3,25 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hyunhye.board.userMapper">
+<mapper namespace="com.hyunhye.user.repository.UserRepository">
 
-	<resultMap id="list" type="com.hyunhye.user.model.UserModel">
-		<result property="userId" column="userId" javaType="java.lang.Integer" />
-		<result property="id" column="id" javaType="java.lang.String" />
-		<result property="password" column="password" javaType="java.lang.String" />
-		<result property="name" column="name" javaType="java.lang.String" />
-		<result property="sessionKey" column="sessionKey" javaType="java.lang.String" />
-		<result property="sessionLimit" column="sessionLimit" javaType="java.lang.String" />
+	<resultMap id="list" type="user">
+		<result property="userId" column="userId"/>
+		<result property="id" column="id" />
+		<result property="password" column="password" />
+		<result property="name" column="name"/>
+		<result property="sessionKey" column="sessionKey" />
+		<result property="sessionLimit" column="sessionLimit" />
 	</resultMap>
 
-	<insert id="regist">
+	<insert id="userRegist">
 		INSERT INTO USER (id, password, name) VALUES
 		(#{id},
 		password(#{password}), #{name})
 	</insert>
 
 
-	<delete id="delete">
+	<delete id="userDelete">
 		DELETE FROM USER WHERE id = #{id}
 	</delete>
 
@@ -39,7 +39,7 @@
 		WHERE id = #{id} AND password = password(#{password})
 	</select>
 	
-	<select id="select" resultType="Integer" parameterType="String">
+	<select id="userSelect" resultType="Integer" parameterType="String">
 		SELECT
 		COUNT(*)
 		FROM USER

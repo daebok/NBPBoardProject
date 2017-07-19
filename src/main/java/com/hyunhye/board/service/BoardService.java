@@ -28,23 +28,23 @@ public class BoardService {
 	@Resource(name = "fileUtils")
 	private UploadFileUtils fileUtils;
 
-	public List<BoardModel> listAll(Model model) throws Exception {
-		return repository.listAll();
+	public List<BoardModel> boardListAll(Model model) throws Exception {
+		return repository.boardListAll();
 	}
 
 	@Transactional
-	public void regist(HttpSession session, BoardModel model) throws Exception {
+	public void boardRegist(HttpSession session, BoardModel boardModel) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = simpleDateFormat.format(date);
 
-		model.setDate(currentTime);
-		model.setUserId(userId);
+		boardModel.setDate(currentTime);
+		boardModel.setUserId(userId);
 
-		repository.regist(model);
+		repository.boardRegist(boardModel);
 
-		String[] files = model.getFiles();
+		String[] files = boardModel.getFiles();
 		if (files == null) {
 			return;
 		}
@@ -61,8 +61,8 @@ public class BoardService {
 		}
 	}
 
-	public BoardModel read(int boardId) throws Exception {
-		return repository.read(boardId);
+	public BoardModel boardSelect(int boardId) throws Exception {
+		return repository.boardSelect(boardId);
 	}
 
 	public List<FileModel> getAttach(int boardId) throws Exception {
@@ -70,17 +70,17 @@ public class BoardService {
 	}
 
 	@Transactional
-	public BoardModel modify(HttpSession session, BoardModel model) throws Exception {
+	public BoardModel boardModify(HttpSession session, BoardModel boardModel) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		model.setDate(currentTime);
-		model.setUserId(userId);
+		boardModel.setDate(currentTime);
+		boardModel.setUserId(userId);
 
-		int[] filesId = model.getFilesId();
+		int[] filesId = boardModel.getFilesId();
 		if (filesId != null) {
 			int fileId = 0;
 			for (int i = 0; i < filesId.length; i++) {
@@ -89,7 +89,7 @@ public class BoardService {
 			}
 		}
 
-		String[] files = model.getFiles();
+		String[] files = boardModel.getFiles();
 		if (files != null) {
 			String fileName = null;
 			for (int i = 1; i < files.length; i++) {
@@ -102,11 +102,11 @@ public class BoardService {
 				repository.addAttach(fileModel);
 			}
 		}
-		return repository.modify(model);
+		return repository.boardModify(boardModel);
 	}
 
-	public void delete(int boardId) throws Exception {
-		repository.delete(boardId);
+	public void boardDelete(int boardId) throws Exception {
+		repository.boardDelete(boardId);
 	}
 
 	public List<CategoryModel> categoryListAll() throws Exception {

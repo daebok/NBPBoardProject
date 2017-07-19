@@ -16,29 +16,25 @@ public class CommentService {
 	@Autowired
 	CommentRepository repository;
 
-	public void addComment(CommentModel model) throws Exception {
-		// TODO Auto-generated method stub
+	public void commentRegist(CommentModel commentModel) throws Exception {
 
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = simpleDateFormat.format(date);
 
-		model.setDate(currentTime);
-		repository.create(model);
+		commentModel.setDate(currentTime);
+		repository.commentRegist(commentModel);
 	}
 
-	public List<CommentModel> listComment(int boardId) throws Exception {
-		// TODO Auto-generated method stub
-		return repository.list(boardId);
+	public List<CommentModel> commentListAll(int boardId) throws Exception {
+		return repository.commentListAll(boardId);
 	}
 
-	public void modifyComment(CommentModel model) throws Exception {
-		// TODO Auto-generated method stub
-		repository.update(model);
+	public void commentUpdate(CommentModel commentModel) throws Exception {
+		repository.commentUpdate(commentModel);
 	}
 
-	public void removeComment(int boardId) throws Exception {
-		// TODO Auto-generated method stub
-		repository.delete(boardId);
+	public void commentDelete(int commentId) throws Exception {
+		repository.commentDelete(commentId);
 	}
 }

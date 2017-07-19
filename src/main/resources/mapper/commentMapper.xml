@@ -3,18 +3,18 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hyunhye.board.commentMapper">
+<mapper namespace="com.hyunhye.comment.repository.CommentRepository">
 
-	<resultMap id="list" type="com.hyunhye.comment.model.CommentModel">
-		<result property="userId" column="userId" javaType="java.lang.Integer" />
-		<result property="boardId" column="boardId" javaType="java.lang.Integer" />
-		<result property="commentId" column="commentId" javaType="java.lang.Integer" />
-		<result property="content" column="content" javaType="java.lang.String" />
-		<result property="name" column="name" javaType="java.lang.String" />
-		<result property="date" column="date" javaType="java.lang.String" />
+	<resultMap id="list" type="comment">
+		<result property="userId" column="userId" />
+		<result property="boardId" column="boardId"/>
+		<result property="commentId" column="commentId"  />
+		<result property="content" column="content" />
+		<result property="name" column="name" />
+		<result property="date" column="date" />
 	</resultMap>
 
-	<select id="list" resultMap="list">
+	<select id="commentListAll" resultMap="list">
 		SELECT COMMENT.content, COMMENT.date, USER.name
 		FROM COMMENT
 		JOIN  USER
@@ -23,20 +23,20 @@
 		ORDER BY commentId
 	</select>
 
-	<insert id="create">
+	<insert id="commentRegist">
 		INSERT INTO COMMENT (boardId, userId, content, date)
 		VALUES
-		(${boardId}, ${userId}, '${content}', '${date}')
+		(#{boardId}, #{userId}, #{content', #{date})
 	</insert>
 
-	<select id="update" resultMap="list">
+	<select id="commentUpdate" resultMap="list">
 		UPDATE COMMENT SET
 		content = #{content},
 		date = #{date}
 		WHERE commentId = #{commentId}
 	</select>
 
-	<delete id="delete"> 
+	<delete id="commentDelete"> 
 		DELETE FROM COMMENT WHERE commentId = #{commentId} 
 	</delete>
 

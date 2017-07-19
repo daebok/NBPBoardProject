@@ -14,8 +14,8 @@ public class UserService {
 	@Autowired
 	public UserRepository repository;
 
-	public void regist(UserModel model) throws Exception {
-		repository.regist(model);
+	public void userRegist(UserModel model) throws Exception {
+		repository.userRegist(model);
 	}
 
 	public boolean loginCheck(HttpSession session, UserModel model) throws Exception {
@@ -42,7 +42,7 @@ public class UserService {
 		session.invalidate();
 	}
 
-	public int select(String id) throws Exception {
-		return repository.select(id);
+	public int userSelect(String id) throws Exception {
+		return repository.userSelect(id);
 	}
 }
