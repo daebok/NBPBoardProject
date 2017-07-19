@@ -2,6 +2,9 @@ package com.hyunhye.board.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
@@ -66,9 +70,17 @@ public class BoardController {
 	}
 
 	@RequestMapping("answer")
-	public String read(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri, Model model)
+	public String read(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri, Model model,
+		HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
-		service.increaseViewCount(boardId);
+
+		Cookie viewCount = WebUtils.getCookie(request, "viewCount" + boardId);
+		if (viewCount == null) {
+			service.increaseViewCount(boardId);
+			Cookie cookie = new Cookie("viewCount" + boardId, Integer.toString(boardId));
+			response.addCookie(cookie);
+		}
+
 		model.addAttribute("model", service.read(boardId));
 		model.addAttribute("attach", service.getAttach(boardId));
 		model.addAttribute("comment", commentService.listComment(boardId));
