@@ -26,7 +26,7 @@
 	<insert id="commentRegist">
 		INSERT INTO COMMENT (boardId, userId, content, date)
 		VALUES
-		(#{boardId}, #{userId}, #{content', #{date})
+		(#{boardId}, #{userId}, #{content}, #{date})
 	</insert>
 
 	<select id="commentUpdate" resultMap="list">

@@ -11,14 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
@@ -68,8 +69,8 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	@RequestMapping("answer/{boardId}")
-	public String boardSelect(@PathVariable("boardId") int boardId,
+	@RequestMapping("answer")
+	public String boardSelect(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
@@ -86,8 +87,8 @@ public class BoardController {
 		return "board/answer";
 	}
 
-	@RequestMapping("modify/{boardId}")
-	public String modify(@PathVariable("boardId") int boardId, Model model) throws Exception {
+	@RequestMapping("modify")
+	public String modify(@RequestParam("boardId") int boardId, Model model) throws Exception {
 		model.addAttribute("model", boardService.boardSelect(boardId));
 		model.addAttribute("list", boardService.categoryListAll());
 		model.addAttribute("attach", boardService.getAttach(boardId));
@@ -102,8 +103,8 @@ public class BoardController {
 		return "redirect:/board/answer?boardId=" + model.getBoardId();
 	}
 
-	@RequestMapping("delete/{boardId}")
-	public String boardDelete(@PathVariable("boardId") int boardId, RedirectAttributes rttr) throws Exception {
+	@RequestMapping("delete")
+	public String boardDelete(@RequestParam("boardId") int boardId, RedirectAttributes rttr) throws Exception {
 		boardService.boardDelete(boardId);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");

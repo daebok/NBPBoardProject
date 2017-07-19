@@ -5,7 +5,7 @@
 
 <mapper namespace="com.hyunhye.board.repository.BoardRepository">
 
-	<resultMap id="list" type="board">
+	<resultMap id="boardList" type="board">
 		<result property="userId" column="userId" />
 		<result property="boardId" column="boardId" />
 		<result property="categoryId" column="categoryId" />
@@ -16,6 +16,38 @@
 		<result property="date" column="date"/>
 		<result property="viewCount" column="viewCount" />
 	</resultMap>
+	
+	<resultMap id="categoryList" type="category">
+		<result property="categoryId" column="categoryId" />
+		<result property="item" column="item" />
+	</resultMap>
+
+
+	<resultMap id="fileList" type="file">
+		<result property="boardId" column="boardId" />
+		<result property="fileName" column="fileName" />
+		<result property="originName" column="originName" />
+		<result property="extension" column="extension" />
+	</resultMap>
+	
+	<insert id="addAttach">
+		INSERT INTO FILE (boardId, fileName, originName, extension)
+		VALUES
+		( (SELECT boardId FROM BOARD ORDER BY boardId desc limit 1) , #{fileName}, #{originName}, #{extension} )
+	</insert>
+	
+	<select id="getAttach" resultMap="fileList">
+		select fileId, fileName, originName from FILE where boardId = #{boardId}; 
+	</select>
+	
+	<delete id="deleteAttach">
+		DELETE FROM FILE WHERE fileId = #{fileId}
+	</delete>
+	
+	<select id="categoryListAll" resultMap="categoryList">
+		SELECT item
+		FROM CATEGORY
+	</select>
 
 	<select id="boardListAll" resultType="board">
 		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
@@ -32,7 +64,7 @@
 		(#{userId}, (SELECT categoryId FROM CATEGORY WHERE item = #{item}), #{title}, #{content}, #{date})
 	</insert>
 
-	<select id="boardSelect" resultMap="list">
+	<select id="boardSelect" resultMap="boardList">
 		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD 
 		<include refid="join_category"></include>
@@ -40,7 +72,7 @@
 		WHERE boardId = #{boardId}
 	</select>
 
-	<select id="boardModify" resultMap="list">
+	<select id="boardModify" resultMap="boardList">
 		UPDATE BOARD SET
 		title = #{title},
 		content = #{content},
@@ -50,7 +82,7 @@
 
 	<delete id="boardDelete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
 	
-	<select id="listCriteria" resultMap="list">
+	<select id="listCriteria" resultMap="boardList">
 		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
 		FROM BOARD
 		<include refid="join_category"></include>
@@ -76,7 +108,7 @@
 		WHERE boardId = #{boardId}
 	</select>
 	
-	<update id="increaseViewcount">
+	<update id="increaseViewCount">
 		UPDATE BOARD SET viewCount = viewCount + 1 
 		WHERE boardId = #{boardId}
     </update>
@@ -89,14 +121,14 @@
 			AND 
 			<choose>
 				<when test="searchType == 'title_content'">
-					( content like %$#{keyword}%
-					OR title like %#{keyword}%)%
+					( content like CONCAT('%',#{keyword},'%')
+					OR title like CONCAT('%',#{keyword},'%') )
 				</when>
 				<when test="searchType == 'content'">
-					 content like %#{keyword}%
+					 content like CONCAT('%',#{keyword},'%')
 				</when>
 				<when test="searchType == 'title'">
-					 title like %$#{keyword}%
+					 title like CONCAT('%',#{keyword},'%')
 				</when>
 			</choose>
 		</if>

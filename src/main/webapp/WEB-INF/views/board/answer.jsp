@@ -101,7 +101,7 @@
 				</c:if>
 				<div class="pull-right">
 					<form name="form" action="list" method="post">
-						<input type="hidden" name="id" value="${model.boardId}" /> 
+						<input type="hidden" name="boardId" value="${model.boardId}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						<button type="submit" id="list" class="btn btn-warning">list</button>
