@@ -29,7 +29,14 @@
 <script>
 	$(document).ready(function() {
 		$('.summernote').summernote({
-			height : 300
+			height : 300,
+			callbacks: {
+				onImageUpload: function(files, editor, welEditable) {
+					for (var i = files.length - 1; i >= 0; i--) {
+						sendFile(files[i],this);
+					}
+				}
+			}
 		});
 		$("#modifyButton").click(function() {
 			var title = $("#title").val();
@@ -51,7 +58,7 @@
 		
 		$(".uploadedList").on("click","a",function(){
 			var that = $(this);
-			$('#form').append("<input type='hidden' name='filesId' value="+$(this).attr("data-id")+">");
+			$('#registerForm').append("<input type='hidden' name='filesId' value="+$(this).attr("data-id")+">");
 			$.ajax({
 				url: "/upload/deleteFile",
 				type:"post",
@@ -73,7 +80,7 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid" style="margin-bottom: 30px">
-			<form action="question/modify" method="post" name="form" id="form" class="form-horizontal">
+			<form action="question/modify" method="post" name="form" id="registerForm" class="form-horizontal">
 				<div class="form-group">
 					<label for="title">Title</label>
 					<input type="text" name="title" value="${model.title}" maxlength="80" id="title" /> 
@@ -88,6 +95,7 @@
 				</div>
 				<textarea class="summernote" cols="100" rows="30" name="content"
 					maxlength="500" id="content">${model.content}</textarea>
+				<input type="file" class="fileButton" name="file">
 				<div class="form-group">
 					<div class="fileDrop">File Drop Here</div>
 				</div>
@@ -96,7 +104,7 @@
 						<c:forEach var="attach" items="${attach}">
 							<div class="uploadedList">
 								<div>
-									<a href='/upload/displayFile?fileName=${attach.fileName}'> ${attach.originName}</a> 
+									<a href='/upload/displayFile?fileName=${attach.fileName}' > ${attach.originName}</a> 
 									&nbsp;&nbsp;
 									<a class='delete' data-src="${attach.fileName}" data-id="${attach.fileId}">[삭제]</a>
 									<br>
@@ -107,7 +115,6 @@
 					</div>
 				</div>
 	
-
 				<input type="hidden" name="boardId" value="${model.boardId}">
 				<div class="pull-right">
 					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>

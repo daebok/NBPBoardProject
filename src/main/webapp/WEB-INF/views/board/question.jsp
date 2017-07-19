@@ -27,6 +27,7 @@
 <script src="<c:url value="/resources/common/js/upload.js" />"></script>
 <script src="<c:url value="/resources/common/js/fileUpload.js" />"></script>
 <script>
+
 	$(document).ready(function() {
 		$("#questionButton").click(function() {
 			var title = $("#title").val();
@@ -52,27 +53,15 @@
 		$('.summernote').summernote({
 			height : 200,
 			width: 100,
-			onImageUpload : function(files, editor, welEditable) {
-				sendFile(files[0], editor, welEditable);
+			callbacks: {
+				onImageUpload: function(files, editor, welEditable) {
+					for (var i = files.length - 1; i >= 0; i--) {
+						sendFile(files[i],this);
+					}
+				}
 			}
 		});
-		function sendFile(file, editor, welEditable) {
-			data = new FormData();
-			data.append("uploadFile", file);
-			$.ajax({
-				data : data,
-				type : "POST",
-				url : "/upload/imageUpload",
-				dataType : 'text',
-				cache : false,
-				contentType : false,
-				processData : false,
-				success : function(data) {
-					editor.insertImage(welEditable, data.url);
-				}
-			});
-		}
-
+		
 	});
 </script>
 
@@ -100,6 +89,7 @@
 				<textarea class="summernote" name="content" maxlength="500"
 					id="content"></textarea>
 				<br /> 
+				<input type="file" class="fileButton" name="file">
 				<div class="form-group">
 					<div class="fileDrop">File Drop Here</div>
 				</div>
