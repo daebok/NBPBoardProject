@@ -41,8 +41,8 @@ public class UserController {
 	@RequestMapping(value = "logincheck", method = RequestMethod.POST)
 	public String loginCheck(@ModelAttribute UserModel model, HttpSession session, RedirectAttributes rttr)
 		throws Exception {
-		boolean result = service.loginCheck(session, model);
-		if (result) {
+		int result = service.loginCheck(session, model);
+		if (result == 1) {
 			session.setAttribute("loginCheck", result);
 			return "home";
 		} else {

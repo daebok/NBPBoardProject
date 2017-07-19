@@ -15,7 +15,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		ModelAndView modelAndView) throws Exception {
 		HttpSession session = request.getSession();
 
-		if (!(boolean)session.getAttribute("loginCheck")) {
+		if ((int)session.getAttribute("loginCheck") != 1) {
 			response.sendRedirect("/user/login");
 			return;
 		}

@@ -10,7 +10,7 @@ public interface UserRepository {
 
 	public void userDelete(UserModel model) throws Exception;
 
-	boolean loginCheck(UserModel model) throws Exception;
+	public int loginCheck(UserModel model) throws Exception;
 
 	public UserModel viewUser(UserModel model) throws Exception;
 

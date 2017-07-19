@@ -25,8 +25,8 @@
 		DELETE FROM USER WHERE id = #{id}
 	</delete>
 
-	<select id="loginCheck" resultType="String">
-		SELECT name FROM USER
+	<select id="loginCheck" resultType="int">
+		SELECT count(userId) FROM USER
 		WHERE id = #{id} AND password = password(#{password})
 	</select>
 

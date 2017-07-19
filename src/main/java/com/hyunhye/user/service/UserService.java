@@ -18,9 +18,10 @@ public class UserService {
 		repository.userRegist(model);
 	}
 
-	public boolean loginCheck(HttpSession session, UserModel model) throws Exception {
-		boolean result = repository.loginCheck(model);
-		if (result) {
+	public int loginCheck(HttpSession session, UserModel model) throws Exception {
+		int result = repository.loginCheck(model);
+
+		if (result == 1) {
 			UserModel userModel = viewUser(model);
 
 			session.setAttribute("userId", userModel.getUserId());
