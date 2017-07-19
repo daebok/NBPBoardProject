@@ -38,7 +38,7 @@ public class BoardController {
 		return "home";
 	}
 
-	@RequestMapping(value = "question")
+	@RequestMapping("question")
 	public String readCategory(Model model) throws Exception {
 		List<CategoryModel> list = service.categoryListAll();
 		model.addAttribute("list", list);

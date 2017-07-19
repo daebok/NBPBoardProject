@@ -71,6 +71,11 @@
 		</if>
 	</select>
 	
+	<select id="checkUser" resultType="int">
+		SELECT userId FROM BOARD
+		WHERE boardId = #{boardId}
+	</select>
+	
 	<update id="increaseViewcount">
 		UPDATE BOARD SET viewCount = viewCount + 1 
 		WHERE boardId = #{boardId}

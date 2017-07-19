@@ -13,7 +13,6 @@
 	</context:component-scan>
 
 	<beans:import resource="applicationContext-datasource.xml" />
-	<beans:import resource="applicationContext-interceptor.xml" />
 
 	<!-- FileUpload -->
 	<beans:bean id="multipartResolver"

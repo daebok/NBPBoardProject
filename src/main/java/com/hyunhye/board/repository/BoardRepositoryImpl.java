@@ -78,7 +78,11 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public void increaseViewCount(int boardId) {
-		// TODO Auto-generated method stub
 		sqlSession.insert(namespace + ".increaseViewcount", boardId);
+	}
+
+	@Override
+	public int checkUser(int boardId) {
+		return sqlSession.selectOne(namespace + ".checkUser", boardId);
 	}
 }

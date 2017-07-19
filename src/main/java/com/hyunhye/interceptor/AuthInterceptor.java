@@ -4,20 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.hyunhye.user.service.UserService;
-
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-
-	@Autowired
-	UserService service;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 		throws Exception {
 		HttpSession session = request.getSession();
+
 		if (session.getAttribute("login") == null) {
 			saveDest(request);
 			response.sendRedirect("/user/login");

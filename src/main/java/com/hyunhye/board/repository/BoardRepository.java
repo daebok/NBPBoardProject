@@ -32,4 +32,6 @@ public interface BoardRepository {
 
 	public void deleteAttach(int boardId) throws Exception;
 
+	public int checkUser(int boardId);
+
 }

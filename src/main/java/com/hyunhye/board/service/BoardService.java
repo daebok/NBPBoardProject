@@ -32,4 +32,6 @@ public interface BoardService {
 
 	public void increaseViewCount(int boardId) throws Exception;
 
+	public int checkUser(int boardId) throws Exception;
+
 }

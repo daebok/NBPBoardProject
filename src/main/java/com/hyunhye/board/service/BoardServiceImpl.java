@@ -140,4 +140,9 @@ public class BoardServiceImpl implements BoardService {
 	public void increaseViewCount(int boardId) throws Exception {
 		repository.increaseViewCount(boardId);
 	}
+
+	@Override
+	public int checkUser(int boardId) throws Exception {
+		return repository.checkUser(boardId);
+	}
 }
