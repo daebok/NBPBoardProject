@@ -32,12 +32,12 @@ function sendFile(file, el) {
 $(document).ready(function() {
 	$(".fileDrop").on("dragenter dragover", function(event) {
 		event.preventDefault();
-		var files = event.originalEvent.dataTransfer.files;
+		var files = event.originalEvent.dataTransfer.files; // 전달된 파일 데이터 업로드
 		var file = files[0];
 	});
 	$(".fileDrop").on("drop", function(event) {
 		event.preventDefault();
-		var files = event.originalEvent.dataTransfer.files;
+		var files = event.originalEvent.dataTransfer.files; // 전달된 파일 데이터 업로드
 		var file = files[0];
 
 		var formData = new FormData();

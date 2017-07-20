@@ -1,8 +1,8 @@
 # HyunHye
 
-## environment
+## delevepment environment
 - apache 2.2.31
-- tomcat 7.0.78cd 
+- tomcat 7.0.78
 - jdk 1.8.0_131
 - MySQL 5.6.30
 

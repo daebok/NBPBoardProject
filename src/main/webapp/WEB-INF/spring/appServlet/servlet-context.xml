@@ -64,7 +64,7 @@
 	</beans:bean>
 	<interceptors>
 		<interceptor>
-			<mapping path="/**/*"/>
+			<mapping path="/board/*" />
 			<beans:ref bean="webContentInterceptor"/>
 		</interceptor>
 	</interceptors>

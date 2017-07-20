@@ -19,7 +19,6 @@ import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
-import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
@@ -70,14 +69,15 @@ public class BoardController {
 	}
 
 	@RequestMapping("answer")
-	public String boardSelect(@RequestParam("boardId") int boardId, @ModelAttribute("cri") Criteria cri,
+	public String boardSelect(@RequestParam("boardId") int boardId, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		Cookie viewCount = WebUtils.getCookie(request, "viewCount" + boardId);
+		HttpSession session = request.getSession();
+		Cookie viewCount = WebUtils.getCookie(request, boardId + "&" + session.getAttribute("userId"));
 		if (viewCount == null) {
 			boardService.increaseViewCount(boardId);
-			Cookie cookie = new Cookie("viewCount" + boardId, Integer.toString(boardId));
+			Cookie cookie = new Cookie(boardId + "&" + session.getAttribute("userId"), "view");
 			response.addCookie(cookie);
 		}
 

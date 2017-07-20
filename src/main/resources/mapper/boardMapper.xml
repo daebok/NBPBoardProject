@@ -132,7 +132,6 @@
 				</when>
 			</choose>
 		</if>
-		
 	</sql>
 	
 	<sql id="join_user">

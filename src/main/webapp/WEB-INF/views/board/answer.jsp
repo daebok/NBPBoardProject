@@ -104,6 +104,9 @@
 						<input type="hidden" name="boardId" value="${model.boardId}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
+						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
+						<input type="hidden" name="keyword" value="${cri.keyword}" />
 						<button type="submit" id="list" class="btn btn-warning">list</button>
 					</form>
 				</div>

@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 
-// is image? or not?
-// if image, show thumbnail
-// if not, only download
+/*
+ * is image? or not?
+ * if image, show thumbnail
+ * if not, only download
+ */
 public class MediaUtils {
 	private static Map<String, MediaType> mediaMap;
 

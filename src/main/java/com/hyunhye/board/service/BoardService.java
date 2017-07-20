@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
-import com.hyunhye.common.UploadFileUtils;
 
 @Service
 public class BoardService {
@@ -25,8 +23,6 @@ public class BoardService {
 	@Autowired
 	public BoardRepository repository;
 
-	@Resource(name = "fileUtils")
-	private UploadFileUtils fileUtils;
 
 	public List<BoardModel> boardListAll(Model model) throws Exception {
 		return repository.boardListAll();
