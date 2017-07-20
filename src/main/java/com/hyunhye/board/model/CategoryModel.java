@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 @Alias("category")
 public class CategoryModel {
-	int categoryId;
-	String item;
+	/* 카테고리 번호 */
+	private int categoryId;
+	/* 카테고리 항목이름 */
+	private String item;
 }

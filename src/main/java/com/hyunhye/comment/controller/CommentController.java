@@ -23,6 +23,7 @@ public class CommentController {
 	@Autowired
 	CommentService service;
 
+	/* 답변 달기 */
 	@ResponseBody
 	@RequestMapping(value = "regist", method = RequestMethod.GET)
 	public ResponseEntity<List<CommentModel>> commentRegist(@ModelAttribute CommentModel commentModel) {
@@ -39,6 +40,7 @@ public class CommentController {
 		return entity;
 	}
 
+	/* 답변 리스트 */
 	@ResponseBody
 	@RequestMapping("list")
 	public ResponseEntity<List<CommentModel>> commentList(@RequestParam("boardId") int boardId) {
@@ -54,8 +56,10 @@ public class CommentController {
 		return entity;
 	}
 
+	/* 답변 수정 */
 	@RequestMapping(value = "update", method = RequestMethod.GET)
-	public ResponseEntity<String> commentUpdate(@RequestParam("id") int commentId, @RequestBody CommentModel model) {
+	public ResponseEntity<String> commentUpdate(@RequestParam("commentId") int commentId,
+		@RequestBody CommentModel model) {
 		ResponseEntity<String> entity = null;
 		try {
 			model.setCommentId(commentId);
@@ -69,6 +73,7 @@ public class CommentController {
 		return entity;
 	}
 
+	/* 답변 삭제 */
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
 	public ResponseEntity<String> commentDelete(@RequestParam("commentId") int commentId) {
 		ResponseEntity<String> entity = null;

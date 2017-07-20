@@ -24,10 +24,15 @@ public class BoardService {
 	public BoardRepository repository;
 
 
+	/* 게시글 리스트 */
 	public List<BoardModel> boardListAll(Model model) throws Exception {
 		return repository.boardListAll();
 	}
 
+	/*
+	 * 게시글 작성하기
+	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
+	 */
 	@Transactional
 	public void boardRegist(HttpSession session, BoardModel boardModel) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
@@ -40,6 +45,7 @@ public class BoardService {
 
 		repository.boardRegist(boardModel);
 
+		/* 업로드 된 첨부파일 가져오기 */
 		String[] files = boardModel.getFiles();
 		if (files == null) {
 			return;
@@ -57,14 +63,20 @@ public class BoardService {
 		}
 	}
 
+	/* 해당 게시글 상세 보기 */
 	public BoardModel boardSelect(int boardId) throws Exception {
 		return repository.boardSelect(boardId);
 	}
 
+	/* 첨부파일 등록 */
 	public List<FileModel> getAttach(int boardId) throws Exception {
 		return repository.getAttach(boardId);
 	}
 
+	/*
+	 * 게시글 수정하기
+	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
+	 */
 	@Transactional
 	public BoardModel boardModify(HttpSession session, BoardModel boardModel) throws Exception {
 		int userId = (Integer)session.getAttribute("userId");
@@ -76,6 +88,7 @@ public class BoardService {
 		boardModel.setDate(currentTime);
 		boardModel.setUserId(userId);
 
+		/* 삭제된 첨부파일 번호 가져오기 */
 		int[] filesId = boardModel.getFilesId();
 		if (filesId != null) {
 			int fileId = 0;
@@ -85,6 +98,7 @@ public class BoardService {
 			}
 		}
 
+		/* 추가된 첨부파일 가져오기 */
 		String[] files = boardModel.getFiles();
 		if (files != null) {
 			String fileName = null;
@@ -101,14 +115,17 @@ public class BoardService {
 		return repository.boardModify(boardModel);
 	}
 
+	/* 게시글 삭제하기 */
 	public void boardDelete(int boardId) throws Exception {
 		repository.boardDelete(boardId);
 	}
 
+	/* 카테고리 목록 가져오기 */
 	public List<CategoryModel> categoryListAll() throws Exception {
 		return repository.categoryListAll();
 	}
 
+	/* 게시글 리스트 (페이징) */
 	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception {
 		if (cri.getCategoryType() == null) {
 			cri.setCategoryType("");
@@ -119,14 +136,17 @@ public class BoardService {
 		return repository.listCriteria(cri);
 	}
 
+	/* 게시글 개수 구하기 */
 	public int listCountCriteria(SearchCriteria cri) throws Exception {
 		return repository.countPaging(cri);
 	}
 
+	/* 조회수 */
 	public void increaseViewCount(int boardId) throws Exception {
 		repository.increaseViewCount(boardId);
 	}
 
+	/* 게시글 작성자 가져오기 */
 	public int checkUser(int boardId) throws Exception {
 		return repository.checkUser(boardId);
 	}

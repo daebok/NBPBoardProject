@@ -1,14 +1,23 @@
 package com.hyunhye.board.model;
 
-public class Criteria {
-	private int page;
-	private int perPageNum;
-	private int startPage;
+import lombok.Data;
 
+@Data
+public class Criteria {
+	/* 페이지 번호 */
+	private int page;
+	/* 페이지 당 데이터 개수 */
+	private int perPageNum;
+	/* 시작 데이터 번호 */
+	private int startBoardId;
+
+	/*
+	 * 디폴트: 시작 페이지=1, 화면 당 페이지 수=10
+	 */
 	public Criteria() {
 		this.page = 1;
 		this.perPageNum = 10;
-		setStartPage();
+		setStartBoardId();
 	}
 
 	public void setPage(int page) {
@@ -21,25 +30,21 @@ public class Criteria {
 	}
 
 	public void setPerPageNum(int perPageNum) {
-		if (perPageNum <= 0 || perPageNum > 100) {
-			this.perPageNum = 19;
-			return;
-		}
-
 		this.perPageNum = perPageNum;
 	}
 
-	public void setStartPage() {
-		this.startPage = (page - 1) * perPageNum;
+	public void setStartBoardId() {
+		/* 시작 데이터 번호 = (페이지 번호 - 1) * 페이지 당 데이터 개수 */
+		this.startBoardId = (page - 1) * perPageNum;
 	}
 
 	public int getPage() {
 		return page;
 	}
 
-	public int getStartPage() {
-		this.startPage = (page - 1) * perPageNum;
-		return this.startPage;
+	public int getStartBoardId() {
+		this.startBoardId = (page - 1) * perPageNum;
+		return this.startBoardId;
 	}
 
 	public int getPerPageNum() {

@@ -9,24 +9,23 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr;
-import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
-@Component("fileUtils")
 public class UploadFileUtils {
 
+	/* UUID를 통해 유일한 파일 이름 생성하여 '/년/월/일'폴더를 만들어 그 폴더로 파일을 복사하는 메소드 */
 	public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception {
 		UUID uuid = UUID.randomUUID();
-		String savedName = uuid.toString() + "_" + originalName;
-		String savedPath = calcPath(uploadPath);
-		File target = new File(uploadPath + savedPath, savedName);
+		String savedName = uuid.toString() + "_" + originalName; // 유일한 파일 이름 생성
+		String savedPath = calcPath(uploadPath); // 폴더 경로 생성
+		File target = new File(uploadPath + savedPath, savedName); // 파일 객체 생성
 
-		FileCopyUtils.copy(fileData, target);
-		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1); // contentType
+		FileCopyUtils.copy(fileData, target); // 폴더에 디렉토리 복사
+		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1); // 확장자 추출
 		String uploadedFileName = null;
-		if (MediaUtils.getMediaType(formatName) != null) {
-			uploadedFileName = makeThumbnail(uploadPath, savedPath, savedName);
-		} else {
+		if (MediaUtils.getMediaType(formatName) != null) { // 이미지 파일인 경우...
+			uploadedFileName = makeThumbnail(uploadPath, savedPath, savedName); // 섬네일 생성
+		} else { // 이미지 파일이 아닌 경우...
 			uploadedFileName = makeIcon(uploadPath, savedPath, savedName);
 		}
 		return uploadedFileName;
@@ -37,16 +36,7 @@ public class UploadFileUtils {
 		return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
-	public static String getExtension(String fileName) {
-		int dotPosition = fileName.lastIndexOf('.');
-
-		if (-1 != dotPosition && fileName.length() - 1 > dotPosition) {
-			return fileName.substring(dotPosition + 1);
-		} else {
-			return "";
-		}
-	}
-
+	/* '년/월/일'을 계산하여 경로 지정 */
 	private static String calcPath(String uploadPath) {
 
 		Calendar cal = Calendar.getInstance();
@@ -60,6 +50,7 @@ public class UploadFileUtils {
 		return datePath;
 	}
 
+	/* '/년/월/일' 이름의 폴더 생성 */
 	private static void makeDir(String uploadPath, String... paths) {
 
 		if (new File(paths[paths.length - 1]).exists()) {
@@ -76,9 +67,10 @@ public class UploadFileUtils {
 		}
 	}
 
+	/* 썸네일 생성하고 썸네일 이름을 리턴하는 메소드 */
 	private static String makeThumbnail(String uploadPath, String path, String fileName) throws Exception {
 
-		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
+		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName)); // 이미지를 읽기 위한 버퍼 생성
 
 		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 150);
 
@@ -87,7 +79,7 @@ public class UploadFileUtils {
 		File newFile = new File(thumbnailName);
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-		ImageIO.write(destImg, formatName.toUpperCase(), newFile);
+		ImageIO.write(destImg, formatName.toUpperCase(), newFile); // 썸네일 생성
 
 		return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}

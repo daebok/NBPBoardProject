@@ -23,6 +23,7 @@ public class BoardInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 
+		/* 현재 로그인 중인 아이디와 게시글 작성자와 비교하여 잘못된 경우 다시 목록으로 이동 */
 		if ((Integer)session.getAttribute("userId") != userId) {
 			response.sendRedirect("/board/list");
 			return false;

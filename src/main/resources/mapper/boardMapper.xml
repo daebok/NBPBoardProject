@@ -91,7 +91,7 @@
 			<include refid="search"></include>
 		</if>
 		ORDER BY BOARD.boardId desc, BOARD.date desc
-		limit #{startPage}, #{perPageNum}
+		limit #{startBoardId}, #{perPageNum}
 	</select>
 	
 	

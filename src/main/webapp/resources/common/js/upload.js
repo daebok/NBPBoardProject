@@ -1,3 +1,6 @@
+/* 
+ * 파일 업로드에 관련된 자바스크립트 파일
+ */
 function checkImageType(fileName) {
 	var pattern = /jpg|gif|png|jpeg/i;
 	return fileName.match(pattern);

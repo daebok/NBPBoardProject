@@ -27,6 +27,7 @@ public class UploadController {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
+	/* 파일 업로드 처리 */
 	@ResponseBody
 	@RequestMapping(value = "uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
@@ -35,24 +36,26 @@ public class UploadController {
 			HttpStatus.CREATED);
 	}
 
+	/* 이미지 표시 */
 	@ResponseBody
 	@RequestMapping("displayFile")
 	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
 		try {
-			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
 
-			MediaType mediaType = MediaUtils.getMediaType(formatName);
+			MediaType mediaType = MediaUtils.getMediaType(formatName); // MediaUtils에서 이미지 파일 여부 검사
 
-			HttpHeaders headers = new HttpHeaders();
+			HttpHeaders headers = new HttpHeaders(); // 헤더 구성 객체
 
 			in = new FileInputStream(uploadPath + fileName);
-			if (mediaType != null) {
+
+			if (mediaType != null) { // 이미지 파일이면...
 				headers.setContentType(mediaType);
-			} else {
+			} else { // 이미지 파일이 아니면...
 				fileName = fileName.substring(fileName.indexOf("_") + 1);
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // contentType for download
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 다운로드 용 확장자 구성
 				headers.add("Content-Disposition",
 					"attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "iso-8859-1") + "\"");
 			}
@@ -66,6 +69,7 @@ public class UploadController {
 		return entity;
 	}
 
+	/* 파일 삭제 처리 */
 	@ResponseBody
 	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(String fileName) {
@@ -76,7 +80,7 @@ public class UploadController {
 		if (mediaType != null) {
 			String front = fileName.substring(0, 12);
 			String end = fileName.substring(14);
-			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete();
+			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete(); // 썸네일 이미지 삭제
 		}
 
 		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();

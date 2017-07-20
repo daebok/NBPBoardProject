@@ -16,6 +16,7 @@ public class CommentService {
 	@Autowired
 	CommentRepository repository;
 
+	/* 답변 등록 */
 	public void commentRegist(CommentModel commentModel) throws Exception {
 
 		Date date = new Date();
@@ -26,14 +27,17 @@ public class CommentService {
 		repository.commentRegist(commentModel);
 	}
 
+	/* 답변 리스트 */
 	public List<CommentModel> commentListAll(int boardId) throws Exception {
 		return repository.commentListAll(boardId);
 	}
 
+	/* 답변 수정 */
 	public void commentUpdate(CommentModel commentModel) throws Exception {
 		repository.commentUpdate(commentModel);
 	}
 
+	/* 답변 삭제 */
 	public void commentDelete(int commentId) throws Exception {
 		repository.commentDelete(commentId);
 	}

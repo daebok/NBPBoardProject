@@ -34,6 +34,7 @@ public class BoardController {
 	@Autowired
 	public CommentService commentService;
 
+	/* 게시글 목록을 가지고 홈 화면으로 이동 */
 	@RequestMapping(value = {"", "/"})
 	public String home(Model model) throws Exception {
 		model.addAttribute("model", boardService.boardListAll(model));
@@ -41,6 +42,7 @@ public class BoardController {
 		return "home";
 	}
 
+	/* 게시글 리스트  */
 	@RequestMapping("question")
 	public String question(Model model) throws Exception {
 		List<CategoryModel> list = boardService.categoryListAll();
@@ -48,8 +50,9 @@ public class BoardController {
 		return "/board/question";
 	}
 
+	/* 리스트 목록 보기 (페이징) */
 	@RequestMapping("list")
-	public String listCountCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
+	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 		model.addAttribute("list", boardService.listCriteria(cri));
 
 		PageMaker pageMaker = new PageMaker();
@@ -62,20 +65,23 @@ public class BoardController {
 		return "board/list";
 	}
 
+	/* 게시글 작성하기  */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
 	public String boardRegist(@ModelAttribute BoardModel model, HttpSession session) throws Exception {
 		boardService.boardRegist(session, model);
 		return "redirect:/board/list";
 	}
 
+	/* 게시글 상세 보기 */
 	@RequestMapping("answer")
 	public String boardSelect(@RequestParam("boardId") int boardId, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
+		/* 조회수 */
 		HttpSession session = request.getSession();
 		Cookie viewCount = WebUtils.getCookie(request, boardId + "&" + session.getAttribute("userId"));
-		if (viewCount == null) {
+		if (viewCount == null) { // 해당 세션을 가지고 있으면...
 			boardService.increaseViewCount(boardId);
 			Cookie cookie = new Cookie(boardId + "&" + session.getAttribute("userId"), "view");
 			response.addCookie(cookie);
@@ -87,6 +93,7 @@ public class BoardController {
 		return "board/answer";
 	}
 
+	/* 게시글 수정화면으로 이동 */
 	@RequestMapping("modify")
 	public String modify(@RequestParam("boardId") int boardId, Model model) throws Exception {
 		model.addAttribute("model", boardService.boardSelect(boardId));
@@ -95,6 +102,7 @@ public class BoardController {
 		return "board/modify";
 	}
 
+	/* 게시글 수정 등록 */
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
 	public String boardModify(HttpSession session, @ModelAttribute BoardModel model)
 		throws Exception {
@@ -103,6 +111,7 @@ public class BoardController {
 		return "redirect:/board/answer?boardId=" + model.getBoardId();
 	}
 
+	/* 게시글 삭제 */
 	@RequestMapping("delete")
 	public String boardDelete(@RequestParam("boardId") int boardId, RedirectAttributes rttr) throws Exception {
 		boardService.boardDelete(boardId);
