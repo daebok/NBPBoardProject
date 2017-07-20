@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -32,22 +33,26 @@ public class UploadController {
 	private String uploadPath;
 
 	@RequestMapping(value = "uploadForm", method = RequestMethod.POST)
-	public void uploadForm(MultipartFile file, Model model) throws Exception {
-		String savedName = uploadfile(file.getOriginalFilename(), file.getBytes());
+	public void uploadForm(MultipartFile file, Model model, HttpServletRequest request) throws Exception {
+		String realUploadPath = request.getServletContext().getRealPath(uploadPath);
+
+		String savedName = uploadfile(file.getOriginalFilename(), file.getBytes(), realUploadPath);
 		model.addAttribute("savedName", savedName);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
+	public ResponseEntity<String> uploadAjax(MultipartFile file, HttpServletRequest request) throws Exception {
+		String realUploadPath = request.getServletContext().getRealPath(uploadPath);
+
 		return new ResponseEntity<String>(
-			UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()),
+			UploadFileUtils.uploadFile(realUploadPath, file.getOriginalFilename(), file.getBytes()),
 			HttpStatus.CREATED);
 	}
 
 	@ResponseBody
 	@RequestMapping("displayFile")
-	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
+	public ResponseEntity<byte[]> displayFile(String fileName, HttpServletRequest request) throws Exception {
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
 		try {
@@ -57,7 +62,8 @@ public class UploadController {
 
 			HttpHeaders headers = new HttpHeaders();
 
-			in = new FileInputStream(uploadPath + fileName);
+			String realUploadPath = request.getServletContext().getRealPath(uploadPath);
+			in = new FileInputStream(realUploadPath + fileName);
 			if (mediaType != null) {
 				headers.setContentType(mediaType);
 			} else {
@@ -78,29 +84,30 @@ public class UploadController {
 
 	@ResponseBody
 	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
-	public ResponseEntity<String> deleteFile(String fileName) {
+	public ResponseEntity<String> deleteFile(String fileName, HttpServletRequest request) {
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 		MediaType mediaType = MediaUtils.getMediaType(formatName);
 
+		String realUploadPath = request.getServletContext().getRealPath(uploadPath);
 		if (mediaType != null) {
 			String front = fileName.substring(0, 12);
 			String end = fileName.substring(14);
-			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete();
+			new File(realUploadPath + (front + end).replace('/', File.separatorChar)).delete();
 		}
 
-		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+		new File(realUploadPath + fileName.replace('/', File.separatorChar)).delete();
 
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 
 	}
 
-	private String uploadfile(String originalName, byte[] fileData) throws IOException {
+	private String uploadfile(String originalName, byte[] fileData, String realUploadPath) throws IOException {
 		UUID uid = UUID.randomUUID();
 
 		String savedName = uid.toString() + "_" + originalName;
 
-		File target = new File(uploadPath, savedName);
+		File target = new File(realUploadPath, savedName);
 
 		FileCopyUtils.copy(fileData, target);
 
