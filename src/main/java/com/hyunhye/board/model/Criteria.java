@@ -12,7 +12,7 @@ public class Criteria {
 	private int startBoardId;
 
 	/*
-	 * 디폴트: 시작 페이지=1, 화면 당 페이지 수=10
+	 * 디폴트: 시작 페이지=1, 페이지 당 데이터 개수=10
 	 */
 	public Criteria() {
 		this.page = 1;

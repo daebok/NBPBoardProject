@@ -4,6 +4,22 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
+<style type="text/css">
+	#content{ 
+		display: -webkit-box; 
+		display: -ms-flexbox; 
+		display: box; 
+		margin-top:1px; 
+		max-height:80px; 
+		overflow:hidden; 
+		vertical-align:top; 
+		text-overflow: ellipsis; 
+		word-break:break-all; 
+		-webkit-box-orient:vertical; 
+		-webkit-line-clamp:3
+
+	}
+</style>
 <script>
 	$(document).ready(
 		function(){
@@ -43,7 +59,7 @@
 						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardId=${board.boardId}"
 							id="boardId">${board.title}</a>
 					</h1>
-					<p>${board.content}</p>
+					<p id="content">${board.content}</p>
 					<div>
 						<span class="badge">Posted ${board.date}</span>
 						<span class="badge">Posted By ${board.name}</span>

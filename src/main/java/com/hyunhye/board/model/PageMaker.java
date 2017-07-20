@@ -21,7 +21,7 @@ public class PageMaker {
 	/* 이후 페이지 */
 	private boolean next;
 	/* 화면에 보여지는 페이지 개수 */
-	private int displayPageNum = 10;
+	private int displayPageNum = 5;
 	private Criteria cri;
 
 	public void setCri(Criteria cri) {
