@@ -35,7 +35,7 @@ public class BoardController {
 	public CommentService commentService;
 
 	/* 게시글 목록을 가지고 홈 화면으로 이동 */
-	@RequestMapping(value = {"", "/"})
+	@RequestMapping("/")
 	public String home(Model model) throws Exception {
 		model.addAttribute("model", boardService.boardListAll(model));
 		model.addAttribute("categoryList", boardService.categoryListAll());
