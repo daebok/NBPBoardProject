@@ -9,12 +9,12 @@ import com.hyunhye.comment.model.CommentModel;
 @Repository
 public interface CommentRepository {
 
-	public List<CommentModel> commentListAll(int boardId);
+	public List<CommentModel> commentListAll(int boardNo);
 
 	public void commentRegist(CommentModel commentModel);
 
 	public void commentUpdate(CommentModel commentModel);
 
-	public void commentDelete(int commentId);
+	public void commentDelete(int commentNo);
 
 }

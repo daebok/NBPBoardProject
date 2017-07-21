@@ -10,17 +10,15 @@
 		<div>
 			<c:choose>
 				<c:when test="${sessionScope.login == null}">
-					<a href="<c:url value='/user/login'/>" id="LOGIN"
-						class="btn btn-default">LogIn</a>
-					<a href="<c:url value='/user/signup'/>" id="SIGNUP"
-						class="btn btn-default">SingUp</a>
+					<a href="<c:url value='/user/login'/>" id="login" class="btn btn-default">LogIn</a>
+					<a href="<c:url value='/user/signup'/>" id="signup" class="btn btn-default">SingUp</a>
 				</c:when>
 				<c:otherwise> 
-							${sessionScope.name}(${sessionScope.id})님 환영합니다. &nbsp;
-							<a href="<c:url value='/user/logout'/>" id="LOGOUT" class="btn btn-default">LogOut</a>
+							${sessionScope.userName}님 환영합니다. &nbsp;
+							<a href="<c:url value='/user/logout'/>" id="logout" class="btn btn-default">LogOut</a>
 							<div  class="pull-right">
-								<a href="<c:url value='/user/myQuestions'/>" id="LOGOUT" class="btn btn-default">My Questions</a>
-								<a href="<c:url value='/user/favorite'/>" id="LOGOUT" class="btn btn-default">Favorite</a>
+								<a href="<c:url value='/user/myQuestions'/>" id="logout" class="btn btn-default">My Questions</a>
+								<a href="<c:url value='/user/favorite'/>" id="logout" class="btn btn-default">Favorite</a>
 							</div>
 				</c:otherwise>
 			</c:choose>

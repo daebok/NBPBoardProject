@@ -8,25 +8,25 @@ import lombok.Data;
 @Alias("board")
 public class BoardModel {
 	/* 게시판 번호 */
-	private int boardId;
+	private int boardNo;
 	/* 게시글 제목 */
-	private String title;
+	private String boardTitle;
 	/* 게시글 내용 */
-	private String content;
+	private String boardContent;
 	/* 게시글 작성 날짜 */
-	private String date;
+	private String boardDate;
 	/* 게시글 첨부 파일 */
-	private String[] files;
+	private String[] boardFiles;
 	/* 게시글 첨부 파일 번호 */
-	private int[] filesId;
+	private int[] boardFilesNo;
 	/* 조회수 */
-	private int viewCount;
+	private int boardViewCount;
 	/* 카테고리 번호 */
-	private int categoryId;
+	private int categoryNo;
 	/* 카테고리 목록이름 */
-	private String item;
+	private String categoryItem;
 	/* 사용자 번호 */
-	private int userId;
+	private int userNo;
 	/* 사용자 이름 */
-	private String name;
+	private String userName;
 }

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.CategoryModel;
@@ -25,7 +24,7 @@ public class BoardService {
 
 
 	/* 게시글 리스트 */
-	public List<BoardModel> boardListAll(Model model) throws Exception {
+	public List<BoardModel> boardListAll() throws Exception {
 		return repository.boardListAll();
 	}
 
@@ -35,18 +34,14 @@ public class BoardService {
 	 */
 	@Transactional
 	public void boardRegist(HttpSession session, BoardModel boardModel) throws Exception {
-		int userId = (Integer)session.getAttribute("userId");
-		Date date = new Date();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = simpleDateFormat.format(date);
+		int userNo = (Integer)session.getAttribute("userNo");
 
-		boardModel.setDate(currentTime);
-		boardModel.setUserId(userId);
+		boardModel.setUserNo(userNo);
 
 		repository.boardRegist(boardModel);
 
 		/* 업로드 된 첨부파일 가져오기 */
-		String[] files = boardModel.getFiles();
+		String[] files = boardModel.getBoardFiles();
 		if (files == null) {
 			return;
 		}
@@ -56,21 +51,21 @@ public class BoardService {
 			fileName = files[i];
 			FileModel fileModel = new FileModel();
 			fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
-			fileModel.setOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
-			fileModel.setExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
+			fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
+			fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
 
 			repository.addAttach(fileModel);
 		}
 	}
 
 	/* 해당 게시글 상세 보기 */
-	public BoardModel boardSelect(int boardId) throws Exception {
-		return repository.boardSelect(boardId);
+	public BoardModel boardSelect(int boardNo) throws Exception {
+		return repository.boardSelect(boardNo);
 	}
 
 	/* 첨부파일 등록 */
-	public List<FileModel> getAttach(int boardId) throws Exception {
-		return repository.getAttach(boardId);
+	public List<FileModel> getAttach(int boardNo) throws Exception {
+		return repository.getAttach(boardNo);
 	}
 
 	/*
@@ -79,35 +74,35 @@ public class BoardService {
 	 */
 	@Transactional
 	public BoardModel boardModify(HttpSession session, BoardModel boardModel) throws Exception {
-		int userId = (Integer)session.getAttribute("userId");
+		int userNo = (Integer)session.getAttribute("userNo");
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dt);
 
-		boardModel.setDate(currentTime);
-		boardModel.setUserId(userId);
+		boardModel.setBoardDate(currentTime);
+		boardModel.setUserNo(userNo);
 
 		/* 삭제된 첨부파일 번호 가져오기 */
-		int[] filesId = boardModel.getFilesId();
-		if (filesId != null) {
-			int fileId = 0;
-			for (int i = 0; i < filesId.length; i++) {
-				fileId = filesId[i];
-				repository.deleteAttach(fileId);
+		int[] filesNo = boardModel.getBoardFilesNo();
+		if (filesNo != null) {
+			int fileNo = 0;
+			for (int i = 0; i < filesNo.length; i++) {
+				fileNo = filesNo[i];
+				repository.deleteAttach(fileNo);
 			}
 		}
 
 		/* 추가된 첨부파일 가져오기 */
-		String[] files = boardModel.getFiles();
+		String[] files = boardModel.getBoardFiles();
 		if (files != null) {
 			String fileName = null;
 			for (int i = 1; i < files.length; i++) {
 				fileName = files[i];
 				FileModel fileModel = new FileModel();
 				fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
-				fileModel.setOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
-				fileModel.setExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
+				fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
+				fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
 
 				repository.addAttach(fileModel);
 			}
@@ -116,8 +111,8 @@ public class BoardService {
 	}
 
 	/* 게시글 삭제하기 */
-	public void boardDelete(int boardId) throws Exception {
-		repository.boardDelete(boardId);
+	public void boardDelete(int boardNo) throws Exception {
+		repository.boardDelete(boardNo);
 	}
 
 	/* 카테고리 목록 가져오기 */
@@ -142,12 +137,12 @@ public class BoardService {
 	}
 
 	/* 조회수 */
-	public void increaseViewCount(int boardId) throws Exception {
-		repository.increaseViewCount(boardId);
+	public void increaseViewCount(int boardNo) throws Exception {
+		repository.increaseViewCount(boardNo);
 	}
 
 	/* 게시글 작성자 가져오기 */
-	public int checkUser(int boardId) throws Exception {
-		return repository.checkUser(boardId);
+	public int checkUser(int boardNo) throws Exception {
+		return repository.checkUser(boardNo);
 	}
 }

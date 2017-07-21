@@ -76,20 +76,19 @@
 			<form action="/board/question/ask" method="post" name="form" id="registerForm" class="form-horizontal">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="title" maxlength="100" id="title" size="20" class="form-control" />
+					<input type="text" name="boardTitle" maxlength="100" id="title" size="20" class="form-control" />
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
-					<select name="item" id="category">
+					<select name="categoryItem" id="category">
 						<c:forEach var="category" items="${list}">
-							<option value="${category.item}">${category.item}</option>
+							<option value="${category.categoryItem}">${category.categoryItem}</option>
 						</c:forEach>
 					</select> 
 				</div>
-				<textarea class="summernote" name="content" maxlength="500"
-					id="content"></textarea>
+				<textarea class="summernote" name="boardContent" maxlength="500" id="content"></textarea>
 				<br /> 
-				<input type="file" class="fileButton" name="file">
+				<input type="file" class="fileButton" name="boardFiles">
 				<div class="form-group">
 					<div class="fileDrop">File Drop Here</div>
 				</div>

@@ -29,7 +29,7 @@
 				var result = confirm('게시물을 삭제하시겠습니까?');
 				if (result) {
 					console.log(result);
-					location.replace('/board/delete?boardId=${model.boardId}');
+					location.replace('/board/delete?boardNo=${model.boardNo}');
 				} 
 			});
 			$('#list').click(function() {
@@ -44,11 +44,11 @@
 				}
 			});
 			$('#commentButton').click(function() {
-				var contentObj = $('#content');
-				var content = $('#content').val();
-				var boardId = ${model.boardId};
-				var userId = ${sessionScope.userId};
-				var data = "boardId=" + boardId + "&userId=" + userId + "&content=" + content;
+				var contentObj = $('#commentContent');
+				var commentContent = $('#commentContent').val();
+				var boardNo = ${model.boardNo};
+				var userNo = ${sessionScope.userNo};
+				var data = "boardNo=" + boardNo + "&userNo=" + userNo + "&commentContent=" + commentContent;
 				$.ajax({
 					type : 'GET',
 					url : '/comment/regist',
@@ -60,7 +60,7 @@
 						$(".emptyContent").hide();
 						alert('답글이 달렸습니다.');
 						$("#listComment").append("<div class='comment-wrapper'> <div class='comment'>"
-								+ content + "</div><span class='badge'>Commented By  ${sessionScope.id}</span></div>");
+								+ commentContent + "</div><span class='badge'>Commented By  ${sessionScope.userName}</span></div>");
 						$('.summernote').empty();
 					}
 				});
@@ -77,31 +77,31 @@
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<div class="pull-right">
-					<span class="label label-warning">${model.item}</span>
+					<span class="label label-warning">${model.categoryItem}</span>
 				</div>
-				<h1>${model.title}</h1>
-				<p>${model.content}</p>
+				<h1>${model.boardTitle}</h1>
+				<p>${model.boardContent}</p>
 				<div>
 					<c:forEach var="attach" items="${attach}">
 						<a href='/upload/displayFile?fileName=${attach.fileName}'> <img
 							src='/upload/displayFile?fileName=${attach.fileName}'
-							onerror="this.style.display='none'" alt='' width='100%' />${attach.originName}
+							onerror="this.style.display='none'" alt='' width='100%' />${attach.fileOriginName}
 						</a>
 						<br>
 					</c:forEach>
 				</div>
 
 				<div class="pull-right">
-					<span class="badge">Posted By ${model.name}</span>
+					<span class="badge">Posted By ${model.userName}</span>
 				</div>
 				<hr>
-				<c:if test="${sessionScope.userId == model.userId}">
-					<a href="<c:url value='/board/modify?boardId=${model.boardId}'/>" id="modify" class="btn btn-danger">Modify</a>
+				<c:if test="${sessionScope.userNo == model.userNo}">
+					<a href="<c:url value='/board/modify?boardNo=${model.boardNo}'/>" id="modify" class="btn btn-danger">Modify</a>
 					<button id="delete" class="btn btn-danger">Delete</button>
 				</c:if>
 				<div class="pull-right">
 					<form name="form" action="list" method="post">
-						<input type="hidden" name="boardId" value="${model.boardId}" /> 
+						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
@@ -122,15 +122,15 @@
 					</c:if>
 					<c:forEach var="comment" items="${comment}">
 						<div class="comment-wrapper">
-							<div class="comment">${comment.content}</div>
-							<span class="badge commentName">Commented By ${comment.name}</span>
+							<div class="comment">${comment.commentContent}</div>
+							<span class="badge commentName">Commented By ${comment.userName}</span>
 						</div>
 					</c:forEach>
 				</div>
 			</div>
 			<div class="col-lg-12" style="margin-top: 50px; margin-bottom: 100px">
 				<label for="content">Your Answer</label>
-				<textarea class="summernote" name="content" id="content"></textarea>
+				<textarea class="summernote" name="commentContent" id="commentContent"></textarea>
 				<br />
 				<div class="pull-right">
 					<button id="commentButton" class="btn btn-default">Comment</button>

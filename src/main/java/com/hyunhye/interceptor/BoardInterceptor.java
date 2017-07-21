@@ -18,13 +18,13 @@ public class BoardInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 		throws Exception {
 
-		int boardId = Integer.parseInt(request.getParameter("boardId"));
-		int userId = service.checkUser(boardId);
+		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+		int userNo = service.checkUser(boardNo);
 
 		HttpSession session = request.getSession();
 
 		/* 현재 로그인 중인 아이디와 게시글 작성자와 비교하여 잘못된 경우 다시 목록으로 이동 */
-		if ((Integer)session.getAttribute("userId") != userId) {
+		if ((Integer)session.getAttribute("userNo") != userNo) {
 			response.sendRedirect("/board/list");
 			return false;
 		}

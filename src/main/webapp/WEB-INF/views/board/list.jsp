@@ -38,14 +38,13 @@
 </script>
 </head>
 <body>
-	<!-- header start -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+	
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
-				<c:if test="${sessionScope.userId != null}">
+				<c:if test="${sessionScope.userNo != null}">
 					<a href="<c:url value='/board/question'/>" id="question"
 						class="btn btn-danger">Ask Question</a>
 				</c:if>
@@ -56,16 +55,15 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h1>
-						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardId=${board.boardId}"
-							id="boardId">${board.title}</a>
+						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
 					</h1>
-					<p id="content">${board.content}</p>
+					<p id="content">${board.boardContent}</p>
 					<div>
-						<span class="badge">Posted ${board.date}</span>
-						<span class="badge">Posted By ${board.name}</span>
+						<span class="badge">Posted ${board.boardDate}</span>
+						<span class="badge">Posted By ${board.userName}</span>
 						<div class="pull-right">
-							<span class="label label-primary">조회수: ${board.viewCount}</span>
-							<span class="label label-warning">${board.item}</span>
+							<span class="label label-primary">조회수: ${board.boardViewCount}</span>
+							<span class="label label-warning">${board.categoryItem}</span>
 						</div>
 					</div>
 					<hr>

@@ -30,7 +30,7 @@ public class CommentController {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
 			service.commentRegist(commentModel);
-			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(commentModel.getBoardId()),
+			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(commentModel.getBoardNo()),
 				HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,10 +43,10 @@ public class CommentController {
 	/* 답변 리스트 */
 	@ResponseBody
 	@RequestMapping("list")
-	public ResponseEntity<List<CommentModel>> commentList(@RequestParam("boardId") int boardId) {
+	public ResponseEntity<List<CommentModel>> commentList(@RequestParam("boardNo") int boardNo) {
 		ResponseEntity<List<CommentModel>> entity = null;
 		try {
-			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(boardId),
+			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(boardNo),
 				HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,11 +58,11 @@ public class CommentController {
 
 	/* 답변 수정 */
 	@RequestMapping(value = "update", method = RequestMethod.GET)
-	public ResponseEntity<String> commentUpdate(@RequestParam("commentId") int commentId,
+	public ResponseEntity<String> commentUpdate(@RequestParam("commentNo") int commentNo,
 		@RequestBody CommentModel model) {
 		ResponseEntity<String> entity = null;
 		try {
-			model.setCommentId(commentId);
+			model.setCommentNo(commentNo);
 			service.commentUpdate(model);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
@@ -75,10 +75,10 @@ public class CommentController {
 
 	/* 답변 삭제 */
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public ResponseEntity<String> commentDelete(@RequestParam("commentId") int commentId) {
+	public ResponseEntity<String> commentDelete(@RequestParam("commentNo") int commentNo) {
 		ResponseEntity<String> entity = null;
 		try {
-			service.commentDelete(commentId);
+			service.commentDelete(commentNo);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

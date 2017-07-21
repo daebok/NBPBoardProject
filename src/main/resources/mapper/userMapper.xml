@@ -6,43 +6,54 @@
 <mapper namespace="com.hyunhye.user.repository.UserRepository">
 
 	<resultMap id="list" type="user">
-		<result property="userId" column="userId"/>
-		<result property="id" column="id" />
-		<result property="password" column="password" />
-		<result property="name" column="name"/>
-		<result property="sessionKey" column="sessionKey" />
-		<result property="sessionLimit" column="sessionLimit" />
+		<result property="userNo" column="user_no"/>
+		<result property="userId" column="user_id" />
+		<result property="userPassword" column="user_password" />
+		<result property="userName" column="user_name" />
 	</resultMap>
 
 	<insert id="userRegist">
-		INSERT INTO USER (id, password, name) VALUES
-		(#{id},
-		password(#{password}), #{name})
+		INSERT INTO USER (
+			user_id, 
+			user_password, 
+			user_name
+		) VALUES (
+			#{userId},
+			password(#{userPassword}), 
+			#{userName}
+		)
 	</insert>
 
 
 	<delete id="userDelete">
-		DELETE FROM USER WHERE id = #{id}
+		DELETE FROM USER 
+		WHERE 
+			user_id = #{userId}
 	</delete>
 
 	<select id="loginCheck" resultType="int">
-		SELECT count(userId) FROM USER
-		WHERE id = #{id} AND password = password(#{password})
+		SELECT 
+			count(user_no) 
+		FROM USER
+		WHERE 
+			user_id = #{userId} AND 
+			user_password = password(#{userPassword})
 	</select>
 
 	<select id="viewUser" resultMap="list">
 		SELECT
-		userId,
-		name,
-		id
+			user_no,
+			user_name,
+			user_id
 		FROM USER
-		WHERE id = #{id} AND password = password(#{password})
+		WHERE 
+			user_id = #{userId} AND 
+			user_password = password(#{userPassword})
 	</select>
 	
 	<select id="userSelect" resultType="Integer" parameterType="String">
-		SELECT
-		COUNT(*)
+		SELECT COUNT(*)
 		FROM USER
-		WHERE id = #{id}
+		WHERE user_id = #{userId}
 	</select>
 </mapper>

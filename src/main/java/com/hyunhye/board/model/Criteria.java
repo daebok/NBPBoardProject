@@ -9,7 +9,7 @@ public class Criteria {
 	/* 페이지 당 데이터 개수 */
 	private int perPageNum;
 	/* 시작 데이터 번호 */
-	private int startBoardId;
+	private int startBoardNo;
 
 	/*
 	 * 디폴트: 시작 페이지=1, 페이지 당 데이터 개수=10
@@ -17,7 +17,7 @@ public class Criteria {
 	public Criteria() {
 		this.page = 1;
 		this.perPageNum = 10;
-		setStartBoardId();
+		setStartBoardNo();
 	}
 
 	public void setPage(int page) {
@@ -33,18 +33,18 @@ public class Criteria {
 		this.perPageNum = perPageNum;
 	}
 
-	public void setStartBoardId() {
+	public void setStartBoardNo() {
 		/* 시작 데이터 번호 = (페이지 번호 - 1) * 페이지 당 데이터 개수 */
-		this.startBoardId = (page - 1) * perPageNum;
+		this.startBoardNo = (page - 1) * perPageNum;
 	}
 
 	public int getPage() {
 		return page;
 	}
 
-	public int getStartBoardId() {
-		this.startBoardId = (page - 1) * perPageNum;
-		return this.startBoardId;
+	public int getStartBoardNo() {
+		this.startBoardNo = (page - 1) * perPageNum;
+		return this.startBoardNo;
 	}
 
 	public int getPerPageNum() {

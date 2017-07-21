@@ -14,6 +14,7 @@
 
 	<context:property-placeholder location="classpath:/config/database.properties" />
 	<beans:import resource="applicationContext-datasource.xml" />
+	<beans:import resource="applicationContext-security.xml" />
 
 	<!-- FileUpload -->
 	<beans:bean id="multipartResolver"

@@ -26,9 +26,9 @@ public class UserService {
 		if (result == 1) {
 			UserModel userModel = viewUser(model);
 
+			session.setAttribute("userNo", userModel.getUserNo());
 			session.setAttribute("userId", userModel.getUserId());
-			session.setAttribute("id", userModel.getId());
-			session.setAttribute("name", userModel.getName());
+			session.setAttribute("userName", userModel.getUserName());
 		}
 		return result;
 	}
@@ -41,14 +41,14 @@ public class UserService {
 	/* 로그 아웃 시, 세션 제거 */
 	public void logout(HttpSession session) {
 		session.removeAttribute("login");
-		session.removeAttribute("id");
-		session.removeAttribute("name");
+		session.removeAttribute("userNo");
 		session.removeAttribute("userId");
+		session.removeAttribute("userName");
 		session.invalidate();
 	}
 
 	/* 해당 아이디를 가진 사용자가 있으면, 1 리턴 */
-	public int userSelect(String id) throws Exception {
-		return repository.userSelect(id);
+	public int userSelect(String userId) throws Exception {
+		return repository.userSelect(userId);
 	}
 }

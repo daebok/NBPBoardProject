@@ -6,97 +6,150 @@
 <mapper namespace="com.hyunhye.board.repository.BoardRepository">
 
 	<resultMap id="boardList" type="board">
-		<result property="userId" column="userId" />
-		<result property="boardId" column="boardId" />
-		<result property="categoryId" column="categoryId" />
-		<result property="name" column="name" />
-		<result property="item" column="item" />
-		<result property="title" column="title" />
-		<result property="content" column="content" />
-		<result property="date" column="date"/>
-		<result property="viewCount" column="viewCount" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
+		<result property="boardNo" column="board_no" />
+		<result property="boardTitle" column="board_title" />
+		<result property="boardContent" column="board_content" />
+		<result property="boardDate" column="board_date"/>
+		<result property="boardViewCount" column="board_view_cnt" />
 	</resultMap>
 	
 	<resultMap id="categoryList" type="category">
-		<result property="categoryId" column="categoryId" />
-		<result property="item" column="item" />
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
 	</resultMap>
 
 
 	<resultMap id="fileList" type="file">
-		<result property="boardId" column="boardId" />
-		<result property="fileName" column="fileName" />
-		<result property="originName" column="originName" />
-		<result property="extension" column="extension" />
+		<result property="boardNo" column="board_no" />
+		<result property="fileNo" column="file_no" />
+		<result property="fileName" column="file_name" />
+		<result property="fileOriginName" column="file_origin_name" />
+		<result property="fileExtension" column="file_extension" />
 	</resultMap>
 	
 	<insert id="addAttach">
-		INSERT INTO FILE (boardId, fileName, originName, extension)
-		VALUES
-		( (SELECT boardId FROM BOARD ORDER BY boardId desc limit 1) , #{fileName}, #{originName}, #{extension} )
+		INSERT INTO FILE (
+			board_no, 
+			file_name, 
+			file_origin_name, 
+			file_extension
+		) VALUES ( 
+			(SELECT board_no FROM BOARD ORDER BY board_no desc limit 1), 
+			#{fileName}, 
+			#{fileOriginName}, 
+			#{fileExtension} 
+		)
 	</insert>
 	
 	<select id="getAttach" resultMap="fileList">
-		select fileId, fileName, originName from FILE where boardId = #{boardId}; 
+		SELECT 
+			file_no, 
+			file_name, 
+			file_origin_name 
+		FROM FILE 
+		WHERE 
+			board_no = #{boardNo}; 
 	</select>
 	
 	<delete id="deleteAttach">
-		DELETE FROM FILE WHERE fileId = #{fileId}
+		DELETE FROM FILE 
+		WHERE 
+			file_no = #{fileNo}
 	</delete>
 	
 	<select id="categoryListAll" resultMap="categoryList">
-		SELECT item
+		SELECT category_item
 		FROM CATEGORY
 	</select>
 
-	<select id="boardListAll" resultType="board">
-		SELECT BOARD.boardId, CATEGORY.item, USER.name, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
+	<select id="boardListAll" resultMap="boardList">
+		SELECT 
+			BOARD.board_no, 
+			CATEGORY.category_item, 
+			USER.user_name, 
+			BOARD.board_title, 
+			BOARD.board_content, 
+			BOARD.board_date, 
+			BOARD.board_view_cnt
 		FROM BOARD
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
-		ORDER BY BOARD.viewCount desc
+		ORDER BY BOARD.board_view_cnt desc
 		limit 0, 10
 	</select>
 
 	<insert id="boardRegist">
-		INSERT INTO BOARD (userId, categoryId, title, content, date)
-		VALUES
-		(#{userId}, (SELECT categoryId FROM CATEGORY WHERE item = #{item}), #{title}, #{content}, #{date})
+		INSERT INTO BOARD (
+			user_no, 
+			category_no, 
+			board_title, 
+			board_content
+		) VALUES (
+			#{userNo}, 
+			(SELECT category_no FROM CATEGORY WHERE category_item = #{categoryItem}), 
+			#{boardTitle}, 
+			#{boardContent}
+		)
 	</insert>
 
 	<select id="boardSelect" resultMap="boardList">
-		SELECT BOARD.boardId, BOARD.userId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
+		SELECT 
+			BOARD.board_no, 
+			BOARD.user_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			BOARD.board_title, 
+			BOARD.board_content, 
+			BOARD.board_date,
+			BOARD.board_view_cnt
 		FROM BOARD 
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
-		WHERE boardId = #{boardId}
+		WHERE 
+			board_no = #{boardNo}
 	</select>
 
 	<select id="boardModify" resultMap="boardList">
 		UPDATE BOARD SET
-		title = #{title},
-		content = #{content},
-		date = #{date}
-		WHERE boardId = #{boardId}
+			board_title = #{boardTitle},
+			board_content = #{boardContent},
+			board_date = #{boardDate}
+		WHERE 
+			board_no = #{boardNo}
 	</select>
 
-	<delete id="boardDelete"> DELETE FROM BOARD WHERE boardId = #{boardId} </delete>
+	<delete id="boardDelete"> 
+		DELETE FROM BOARD 
+		WHERE 
+			board_no = #{boardNo} </delete>
 	
 	<select id="listCriteria" resultMap="boardList">
-		SELECT BOARD.boardId, USER.name, CATEGORY.item, BOARD.title, BOARD.content, BOARD.date, BOARD.viewCount
+		SELECT 
+			BOARD.board_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			BOARD.board_title, 
+			BOARD.board_content, 
+			BOARD.board_date, 
+			BOARD.board_view_cnt
 		FROM BOARD
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
 		<if test="searchType != '' or categoryType != '' ">
 			<include refid="search"></include>
 		</if>
-		ORDER BY BOARD.boardId desc, BOARD.date desc
-		limit #{startBoardId}, #{perPageNum}
+		ORDER BY BOARD.board_no desc, BOARD.board_date desc
+		limit #{startBoardNo}, #{perPageNum}
 	</select>
 	
 	
 	<select id="countPaging" resultType="int">
-		SELECT COUNT(boardId) FROM BOARD
+		SELECT COUNT(board_no) 
+		FROM BOARD
 		<include refid="join_category"></include>
 		<if test="searchType != '' or categoryType != '' ">
 			<include refid="search"></include>
@@ -104,31 +157,36 @@
 	</select>
 	
 	<select id="checkUser" resultType="int">
-		SELECT userId FROM BOARD
-		WHERE boardId = #{boardId}
+		SELECT 
+			user_no 
+		FROM BOARD
+		WHERE 
+			board_no = #{boardNo}
 	</select>
 	
 	<update id="increaseViewCount">
-		UPDATE BOARD SET viewCount = viewCount + 1 
-		WHERE boardId = #{boardId}
+		UPDATE BOARD SET 
+			board_view_cnt = board_view_cnt + 1 
+		WHERE 
+			board_no = #{boardNo}
     </update>
     
 	<sql id="search">
 		<if test="categoryType != 'null'">
-			WHERE CATEGORY.item = #{categoryType}
+			WHERE CATEGORY.category_item = #{categoryType}
 		</if>
 		<if test="searchType != 'null'">
 			AND 
 			<choose>
 				<when test="searchType == 'title_content'">
-					( content like CONCAT('%',#{keyword},'%')
-					OR title like CONCAT('%',#{keyword},'%') )
+					( board_content like CONCAT('%',#{keyword},'%')
+					OR board_title like CONCAT('%',#{keyword},'%') )
 				</when>
 				<when test="searchType == 'content'">
-					 content like CONCAT('%',#{keyword},'%')
+					 board_content like CONCAT('%',#{keyword},'%')
 				</when>
 				<when test="searchType == 'title'">
-					 title like CONCAT('%',#{keyword},'%')
+					 board_title like CONCAT('%',#{keyword},'%')
 				</when>
 			</choose>
 		</if>
@@ -136,12 +194,12 @@
 	
 	<sql id="join_user">
 		JOIN  USER
-		ON BOARD.userId = USER.userId
+		ON BOARD.user_no = USER.user_no
 	</sql>
 	
 	<sql id="join_category">
 		JOIN CATEGORY
-		ON BOARD.categoryId = CATEGORY.categoryId
+		ON BOARD.category_no = CATEGORY.category_no
 	</sql>
 
 </mapper>

@@ -43,14 +43,13 @@ public class UserController {
 
 	/* 아이디, 비밀번호 일치 확인 */
 	@RequestMapping(value = "logincheck", method = RequestMethod.POST)
-	public String loginCheck(@ModelAttribute UserModel model, HttpSession session, RedirectAttributes rttr)
+	public String loginCheck(@ModelAttribute UserModel model, HttpSession session)
 		throws Exception {
 		int result = service.loginCheck(session, model);
 		if (result == 1) {
 			session.setAttribute("loginCheck", result);
 			return "home";
 		} else {
-			rttr.addFlashAttribute("msg", "FAILURE");
 			session.setAttribute("loginCheck", result);
 			return "user/login";
 		}
@@ -66,7 +65,7 @@ public class UserController {
 
 	/* 아이디 중복 확인 */
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody int duplicationId(@RequestBody String id) throws Exception {
-		return service.userSelect(id);
+	public @ResponseBody int duplicationId(@RequestBody String userId) throws Exception {
+		return service.userSelect(userId);
 	}
 }

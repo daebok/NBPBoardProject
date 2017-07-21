@@ -18,23 +18,23 @@ public interface BoardRepository {
 
 	public void boardRegist(BoardModel boardModel);
 
-	public BoardModel boardSelect(int boardId);
+	public BoardModel boardSelect(int boardNo);
 
 	public BoardModel boardModify(BoardModel boardModel);
 
-	public void boardDelete(int boardId);
+	public void boardDelete(int boardNo);
 
 	public void addAttach(FileModel model);
 
-	public List<FileModel> getAttach(int boardId);
+	public List<FileModel> getAttach(int boardNo);
 
-	public void deleteAttach(int fileId);
+	public void deleteAttach(int fileNo);
 
 	public List<BoardModel> listCriteria(SearchCriteria cri);
 
 	public int countPaging(SearchCriteria cri);
 
-	public void increaseViewCount(int boardId);
+	public void increaseViewCount(int boardNo);
 
-	public int checkUser(int boardId);
+	public int checkUser(int boardNo);
 }

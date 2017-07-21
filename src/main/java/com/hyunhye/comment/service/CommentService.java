@@ -1,7 +1,5 @@
 package com.hyunhye.comment.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +16,12 @@ public class CommentService {
 
 	/* 답변 등록 */
 	public void commentRegist(CommentModel commentModel) throws Exception {
-
-		Date date = new Date();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = simpleDateFormat.format(date);
-
-		commentModel.setDate(currentTime);
 		repository.commentRegist(commentModel);
 	}
 
 	/* 답변 리스트 */
-	public List<CommentModel> commentListAll(int boardId) throws Exception {
-		return repository.commentListAll(boardId);
+	public List<CommentModel> commentListAll(int boardNo) throws Exception {
+		return repository.commentListAll(boardNo);
 	}
 
 	/* 답변 수정 */
@@ -38,7 +30,7 @@ public class CommentService {
 	}
 
 	/* 답변 삭제 */
-	public void commentDelete(int commentId) throws Exception {
-		repository.commentDelete(commentId);
+	public void commentDelete(int commentNo) throws Exception {
+		repository.commentDelete(commentNo);
 	}
 }

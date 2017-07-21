@@ -6,8 +6,8 @@
 		<option value="null"
 			<c:out value="${cri.categoryType eq 'null'?'selected':''}"/>>---</option>
 		<c:forEach var="category" items="${categoryList}">
-			<option value="${category.item}"
-				<c:out value="${cri.categoryType eq category.item ?'selected':''}"/>> ${category.item}</option>
+			<option value="${category.categoryItem}"
+				<c:out value="${cri.categoryType eq category.categoryItem ?'selected':''}"/>> ${category.categoryItem}</option>
 		</c:forEach>
 	</select> 
 	<select name="searchType" id="searchType">

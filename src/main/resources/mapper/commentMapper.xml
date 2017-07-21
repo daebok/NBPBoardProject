@@ -5,39 +5,52 @@
 
 <mapper namespace="com.hyunhye.comment.repository.CommentRepository">
 
-	<resultMap id="list" type="comment">
-		<result property="userId" column="userId" />
-		<result property="boardId" column="boardId"/>
-		<result property="commentId" column="commentId"  />
-		<result property="content" column="content" />
-		<result property="name" column="name" />
-		<result property="date" column="date" />
+	<resultMap id="commentList" type="comment">
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="boardNo" column="board_no"/>
+		<result property="commentNo" column="comment_no"  />
+		<result property="commentContent" column="comment_content" />
+		<result property="commentDate" column="comment_date" />
 	</resultMap>
 
-	<select id="commentListAll" resultMap="list">
-		SELECT COMMENT.content, COMMENT.date, USER.name
+	<select id="commentListAll" resultMap="commentList">
+		SELECT 
+			COMMENT.comment_content, 
+			COMMENT.comment_date, 
+			USER.user_name
 		FROM COMMENT
 		JOIN  USER
-		ON COMMENT.userId = USER.userId
-		WHERE boardId = #{boardId}
-		ORDER BY commentId
+		ON COMMENT.user_no = USER.user_no
+		WHERE 
+			board_no = #{boardNo}
+		ORDER BY comment_no
 	</select>
 
 	<insert id="commentRegist">
-		INSERT INTO COMMENT (boardId, userId, content, date)
-		VALUES
-		(#{boardId}, #{userId}, #{content}, #{date})
+		INSERT INTO COMMENT (
+			board_no, 
+			user_no, 
+			comment_content
+		) VALUES (
+			#{boardNo}, 
+			#{userNo}, 
+			#{commentContent}
+		)
 	</insert>
 
-	<select id="commentUpdate" resultMap="list">
+	<select id="commentUpdate" resultMap="commentList">
 		UPDATE COMMENT SET
-		content = #{content},
-		date = #{date}
-		WHERE commentId = #{commentId}
+			comment_content = #{commentContent},
+			comment_date = #{commentDate}
+		WHERE 
+			comment_no = #{commentNo}
 	</select>
 
 	<delete id="commentDelete"> 
-		DELETE FROM COMMENT WHERE commentId = #{commentId} 
+		DELETE FROM COMMENT
+		WHERE 
+			comment_no = #{commentNo} 
 	</delete>
 
 </mapper>

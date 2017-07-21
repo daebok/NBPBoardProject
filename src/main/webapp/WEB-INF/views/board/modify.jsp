@@ -54,11 +54,11 @@
 			document.form.action = "/board/question/modify"
 			document.form.submit();
 		});
-		$("#category").val('${model.item}').prop("selected", true);
+		$("#category").val('${model.categoryItem}').prop("selected", true);
 		
 		$(".uploadedList").on("click","a",function(){
 			var that = $(this);
-			$('#registerForm').append("<input type='hidden' name='filesId' value="+$(this).attr("data-id")+">");
+			$('#registerForm').append("<input type='hidden' name='boardFilesNo' value="+$(this).attr("data-id")+">");
 			$.ajax({
 				url: "/upload/deleteFile",
 				type:"post",
@@ -83,19 +83,18 @@
 			<form action="question/modify" method="post" name="form" id="registerForm" class="form-horizontal">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="title" value="${model.title}" maxlength="80" id="title" /> 
+					<input type="text" name="boardTitle" value="${model.boardTitle}" maxlength="80" id="title" /> 
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
-					<select name="item" id="category">
+					<select name="categoryItem" id="category">
 						<c:forEach var="category" items="${list}">
-							<option value="${category.item}">${category.item}</option>
+							<option value="${category.categoryItem}">${category.categoryItem}</option>
 						</c:forEach>
 					</select> 
 				</div>
-				<textarea class="summernote" cols="100" rows="30" name="content"
-					maxlength="500" id="content">${model.content}</textarea>
-				<input type="file" class="fileButton" name="file">
+				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">${model.boardContent}</textarea>
+				<input type="file" class="fileButton" name="boardFiles">
 				<div class="form-group">
 					<div class="fileDrop">File Drop Here</div>
 				</div>
@@ -104,9 +103,9 @@
 						<c:forEach var="attach" items="${attach}">
 							<div class="uploadedList">
 								<div>
-									<a href='/upload/displayFile?fileName=${attach.fileName}' > ${attach.originName}</a> 
+									<a href='/upload/displayFile?fileName=${attach.fileName}' > ${attach.fileOriginName}</a> 
 									&nbsp;&nbsp;
-									<a class='delete' data-src="${attach.fileName}" data-id="${attach.fileId}">[삭제]</a>
+									<a class='delete' data-src="${attach.fileName}" data-id="${attach.fileNo}">[삭제]</a>
 									<br>
 								</div>
 							</div>
@@ -115,7 +114,7 @@
 					</div>
 				</div>
 	
-				<input type="hidden" name="boardId" value="${model.boardId}">
+				<input type="hidden" name="boardNo" value="${model.boardNo}">
 				<div class="pull-right">
 					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>
 				</div>

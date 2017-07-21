@@ -18,11 +18,11 @@ function getAjax(formData){
 				str = "<div><a href='/upload/displayFile?fileName="+getImageLink(data)+"' class='file'>"; // link
 				str += "<img src='/upload/displayFile?fileName="+data+"'/></a>";
 				str += "&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
-				str += "<input type='hidden' name='files' value='"+getImageLink(data)+"'> </div>";
+				str += "<input type='hidden' name='boardFiles' value='"+getImageLink(data)+"'> </div>";
 			} else { 
 				str = "<div><a href='/upload/displayFile?fileName="+data+"' class='file'>"+getOriginalName(data)+"</a>"
 						+"&nbsp;&nbsp;<a data-src="+data+" class='delete'>[삭제]</a>";
-				str += "<input type='hidden' name='files' value='"+data+"'> </div>";
+				str += "<input type='hidden' name='boardFiles' value='"+data+"'> </div>";
 			}
 			$(".newUploadedList").append(str);
 		}

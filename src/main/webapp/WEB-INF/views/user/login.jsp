@@ -9,17 +9,16 @@
 <script>
 	$(document).ready(function() {
 		$("#loginButton").click(function() {
-			var id = $("#id").val();
-			var password = $("#password").val();
-			var name = $("#name").val();
-			if (id == "") {
+			var userId = $("#userId").val();
+			var userPassword = $("#userPassword").val();
+			if (userId == "") {
 				alert("아이디를 입력하세요.");
-				$("#id").focus();
+				$("#userId").focus();
 				return;
 			}
-			if (password == "") {
+			if (userPassword == "") {
 				alert("비밀번호를 입력하세요.");
-				$("#password").focus();
+				$("#userPassword").focus();
 				return;
 			}
 			document.form.action = "/user/logincheck"
@@ -38,13 +37,13 @@
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>ID</b></label>
 						<div class="col-sm-10">
-							<input type="text" name="id" id="id" placeholder="Enter ID" class="form-control" /> <br /> 
+							<input type="text" name="userId" id="userId" placeholder="Enter ID" class="form-control" /> <br /> 
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="password" class="col-sm-2 control-label"><b>Password</b></label>
 						<div class="col-sm-10">
-							<input type="password" name="password" id="password" placeholder="Enter PASSWORD" class="form-control" /> <br />
+							<input type="password" name="userPassword" id="userPassword" placeholder="Enter PASSWORD" class="form-control" /> <br />
 						</div>
 					</div>
 					<div class="form-group">

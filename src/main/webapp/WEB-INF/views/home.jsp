@@ -25,15 +25,15 @@
 				</div>
 				<c:forEach var="board" items="${model}">
 					<h1>
-						<a href="<c:url value='/board/answer?boardId=${board.boardId}'/>" id="boardId">${board.title}</a>
+						<a href="<c:url value='/board/answer?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
 					</h1>
-					<p>${board.content}</p>
+					<p>${board.boardContent}</p>
 					<div>
-						<span class="badge">Posted ${board.date}</span>
-						<span class="badge">Posted By ${board.name}</span>
+						<span class="badge">Posted ${board.boardDate}</span>
+						<span class="badge">Posted By ${board.userName}</span>
 						<div class="pull-right">
-							<span class="label label-primary">조회수: ${board.viewCount}</span>
-							<span class="label label-warning">${board.item}</span>
+							<span class="label label-primary">조회수: ${board.boardViewCount}</span>
+							<span class="label label-warning">${board.categoryItem}</span>
 						</div>
 					</div>
 					<hr>
