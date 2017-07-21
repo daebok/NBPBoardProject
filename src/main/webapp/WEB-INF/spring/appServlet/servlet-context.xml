@@ -59,13 +59,4 @@
 		</interceptor>
 	</interceptors>
 		
-	<beans:bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
-		<beans:property name="cacheSeconds" value="0"/>
-	</beans:bean>
-	<interceptors>
-		<interceptor>
-			<mapping path="/board/*" />
-			<beans:ref bean="webContentInterceptor"/>
-		</interceptor>
-	</interceptors>
 </beans:beans>
