@@ -33,7 +33,7 @@
 	</beans:bean>
 	
 	<!-- Interceptor -->
-	<beans:bean id="authInterceptor" class="com.hyunhye.interceptor.AuthInterceptor" />
+	<!-- <beans:bean id="authInterceptor" class="com.hyunhye.interceptor.AuthInterceptor" />
 	<interceptors>
 		<interceptor>
 			<mapping path="/board/answer" />
@@ -67,5 +67,5 @@
 			<mapping path="/board/*" />
 			<beans:ref bean="webContentInterceptor"/>
 		</interceptor>
-	</interceptors>
+	</interceptors> -->
 </beans:beans>
