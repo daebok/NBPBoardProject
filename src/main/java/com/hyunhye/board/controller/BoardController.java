@@ -24,8 +24,8 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
 
-@Controller
 @RequestMapping("board")
+@Controller
 public class BoardController {
 
 	@Autowired
@@ -35,12 +35,12 @@ public class BoardController {
 	public CommentService commentService;
 
 	/* 게시글 목록을 가지고 홈 화면으로 이동 */
-	@RequestMapping("/")
+	/*@RequestMapping("/")
 	public String home(Model model) throws Exception {
 		model.addAttribute("model", boardService.boardListAll(model));
 		model.addAttribute("categoryList", boardService.categoryListAll());
 		return "home";
-	}
+	}*/
 
 	/* 게시글 리스트  */
 	@RequestMapping("question")
