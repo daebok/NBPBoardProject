@@ -72,7 +72,7 @@ public class UploadController {
 	/* 파일 삭제 처리 */
 	@ResponseBody
 	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
-	public ResponseEntity<String> deleteFile(String fileName) {
+	public ResponseEntity<String> deleteFile(String fileName) throws Exception {
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 		MediaType mediaType = MediaUtils.getMediaType(formatName);

@@ -16,11 +16,4 @@ public class IndexController {
 		log.debug("IndexController input");
 		return "home";
 	}
-	
-	@RequestMapping("/board")
-	public String board(Model model) throws Exception {
-		log.debug("Board input");
-		return "home";
-	}
-
 }
