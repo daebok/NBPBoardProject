@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @SuppressWarnings("serial")
-@Alias("user")
+@Alias("userDetails")
 public class UserModelDetails extends User {
 
 	private int userNo;

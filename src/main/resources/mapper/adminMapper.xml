@@ -10,6 +10,7 @@
 		<result property="userId" column="user_id" />
 		<result property="userPassword" column="user_password" />
 		<result property="userName" column="user_name" />
+		<result property="userAuthority" column="user_authority" />
 	</resultMap>
 	
 	<resultMap id="categoryList" type="category">
@@ -45,4 +46,25 @@
 			category_no = #{categoryNo}
 	</update>
 	
+	<select id="userListAll" resultMap="userList">
+		SELECT
+			user_no,
+			user_id, 
+			user_name,
+			user_authority
+		FROM USER
+	</select>
+	
+	<update id="userModify">
+		UPDATE USER SET
+			user_authority = #{userAuthority}
+		WHERE 
+			user_no = #{userNo}
+	</update>
+	
+	<delete id="userDelete">
+		DELETE FROM USER
+		WHERE 
+			user_no = #{userNo}
+	</delete>
 </mapper>

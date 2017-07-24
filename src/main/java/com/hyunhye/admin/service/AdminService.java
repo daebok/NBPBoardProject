@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.hyunhye.admin.repository.AdminRepository;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.user.model.UserModel;
 
 @Service
 public class AdminService {
@@ -28,5 +29,17 @@ public class AdminService {
 
 	public void categoryModify(CategoryModel categoryModel) {
 		repository.categoryModify(categoryModel);
+	}
+
+	public List<UserModel> userListAll() {
+		return repository.userListAll();
+	}
+
+	public void userModify(UserModel userModel) {
+		repository.userModify(userModel);
+	}
+
+	public void userDelete(UserModel userModel) {
+		repository.userDelete(userModel);
 	}
 }

@@ -1,5 +1,6 @@
 package com.hyunhye.comment.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,12 +58,10 @@ public class CommentController {
 
 	/* 답변 수정 */
 	@RequestMapping("modify")
-	public ResponseEntity<String> commentUpdate(@RequestParam("commentNo") int commentNo,
-		@RequestBody CommentModel model) {
+	public ResponseEntity<String> commentUpdate(@ModelAttribute CommentModel commentModel) {
 		ResponseEntity<String> entity = null;
 		try {
-			model.setCommentNo(commentNo);
-			service.commentUpdate(model);
+			service.commentUpdate(commentModel);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,6 +69,16 @@ public class CommentController {
 		}
 
 		return entity;
+	}
+
+	/* 답변 가져오기 */
+	@ResponseBody
+	@RequestMapping("select")
+	public HashMap<String, Object> commentSelect(@ModelAttribute CommentModel model) {
+		HashMap<String, Object> hashmap = new HashMap<String, Object>();
+		hashmap.put("commentContent", service.commentSelect(model).getCommentContent());
+
+		return hashmap;
 	}
 
 	/* 답변 삭제 */

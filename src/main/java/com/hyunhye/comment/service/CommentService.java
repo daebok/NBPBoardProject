@@ -17,7 +17,7 @@ public class CommentService {
 	CommentRepository repository;
 
 	/* 답변 등록 */
-	public void commentRegist(CommentModel commentModel) throws Exception {
+	public void commentRegist(CommentModel commentModel) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		commentModel.setUserNo(user.getUserNo());
 		repository.commentRegist(commentModel);
@@ -43,8 +43,11 @@ public class CommentService {
 	}
 
 	public CommentModel commentCount() {
-		// TODO Auto-generated method stub
 		return repository.commentCount();
+	}
+
+	public CommentModel commentSelect(CommentModel model) {
+		return repository.commentSelect(model);
 	}
 
 }

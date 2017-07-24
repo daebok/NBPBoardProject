@@ -46,8 +46,7 @@
 
 	<select id="commentUpdate" resultMap="commentList">
 		UPDATE COMMENT SET
-			comment_content = #{commentContent},
-			comment_date = #{commentDate}
+			comment_content = #{commentContent}
 		WHERE 
 			comment_no = #{commentNo}
 	</select>
@@ -73,5 +72,19 @@
 		FROM COMMENT 
 		group by board_no;
 	</select>
-
+	
+	<select id="commentSelect" resultMap="commentList">
+		SELECT 
+			USER.user_name, 
+			USER.user_id, 
+			COMMENT.comment_no, 
+			COMMENT.comment_content, 
+			COMMENT.comment_date, 
+			USER.user_name
+		FROM COMMENT
+		JOIN  USER
+		ON COMMENT.user_no = USER.user_no
+		WHERE 
+			comment_no = #{commentNo}
+	</select>
 </mapper>

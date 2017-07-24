@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-
+@Alias("user")
 public class UserModel {
 	/* 사용자 번호 */
 	private int userNo;
@@ -15,4 +15,6 @@ public class UserModel {
 	private String userPassword;
 	/* 사용자 이름 */
 	private String userName;
+	/* 사용자 권한 */
+	private String userAuthority;
 }

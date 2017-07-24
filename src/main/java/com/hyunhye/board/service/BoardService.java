@@ -4,9 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +14,7 @@ import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
+import com.hyunhye.user.model.UserModelDetails;
 
 @Service
 public class BoardService {
@@ -71,8 +71,9 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public BoardModel boardModify(HttpSession session, BoardModel boardModel) throws Exception {
-		int userNo = (Integer)session.getAttribute("userNo");
+	public BoardModel boardModify(BoardModel boardModel) throws Exception {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		int userNo = user.getUserNo();
 
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

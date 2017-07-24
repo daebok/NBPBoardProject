@@ -51,6 +51,7 @@
  
 	<authentication-manager>
 		<authentication-provider user-service-ref="userServiceManager">
+		<password-encoder ref="passwordEncoder"/>
 		</authentication-provider>
 	</authentication-manager>
 	

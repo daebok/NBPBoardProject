@@ -1,10 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
+<sec:csrfMetaTags/>
 <title>Home</title>
 <script type="text/javascript">
 	var idCheck = 0;
@@ -12,6 +13,8 @@
 	function checkId() {
 		var userId = $('#userId').val();
 		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		if (special_pattern.test(userId) == true || userId == " ") {
 			alert('특수문자 및 공백은 사용할 수 없습니다.');
 			$('#userId').val(userId.substring(0, userId.length - 1));
@@ -23,6 +26,9 @@
 			dataType: "json",
 			type : "POST",
 			url : "/user/duplicationId",
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
 			success : function(data) {
 				if (userId == "" && data == 0) {
 					$(".signupbtn").prop("disabled", true);
@@ -97,6 +103,7 @@
 	<div class="container">
 		<div class="container-fluid">
 			<form name="form" action="insert" method="post" class="form-horizontal">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<div class="form-group">
 					<label for="userId" class="col-sm-2 control-label"><b>ID</b></label> 
 					<div class="col-sm-10">

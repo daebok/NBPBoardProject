@@ -21,4 +21,6 @@ public interface CommentRepository {
 
 	public CommentModel commentCount();
 
+	public CommentModel commentSelect(CommentModel model);
+
 }

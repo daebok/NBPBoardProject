@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
@@ -44,11 +45,10 @@
 		<div class="container-fluid">
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
-				<c:if test="${sessionScope.userNo != null}">
+				<sec:authorize access="isAuthenticated()">
 					<a href="<c:url value='/board/question'/>" id="question"
 						class="btn btn-danger">Ask Question</a>
-				</c:if>
-
+				</sec:authorize>
 			</div>
 		</div>
 		<div class="container-fluid">

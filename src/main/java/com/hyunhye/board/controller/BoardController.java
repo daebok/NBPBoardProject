@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -73,18 +72,17 @@ public class BoardController {
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal)
 		throws Exception {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		/* 조회수 */
-		HttpSession session = request.getSession();
-		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + session.getAttribute("userNo"));
+		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + user.getUserNo());
 		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
 			boardService.increaseViewCount(boardNo);
-			Cookie cookie = new Cookie(boardNo + "&" + session.getAttribute("userNo"), "view");
+			Cookie cookie = new Cookie(boardNo + "&" + user.getUserNo(), "view");
 			cookie.setMaxAge(60 * 60 * 24); // 하루 동안 유지
 			response.addCookie(cookie);
 		}
 
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("user.getUsername(): " + user.getUsername());
 		model.addAttribute("user", user);
 		model.addAttribute("model", boardService.boardSelect(boardNo));
 		model.addAttribute("attach", boardService.getAttach(boardNo));
@@ -103,9 +101,9 @@ public class BoardController {
 
 	/* 게시글 수정 등록 */
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
-	public String boardModify(HttpSession session, @ModelAttribute BoardModel model)
+	public String boardModify(@ModelAttribute BoardModel model)
 		throws Exception {
-		boardService.boardModify(session, model);
+		boardService.boardModify(model);
 
 		return "redirect:/board/answer?boardNo=" + model.getBoardNo();
 	}
