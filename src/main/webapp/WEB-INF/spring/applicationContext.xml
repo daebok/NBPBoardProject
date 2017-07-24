@@ -22,7 +22,7 @@
 		<beans:property name="maxUploadSize" value="10485760" /> <!-- 10MB -->
 	</beans:bean>
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="C:\Users\NAVER\Desktop\upload"></beans:constructor-arg>
+		<beans:constructor-arg value="/home1/irteam/hyunhye/upload"></beans:constructor-arg>
 	</beans:bean>
 
 </beans:beans>

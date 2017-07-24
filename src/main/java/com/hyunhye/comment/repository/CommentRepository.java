@@ -15,12 +15,12 @@ public interface CommentRepository {
 
 	public void commentUpdate(CommentModel commentModel);
 
-	public void commentDelete(int commentNo);
+	public void commentDelete(int boardNol);
 
 	public CommentModel commentLastSelect();
 
 	public CommentModel commentCount();
 
-	public CommentModel commentSelect(CommentModel model);
+	public CommentModel commentSelect(CommentModel commentModel);
 
 }

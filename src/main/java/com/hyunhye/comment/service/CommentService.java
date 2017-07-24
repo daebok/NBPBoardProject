@@ -34,20 +34,20 @@ public class CommentService {
 	}
 
 	/* 답변 삭제 */
-	public void commentDelete(int commentNo) throws Exception {
-		if (commentNo == 0) {
-			commentNo = repository.commentLastSelect().getCommentNo();
-			System.out.println("commentNo: " + commentNo);
-		}
-		repository.commentDelete(commentNo);
+	public void commentDelete(int boardNo) throws Exception {
+		repository.commentDelete(boardNo);
 	}
 
 	public CommentModel commentCount() {
 		return repository.commentCount();
 	}
 
-	public CommentModel commentSelect(CommentModel model) {
-		return repository.commentSelect(model);
+	public CommentModel commentSelect(CommentModel commentModel) {
+		return repository.commentSelect(commentModel);
+	}
+
+	public CommentModel commentLastSelect() {
+		return repository.commentLastSelect();
 	}
 
 }

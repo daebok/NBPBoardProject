@@ -26,19 +26,19 @@ public class CommentController {
 	/* 답변 달기 */
 	@ResponseBody
 	@RequestMapping(value = "regist", method = RequestMethod.GET)
-	public ResponseEntity<List<CommentModel>> commentRegist(@ModelAttribute CommentModel commentModel) {
-		ResponseEntity<List<CommentModel>> entity = null;
+	public ResponseEntity<CommentModel> commentRegist(@ModelAttribute CommentModel commentModel) {
+		ResponseEntity<CommentModel> entity = null;
 		try {
 			service.commentRegist(commentModel);
-			entity = new ResponseEntity<List<CommentModel>>(service.commentListAll(commentModel.getBoardNo()),
-				HttpStatus.OK);
+			entity = new ResponseEntity<CommentModel>(service.commentLastSelect(), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<List<CommentModel>>(HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<CommentModel>(HttpStatus.BAD_REQUEST);
 		}
 
 		return entity;
 	}
+
 
 	/* 답변 리스트 */
 	@ResponseBody
