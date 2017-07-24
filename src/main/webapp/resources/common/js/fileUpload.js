@@ -12,6 +12,9 @@ function getAjax(formData){
 		processData : false,
 		contentType : false,
 		type : 'POST',
+		beforeSend: function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
 		success : function(data) {
 			var str="";
 			if(checkImageType(data)){ 
