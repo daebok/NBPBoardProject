@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
@@ -21,7 +20,7 @@
 				$("#userPassword").focus();
 				return;
 			}
-			document.form.action = "/user/logincheck"
+			document.form.action = "/loginProcess"
 			document.form.submit();
 		});
 	});
@@ -34,6 +33,12 @@
 	<div class="container">
 		<div class="container-fluid">
 				<form name="form" method="post" class="form-horizontal">
+					<c:if test="${param.error != null}">
+						<p>아이디와 비밀번호가 잘못되었습니다.</p>
+					</c:if>
+					<c:if test="${param.logout != null}">
+						<p>로그아웃 하였습니다.</p>
+					</c:if>
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>ID</b></label>
 						<div class="col-sm-10">
@@ -51,11 +56,7 @@
 							<button type="button" id="loginButton" class="btn btn-default">Log In</button>
 						</div>
 					</div>
-					<div class="form-group">
-						<c:if test="${msg == 'LOGOUT'}">
-							<div style="color: red; margin-top: 10px;">로그아웃되었습니다.</div>
-						</c:if>
-					</div>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				</form>
 			
 		</div>

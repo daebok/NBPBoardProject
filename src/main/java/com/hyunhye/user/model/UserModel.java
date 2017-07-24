@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("user")
+
 public class UserModel {
 	/* 사용자 번호 */
 	private int userNo;

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.admin.repository.AdminRepository">
+
+	<resultMap id="userList" type="user">
+		<result property="userNo" column="user_no" />
+		<result property="userId" column="user_id" />
+		<result property="userPassword" column="user_password" />
+		<result property="userName" column="user_name" />
+	</resultMap>
+	
+	<resultMap id="categoryList" type="category">
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
+	</resultMap>
+	
+	<select id="categoryAdd">
+		INSERT INTO CATEGORY (
+			category_item
+		) VALUES (
+			#{categoryItem}
+		)
+	</select>
+	
+	<select id="categoryListAll" resultMap="categoryList">
+		SELECT
+			category_no, 
+			category_item
+		FROM CATEGORY
+	</select>
+	
+	<delete id="categoryDelete">
+		DELETE FROM CATEGORY
+		WHERE 
+			category_no = #{categoryNo}
+	</delete>
+	
+	<update id="categoryModify">
+		UPDATE CATEGORY SET
+			category_item = #{categoryItem}
+		WHERE 
+			category_no = #{categoryNo}
+	</update>
+	
+</mapper>

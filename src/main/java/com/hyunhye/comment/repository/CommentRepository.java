@@ -17,4 +17,8 @@ public interface CommentRepository {
 
 	public void commentDelete(int commentNo);
 
+	public CommentModel commentLastSelect();
+
+	public CommentModel commentCount();
+
 }

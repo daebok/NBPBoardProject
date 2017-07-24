@@ -28,7 +28,6 @@
 			$('#delete').click(function() {
 				var result = confirm('게시물을 삭제하시겠습니까?');
 				if (result) {
-					console.log(result);
 					location.replace('/board/delete?boardNo=${model.boardNo}');
 				} 
 			});
@@ -43,12 +42,29 @@
 						sendFile(files[0], editor,welEditable);
 				}
 			});
+			$('.comment-delete').click(function(){
+				var commentNo = $('.comment-delete').attr("comment-no");
+				var data = "commentNo=" + commentNo;
+				var result = confirm('답변을 삭제하시겠습니까?');
+				if (result) {
+					$.ajax({
+						type : 'GET',
+						url : '/comment/delete',
+						dataType : 'text',
+						processData : false,
+						contentType : false,
+						data : data,
+						success : function(result) {
+							$("#"+commentNo).hide();
+						}
+					});
+				}
+			});
 			$('#commentButton').click(function() {
 				var contentObj = $('#commentContent');
 				var commentContent = $('#commentContent').val();
 				var boardNo = ${model.boardNo};
-				var userNo = ${sessionScope.userNo};
-				var data = "boardNo=" + boardNo + "&userNo=" + userNo + "&commentContent=" + commentContent;
+				var data = "boardNo=" + boardNo + "&commentContent=" + commentContent;
 				$.ajax({
 					type : 'GET',
 					url : '/comment/regist',
@@ -59,8 +75,11 @@
 					success : function(result) {
 						$(".emptyContent").hide();
 						alert('답글이 달렸습니다.');
-						$("#listComment").append("<div class='comment-wrapper'> <div class='comment'>"
-								+ commentContent + "</div><span class='badge'>Commented By  ${sessionScope.userName}</span></div>");
+						$("#listComment").append("<div class='comment-wrapper' id='0'> <div class='comment'>"
+								+ commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span><div class='pull-right'>"
+								+ '<button type="button" class="comment-modify btn btn-default" comment-no="0">Modify</button>&nbsp;'
+								+ '<button type="button" class="comment-delete btn btn-default" comment-no="0">Delete</button></div></div>'
+							);
 						$('.summernote').empty();
 					}
 				});
@@ -73,7 +92,6 @@
 	<%@include file="../common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
-
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<div class="pull-right">
@@ -83,9 +101,9 @@
 				<p>${model.boardContent}</p>
 				<div>
 					<c:forEach var="attach" items="${attach}">
-						<a href='/upload/displayFile?fileName=${attach.fileName}'> <img
-							src='/upload/displayFile?fileName=${attach.fileName}'
-							onerror="this.style.display='none'" alt='' width='100%' />${attach.fileOriginName}
+						<a href='/upload/displayFile?fileName=${attach.fileName}'> 
+							<img src='/upload/displayFile?fileName=${attach.fileName}'
+								 onerror="this.style.display='none'" alt='' width='100%' />${attach.fileOriginName}
 						</a>
 						<br>
 					</c:forEach>
@@ -95,10 +113,15 @@
 					<span class="badge">Posted By ${model.userName}</span>
 				</div>
 				<hr>
-				<c:if test="${sessionScope.userNo == model.userNo}">
-					<a href="<c:url value='/board/modify?boardNo=${model.boardNo}'/>" id="modify" class="btn btn-danger">Modify</a>
-					<button id="delete" class="btn btn-danger">Delete</button>
-				</c:if>
+					<c:if test="${user.username == model.userId}">
+						<a href="<c:url value='/board/modify?boardNo=${model.boardNo}'/>" id="modify" class="btn btn-danger">Modify</a>
+						<button id="delete" class="btn btn-danger">Delete</button>
+					</c:if>
+					<c:if test="${user.username != model.userId}"> <!-- 관리자 권한 -->
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<button id="delete" class="btn btn-danger">Delete</button>
+						</sec:authorize>
+					</c:if>
 				<div class="pull-right">
 					<form name="form" action="list" method="post">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
@@ -113,29 +136,42 @@
 			</div>
 		</div>
 
-		<div class="container-fluid">
-			<div class="col-lg-8" style="margin-top: 70px; margin-bottom: 20px">
+		<div class="container-fluid" style="margin-top: 70px; margin-bottom: 50px">
+			<div class="col-lg-8">
 				<span class="commentTitle">Comment</span>
 				<div id="listComment" class="col-lg-12">
 					<c:if test='${empty comment}'>
 						<div class="emptyContent">답변이 없습니다.</div>
 					</c:if>
 					<c:forEach var="comment" items="${comment}">
-						<div class="comment-wrapper">
+						<div class="comment-wrapper" id="${comment.commentNo}">
 							<div class="comment">${comment.commentContent}</div>
 							<span class="badge commentName">Commented By ${comment.userName}</span>
+							<div class="pull-right">
+								<c:if test="${user.username == comment.userId}">
+									<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
+									<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
+								</c:if>
+								<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
+									</sec:authorize>
+								</c:if>
+							</div>
 						</div>
 					</c:forEach>
 				</div>
 			</div>
-			<div class="col-lg-12" style="margin-top: 50px; margin-bottom: 100px">
-				<label for="content">Your Answer</label>
-				<textarea class="summernote" name="commentContent" id="commentContent"></textarea>
-				<br />
-				<div class="pull-right">
-					<button id="commentButton" class="btn btn-default">Comment</button>
+			<sec:authorize access="isAuthenticated()">
+				<div class="col-lg-12" style="margin-top: 50px;">
+					<label for="content">Your Answer</label>
+					<textarea class="summernote" name="commentContent" id="commentContent"></textarea>
+					<br />
+					<div class="pull-right">
+						<button id="commentButton" class="btn btn-default">Comment</button>
+					</div>
 				</div>
-			</div>
+			</sec:authorize>
 		</div>
 	</div>
 </body>

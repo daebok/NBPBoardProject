@@ -19,4 +19,6 @@ public class CommentModel {
 	private int userNo;
 	/* 사용자 이름 */
 	private String userName;
+	/* 사용자 아이디 */
+	private String userId;
 }

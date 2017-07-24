@@ -1,7 +1,5 @@
 package com.hyunhye.user.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,7 +26,7 @@ public class UserController {
 	}
 
 	/* 로그인 페이지 이동 */
-	@RequestMapping("login")
+	@RequestMapping("loginPage")
 	public String login() {
 		return "user/login";
 	}
@@ -38,28 +36,6 @@ public class UserController {
 	public String userRegist(@ModelAttribute UserModel model, RedirectAttributes rttr) throws Exception {
 		service.userRegist(model);
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "redirect:/user/login";
-	}
-
-	/* 아이디, 비밀번호 일치 확인 */
-	@RequestMapping(value = "logincheck", method = RequestMethod.POST)
-	public String loginCheck(@ModelAttribute UserModel model, HttpSession session)
-		throws Exception {
-		int result = service.loginCheck(session, model);
-		if (result == 1) {
-			session.setAttribute("loginCheck", result);
-			return "home";
-		} else {
-			session.setAttribute("loginCheck", result);
-			return "user/login";
-		}
-	}
-
-	/* 로그아웃 */
-	@RequestMapping("logout")
-	public String logout(HttpSession session, RedirectAttributes rttr) throws Exception {
-		service.logout(session);
-		rttr.addFlashAttribute("msg", "LOGOUT");
 		return "redirect:/user/login";
 	}
 

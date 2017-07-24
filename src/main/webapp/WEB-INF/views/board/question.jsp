@@ -95,6 +95,7 @@
 				<div class="box-footer">
 					<div class="newUploadedList"></div>
 				</div>
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<div class="pull-right">
 					<button type="button" id="questionButton" class="btn btn-default">Question</button>
 				</div>

@@ -113,7 +113,7 @@
 						<div class="newUploadedList"></div>
 					</div>
 				</div>
-	
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<input type="hidden" name="boardNo" value="${model.boardNo}">
 				<div class="pull-right">
 					<button type="button" id="modifyButton" class="btn btn-default">Modify</button>

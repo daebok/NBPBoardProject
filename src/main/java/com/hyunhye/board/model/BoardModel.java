@@ -29,4 +29,8 @@ public class BoardModel {
 	private int userNo;
 	/* 사용자 이름 */
 	private String userName;
+	/* 사용자 아이디 */
+	private String userId;
+	/* 답변 갯수 */
+	private int commentCount;
 }

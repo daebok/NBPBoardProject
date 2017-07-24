@@ -3,10 +3,12 @@ package com.hyunhye.comment.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.comment.model.CommentModel;
 import com.hyunhye.comment.repository.CommentRepository;
+import com.hyunhye.user.model.UserModelDetails;
 
 @Service
 public class CommentService {
@@ -16,6 +18,8 @@ public class CommentService {
 
 	/* 답변 등록 */
 	public void commentRegist(CommentModel commentModel) throws Exception {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		commentModel.setUserNo(user.getUserNo());
 		repository.commentRegist(commentModel);
 	}
 
@@ -31,6 +35,16 @@ public class CommentService {
 
 	/* 답변 삭제 */
 	public void commentDelete(int commentNo) throws Exception {
+		if (commentNo == 0) {
+			commentNo = repository.commentLastSelect().getCommentNo();
+			System.out.println("commentNo: " + commentNo);
+		}
 		repository.commentDelete(commentNo);
 	}
+
+	public CommentModel commentCount() {
+		// TODO Auto-generated method stub
+		return repository.commentCount();
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.hyunhye.board.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +25,7 @@ import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
+import com.hyunhye.user.model.UserModelDetails;
 
 @RequestMapping("board")
 @Controller
@@ -59,25 +62,30 @@ public class BoardController {
 
 	/* 게시글 작성하기  */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardRegist(@ModelAttribute BoardModel model, HttpSession session) throws Exception {
-		boardService.boardRegist(session, model);
+	public String boardRegist(@ModelAttribute BoardModel model, Principal principal) throws Exception {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		boardService.boardRegist(user.getUserNo(), model);
 		return "redirect:/board/list";
 	}
 
 	/* 게시글 상세 보기 */
 	@RequestMapping("answer")
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
-		Model model, HttpServletRequest request, HttpServletResponse response)
+		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal)
 		throws Exception {
 		/* 조회수 */
 		HttpSession session = request.getSession();
 		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + session.getAttribute("userNo"));
-		if (viewCount == null) { // 해당 세션을 가지고 있으면...
+		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
 			boardService.increaseViewCount(boardNo);
 			Cookie cookie = new Cookie(boardNo + "&" + session.getAttribute("userNo"), "view");
+			cookie.setMaxAge(60 * 60 * 24); // 하루 동안 유지
 			response.addCookie(cookie);
 		}
 
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("user.getUsername(): " + user.getUsername());
+		model.addAttribute("user", user);
 		model.addAttribute("model", boardService.boardSelect(boardNo));
 		model.addAttribute("attach", boardService.getAttach(boardNo));
 		model.addAttribute("comment", commentService.commentListAll(boardNo));

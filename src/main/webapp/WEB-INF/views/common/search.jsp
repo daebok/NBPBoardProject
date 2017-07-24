@@ -20,4 +20,5 @@
 	</select> 
 	<input name="keyword" id="keyword" value="${cri.keyword}"> 
 	<input type="submit" id="searchButton" class="btn btn-default" value="검색">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>

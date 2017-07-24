@@ -32,6 +32,7 @@
 						<span class="badge">Posted ${board.boardDate}</span>
 						<span class="badge">Posted By ${board.userName}</span>
 						<div class="pull-right">
+							<span class="label label-success">댓글: ${board.commentCount}</span>
 							<span class="label label-primary">조회수: ${board.boardViewCount}</span>
 							<span class="label label-warning">${board.categoryItem}</span>
 						</div>

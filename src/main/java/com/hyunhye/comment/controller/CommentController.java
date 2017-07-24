@@ -57,7 +57,7 @@ public class CommentController {
 	}
 
 	/* 답변 수정 */
-	@RequestMapping(value = "update", method = RequestMethod.GET)
+	@RequestMapping("modify")
 	public ResponseEntity<String> commentUpdate(@RequestParam("commentNo") int commentNo,
 		@RequestBody CommentModel model) {
 		ResponseEntity<String> entity = null;

@@ -33,9 +33,7 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public void boardRegist(HttpSession session, BoardModel boardModel) throws Exception {
-		int userNo = (Integer)session.getAttribute("userNo");
-
+	public void boardRegist(int userNo, BoardModel boardModel) throws Exception {
 		boardModel.setUserNo(userNo);
 
 		repository.boardRegist(boardModel);

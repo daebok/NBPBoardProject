@@ -33,23 +33,6 @@
 	</beans:bean>
 	
 	<!-- Interceptor -->
-	<beans:bean id="authInterceptor" class="com.hyunhye.interceptor.AuthInterceptor" />
-	<interceptors>
-		<interceptor>
-			<mapping path="/board/answer" />
-			<mapping path="/board/question" />
-			<beans:ref bean="authInterceptor" />
-		</interceptor>
-	</interceptors>
-
-	<beans:bean id="loginInterceptor" class="com.hyunhye.interceptor.LoginInterceptor" />
-	<interceptors>
-		<interceptor>
-			<mapping path="/user/logincheck" />
-			<beans:ref bean="loginInterceptor" />
-		</interceptor>
-	</interceptors>
-	
 	<beans:bean id="boardInterceptor" class="com.hyunhye.interceptor.BoardInterceptor" />
 	<interceptors>
 		<interceptor>
