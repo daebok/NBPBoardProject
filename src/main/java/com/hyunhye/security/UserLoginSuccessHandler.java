@@ -20,7 +20,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication)
 		throws IOException, ServletException {
-		log.info("Login Success");
+
 		log.info(authentication.getName());
 		log.info(authentication.getAuthorities().toString());
 		log.info(authentication.getDetails().toString());

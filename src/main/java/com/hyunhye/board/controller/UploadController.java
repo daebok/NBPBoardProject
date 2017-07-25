@@ -7,6 +7,8 @@ import java.io.InputStream;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,8 @@ import com.hyunhye.common.UploadFileUtils;
 @RequestMapping("/upload")
 public class UploadController {
 
+	Logger log = LoggerFactory.getLogger(UploadController.class);
+
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
@@ -31,8 +35,12 @@ public class UploadController {
 	@ResponseBody
 	@RequestMapping(value = "uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
+
+		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+		log.info("homePath: {}", homePath);
+
 		return new ResponseEntity<String>(
-			UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()),
+			UploadFileUtils.uploadFile(homePath + uploadPath, file.getOriginalFilename(), file.getBytes()),
 			HttpStatus.CREATED);
 	}
 
@@ -49,7 +57,8 @@ public class UploadController {
 
 			HttpHeaders headers = new HttpHeaders(); // 헤더 구성 객체
 
-			in = new FileInputStream(uploadPath + fileName);
+			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+			in = new FileInputStream(homePath + uploadPath + fileName);
 
 			if (mediaType != null) { // 이미지 파일이면...
 				headers.setContentType(mediaType);
@@ -76,14 +85,15 @@ public class UploadController {
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 		MediaType mediaType = MediaUtils.getMediaType(formatName);
+		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 
 		if (mediaType != null) {
 			String front = fileName.substring(0, 12);
 			String end = fileName.substring(14);
-			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete(); // 썸네일 이미지 삭제
+			new File(homePath + uploadPath + (front + end).replace('/', File.separatorChar)).delete(); // 썸네일 이미지 삭제
 		}
 
-		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+		new File(homePath + uploadPath + fileName.replace('/', File.separatorChar)).delete();
 
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
