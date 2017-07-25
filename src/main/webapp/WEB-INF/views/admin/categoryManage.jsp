@@ -23,19 +23,20 @@
 	});
 </script>
 <style>
-	.list-group-item{
+	.category-list-title {
+		text-align: center;
+	}
+	.list-group-item {
 		overflow:hidden;
+		width:50%;
 	}
 	.list-1{
 		float:left;
 		width:50%;
+		text-align: center;
 	}
 	.list-2{
 		float:left;
-	}
-	.category-wrapper {
-		position: absolute;
-		left: 25%;
 	}
 </style>
 </head>
@@ -51,20 +52,24 @@
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>Add</b></label>
 						<div class="col-sm-10">
-							<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" class="form-control" />
-							<div class="pull-right">
-								<button type="button" id="category-add-button" class="btn btn-default">Add</button>
-							</div>
+							<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" 
+																			class="form-control" style="width:70%; float:left;"/>
+							<button type="button" id="category-add-button" class="btn btn-default" style="float:left;">Add</button>
 						</div>
 					</div>
 				</form>
 			</div>
 			<div class="list-group">
+				<div class="list-group-item">
+					<div class="list-1">
+						<b>Category List</b>
+					</div>
+				</div>
 				<c:forEach var="category" items="${categoryList}">
 					<div class="list-group-item">
 						<form name="${category.categoryNo}" method="get" action="/admin/categoryDelete" class="form-horizontal" id="${category.categoryNo}">
 							<div class="list-1">
-								<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" class="form-control" value="${category.categoryItem}"/>
+								<span>${category.categoryItem}</span>
 							</div>
 							<div class="list-2">
 								<input type="submit" class="category-delete btn btn-success" value="Delete" />

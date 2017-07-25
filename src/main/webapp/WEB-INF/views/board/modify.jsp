@@ -10,13 +10,13 @@
 <style>
 .fileDrop {
 	width: 70%;
-	height: 100px;
+	height: 150px;
 	border: 1px dotted gray;
 	border: 1px dotted lightslategray;
 	border-radius: 20px;
 	margin: auto; 
 	text-align: center;
-	line-height: 100px;
+	line-height: 150px;
 	font-weight: border;
 }
 
@@ -93,12 +93,16 @@
 		/* [삭제]버튼 누르면, 업로드 된 파일 삭제 */
 		$(".newUploadedList").on("click","a",function(event){
 			var that = $(this);
-			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			$.ajax({
 				url: "/upload/deleteFile",
 				type:"post",
 				data: {fileName: $(this).attr("data-src")},
 				dataType: "text",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
 				success:function(result){
 					if(result == 'deleted'){
 						that.parent('div').remove();
@@ -138,12 +142,17 @@
 		
 		$(".uploadedList").on("click","a",function(){
 			var that = $(this);
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			$('#registerForm').append("<input type='hidden' name='boardFilesNo' value="+$(this).attr("data-id")+">");
 			$.ajax({
 				url: "/upload/deleteFile",
 				type:"post",
 				data: {fileName: $(this).attr("data-src")},
 				dataType: "text",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
 				success:function(result){
 					if(result == 'deleted'){
 						that.parent('div').remove();
