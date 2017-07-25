@@ -30,7 +30,6 @@
 <script src="<c:url value="/resources/common/js/upload.js" />"></script>
 <script src="<c:url value="/resources/common/js/fileUpload.js" />"></script>
 <script>
-	
 	$(document).ready(function() {
 		$("#questionButton").click(function() {
 			var title = $("#title").val();

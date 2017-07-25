@@ -22,114 +22,117 @@
 }
 </style>
 <script>
-	$(document).ready(
-		function() {
-			$('#delete').click(function() {
-				var result = confirm('게시물을 삭제하시겠습니까?');
-				if (result) {
-					location.replace('/board/delete?boardNo=${model.boardNo}');
-				} 
-			});
-			$('#list').click(function() {
-				document.form.method = "get";
-				document.form.action = "/board/list"
-				document.form.submit();
-			});
-			$('.summernote').summernote({
-				height : 200,
-				onImageUpload : function(files,editor, welEditable) {
-						sendFile(files[0], editor,welEditable);
-				}
-			});
-			$('.comment-delete').click(function(){
-				var commentNo = $(this).attr("comment-no");
-				var data = "commentNo=" + commentNo;
-				var result = confirm('답변을 삭제하시겠습니까?');
-				if (result) {
-					$.ajax({
-						type : 'GET',
-						url : '/comment/delete',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success : function(result) {
-							$("#"+commentNo).remove();
-						}
-					});
-				}
-			});
-			$('.comment-modify').click(function(){
+$(document).on("click",".comment-delete", function() {
+	var commentNo = $(this).attr("comment-no");
+	var data = "commentNo=" + commentNo;
+	var result = confirm('답변을 삭제하시겠습니까?');
+	if (result) {
+		$.ajax({
+			type : 'GET',
+			url : '/comment/delete',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				$("#"+commentNo).remove();
+			}
+		});
+	}
+});
+
+$(document).on("click",".comment-modify",function() {
+	var commentNo = $(this).attr('comment-no');
+	var result = confirm('답변을 수정하시겠습니까?');
+	var data = "commentNo=" + commentNo;
+	if (result) {
+		$.ajax({
+			type : 'GET',
+			url : '/comment/select',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				var list = $.parseJSON(result);
+				$('#'+commentNo).css('background-color','#ededed');
+				$('#comment-button').html('Modify');
+				$('#comment-button').attr('comment-no',commentNo);
+				$('.summernote').summernote('code', list.commentContent);
+				$('#comment-list > *').attr("disabled",true);
+			}
+		});
+	}
+});
+$(document).ready(
+	function() {
+		$('#delete').click(function() {
+			var result = confirm('게시물을 삭제하시겠습니까?');
+			if (result) {
+				location.replace('/board/delete?boardNo=${model.boardNo}');
+			} 
+		});
+		$('#list').click(function() {
+			document.form.method = "get";
+			document.form.action = "/board/list"
+			document.form.submit();
+		});
+		$('.summernote').summernote({
+			height : 200,
+			onImageUpload : function(files,editor, welEditable) {
+					sendFile(files[0], editor,welEditable);
+			}
+		});
+		
+		
+		$('#comment-button').on('click', function(event) {
+			var contentObj = $('#comment-content');
+			var commentContent = $('#comment-content').val();
+			if($(this).html() == 'Comment'){
+				var boardNo = ${model.boardNo};
+				var data = "boardNo=" + boardNo + "&commentContent=" + commentContent;
+				$.ajax({
+					type : 'GET',
+					url : '/comment/regist',
+					dataType : 'text',
+					processData : false,
+					contentType : false,
+					data : data,
+					success : function(result) {
+						var list = $.parseJSON(result);
+						$(".emptyContent").remove();
+						alert('답글이 달렸습니다.');
+						$("#listComment").append("<div class='comment-wrapper' id='"+list.commentNo+"'> <div class='comment'>"
+								+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
+								+ "<div class='pull-right' class='comment-list'>"
+								+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
+								+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
+							);
+						$('.summernote').summernote('code', '');
+					}
+				});
+			} else if ($(this).html() == 'Modify') {
 				var commentNo = $(this).attr('comment-no');
-				var result = confirm('답변을 수정하시겠습니까?');
-				var data = "commentNo=" + commentNo;
-				if (result) {
-					$.ajax({
-						type : 'GET',
-						url : '/comment/select',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success : function(result) {
-							var list = $.parseJSON(result);
-							$('#'+commentNo).css('background-color','#ededed');
-							$('#comment-button').html('Modify');
-							$('#comment-button').attr('comment-no',commentNo);
-							$('.summernote').summernote('code', list.commentContent);
-							$('#comment-list > *').attr("disabled",true);
-						}
-					});
-				}
+				var data = "commentNo=" + commentNo + "&commentContent=" + commentContent;
+				$.ajax({
+					type : 'GET',
+					url : '/comment/modify',
+					dataType : 'text',
+					processData : false,
+					contentType : false,
+					data : data,
+					success : function(result) {
+						alert('답글이 수정습니다.');
+						$("#content-"+commentNo).html(commentContent);
+						$('.summernote').summernote('code', '');
+						$('#comment-button').html('Comment');
+						$('#'+commentNo).css('background-color','#ffffff');
+						$('#comment-list > *').attr("disabled",false);
+					}
 			});
-			$('#comment-button').on('click', function(event) {
-				var contentObj = $('#comment-content');
-				var commentContent = $('#comment-content').val();
-				if($(this).html() == 'Comment'){
-					var boardNo = ${model.boardNo};
-					var data = "boardNo=" + boardNo + "&commentContent=" + commentContent;
-					$.ajax({
-						type : 'GET',
-						url : '/comment/regist',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success : function(result) {
-							var list = $.parseJSON(result);
-							$(".emptyContent").remove();
-							alert('답글이 달렸습니다.');
-							$("#listComment").append("<div class='comment-wrapper' id='"+list.commentNo+"'> <div class='comment'>"
-									+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
-									+ "<div class='pull-right' class='comment-list'>"
-									+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
-									+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
-								);
-							$('.summernote').summernote('code', '');
-						}
-					});
-				} else if ($(this).html() == 'Modify') {
-					var commentNo = $(this).attr('comment-no');
-					var data = "commentNo=" + commentNo + "&commentContent=" + commentContent;
-					$.ajax({
-						type : 'GET',
-						url : '/comment/modify',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success : function(result) {
-							alert('답글이 수정습니다.');
-							$("#content-"+commentNo).html(commentContent);
-							$('.summernote').summernote('code', '');
-							$('#comment-button').html('Comment');
-							$('#'+commentNo).css('background-color','#ffffff');
-							$('#comment-list > *').attr("disabled",false);
-						}
-					});
-				}
-			});
+		}
 	});
+});
 </script>
 </head>
 <body>
