@@ -9,9 +9,12 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
 
 public class UploadFileUtils {
+	static Logger log = LoggerFactory.getLogger(UploadFileUtils.class);
 
 	/* UUID를 통해 유일한 파일 이름 생성하여 '/년/월/일'폴더를 만들어 그 폴더로 파일을 복사하는 메소드 */
 	public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception {
@@ -19,6 +22,15 @@ public class UploadFileUtils {
 		String savedName = uuid.toString() + "_" + originalName; // 유일한 파일 이름 생성
 		String savedPath = calcPath(uploadPath); // 폴더 경로 생성
 		File target = new File(uploadPath + savedPath, savedName); // 파일 객체 생성
+
+		/* permission denied 해결 */
+		Runtime.getRuntime().exec("chmod 777 " + uploadPath + savedPath + savedName);
+		target.setExecutable(true, false);
+		target.setReadable(true, false);
+		target.setWritable(true, false);
+		log.info("new File Can Write:{}", target.canWrite());
+		log.info("new File Can Write:{}", target.canExecute());
+		target.createNewFile();
 
 		FileCopyUtils.copy(fileData, target); // 폴더에 디렉토리 복사
 		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1); // 확장자 추출
@@ -42,7 +54,7 @@ public class UploadFileUtils {
 		Calendar cal = Calendar.getInstance();
 
 		String yearPath = File.separator + cal.get(Calendar.YEAR);
-		String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH));
+		String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH + 1));
 		String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
 
 		makeDir(uploadPath, yearPath, monthPath, datePath);
