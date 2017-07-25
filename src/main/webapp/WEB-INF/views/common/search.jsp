@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
-<form name="form" method="post" action="/board/list">
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<form:form name="form" method="post" action="/board/list">
 	<select name="categoryType" id="categoryType">
 		<option value="null"
 			<c:out value="${cri.categoryType eq 'null'?'selected':''}"/>>---</option>
@@ -20,5 +21,4 @@
 	</select> 
 	<input name="keyword" id="keyword" value="${cri.keyword}"> 
 	<input type="submit" id="searchButton" class="btn btn-default" value="검색">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-</form>
+</form:form>

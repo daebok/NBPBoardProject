@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
@@ -32,7 +33,7 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-				<form name="form" method="post" class="form-horizontal">
+				<form:form name="form" method="post" class="form-horizontal">
 					<c:if test="${param.error != null}">
 						<p>아이디와 비밀번호가 잘못되었습니다.</p>
 					</c:if>
@@ -56,8 +57,7 @@
 							<button type="button" id="loginButton" class="btn btn-default">Log In</button>
 						</div>
 					</div>
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-				</form>
+				</form:form>
 			
 		</div>
 	</div>

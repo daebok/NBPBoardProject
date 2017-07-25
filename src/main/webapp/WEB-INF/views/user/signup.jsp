@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
@@ -102,8 +103,7 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<form name="form" action="insert" method="post" class="form-horizontal">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+			<form:form name="form" action="insert" method="post" class="form-horizontal">
 				<div class="form-group">
 					<label for="userId" class="col-sm-2 control-label"><b>ID</b></label> 
 					<div class="col-sm-10">
@@ -137,7 +137,7 @@
 						</div>
 					</div>
 				</div>
-			</form>
+			</form:form>
 		</div>
 	</div>
 </body>

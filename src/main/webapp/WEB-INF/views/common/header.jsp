@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <style>
 	.wrapper{
@@ -26,10 +27,10 @@
 						<sec:authentication property="name"/>님 환영합니다.
 					</div>
 					<div class="wrapper-2">
-						<form action="/user/logout" method="POST">
+						<form:form action="/user/logout" method="POST">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 							<input type="submit" id="logout" class="btn btn-default" value="LogOut">
-						</form>
+						</form:form>
 					</div>
 				</sec:authorize>
 			</div>
