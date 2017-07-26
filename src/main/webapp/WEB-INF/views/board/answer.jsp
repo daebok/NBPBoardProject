@@ -126,11 +126,13 @@
 				success : function(result) {
 					var list = $.parseJSON(result);
 					$('.comment-comment-write').remove();
-					$('.comment-comment-selct').click();
+					$('.comment-comment').attr("disabled",false);
+					$('#comment-view-'+commentNo).click();
 				}
 			});
 		}
 	});
+	
 	/* 4. 대댓글 리스트 보기 */
 	$(document).on("click",".comment-comment-selct",function() {
 		$('.comment-comment-write').remove();
@@ -152,7 +154,7 @@
 					for (var i = 0; i < list.commentCommentContent.length; i++) {
 						$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentCommentContent[i].commentNo+"'> "
 							+ "<div class='comment' id='comment-comment-text-"+list.commentCommentContent[i].commentNo+"'>"+list.commentCommentContent[i].commentContent + "</div><span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
-							+ "<div class='pull-right' class='comment-list'>"
+							+ "<div class='pull-right comment-list-list' >"
 							+ '<button type="button" class="comment-comment-modify btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Modify</button>&nbsp;'
 							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Delete</button></div></div>'
 						);
@@ -181,7 +183,7 @@
 				$('#'+commentNo).css('background-color','#ededed');
 				$('#comment-button').attr('comment-no',commentNo);
 				$('#comment-list > *').attr("disabled",true);
-				$('#comment-comment-list').attr("disabled",true);
+				$('.comment-list-list > *').attr("disabled",true);
 				$(this).attr("disabled",true);
 				$('#' + commentNo ).after('<div class="comment-comment-write">'
 					+ '<textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea">'+list.commentContent+'</textarea>'
@@ -209,7 +211,7 @@
 				$('#comment-button').html('Comment');
 				$('#'+commentNo).css('background-color','#ffffff');
 				$('#comment-list > *').attr("disabled",false);
-				$('#comment-comment-list > *').attr("disabled",false);
+				$('.comment-list-list > *').attr("disabled",false);
 				$('.comment-comment-write').remove();
 			}
 		});
@@ -252,11 +254,14 @@
 							var list = $.parseJSON(result);
 							$(".emptyContent").remove();
 							alert('답글이 달렸습니다.');
-							$("#listComment").append("<div class='comment-wrapper' id='"+list.commentNo+"'> <div class='comment'>"
+							$("#listComment").append("<div id='comment-"+list.commentNo+"'> <div class='comment-wrapper id='"+list.commentNo+"'><div class='comment'>"
 									+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
 									+ "<div class='pull-right' class='comment-list'>"
 									+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
-									+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
+									+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp'
+									+ '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'">Comment</button>&nbsp;'
+									+ '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+' comment-no="'+list.commentNo+'" value="closed">Comment ▼</button></div></div>'
+									+ '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div>'
 								);
 							$('.summernote').summernote('code', '');
 						}
@@ -343,30 +348,30 @@
 						<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
 							<div class="comment-wrapper" id="${comment.commentNo}" >
 								<div class="comment" id="content-${comment.commentNo}">${comment.commentContent}</div>
-								<c:choose>
-									<c:when test="${model.userName == comment.userName}">
-										<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
-									</c:when>
-									<c:otherwise>
-										<span class="badge commentName">Commented By ${comment.userName}</span>
-									</c:otherwise>
-								</c:choose>
-								<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">${comment.commentDate}</span>
-								<div class="pull-right" class="comment-list" id="comment-list">
-									<c:if test="${user.username == comment.userId}">
-										<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
-										<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-									</c:if>
-									<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
-										<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<c:choose>
+										<c:when test="${model.userName == comment.userName}">
+											<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
+										</c:when>
+										<c:otherwise>
+											<span class="badge commentName">Commented By ${comment.userName}</span>
+										</c:otherwise>
+									</c:choose>
+									<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">${comment.commentDate}</span>
+									<div class="pull-right" class="comment-list" id="comment-list">
+										<c:if test="${user.username == comment.userId}">
+											<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
 											<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-										</sec:authorize>
-									</c:if>
-									<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}">Comment</button>
-									<button type="button" class="comment-comment-selct btn btn-default" comment-no="${comment.commentNo}" value='closed'>Comment ▼</button>
+										</c:if>
+										<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
+											<sec:authorize access="hasRole('ROLE_ADMIN')">
+												<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
+											</sec:authorize>
+										</c:if>
+										<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}">Comment</button>
+										<button type="button" class="comment-comment-selct btn btn-default" id = "comment-view-${comment.commentNo}" comment-no="${comment.commentNo}" value='closed'>Comment ▼</button>
+									</div>
 								</div>
-							</div>
-							<div class='comment-comment-wrapper' id='comment-comment-list'>
+								<div class='comment-comment-wrapper' id='comment-comment-list'>
 							</div>
 						</div>
 					</c:forEach>
