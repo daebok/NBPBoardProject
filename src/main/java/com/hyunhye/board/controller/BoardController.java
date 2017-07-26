@@ -36,7 +36,7 @@ public class BoardController {
 	@Autowired
 	public CommentService commentService;
 
-	/* 게시글 리스트  */
+	/* 질문하기 페이지 이동  */
 	@RequestMapping("/question")
 	public String question(Model model) {
 		List<CategoryModel> list = boardService.categoryListAll();
@@ -113,5 +113,23 @@ public class BoardController {
 
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		return "redirect:/board/list";
+	}
+
+	/* 내 질문들 보기 */
+	@RequestMapping("/myQuestions")
+	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		model.addAttribute("list", boardService.selectMyQuestions(cri, user.getUserNo()));
+
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(boardService.listCountCriteria(cri));
+
+		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("pageMaker", pageMaker);
+
+		return "user/myQuestions";
+
 	}
 }

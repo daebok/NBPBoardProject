@@ -37,4 +37,6 @@ public interface BoardRepository {
 	public void increaseViewCount(int boardNo);
 
 	public int checkUser(int boardNo);
+
+	public List<BoardModel> selectMyQuestions(SearchCriteria cri, int userNo);
 }

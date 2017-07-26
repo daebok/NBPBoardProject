@@ -144,4 +144,14 @@ public class BoardService {
 	public int checkUser(int boardNo) {
 		return repository.checkUser(boardNo);
 	}
+
+	public List<BoardModel> selectMyQuestions(SearchCriteria cri, int userNo) {
+		if (cri.getCategoryType() == null) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null) {
+			cri.setSearchType("");
+		}
+		return repository.selectMyQuestions(cri, userNo);
+	}
 }

@@ -69,16 +69,7 @@
 	</select>
 
 	<select id="boardListAll" resultMap="boardList">
-		SELECT 
-			BOARD.board_no, 
-			CATEGORY.category_item, 
-			USER.user_name, 
-			BOARD.board_title, 
-			BOARD.board_content, 
-			BOARD.board_date, 
-			BOARD.board_view_cnt,
-			count(comment_no) as comment_count
-		FROM BOARD
+		<include refid='selectBoard'></include>
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
 		<include refid="left_join_comment"></include>
@@ -135,27 +126,32 @@
 	</delete>
 	
 	<select id="listCriteria" resultMap="boardList">
-		SELECT 
-			BOARD.board_no, 
-			USER.user_name, 
-			CATEGORY.category_item, 
-			BOARD.board_title, 
-			BOARD.board_content, 
-			BOARD.board_date, 
-			BOARD.board_view_cnt,
-			count(comment_no) as comment_count
-		FROM BOARD
+		<include refid='selectBoard'></include>
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
 		<include refid="left_join_comment"></include>
 		<if test="searchType != '' or categoryType != '' ">
 			<include refid="search"></include>
 		</if>
-        group by board_no
+		group by board_no
 		ORDER BY BOARD.board_no desc, BOARD.board_date desc
 		limit #{startBoardNo}, #{perPageNum}
 	</select>
 	
+	<select id="selectMyQuestions" resultMap="boardList">
+		<include refid='selectBoard'></include>
+		<include refid="join_category"></include>
+		<include refid="join_user"></include>
+		<include refid="left_join_comment"></include>
+		<if test="searchType != '' or categoryType != '' ">
+			<include refid="search"></include>
+		</if>
+		AND 
+			BOARD.user_id = #{userId}
+		group by board_no
+		ORDER BY BOARD.board_no desc, BOARD.board_date desc
+		limit #{startBoardNo}, #{perPageNum}
+	</select>
 	
 	<select id="countPaging" resultType="int">
 		SELECT COUNT(board_no) 
@@ -200,6 +196,19 @@
 				</when>
 			</choose>
 		</if>
+	</sql>
+	
+	<sql id="selectBoard">
+		SELECT 
+			BOARD.board_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			BOARD.board_title, 
+			BOARD.board_content, 
+			BOARD.board_date, 
+			BOARD.board_view_cnt,
+			count(comment_no) as comment_count
+		FROM BOARD
 	</sql>
 	
 	<sql id="join_user">

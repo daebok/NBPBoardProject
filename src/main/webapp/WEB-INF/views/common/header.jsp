@@ -24,13 +24,12 @@
 			<div class="wrapper">
 				<sec:authorize access="isAuthenticated()">
 					<div class="wrapper-1">
-						<sec:authentication property="name"/>님 환영합니다.
-					</div>
-					<div class="wrapper-2">
 						<form:form action="/user/logout" method="POST">
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 							<input type="submit" id="logout" class="btn btn-default" value="LogOut">
 						</form:form>
+					</div>
+					<div class="wrapper-2">
+						<sec:authentication property="name"/>님 환영합니다.
 					</div>
 				</sec:authorize>
 			</div>
@@ -38,10 +37,11 @@
 				<a href="<c:url value='/user/loginPage'/>" id="login" class="btn btn-default">LogIn</a>
 				<a href="<c:url value='/user/signup'/>" id="signup" class="btn btn-default">SingUp</a>
 			</sec:authorize>
-			<div  class="pull-right">
+			
+			<div class="pull-right">
 				<sec:authorize access="isAuthenticated()">
-						<a href="<c:url value='/user/myQuestions'/>" id="logout" class="btn btn-default">My Questions</a>
-						<a href="<c:url value='/user/favorite'/>" id="logout" class="btn btn-default">Favorite</a>
+						<a href="<c:url value='/board/myQuestions'/>" id="my-qustions" class="btn btn-default">My Questions</a>
+						<a href="<c:url value='/user/favorite'/>" id="favorite" class="btn btn-default">Favorite</a>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<a href="<c:url value='/admin/admin'/>" id="admin" class="btn btn-success">ADMIN</a>
 						</sec:authorize>

@@ -13,16 +13,18 @@
 		<div class="container-fluid">
 			<div class="row">
 				<%@include file="common/search.jsp"%>
-				<a href="<c:url value='/board/question'/>" id="question" class="btn btn-danger">Ask Question</a>
-				<a href="<c:url value='/board/list'/>" id="list" class="btn btn-danger">Questions</a>
 			</div>
 		</div>
 		<div class="container-fluid">
-			<div class="col-md-12">
-				<div style="text-align:right">
+			<div class="col-md-12" style="padding:20px;">
+				<a href="<c:url value='/board/question'/>" id="question" class="btn btn-danger">Ask Question</a>
+				<a href="<c:url value='/board/list'/>" id="list" class="btn btn-danger">Questions</a>
+				<div class="pull-right">
 					<h3>Top 10</h3>
-				<hr>
 				</div>
+			</div>
+			<div class="col-md-12">
+				<hr>
 				<c:forEach var="board" items="${model}">
 					<h1>
 						<a href="<c:url value='/board/answer?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>

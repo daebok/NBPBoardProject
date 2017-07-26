@@ -51,5 +51,4 @@ public class UserService {
 	public int userSelect(String userId) {
 		return repository.userSelect(userId);
 	}
-
 }
