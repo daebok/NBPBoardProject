@@ -26,10 +26,18 @@
 .comment-comment-textarea {
 	float: left;
 	margin-left: 30px;
-	
+	margin-bottom: 20px;
 }
 .comment-comment-button {
 	margin:10px;
+	float: left;
+}
+.comment-comment-modify-button {
+	margin:10px;
+	float: left;
+}
+.comment-comment-cancel-button {
+	margin-top:10px;
 	float: left;
 }
 .comment-comment-list {
@@ -83,14 +91,24 @@
 		}
 	});
 	
-	/* 대댓글 달기 */
+	/* 대댓글  */
+	/* 1. 대댓글 달기 textarea 생성 */
 	$(document).on("click",".comment-comment",function() {
 		var commentNo = $(this).attr('comment-no');
+		$(this).attr("disabled",true);
 		var str="";
 		str += '<div class="comment-comment-write"><textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea"></textarea>';
-		str += '<button type="button" class="comment-comment-button btn btn-default" comment-no="'+commentNo+'">Ok</button></div>';
+		str += '<div><button type="button" class="comment-comment-button btn btn-default" comment-no="'+commentNo+'">Ok</button>';
+		str += '<button type="button" class="comment-comment-cancel-button btn btn-default">Cancel</button></div></div>';
 		$('#comment-'+commentNo+' > .comment-comment-wrapper').append(str);
 	});
+	/* 2. 대댓글 취소 */
+	$(document).on("click",".comment-comment-cancel-button",function() {
+		var commentNo = $(this).attr('comment-no');
+		$('.comment-comment').attr("disabled",false);
+		$('.comment-comment-write').remove();
+	});
+	/* 3. 대댓글 달기 */
 	$(document).on("click",".comment-comment-button",function() {
 		var result = confirm('답변에 답변을 하시겠습니까?');
 		if (result) {
@@ -108,17 +126,15 @@
 				success : function(result) {
 					var list = $.parseJSON(result);
 					$('.comment-comment-write').remove();
-					$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentNo+"'> <div class='comment'>"
-							+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
-							+ "<div class='pull-right' class='comment-list'>"
-							+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
-							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
-						);
+					$('.comment-comment-selct').click();
 				}
 			});
 		}
 	});
+	/* 4. 대댓글 리스트 보기 */
 	$(document).on("click",".comment-comment-selct",function() {
+		$('.comment-comment-write').remove();
+		$('.comment-comment').attr("disabled",false);
 		var commentNo = $(this).attr('comment-no');
 		if($(this).val() == 'closed'){
 			$(this).html("Comment ▲");
@@ -134,10 +150,10 @@
 				success : function(result) {
 					var list = $.parseJSON(result);
 					for (var i = 0; i < list.commentCommentContent.length; i++) {
-						$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentCommentContent[i].commentNo+"'> <div class='comment'>"
-							+ list.commentCommentContent[i].commentContent + "</div><span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
+						$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentCommentContent[i].commentNo+"'> "
+							+ "<div class='comment' id='comment-comment-text-"+list.commentCommentContent[i].commentNo+"'>"+list.commentCommentContent[i].commentContent + "</div><span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
 							+ "<div class='pull-right' class='comment-list'>"
-							+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Modify</button>&nbsp;'
+							+ '<button type="button" class="comment-comment-modify btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Modify</button>&nbsp;'
 							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Delete</button></div></div>'
 						);
 					}
@@ -149,7 +165,55 @@
 			$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 		}
 	});
-	
+	/* 5. 대댓글 수정 버튼 클릭 이벤트 */
+	$(document).on("click",".comment-comment-modify",function() {
+		var commentNo = $(this).attr('comment-no');
+		var data = "commentNo=" + commentNo;
+		$.ajax({
+			type : 'GET',
+			url : '/comment/select',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				var list = $.parseJSON(result);
+				$('#'+commentNo).css('background-color','#ededed');
+				$('#comment-button').attr('comment-no',commentNo);
+				$('#comment-list > *').attr("disabled",true);
+				$('#comment-comment-list').attr("disabled",true);
+				$(this).attr("disabled",true);
+				$('#' + commentNo ).after('<div class="comment-comment-write">'
+					+ '<textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea">'+list.commentContent+'</textarea>'
+					+ '<button type="button" class="comment-comment-modify-button btn btn-default" comment-no="'+commentNo+'">Ok</button></div>');
+			}
+		});
+		
+	});
+	/* 5. 대댓글 수정  */
+	$(document).on("click",".comment-comment-modify-button",function() {
+		var commentContent = $('#comment-comment-textarea').val();
+		console.log(commentContent);
+		var commentNo = $(this).attr('comment-no');
+		var data = "commentNo=" + commentNo + "&commentContent=" + commentContent;
+		$.ajax({
+			type : 'GET',
+			url : '/comment/modify',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				alert('답글이 수정되었습니다.');
+				$("#comment-comment-text-"+commentNo).html(commentContent);
+				$('#comment-button').html('Comment');
+				$('#'+commentNo).css('background-color','#ffffff');
+				$('#comment-list > *').attr("disabled",false);
+				$('#comment-comment-list > *').attr("disabled",false);
+				$('.comment-comment-write').remove();
+			}
+		});
+	});
 	$(document).ready(
 		function() {
 			$('#delete').click(function() {
@@ -208,7 +272,7 @@
 						contentType : false,
 						data : data,
 						success : function(result) {
-							alert('답글이 수정습니다.');
+							alert('답글이 수정되었습니다.');
 							$("#content-"+commentNo).html(commentContent);
 							$('.summernote').summernote('code', '');
 							$('#comment-button').html('Comment');
@@ -302,7 +366,7 @@
 									<button type="button" class="comment-comment-selct btn btn-default" comment-no="${comment.commentNo}" value='closed'>Comment ▼</button>
 								</div>
 							</div>
-							<div class='comment-comment-wrapper'>
+							<div class='comment-comment-wrapper' id='comment-comment-list'>
 							</div>
 						</div>
 					</c:forEach>
