@@ -5,30 +5,28 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <style>
-	.wrapper{
-		overflow: hidden;
+	.wrapper {
+		height: 40px;
 	}
-	.wapper-1{
-		float: left;
-	}
-	.wapper-2{
-		float: left;
+	.wrapper-2 {
+		margin-left:20px;
+		line-height: 40px;
 	}
 </style>
 <div class="container"  style="margin-top:40px;">
 	<div class="container-fluid" >
 		<h1>
-			<a href="<c:url value='/board'/>" style="text-decoration: none;">BOARD</a>
+			<a href="<c:url value='/board'/>" style="text-decoration: none; color:#000000; ">BOARD</a>
 		</h1>
 		<div>
-			<div class="wrapper">
+			<div class="pull-left wrapper">
 				<sec:authorize access="isAuthenticated()">
-					<div class="wrapper-1">
-						<form:form action="/user/logout" method="POST">
+					<div class="pull-left wrapper-1">
+						<form:form action="/user/logout" method="POST"  class="pull-left">
 							<input type="submit" id="logout" class="btn btn-default" value="LogOut">
 						</form:form>
 					</div>
-					<div class="wrapper-2">
+					<div class="pull-left wrapper-2">
 						<sec:authentication property="name"/>님 환영합니다.
 					</div>
 				</sec:authorize>
@@ -47,6 +45,14 @@
 						</sec:authorize>
 				</sec:authorize>
 			</div>
+
+		</div>
+
+	</div>		
+	<div class="container-fluid">
+		<div class="pull-right">
+			<a href="<c:url value='/board/question'/>" id="question" class="btn btn-danger">Ask Question</a>
+			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-danger">Questions</a>
 		</div>
 	</div>
 	<hr>

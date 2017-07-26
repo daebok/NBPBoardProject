@@ -45,10 +45,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
-				<sec:authorize access="isAuthenticated()">
-					<a href="<c:url value='/board/question'/>" id="question"
-						class="btn btn-danger">Ask Question</a>
-				</sec:authorize>
+				<b>All Questions</b>
 			</div>
 		</div>
 		<div class="container-fluid">

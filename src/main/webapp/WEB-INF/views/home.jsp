@@ -11,18 +11,8 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid">
-			<div class="row">
 				<%@include file="common/search.jsp"%>
-			</div>
-		</div>
-		<div class="container-fluid">
-			<div class="col-md-12" style="padding:20px;">
-				<a href="<c:url value='/board/question'/>" id="question" class="btn btn-danger">Ask Question</a>
-				<a href="<c:url value='/board/list'/>" id="list" class="btn btn-danger">Questions</a>
-				<div class="pull-right">
-					<h3>Top 10</h3>
-				</div>
-			</div>
+				<b>★ Top 10</b>
 			<div class="col-md-12">
 				<hr>
 				<c:forEach var="board" items="${model}">
