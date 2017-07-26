@@ -24,7 +24,7 @@ public class BoardService {
 
 
 	/* 게시글 리스트 */
-	public List<BoardModel> boardListAll() throws Exception {
+	public List<BoardModel> boardListAll() {
 		return repository.boardListAll();
 	}
 
@@ -33,7 +33,7 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public void boardRegist(int userNo, BoardModel boardModel) throws Exception {
+	public void boardRegist(int userNo, BoardModel boardModel) {
 		boardModel.setUserNo(userNo);
 
 		repository.boardRegist(boardModel);
@@ -57,12 +57,12 @@ public class BoardService {
 	}
 
 	/* 해당 게시글 상세 보기 */
-	public BoardModel boardSelect(int boardNo) throws Exception {
+	public BoardModel boardSelect(int boardNo) {
 		return repository.boardSelect(boardNo);
 	}
 
 	/* 첨부파일 등록 */
-	public List<FileModel> getAttach(int boardNo) throws Exception {
+	public List<FileModel> getAttach(int boardNo) {
 		return repository.getAttach(boardNo);
 	}
 
@@ -71,7 +71,7 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public BoardModel boardModify(BoardModel boardModel) throws Exception {
+	public BoardModel boardModify(BoardModel boardModel) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		int userNo = user.getUserNo();
 
@@ -110,17 +110,17 @@ public class BoardService {
 	}
 
 	/* 게시글 삭제하기 */
-	public void boardDelete(int boardNo) throws Exception {
+	public void boardDelete(int boardNo) {
 		repository.boardDelete(boardNo);
 	}
 
 	/* 카테고리 목록 가져오기 */
-	public List<CategoryModel> categoryListAll() throws Exception {
+	public List<CategoryModel> categoryListAll() {
 		return repository.categoryListAll();
 	}
 
 	/* 게시글 리스트 (페이징) */
-	public List<BoardModel> listCriteria(SearchCriteria cri) throws Exception {
+	public List<BoardModel> listCriteria(SearchCriteria cri) {
 		if (cri.getCategoryType() == null) {
 			cri.setCategoryType("");
 		}
@@ -131,17 +131,17 @@ public class BoardService {
 	}
 
 	/* 게시글 개수 구하기 */
-	public int listCountCriteria(SearchCriteria cri) throws Exception {
+	public int listCountCriteria(SearchCriteria cri) {
 		return repository.countPaging(cri);
 	}
 
 	/* 조회수 */
-	public void increaseViewCount(int boardNo) throws Exception {
+	public void increaseViewCount(int boardNo) {
 		repository.increaseViewCount(boardNo);
 	}
 
 	/* 게시글 작성자 가져오기 */
-	public int checkUser(int boardNo) throws Exception {
+	public int checkUser(int boardNo) {
 		return repository.checkUser(boardNo);
 	}
 }

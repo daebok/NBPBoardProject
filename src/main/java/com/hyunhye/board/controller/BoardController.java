@@ -38,7 +38,7 @@ public class BoardController {
 
 	/* 게시글 리스트  */
 	@RequestMapping("question")
-	public String question(Model model) throws Exception {
+	public String question(Model model) {
 		List<CategoryModel> list = boardService.categoryListAll();
 		model.addAttribute("list", list);
 		return "/board/question";
@@ -46,7 +46,7 @@ public class BoardController {
 
 	/* 리스트 목록 보기 (페이징) */
 	@RequestMapping("list")
-	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
+	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		model.addAttribute("list", boardService.listCriteria(cri));
 
 		PageMaker pageMaker = new PageMaker();
@@ -61,7 +61,7 @@ public class BoardController {
 
 	/* 게시글 작성하기  */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardRegist(@ModelAttribute BoardModel model, Principal principal) throws Exception {
+	public String boardRegist(@ModelAttribute BoardModel model, Principal principal) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		boardService.boardRegist(user.getUserNo(), model);
 		return "redirect:/board/list";
@@ -70,8 +70,7 @@ public class BoardController {
 	/* 게시글 상세 보기 */
 	@RequestMapping("answer")
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
-		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal)
-		throws Exception {
+		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		/* 조회수 */
@@ -92,7 +91,7 @@ public class BoardController {
 
 	/* 게시글 수정화면으로 이동 */
 	@RequestMapping("modify")
-	public String modify(@RequestParam("boardNo") int boardNo, Model model) throws Exception {
+	public String modify(@RequestParam("boardNo") int boardNo, Model model) {
 		model.addAttribute("model", boardService.boardSelect(boardNo));
 		model.addAttribute("list", boardService.categoryListAll());
 		model.addAttribute("attach", boardService.getAttach(boardNo));
@@ -101,8 +100,7 @@ public class BoardController {
 
 	/* 게시글 수정 등록 */
 	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
-	public String boardModify(@ModelAttribute BoardModel model)
-		throws Exception {
+	public String boardModify(@ModelAttribute BoardModel model) {
 		boardService.boardModify(model);
 
 		return "redirect:/board/answer?boardNo=" + model.getBoardNo();
@@ -110,7 +108,7 @@ public class BoardController {
 
 	/* 게시글 삭제 */
 	@RequestMapping("delete")
-	public String boardDelete(@RequestParam("boardNo") int boardNo, RedirectAttributes rttr) throws Exception {
+	public String boardDelete(@RequestParam("boardNo") int boardNo, RedirectAttributes rttr) {
 		boardService.boardDelete(boardNo);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");

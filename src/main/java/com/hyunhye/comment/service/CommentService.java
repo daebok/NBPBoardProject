@@ -20,21 +20,27 @@ public class CommentService {
 	public void commentRegist(CommentModel commentModel) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		commentModel.setUserNo(user.getUserNo());
+
+		if (commentModel.getCommentNo() != 0) {
+			commentModel.setCommentParentNo(commentModel.getCommentNo());
+		} else {
+			commentModel.setCommentParentNo(0);
+		}
 		repository.commentRegist(commentModel);
 	}
 
 	/* 답변 리스트 */
-	public List<CommentModel> commentListAll(int boardNo) throws Exception {
+	public List<CommentModel> commentListAll(int boardNo) {
 		return repository.commentListAll(boardNo);
 	}
 
 	/* 답변 수정 */
-	public void commentUpdate(CommentModel commentModel) throws Exception {
+	public void commentUpdate(CommentModel commentModel) {
 		repository.commentUpdate(commentModel);
 	}
 
 	/* 답변 삭제 */
-	public void commentDelete(int boardNo) throws Exception {
+	public void commentDelete(int boardNo) {
 		repository.commentDelete(boardNo);
 	}
 
@@ -48,6 +54,11 @@ public class CommentService {
 
 	public CommentModel commentLastSelect() {
 		return repository.commentLastSelect();
+	}
+
+	public List<CommentModel> commentCommentSelect(CommentModel model) {
+		// TODO Auto-generated method stub
+		return repository.commentCommentSelect(model);
 	}
 
 }

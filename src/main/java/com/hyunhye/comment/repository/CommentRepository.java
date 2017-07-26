@@ -23,4 +23,6 @@ public interface CommentRepository {
 
 	public CommentModel commentSelect(CommentModel commentModel);
 
+	public List<CommentModel> commentCommentSelect(CommentModel commentModel);
+
 }

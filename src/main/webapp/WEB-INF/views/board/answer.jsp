@@ -9,7 +9,7 @@
 .comment-wrapper {
 	margin: 20px;
 	padding: 10px;
-	border: 1px dotted #989898;
+	border: 1px dotted #c9302c;
 	border-radius: 10px;
 }
 
@@ -20,119 +20,205 @@
 .commentName {
 	background-color: #000000;
 }
+.comment-comment-write {
+	overflow: hidden;
+}
+.comment-comment-textarea {
+	float: left;
+	margin-left: 30px;
+	
+}
+.comment-comment-button {
+	margin:10px;
+	float: left;
+}
+.comment-comment-list {
+	margin-left: 60px;
+	margin-top: -10px;
+	border-color: #989898;
+}
 </style>
 <script>
-$(document).on("click",".comment-delete", function() {
-	var commentNo = $(this).attr("comment-no");
-	var data = "commentNo=" + commentNo;
-	var result = confirm('답변을 삭제하시겠습니까?');
-	if (result) {
-		$.ajax({
-			type : 'GET',
-			url : '/comment/delete',
-			dataType : 'text',
-			processData : false,
-			contentType : false,
-			data : data,
-			success : function(result) {
-				$("#"+commentNo).remove();
-			}
-		});
-	}
-});
-
-$(document).on("click",".comment-modify",function() {
-	var commentNo = $(this).attr('comment-no');
-	var result = confirm('답변을 수정하시겠습니까?');
-	var data = "commentNo=" + commentNo;
-	if (result) {
-		$.ajax({
-			type : 'GET',
-			url : '/comment/select',
-			dataType : 'text',
-			processData : false,
-			contentType : false,
-			data : data,
-			success : function(result) {
-				var list = $.parseJSON(result);
-				$('#'+commentNo).css('background-color','#ededed');
-				$('#comment-button').html('Modify');
-				$('#comment-button').attr('comment-no',commentNo);
-				$('.summernote').summernote('code', list.commentContent);
-				$('#comment-list > *').attr("disabled",true);
-			}
-		});
-	}
-});
-$(document).ready(
-	function() {
-		$('#delete').click(function() {
-			var result = confirm('게시물을 삭제하시겠습니까?');
-			if (result) {
-				location.replace('/board/delete?boardNo=${model.boardNo}');
-			} 
-		});
-		$('#list').click(function() {
-			document.form.method = "get";
-			document.form.action = "/board/list"
-			document.form.submit();
-		});
-		$('.summernote').summernote({
-			height : 200,
-			onImageUpload : function(files,editor, welEditable) {
-					sendFile(files[0], editor,welEditable);
-			}
-		});
-		
-		
-		$('#comment-button').on('click', function(event) {
-			var contentObj = $('#comment-content');
-			var commentContent = $('#comment-content').val();
-			if($(this).html() == 'Comment'){
-				var boardNo = ${model.boardNo};
-				var data = "boardNo=" + boardNo + "&commentContent=" + commentContent;
-				$.ajax({
-					type : 'GET',
-					url : '/comment/regist',
-					dataType : 'text',
-					processData : false,
-					contentType : false,
-					data : data,
-					success : function(result) {
-						var list = $.parseJSON(result);
-						$(".emptyContent").remove();
-						alert('답글이 달렸습니다.');
-						$("#listComment").append("<div class='comment-wrapper' id='"+list.commentNo+"'> <div class='comment'>"
-								+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
-								+ "<div class='pull-right' class='comment-list'>"
-								+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
-								+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
-							);
-						$('.summernote').summernote('code', '');
-					}
-				});
-			} else if ($(this).html() == 'Modify') {
-				var commentNo = $(this).attr('comment-no');
-				var data = "commentNo=" + commentNo + "&commentContent=" + commentContent;
-				$.ajax({
-					type : 'GET',
-					url : '/comment/modify',
-					dataType : 'text',
-					processData : false,
-					contentType : false,
-					data : data,
-					success : function(result) {
-						alert('답글이 수정습니다.');
-						$("#content-"+commentNo).html(commentContent);
-						$('.summernote').summernote('code', '');
-						$('#comment-button').html('Comment');
-						$('#'+commentNo).css('background-color','#ffffff');
-						$('#comment-list > *').attr("disabled",false);
-					}
+	/* 댓글 삭제 버튼 클릭 이벤트 */
+	$(document).on("click",".comment-delete", function() {
+		var commentNo = $(this).attr("comment-no");
+		var data = "commentNo=" + commentNo;
+		var result = confirm('답변을 삭제하시겠습니까?');
+		if (result) {
+			$.ajax({
+				type : 'GET',
+				url : '/comment/delete',
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				data : data,
+				success : function(result) {
+					$("#"+commentNo).remove();
+				}
 			});
 		}
 	});
-});
+	/* 댓글 수정 버튼 클릭 이벤트 */
+	$(document).on("click",".comment-modify",function() {
+		var commentNo = $(this).attr('comment-no');
+		var result = confirm('답변을 수정하시겠습니까?');
+		var data = "commentNo=" + commentNo;
+		if (result) {
+			$.ajax({
+				type : 'GET',
+				url : '/comment/select',
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				data : data,
+				success : function(result) {
+					var list = $.parseJSON(result);
+					$('#'+commentNo).css('background-color','#ededed');
+					$('#comment-button').html('Modify');
+					$('#comment-button').attr('comment-no',commentNo);
+					$('.summernote').summernote('code', list.commentContent);
+					$('#comment-list > *').attr("disabled",true);
+				}
+			});
+		}
+	});
+	
+	/* 대댓글 달기 */
+	$(document).on("click",".comment-comment",function() {
+		var commentNo = $(this).attr('comment-no');
+		var str="";
+		str += '<div class="comment-comment-write"><textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea"></textarea>';
+		str += '<button type="button" class="comment-comment-button btn btn-default" comment-no="'+commentNo+'">Ok</button></div>';
+		$('#comment-'+commentNo+' > .comment-comment-wrapper').append(str);
+	});
+	$(document).on("click",".comment-comment-button",function() {
+		var result = confirm('답변에 답변을 하시겠습니까?');
+		if (result) {
+			var boardNo = ${model.boardNo};
+			var commentNo = $(this).attr('comment-no');
+			var commentContent = $('#comment-comment-textarea').val();
+			var data = "boardNo=" + boardNo + "&commentContent=" + commentContent + "&commentNo=" + commentNo;
+			$.ajax({
+				type : 'GET',
+				url : '/comment/regist',
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				data : data,
+				success : function(result) {
+					var list = $.parseJSON(result);
+					$('.comment-comment-write').remove();
+					$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentNo+"'> <div class='comment'>"
+							+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
+							+ "<div class='pull-right' class='comment-list'>"
+							+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
+							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
+						);
+				}
+			});
+		}
+	});
+	$(document).on("click",".comment-comment-selct",function() {
+		var commentNo = $(this).attr('comment-no');
+		if($(this).val() == 'closed'){
+			$(this).html("Comment ▲");
+			$(this).val('open');
+			var data = "commentNo=" + commentNo;
+			$.ajax({
+				type : 'GET',
+				url : '/comment/comment/select',
+				dataType : 'text',
+				processData : false,
+				contentType : false,
+				data : data,
+				success : function(result) {
+					var list = $.parseJSON(result);
+					for (var i = 0; i < list.commentCommentContent.length; i++) {
+						$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='"+list.commentCommentContent[i].commentNo+"'> <div class='comment'>"
+							+ list.commentCommentContent[i].commentContent + "</div><span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
+							+ "<div class='pull-right' class='comment-list'>"
+							+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Modify</button>&nbsp;'
+							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Delete</button></div></div>'
+						);
+					}
+				}
+			});
+		} else if($(this).val() == 'open'){
+			$(this).html("Comment ▼");
+			$(this).val('closed');
+			$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
+		}
+	});
+	
+	$(document).ready(
+		function() {
+			$('#delete').click(function() {
+				var result = confirm('게시물을 삭제하시겠습니까?');
+				if (result) {
+					location.replace('/board/delete?boardNo=${model.boardNo}');
+				} 
+			});
+			$('#list').click(function() {
+				document.form.method = "get";
+				document.form.action = "/board/list"
+				document.form.submit();
+			});
+			$('.summernote').summernote({
+				height : 200,
+				onImageUpload : function(files,editor, welEditable) {
+						sendFile(files[0], editor,welEditable);
+				}
+			});
+			
+			
+			$('#comment-button').on('click', function(event) {
+				var contentObj = $('#comment-content');
+				var commentContent = $('#comment-content').val();
+				if($(this).html() == 'Comment'){
+					var boardNo = ${model.boardNo};
+					var data = "boardNo=" + boardNo + "&commentContent=" + commentContent;
+					$.ajax({
+						type : 'GET',
+						url : '/comment/regist',
+						dataType : 'text',
+						processData : false,
+						contentType : false,
+						data : data,
+						success : function(result) {
+							var list = $.parseJSON(result);
+							$(".emptyContent").remove();
+							alert('답글이 달렸습니다.');
+							$("#listComment").append("<div class='comment-wrapper' id='"+list.commentNo+"'> <div class='comment'>"
+									+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
+									+ "<div class='pull-right' class='comment-list'>"
+									+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
+									+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button></div></div>'
+								);
+							$('.summernote').summernote('code', '');
+						}
+					});
+				} else if ($(this).html() == 'Modify') {
+					var commentNo = $(this).attr('comment-no');
+					var data = "commentNo=" + commentNo + "&commentContent=" + commentContent;
+					$.ajax({
+						type : 'GET',
+						url : '/comment/modify',
+						dataType : 'text',
+						processData : false,
+						contentType : false,
+						data : data,
+						success : function(result) {
+							alert('답글이 수정습니다.');
+							$("#content-"+commentNo).html(commentContent);
+							$('.summernote').summernote('code', '');
+							$('#comment-button').html('Comment');
+							$('#'+commentNo).css('background-color','#ffffff');
+							$('#comment-list > *').attr("disabled",false);
+						}
+				});
+			}
+		});
+	});
 </script>
 </head>
 <body>
@@ -190,19 +276,33 @@ $(document).ready(
 						<div class="emptyContent">답변이 없습니다.</div>
 					</c:if>
 					<c:forEach var="comment" items="${comment}">
-						<div class="comment-wrapper" id="${comment.commentNo}" >
-							<div class="comment" id="content-${comment.commentNo}">${comment.commentContent}</div>
-							<span class="badge commentName">Commented By ${comment.userName}</span>
-							<div class="pull-right" class="comment-list" id="comment-list">
-								<c:if test="${user.username == comment.userId}">
-									<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
-									<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-								</c:if>
-								<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
-									<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
+							<div class="comment-wrapper" id="${comment.commentNo}" >
+								<div class="comment" id="content-${comment.commentNo}">${comment.commentContent}</div>
+								<c:choose>
+									<c:when test="${model.userName == comment.userName}">
+										<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
+									</c:when>
+									<c:otherwise>
+										<span class="badge commentName">Commented By ${comment.userName}</span>
+									</c:otherwise>
+								</c:choose>
+								<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">${comment.commentDate}</span>
+								<div class="pull-right" class="comment-list" id="comment-list">
+									<c:if test="${user.username == comment.userId}">
+										<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
 										<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-									</sec:authorize>
-								</c:if>
+									</c:if>
+									<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
+										<sec:authorize access="hasRole('ROLE_ADMIN')">
+											<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
+										</sec:authorize>
+									</c:if>
+									<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}">Comment</button>
+									<button type="button" class="comment-comment-selct btn btn-default" comment-no="${comment.commentNo}" value='closed'>Comment ▼</button>
+								</div>
+							</div>
+							<div class='comment-comment-wrapper'>
 							</div>
 						</div>
 					</c:forEach>

@@ -13,6 +13,8 @@ public class CommentModel {
 	private String commentContent;
 	/* 답변 작성 날짜 */
 	private String commentDate;
+	/* 답변 작성 날짜 */
+	private int commentParentNo;
 	/* 게시판 번호 */
 	private int boardNo;
 	/* 사용자 번호 */

@@ -14,8 +14,25 @@
 		<result property="commentContent" column="comment_content" />
 		<result property="commentDate" column="comment_date" />
 		<result property="commentCount" column="comment_count" />
+		<result property="commentParentNo" column="comment_parent_no" />
 	</resultMap>
-
+	
+	<select id="commentCommentSelect" resultMap="commentList">
+		SELECT 
+			USER.user_name, 
+			USER.user_id, 
+			COMMENT.comment_no, 
+			COMMENT.comment_content, 
+			COMMENT.comment_date, 
+			COMMENT.comment_parent_no
+		FROM COMMENT
+		JOIN  USER
+		ON COMMENT.user_no = USER.user_no
+		WHERE
+			comment_parent_no = #{commentNo}
+		ORDER BY comment_no
+	</select>
+	
 	<select id="commentListAll" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
@@ -29,18 +46,22 @@
 		ON COMMENT.user_no = USER.user_no
 		WHERE 
 			board_no = #{boardNo}
+			AND
+			comment_parent_no = 0
 		ORDER BY comment_no
 	</select>
-
+	
 	<insert id="commentRegist">
 		INSERT INTO COMMENT (
 			board_no, 
 			user_no, 
-			comment_content
+			comment_content,
+			comment_parent_no
 		) VALUES (
 			#{boardNo}, 
 			#{userNo}, 
-			#{commentContent}
+			#{commentContent},
+			#{commentParentNo}
 		)
 	</insert>
 
