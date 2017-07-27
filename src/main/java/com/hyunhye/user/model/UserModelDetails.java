@@ -15,7 +15,9 @@ import lombok.EqualsAndHashCode;
 @Alias("userDetails")
 public class UserModelDetails extends User {
 
+	/* 사용자 번호 */
 	private int userNo;
+	/* 사용자 이름 */
 	private String userName;
 
 	public UserModelDetails(

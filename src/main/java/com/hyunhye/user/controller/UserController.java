@@ -1,8 +1,7 @@
 package com.hyunhye.user.controller;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hyunhye.user.model.UserModel;
-import com.hyunhye.user.service.ShaEncoder;
 import com.hyunhye.user.service.UserService;
 
 @Controller
@@ -22,8 +20,8 @@ public class UserController {
 	@Autowired
 	public UserService service;
 
-	@Resource(name = "shaEncoder")
-	private ShaEncoder encoder;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	/* 회원가입 페이지 이동 */
 	@RequestMapping("/signup")
@@ -40,7 +38,7 @@ public class UserController {
 	/* 회원 등록 */
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String userRegist(@ModelAttribute UserModel model, RedirectAttributes rttr) {
-		model.setUserPassword(encoder.encoding(model.getUserPassword()));
+		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		service.userRegist(model);
 		return "redirect:/user/loginPage";
 	}
