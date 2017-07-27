@@ -125,6 +125,8 @@
 				data : data,
 				success : function(result) {
 					var list = $.parseJSON(result);
+					$('#comment-view-'+commentNo).val('closed');
+					$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 					$('.comment-comment-write').remove();
 					$('.comment-comment').attr("disabled",false);
 					$('#comment-view-'+commentNo).click();
@@ -324,7 +326,7 @@
 						</sec:authorize>
 					</c:if>
 				<div class="pull-right">
-					<form name="form" action="list" method="post">
+					<form:form name="form" action="list" method="post">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
@@ -332,7 +334,7 @@
 						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
 						<input type="hidden" name="keyword" value="${cri.keyword}" />
 						<button type="submit" id="list" class="btn btn-danger">list</button>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>
