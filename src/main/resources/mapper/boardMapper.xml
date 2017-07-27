@@ -33,7 +33,7 @@
 		<result property="fileExtension" column="file_extension" />
 	</resultMap>
 	
-	<insert id="addAttach">
+	<insert id="addFile">
 		INSERT INTO FILE (
 			board_no, 
 			file_name, 
@@ -47,7 +47,7 @@
 		)
 	</insert>
 	
-	<select id="getAttach" resultMap="fileList">
+	<select id="getFile" resultMap="fileList">
 		SELECT 
 			file_no, 
 			file_name, 
@@ -57,7 +57,7 @@
 			board_no = #{boardNo}; 
 	</select>
 	
-	<delete id="deleteAttach">
+	<delete id="deleteFile">
 		DELETE FROM FILE 
 		WHERE 
 			file_no = #{fileNo}

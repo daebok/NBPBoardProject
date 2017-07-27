@@ -26,7 +26,7 @@ import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
 import com.hyunhye.user.model.UserModelDetails;
 
-@RequestMapping("/board")
+@RequestMapping("board")
 @Controller
 public class BoardController {
 
@@ -37,7 +37,7 @@ public class BoardController {
 	public CommentService commentService;
 
 	/* 질문하기 페이지 이동  */
-	@RequestMapping("/question")
+	@RequestMapping("question")
 	public String question(Model model) {
 		List<CategoryModel> list = boardService.categoryListAll();
 		model.addAttribute("list", list);
@@ -45,7 +45,7 @@ public class BoardController {
 	}
 
 	/* 리스트 목록 보기 (페이징) */
-	@RequestMapping("/list")
+	@RequestMapping("list")
 	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		model.addAttribute("list", boardService.listCriteria(cri));
 
@@ -60,7 +60,7 @@ public class BoardController {
 	}
 
 	/* 게시글 작성하기  */
-	@RequestMapping(value = "/question/ask", method = RequestMethod.POST)
+	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
 	public String boardRegist(@ModelAttribute BoardModel model, Principal principal) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		boardService.boardRegist(user.getUserNo(), model);
@@ -68,17 +68,18 @@ public class BoardController {
 	}
 
 	/* 게시글 상세 보기 */
-	@RequestMapping("/answer")
+	@RequestMapping("answer")
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		/* 조회수 */
 		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + user.getUserNo());
+		int cookieMaxAge = 60 * 5; // 쿠키가 5 분 동안만 유지 할 수 있도록 한다.
 		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
 			boardService.increaseViewCount(boardNo);
 			Cookie cookie = new Cookie(boardNo + "&" + user.getUserNo(), "view");
-			cookie.setMaxAge(60 * 60 * 24); // 하루 동안 유지
+			cookie.setMaxAge(cookieMaxAge);
 			response.addCookie(cookie);
 		}
 
@@ -90,7 +91,7 @@ public class BoardController {
 	}
 
 	/* 게시글 수정화면으로 이동 */
-	@RequestMapping("/modify")
+	@RequestMapping("modify")
 	public String modify(@RequestParam("boardNo") int boardNo, Model model) {
 		model.addAttribute("model", boardService.boardSelect(boardNo));
 		model.addAttribute("list", boardService.categoryListAll());
@@ -99,7 +100,7 @@ public class BoardController {
 	}
 
 	/* 게시글 수정 등록 */
-	@RequestMapping(value = "/question/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "question/modify", method = RequestMethod.POST)
 	public String boardModify(@ModelAttribute BoardModel model) {
 		boardService.boardModify(model);
 
@@ -107,7 +108,7 @@ public class BoardController {
 	}
 
 	/* 게시글 삭제 */
-	@RequestMapping("/delete")
+	@RequestMapping("delete")
 	public String boardDelete(@RequestParam("boardNo") int boardNo, RedirectAttributes rttr) {
 		boardService.boardDelete(boardNo);
 
@@ -116,7 +117,7 @@ public class BoardController {
 	}
 
 	/* 내 질문들 보기 */
-	@RequestMapping("/myQuestions")
+	@RequestMapping("myQuestions")
 	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

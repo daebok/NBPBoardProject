@@ -23,7 +23,7 @@ import com.hyunhye.common.MediaUtils;
 import com.hyunhye.common.UploadFileUtils;
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("upload")
 public class UploadController {
 
 	Logger log = LoggerFactory.getLogger(UploadController.class);

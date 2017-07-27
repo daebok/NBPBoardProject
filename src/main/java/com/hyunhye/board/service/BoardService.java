@@ -22,7 +22,6 @@ public class BoardService {
 	@Autowired
 	public BoardRepository repository;
 
-
 	/* 게시글 리스트 */
 	public List<BoardModel> boardListAll() {
 		return repository.boardListAll();
@@ -52,7 +51,7 @@ public class BoardService {
 			fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
 			fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
 
-			repository.addAttach(fileModel);
+			repository.addFile(fileModel);
 		}
 	}
 
@@ -63,7 +62,7 @@ public class BoardService {
 
 	/* 첨부파일 등록 */
 	public List<FileModel> getAttach(int boardNo) {
-		return repository.getAttach(boardNo);
+		return repository.getFile(boardNo);
 	}
 
 	/*
@@ -88,7 +87,7 @@ public class BoardService {
 			int fileNo = 0;
 			for (int i = 0; i < filesNo.length; i++) {
 				fileNo = filesNo[i];
-				repository.deleteAttach(fileNo);
+				repository.deleteFile(fileNo);
 			}
 		}
 
@@ -103,7 +102,7 @@ public class BoardService {
 				fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
 				fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
 
-				repository.addAttach(fileModel);
+				repository.addFile(fileModel);
 			}
 		}
 		return repository.boardModify(boardModel);

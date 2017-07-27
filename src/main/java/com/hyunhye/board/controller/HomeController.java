@@ -12,7 +12,7 @@ public class HomeController {
 	@Autowired
 	public BoardService boardService;
 	/* 게시글 목록을 가지고 홈 화면으로 이동 */
-	@RequestMapping("/board")
+	@RequestMapping("board")
 	public String home(Model model) {
 		model.addAttribute("model", boardService.boardListAll());
 		model.addAttribute("categoryList", boardService.categoryListAll());

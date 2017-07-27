@@ -24,11 +24,11 @@ public interface BoardRepository {
 
 	public void boardDelete(int boardNo);
 
-	public void addAttach(FileModel model);
+	public void addFile(FileModel model);
 
-	public List<FileModel> getAttach(int boardNo);
+	public List<FileModel> getFile(int boardNo);
 
-	public void deleteAttach(int fileNo);
+	public void deleteFile(int fileNo);
 
 	public List<BoardModel> listCriteria(SearchCriteria cri);
 

@@ -17,7 +17,7 @@ import com.hyunhye.comment.model.CommentModel;
 import com.hyunhye.comment.service.CommentService;
 
 @Controller
-@RequestMapping("/comment")
+@RequestMapping("comment")
 public class CommentController {
 
 	@Autowired
@@ -25,7 +25,7 @@ public class CommentController {
 
 	/* 답변 달기 */
 	@ResponseBody
-	@RequestMapping(value = "/regist", method = RequestMethod.GET)
+	@RequestMapping(value = "regist", method = RequestMethod.GET)
 	public ResponseEntity<CommentModel> commentRegist(@ModelAttribute CommentModel commentModel) {
 		ResponseEntity<CommentModel> entity = null;
 
@@ -37,7 +37,7 @@ public class CommentController {
 
 	/* 답변 리스트 */
 	@ResponseBody
-	@RequestMapping("/list")
+	@RequestMapping("list")
 	public ResponseEntity<List<CommentModel>> commentList(@RequestParam("boardNo") int boardNo) {
 		ResponseEntity<List<CommentModel>> entity = null;
 
@@ -48,7 +48,7 @@ public class CommentController {
 	}
 
 	/* 답변 수정 */
-	@RequestMapping("/modify")
+	@RequestMapping("modify")
 	public ResponseEntity<String> commentUpdate(@ModelAttribute CommentModel commentModel) {
 		ResponseEntity<String> entity = null;
 
@@ -60,7 +60,7 @@ public class CommentController {
 
 	/* 답변 가져오기 */
 	@ResponseBody
-	@RequestMapping("/select")
+	@RequestMapping("select")
 	public HashMap<String, Object> commentSelect(@ModelAttribute CommentModel model) {
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
 		hashmap.put("commentContent", service.commentSelect(model).getCommentContent());
@@ -70,7 +70,7 @@ public class CommentController {
 
 	/* 답변 가져오기 */
 	@ResponseBody
-	@RequestMapping("/comment/select")
+	@RequestMapping("comment/select")
 	public HashMap<String, Object> commentCommentSelect(@ModelAttribute CommentModel model) {
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
 		hashmap.put("commentCommentContent", service.commentCommentSelect(model));
@@ -79,7 +79,7 @@ public class CommentController {
 	}
 
 	/* 답변 삭제 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "delete", method = RequestMethod.GET)
 	public ResponseEntity<String> commentDelete(@RequestParam("commentNo") int commentNo) {
 		ResponseEntity<String> entity = null;
 		service.commentDelete(commentNo);

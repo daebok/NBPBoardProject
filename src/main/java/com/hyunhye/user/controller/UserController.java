@@ -14,7 +14,7 @@ import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("user")
 public class UserController {
 
 	@Autowired
@@ -24,19 +24,19 @@ public class UserController {
 	private BCryptPasswordEncoder encoder;
 
 	/* 회원가입 페이지 이동 */
-	@RequestMapping("/signup")
+	@RequestMapping("signup")
 	public String signup() {
 		return "user/signup";
 	}
 
 	/* 로그인 페이지 이동 */
-	@RequestMapping("/loginPage")
+	@RequestMapping("loginPage")
 	public String login() {
 		return "user/login";
 	}
 
 	/* 회원 등록 */
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "insert", method = RequestMethod.POST)
 	public String userRegist(@ModelAttribute UserModel model, RedirectAttributes rttr) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		service.userRegist(model);
@@ -44,7 +44,7 @@ public class UserController {
 	}
 
 	/* 아이디 중복 확인 */
-	@RequestMapping(value = "/duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int duplicationId(@RequestBody String userId) {
 		return service.userSelect(userId);
 	}
