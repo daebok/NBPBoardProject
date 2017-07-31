@@ -9,20 +9,30 @@ import com.hyunhye.comment.model.CommentModel;
 @Repository
 public interface CommentRepository {
 
-	public List<CommentModel> commentListAll(int boardNo);
+	public List<CommentModel> commentListAll(CommentModel commentModel);
 
 	public void commentRegist(CommentModel commentModel);
 
 	public void commentUpdate(CommentModel commentModel);
 
-	public void commentDelete(int boardNol);
+	public void commentDelete(int boardNo);
 
 	public CommentModel commentLastSelect();
 
 	public CommentModel commentCount();
 
+	public CommentModel answerCount(int boardNo);
+
 	public CommentModel commentSelect(CommentModel commentModel);
 
 	public List<CommentModel> commentCommentSelect(CommentModel commentModel);
+
+	public void commentLike(CommentModel model);
+
+	public Integer answerHasComment(int commentNo);
+
+	public void commentUpdateNull(int commentNo);
+
+	public void commenHate(CommentModel model);
 
 }

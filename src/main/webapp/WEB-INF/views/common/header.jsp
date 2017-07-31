@@ -38,8 +38,8 @@
 			
 			<div class="pull-right">
 				<sec:authorize access="isAuthenticated()">
-						<a href="<c:url value='/board/myQuestions'/>" id="my-qustions" class="btn btn-default">My Questions</a>
-						<a href="<c:url value='/user/favorite'/>" id="favorite" class="btn btn-default">Favorite</a>
+						<a href="<c:url value='/board/myinfo'/>" id="my-qustions" class="btn btn-default">My Info</a>
+						
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<a href="<c:url value='/admin/admin'/>" id="admin" class="btn btn-success">ADMIN</a>
 						</sec:authorize>
@@ -51,8 +51,8 @@
 	</div>		
 	<div class="container-fluid">
 		<div class="pull-right">
-			<a href="<c:url value='/board/question'/>" id="question" class="btn btn-danger">Ask Question</a>
-			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-danger">Questions</a>
+			<a href="<c:url value='/board/question'/>" id="question" class="btn btn-primary">? Ask Question</a>
+			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-primary">Questions</a>
 		</div>
 	</div>
 	<hr>

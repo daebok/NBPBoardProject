@@ -31,7 +31,7 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+
 	<!-- Interceptor -->
 	<beans:bean id="boardInterceptor" class="com.hyunhye.interceptor.BoardInterceptor" />
 	<interceptors>
@@ -41,5 +41,4 @@
 			<beans:ref bean="boardInterceptor" />
 		</interceptor>
 	</interceptors>
-		
 </beans:beans>

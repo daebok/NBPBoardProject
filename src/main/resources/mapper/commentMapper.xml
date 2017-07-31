@@ -14,7 +14,9 @@
 		<result property="commentContent" column="comment_content" />
 		<result property="commentDate" column="comment_date" />
 		<result property="commentCount" column="comment_count" />
+		<result property="commentLikeCount" column="comment_like_count" />
 		<result property="commentParentNo" column="comment_parent_no" />
+		<result property="commentEnabled" column="comment_enabled" />
 	</resultMap>
 	
 	<select id="commentCommentSelect" resultMap="commentList">
@@ -38,17 +40,24 @@
 			USER.user_name, 
 			USER.user_id, 
 			COMMENT.comment_no, 
+			COMMENT.comment_no as number, 
 			COMMENT.comment_content, 
 			COMMENT.comment_date, 
-			USER.user_name
+			COMMENT.comment_enabled,
+			USER.user_name,
+			count(COMMENT_LIKE.comment_no) as comment_like_count,
+			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as user_no
 		FROM COMMENT
 		JOIN  USER
 		ON COMMENT.user_no = USER.user_no
+		LEFT JOIN COMMENT_LIKE
+		ON  COMMENT.comment_no = COMMENT_LIKE.comment_no
 		WHERE 
 			board_no = #{boardNo}
 			AND
 			comment_parent_no = 0
-		ORDER BY comment_no
+		group by COMMENT.comment_no
+		ORDER BY COMMENT.comment_no
 	</select>
 	
 	<insert id="commentRegist">
@@ -64,6 +73,24 @@
 			#{commentParentNo}
 		)
 	</insert>
+	
+	<insert id="commentLike">
+		INSERT INTO COMMENT_LIKE (
+			user_no, 
+			comment_no
+		) VALUES (
+			#{userNo}, 
+			#{commentNo}
+		)
+	</insert>
+	
+	<delete id="commenHate">
+		DELETE FROM COMMENT_LIKE 
+		WHERE
+			user_no = #{userNo}
+			AND
+			comment_no = #{commentNo}
+	</delete>
 
 	<select id="commentUpdate" resultMap="commentList">
 		UPDATE COMMENT SET
@@ -71,19 +98,44 @@
 		WHERE 
 			comment_no = #{commentNo}
 	</select>
-
+	
+	<select id="commentUpdateNull" resultMap="commentList">
+		UPDATE COMMENT SET
+			comment_enabled = 0
+		WHERE 
+			comment_no = #{commentNo}
+	</select>
+	
 	<delete id="commentDelete" parameterType="int"> 
 		DELETE FROM COMMENT
 		WHERE 
 			comment_no = #{commentNo} 
 	</delete>
 	
+	<select id="answerHasComment" resultType="int">
+		SELECT 
+			COUNT(comment_no) 
+		FROM COMMENT 
+		WHERE 
+			comment_parent_no = #{commentNo}
+	</select>
+	
 	<select id="commentCount" resultMap="commentList">
 		SELECT 
 			board_no, 
 			count(comment_no) as comment_count
 		FROM COMMENT 
-		group by board_no;
+		group by board_no
+	</select>
+	
+	<select id="answerCount" resultMap="commentList" parameterType="int">
+		SELECT 
+			count(comment_no) as comment_count
+		FROM COMMENT 
+		WHERE 
+			board_no = #{boardNo}
+		AND 
+			comment_parent_no = 0
 	</select>
 	
 	<select id="commentSelect" resultMap="commentList">
