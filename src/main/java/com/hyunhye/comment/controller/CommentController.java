@@ -81,9 +81,19 @@ public class CommentController {
 
 	/* 답변 삭제 */
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public ResponseEntity<Integer> commentDelete(@RequestParam("commentNo") int commentNo) {
-		ResponseEntity<Integer> entity = null;
-		entity = new ResponseEntity<Integer>(service.commentDelete(commentNo), HttpStatus.OK);
+	public ResponseEntity<String> answerDelete(@RequestParam("commentNo") int commentNo) {
+		ResponseEntity<String> entity = null;
+		service.answerDelete(commentNo);
+		entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+
+		return entity;
+	}
+
+	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
+	public ResponseEntity<String> commentDelete(@RequestParam("commentNo") int commentNo) {
+		ResponseEntity<String> entity = null;
+		service.commentDelete(commentNo);
+		entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 
 		return entity;
 	}

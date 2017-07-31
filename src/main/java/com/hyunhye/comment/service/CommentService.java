@@ -46,15 +46,13 @@ public class CommentService {
 	}
 
 	/* 답변 삭제 */
-	public int commentDelete(int commentNo) {
-		/* 답변에 달린 댓글의 개수 확인 */
-		int countChildrenComment = answerHasComment(commentNo);
-		if (countChildrenComment <= 0) {
-			repository.commentDelete(commentNo);
-		} else {
-			repository.commentUpdateNull(commentNo);
-		}
-		return countChildrenComment;
+	public void answerDelete(int commentNo) {
+		repository.answerDelete(commentNo);
+	}
+
+	/* 답변 삭제 */
+	public void commentDelete(int commentNo) {
+		repository.commentDelete(commentNo);
 	}
 
 	public CommentModel commentCount() {

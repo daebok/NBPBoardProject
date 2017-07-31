@@ -15,7 +15,7 @@ public interface CommentRepository {
 
 	public void commentUpdate(CommentModel commentModel);
 
-	public void commentDelete(int boardNo);
+	public void answerDelete(int boardNo);
 
 	public CommentModel commentLastSelect();
 
@@ -34,5 +34,7 @@ public interface CommentRepository {
 	public void commentUpdateNull(int commentNo);
 
 	public void commenHate(CommentModel model);
+
+	public void commentDelete(int commentNo);
 
 }

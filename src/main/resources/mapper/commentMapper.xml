@@ -106,6 +106,14 @@
 			comment_no = #{commentNo}
 	</select>
 	
+	<delete id="answerDelete" parameterType="int"> 
+		DELETE FROM COMMENT
+		WHERE 
+			comment_no = #{commentNo} 
+			AND
+			comment_parent_no = #{commentNo}
+	</delete>
+
 	<delete id="commentDelete" parameterType="int"> 
 		DELETE FROM COMMENT
 		WHERE 
