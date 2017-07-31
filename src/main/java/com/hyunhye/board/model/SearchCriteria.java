@@ -9,4 +9,5 @@ public class SearchCriteria extends Criteria {
 	private String searchType;
 	private String keyword;
 	private String categoryType;
+	private int userNo;
 }

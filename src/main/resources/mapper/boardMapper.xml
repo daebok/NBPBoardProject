@@ -19,6 +19,7 @@
 		<result property="boardContentSummary" column="board_content_summary" />
 		<result property="commentCount" column="comment_count" />
 		<result property="fileCount" column="file_count" />
+		<result property="bookmarkCheck" column="bookmark_check" />
 	</resultMap>
 	
 	<resultMap id="categoryList" type="category">
@@ -132,6 +133,14 @@
 		)
 	</insert>
 	
+	<delete id="boardBookMarkUnCheck">
+		DELETE FROM BOOKMARK 
+		WHERE
+			user_no = #{userNo}
+			AND
+			board_no =#{boardNo}
+	</delete>
+	
 	<select id="boardBookMarkSelect">
 		SELECT 
 			count(bookmark_no)
@@ -164,12 +173,14 @@
 			BOARD.board_title, 
 			BOARD.board_content, 
 			BOARD.board_date,
-			BOARD.board_view_cnt
+			BOARD.board_view_cnt,
+			(SELECT 1 FROM BOARD.BOOKMARK WHERE BOOKMARK.user_no = #{userNo} AND BOOKMARK.board_no = #{boardNo}) as bookmark_check
 		FROM BOARD 
 		<include refid="join_category"></include>
 		<include refid="join_user"></include>
+		<include refid="left_join_bookmark"></include>
 		WHERE 
-			board_no = #{boardNo}
+			BOARD.board_no = #{boardNo}
 	</select>
 
 	<select id="boardModify" resultMap="boardList">
@@ -268,6 +279,7 @@
 		FROM BOARD
 		WHERE
 			BOARD.user_no = #{userNo} 
+		<include refid="join_category"></include>
 		<if test="categoryType != '' ">
 			AND
 			<include refid="category_search"></include>
@@ -283,6 +295,7 @@
 		FROM BOOKMARK
 		WHERE
 			user_no = #{userNo}
+		<include refid="join_category"></include>
 		<if test="categoryType != '' ">
 			AND
 			<include refid="category_search"></include>
@@ -296,6 +309,7 @@
 	<select id="countPaging" resultType="int">
 		SELECT COUNT(board_no) 
 		FROM BOARD
+		<include refid="join_category"></include>
 		<if test="categoryType != '' ">
 			WHERE
 			<include refid="category_search"></include>
@@ -380,4 +394,8 @@
 		ON BOARD.board_no = FILE.board_no
 	</sql>
 	
+	<sql id="left_join_bookmark">
+		LEFT JOIN BOARD.BOOKMARK
+		ON BOARD.board_no = BOOKMARK.board_no
+	</sql>
 </mapper>
