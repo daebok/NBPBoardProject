@@ -12,18 +12,21 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
-	<context:property-placeholder location="classpath:/config/database.properties" />
-	<beans:import resource="applicationContext-datasource.xml" />
-	<beans:import resource="applicationContext-security.xml" />
-
 	<!-- FileUpload -->
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="10485760" /> <!-- 10MB -->
 	</beans:bean>
+	
+	
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<!-- <beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg> -->
-		<beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg>
+		<beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg>
+		<!-- <beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg> -->
 	</beans:bean>
+	
+	<context:property-placeholder location="classpath:/config/database.properties" />
+	<beans:import resource="applicationContext-datasource.xml" />
+	<beans:import resource="applicationContext-security.xml" />
+
 
 </beans:beans>

@@ -1,5 +1,6 @@
 package com.hyunhye.board.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -7,7 +8,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +20,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
@@ -29,6 +37,7 @@ import com.hyunhye.user.model.UserModelDetails;
 @RequestMapping("board")
 @Controller
 public class BoardController {
+	Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 	@Autowired
 	public BoardService boardService;
@@ -61,9 +70,11 @@ public class BoardController {
 
 	/* 게시글 작성하기  */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardRegist(@ModelAttribute BoardModel model, Principal principal) {
+	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file,
+		Principal principal)
+		throws Exception {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		boardService.boardRegist(user.getUserNo(), model);
+		boardService.boardRegist(user.getUserNo(), model, file);
 		return "redirect:/board/list";
 	}
 
@@ -86,9 +97,12 @@ public class BoardController {
 		model.addAttribute("user", user);
 		model.addAttribute("model", boardService.boardSelect(boardNo));
 		model.addAttribute("attach", boardService.getAttach(boardNo));
+		model.addAttribute("answerCount", commentService.answerCount(boardNo));
 		model.addAttribute("comment", commentService.commentListAll(boardNo));
 		return "board/answer";
 	}
+
+
 
 	/* 게시글 수정화면으로 이동 */
 	@RequestMapping("modify")
@@ -101,8 +115,9 @@ public class BoardController {
 
 	/* 게시글 수정 등록 */
 	@RequestMapping(value = "question/modify", method = RequestMethod.POST)
-	public String boardModify(@ModelAttribute BoardModel model) {
-		boardService.boardModify(model);
+	public String boardModify(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
+		throws IOException, Exception {
+		boardService.boardModify(model, file);
 
 		return "redirect:/board/answer?boardNo=" + model.getBoardNo();
 	}
@@ -117,20 +132,90 @@ public class BoardController {
 	}
 
 	/* 내 질문들 보기 */
-	@RequestMapping("myQuestions")
+	@RequestMapping("myquestions")
 	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		model.addAttribute("list", boardService.selectMyQuestions(cri, user.getUserNo()));
+		model.addAttribute("list", boardService.selectMyQuestions(cri));
 
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.listCountCriteria(cri));
+		pageMaker.setTotalCount(boardService.countMyQuestionsPaging(cri));
 
 		model.addAttribute("categoryList", boardService.categoryListAll());
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myQuestions";
-
+		return "user/myquestions";
 	}
+
+	/* 즐겨찾기 추가 */
+	@RequestMapping(value = "bookmark", method = RequestMethod.GET)
+	public ResponseEntity<String> boardBookMark(@ModelAttribute BoardModel model) {
+		ResponseEntity<String> entity = null;
+		boardService.boardBookMark(model);
+		entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+
+		return entity;
+	}
+
+	/* 즐겨찾기 해제 */
+	@RequestMapping(value = "bookmark/uncheck", method = RequestMethod.GET)
+	public ResponseEntity<String> boardBookMarkUnCheck(@ModelAttribute BoardModel model) {
+		ResponseEntity<String> entity = null;
+		boardService.boardBookMarkUnCheck(model);
+		entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+
+		return entity;
+	}
+
+	/* 즐겨찾기 목록 보기 */
+	@RequestMapping("myfavorite")
+	public String myFavorite(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+		model.addAttribute("list", boardService.myFavorite(cri));
+
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(boardService.countMyFavoritePaging(cri));
+
+		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("pageMaker", pageMaker);
+
+		return "user/myfavorite";
+	}
+
+	/* 즐겨찾기 상세 보기 */
+	@RequestMapping("myfavorite/memo")
+	public String boardMemo(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
+		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		model.addAttribute("user", user);
+		model.addAttribute("model", boardService.boardSelect(boardNo));
+		model.addAttribute("attach", boardService.getAttach(boardNo));
+		model.addAttribute("answerCount", commentService.answerCount(boardNo));
+		model.addAttribute("comment", commentService.commentListAll(boardNo));
+		model.addAttribute("memo", boardService.memoSelect(boardNo));
+		return "user/memo";
+	}
+
+	/* 즐겨찾기 메모 작성 */
+	@ResponseBody
+	@RequestMapping(value = "memo", method = RequestMethod.POST)
+	public ResponseEntity<String> commentRegist(@ModelAttribute BookMarkModel bookMarkModel) {
+		ResponseEntity<String> entity = null;
+
+		logger.info("bookMarkModel.getBoardNo:{}", bookMarkModel.getBoardNo());
+		logger.info("bookMarkModel.getBookmarkMemo:{}", bookMarkModel.getBookmarkMemo());
+		boardService.bookMarkMemoRegist(bookMarkModel);
+		entity = new ResponseEntity<String>(HttpStatus.OK);
+		return entity;
+	}
+
+	/* 내정보 상세 보기 */
+	@RequestMapping("myinfo")
+	public String boardMemo(Model model) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("user", user);
+		return "user/myinfo";
+	}
+
 }

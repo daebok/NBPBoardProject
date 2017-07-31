@@ -352,10 +352,10 @@ var header = $("meta[name='_csrf_header']").attr("content");
 	});
 	
 	/* 즐겨찾기  */
-	$(document).on('click','#book-mark',function(){
+	$(document).on('click','#book-mark-uncheck',function(){
 		var data = "boardNo=" + ${model.boardNo};
-		$(this).attr('class','book-mark glyphicon glyphicon-star');
-		$(this).css('color','#FFCD12');
+		$(this).attr('id','book-mark');
+		$(this).css('color','#FF3636');
 		$.ajax({
 			type : 'GET',
 			url : '/board/bookmark',
@@ -366,7 +366,23 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			success : function(result) {
 				$('.book-mark-alarm').show(1000);
 				$('.book-mark-alarm').hide(2000);
-				console.log('success');
+			}
+		});
+	});
+	
+	/* 즐겨찾기 해제 */
+	$(document).on('click','#book-mark',function(){
+		var data = "boardNo=" + ${model.boardNo};
+		$(this).attr('id','book-mark-uncheck');
+		$(this).css('color','#888');
+		$.ajax({
+			type : 'GET',
+			url : '/board/bookmark/uncheck',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
 			}
 		});
 	});
@@ -399,13 +415,19 @@ var header = $("meta[name='_csrf_header']").attr("content");
 	<%@include file="../common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
-		<div class="book-mark-alarm label label-info" style="display:none;">즐겨찾기에 추가되었습니다.</div> 
-		<div id="book-mark" class="book-mark glyphicon glyphicon-star" style="font-size:25px; color:#eee;"></div>
-	</div>
-	<div class="container">
 		<div class="container-fluid">
+			<div class="pull-right" style="margin-bottom:10px;">
+				<c:choose>
+					<c:when test="${model.bookmarkCheck eq 1}">
+						<div id="book-mark" class="glyphicon glyphicon-check" style="font-size:25px; color:#FF3636;"></div>
+					</c:when>
+					<c:otherwise>
+						<div id="book-mark-uncheck" class="glyphicon glyphicon-check" style="font-size:25px; color:#888;"></div>
+					</c:otherwise>
+				</c:choose>
+			</div>
 			<div class="col-md-12">
-				<span class="label label-warning">${model.categoryItem}</span>
+				<span class="label label-warning">${model.categoryItem} </span>
 				<h1>${model.boardTitle}</h1>
 				<p>${model.boardContent}</p>
 				<div class="panel panel-default">
@@ -462,10 +484,10 @@ var header = $("meta[name='_csrf_header']").attr("content");
 							<div  style="diplay:block;">
 								<c:choose>
 									<c:when test="${comment.userNo eq 1}">
-										<div class="answer-like glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:25px; color:#FF3636;"></div>
+										<div class="answer-like glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#FF3636;"></div>
 									</c:when>
 									<c:otherwise>
-										<div class="answer-hate glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:25px; color:#eee;"></div>
+										<div class="answer-hate glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#eee;"></div>
 									</c:otherwise>
 								</c:choose>
 								<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
@@ -510,7 +532,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				</div>
 			</div>
 			<sec:authorize access="isAuthenticated()">
-				<div class="col-lg-12" style="margin-top: 50px;">
+				<div class="col-lg-8" style="margin-top: 50px;">
 					<form:form name="form" class="answer-form">
 						<input type="hidden" name="boardNo" value="${model.boardNo}">
 						<label for="content">Your Answer</label>

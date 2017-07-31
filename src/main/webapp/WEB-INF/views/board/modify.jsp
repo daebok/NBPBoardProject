@@ -8,28 +8,16 @@
 <head>
 <sec:csrfMetaTags/>
 <title>BOARD</title>
-<style>
-.fileDrop {
-	width: 70%;
-	height: 150px;
-	border: 1px dotted gray;
-	border: 1px dotted lightslategray;
-	border-radius: 20px;
-	margin: auto; 
-	text-align: center;
-	line-height: 150px;
-	font-weight: border;
-}
-
-.delete {
-	color: black;
-	font-size:15px;
-	text-decoration: none;
-}
-</style>
+<link href="<c:url value="/resources/common/css/file-css.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/common/js/upload.js" />"></script>
-<script src="<c:url value="/resources/common/js/fileUpload.js" />"></script>
 <script>
+	/* 파일 삭제 */
+	$(document).on('click','.new-file-delete-button',function(){
+		var fileId = $(this).attr('id');
+		$('#file-list-'+fileId).remove();
+		$(".newUploadedList").append( "<input type='hidden' name='boardFilesNo' value='"+fileId+"'/>");
+	});
+	
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height : 300,
@@ -57,27 +45,25 @@
 			document.form.action = "/board/question/modify"
 			document.form.submit();
 		});
-		$("#category").val('${model.categoryItem}').prop("selected", true);
 		
-		$(".uploadedList").on("click","a",function(){
-			var that = $(this);
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$('#registerForm').append("<input type='hidden' name='boardFilesNo' value="+$(this).attr("data-id")+">");
-			$.ajax({
-				url: "/upload/deleteFile",
-				type:"post",
-				data: {fileName: $(this).attr("data-src")},
-				dataType: "text",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader(header, token);
-				},
-				success:function(result){
-					if(result == 'deleted'){
-						that.parent('div').remove();
-					}
-				}
-			});
+		$("#category").val('${model.categoryNo}').prop("selected", true);
+		
+		/* 파일 업로드 */
+		$(".file").on("change", function(event) {
+			$(".newUploadedList > * ").remove();
+			for(var index = 0 ; index < $(".file")[0].files.length; index++) {
+				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
+				str += "<div class='list-1'>" + $(".file")[0].files[index].name +"</div>";
+				str += "<div class='list-2'>" + $(".file")[0].files[index].size + " bytes </div>";
+				str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
+				$(".newUploadedList").append(str);
+			}
+		});
+		
+		/* 파일 삭제 */
+		$(".file-delete-button").on("click", function(){
+			$(this).parent('div').parent('div').remove();
+			$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+$(this).attr("id")+">");
 		});
 	});
 </script>
@@ -88,37 +74,44 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid" style="margin-bottom: 30px">
-			<form:form action="question/modify" method="post" name="form" id="registerForm" class="form-horizontal">
+			<form:form action="question/modify" method="post" name="form" class="modify-form form-horizontal"  enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="title">Title</label>
 					<input type="text" name="boardTitle" value="${model.boardTitle}" maxlength="80" id="title" /> 
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
-					<select name="categoryItem" id="category">
+					<select name="categoryNo" id="category">
 						<c:forEach var="category" items="${list}">
-							<option value="${category.categoryItem}">${category.categoryItem}</option>
+							<option value="${category.categoryNo}">${category.categoryItem}</option>
 						</c:forEach>
 					</select> 
 				</div>
 				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">${model.boardContent}</textarea>
-				<input type="file" class="fileButton" name="boardFiles">
 				<div class="form-group">
-					<div class="fileDrop">File Drop Here</div>
-				</div>
-				<div>
-					<div class="box-footer">
-						<c:forEach var="attach" items="${attach}">
-							<div class="uploadedList">
-								<div>
-									<a href='/upload/displayFile?fileName=${attach.fileName}' > ${attach.fileOriginName}</a> 
-									&nbsp;&nbsp;
-									<a class='delete' data-src="${attach.fileName}" data-id="${attach.fileNo}">[삭제]</a>
-									<br>
-								</div>
+					<div class="filebox"> 
+						<input class="upload-name" value="파일선택" disabled="disabled" > 
+						<label for="input-file">업로드</label> 
+						<input type="file" name="files" multiple="multiple" class="file upload-hidden" id="input-file" maxlength="5">
+					</div>
+					<div class="panel panel-default">
+						<div class="list-group">
+							<div class="list-group-item">
+								<div class="list-1"><b>파일명</b></div>
+								<div class="list-2"><b>크기</b></div>
+								<div class="list-3"><b>삭제</b></div>
 							</div>
-						</c:forEach>
-						<div class="newUploadedList"></div>
+							<c:forEach var="attach" items="${attach}">
+								<div class="uploadedList">
+									<div class="list-group-item">
+										<div class="list-1">${attach.fileOriginName}</div>
+										<div class="list-2">${attach.fileSize} bytes</div>
+										<div class="list-3"><a class='file-delete-button' id='${attach.fileName}'>[삭제]</a></div>
+									</div>
+								</div>
+							</c:forEach>
+							<div class="newUploadedList"></div>
+						</div>
 					</div>
 				</div>
 				<input type="hidden" name="boardNo" value="${model.boardNo}">

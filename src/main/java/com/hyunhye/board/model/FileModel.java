@@ -17,4 +17,6 @@ public class FileModel {
 	private String fileOriginName;
 	/* 확장자 */
 	private String fileExtension;
+	/* 파일 크긴 */
+	private long fileSize;
 }

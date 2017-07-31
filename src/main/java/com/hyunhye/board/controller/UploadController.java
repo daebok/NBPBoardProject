@@ -17,10 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.hyunhye.common.MediaUtils;
-import com.hyunhye.common.UploadFileUtils;
 
 @Controller
 @RequestMapping("upload")
@@ -31,22 +29,9 @@ public class UploadController {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	/* 파일 업로드 처리 */
+	/*이미지 표시*/
 	@ResponseBody
-	@RequestMapping(value = "uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
-
-		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-		log.info("homePath: {}", homePath);
-
-		return new ResponseEntity<String>(
-			UploadFileUtils.uploadFile(homePath + uploadPath, file.getOriginalFilename(), file.getBytes()),
-			HttpStatus.CREATED);
-	}
-
-	/* 이미지 표시 */
-	@ResponseBody
-	@RequestMapping("displayFile")
+	@RequestMapping("downloadFile")
 	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
@@ -78,7 +63,7 @@ public class UploadController {
 		return entity;
 	}
 
-	/* 파일 삭제 처리 */
+	/*파일 삭제 처리*/
 	@ResponseBody
 	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(String fileName) throws Exception {

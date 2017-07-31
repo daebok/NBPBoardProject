@@ -1,26 +1,39 @@
 package com.hyunhye.board.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
+import com.hyunhye.common.UploadFileUtils;
 import com.hyunhye.user.model.UserModelDetails;
 
 @Service
 public class BoardService {
+	Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
 	public BoardRepository repository;
+
+	@Resource(name = "uploadPath")
+	private String uploadPath;
 
 	/* 게시글 리스트 */
 	public List<BoardModel> boardListAll() {
@@ -32,32 +45,60 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public void boardRegist(int userNo, BoardModel boardModel) {
+	public void boardRegist(int userNo, BoardModel boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
+
+		/* HTML 태그 제거 */
+		String boardSummary = boardModel.getBoardContent()
+			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		boardModel.setBoardContentSummary(boardSummary);
 
 		repository.boardRegist(boardModel);
 
-		/* 업로드 된 첨부파일 가져오기 */
-		String[] files = boardModel.getBoardFiles();
-		if (files == null) {
-			return;
-		}
+		/* 삭제된 첨부파일 번호 가져오기 */
+		int[] filesNo = boardModel.getBoardFilesNo();
+		int index2 = 0;
 
-		String fileName = null;
-		for (int i = 1; i < files.length; i++) {
-			fileName = files[i];
+		/* 파일 업로드 */
+		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+		for (int index = 0; index < files.length; index++) {
+			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
+				index2++;
+				continue;
+			}
+			MultipartFile file = files[index];
+
+			String fileOriginalName = file.getOriginalFilename();
+			long fileSize = file.getSize();
+			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
+
+			/* 파일을 첨부하지 않았을 때 */
+			if (fileContentType.equals("")) {
+				continue;
+			}
+
+			/* 1. 서버에 업로드 */
+			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,
+				file.getBytes());
 			FileModel fileModel = new FileModel();
-			fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
-			fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
-			fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
+			fileModel.setFileName(fileName);
+			fileModel.setFileOriginName(fileOriginalName);
+			fileModel.setFileExtension(fileContentType);
+			fileModel.setFileSize(fileSize);
 
+			/* 2. 데이터베이스에 저장 */
 			repository.addFile(fileModel);
+
 		}
 	}
 
 	/* 해당 게시글 상세 보기 */
 	public BoardModel boardSelect(int boardNo) {
-		return repository.boardSelect(boardNo);
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		BoardModel boardModel = new BoardModel();
+		boardModel.setBoardNo(boardNo);
+		boardModel.setUserNo(user.getUserNo());
+		return repository.boardSelect(boardModel);
 	}
 
 	/* 첨부파일 등록 */
@@ -70,7 +111,7 @@ public class BoardService {
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
 	 */
 	@Transactional
-	public BoardModel boardModify(BoardModel boardModel) {
+	public BoardModel boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		int userNo = user.getUserNo();
 
@@ -81,30 +122,55 @@ public class BoardService {
 		boardModel.setBoardDate(currentTime);
 		boardModel.setUserNo(userNo);
 
+		/* 삭제된 첨부파일  가져오기 */
+		String[] filesDelete = boardModel.getBoardFilesDelete();
+		if (filesDelete != null) {
+			String fileDelete;
+			for (int i = 0; i < filesDelete.length; i++) {
+				fileDelete = filesDelete[i];
+
+				/* 1. 서버에서 삭제 */
+				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+
+				new File(homePath + uploadPath + fileDelete.replace('/', File.separatorChar)).delete();
+
+				/* 2. 데이버베이스에서 삭제*/
+				repository.deleteFile(fileDelete);
+			}
+		}
+
 		/* 삭제된 첨부파일 번호 가져오기 */
 		int[] filesNo = boardModel.getBoardFilesNo();
-		if (filesNo != null) {
-			int fileNo = 0;
-			for (int i = 0; i < filesNo.length; i++) {
-				fileNo = filesNo[i];
-				repository.deleteFile(fileNo);
+		int index2 = 0;
+
+		/* 파일 업로드 */
+		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+		for (int index = 1; index < files.length; index++) {
+			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
+				index2++;
+				continue;
 			}
+			MultipartFile file = files[index];
+			String fileOriginalName = file.getOriginalFilename();
+			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
+			long fileSize = file.getSize();
+
+			/* 파일을 첨부하지 않았을 때 */
+			if (fileContentType.equals("")) {
+				break;
+			}
+
+			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,
+				file.getBytes());
+			FileModel fileModel = new FileModel();
+			fileModel.setFileName(fileName);
+			fileModel.setFileOriginName(fileOriginalName);
+			fileModel.setFileExtension(fileContentType);
+			fileModel.setFileSize(fileSize);
+
+			repository.addFile(fileModel);
 		}
 
-		/* 추가된 첨부파일 가져오기 */
-		String[] files = boardModel.getBoardFiles();
-		if (files != null) {
-			String fileName = null;
-			for (int i = 1; i < files.length; i++) {
-				fileName = files[i];
-				FileModel fileModel = new FileModel();
-				fileModel.setFileName(fileName.substring(fileName.indexOf("=") + 1));
-				fileModel.setFileOriginName(fileName.substring(fileName.lastIndexOf("_") + 1));
-				fileModel.setFileExtension(fileName.substring(fileName.lastIndexOf(".") + 1));
-
-				repository.addFile(fileModel);
-			}
-		}
 		return repository.boardModify(boardModel);
 	}
 
@@ -120,10 +186,10 @@ public class BoardService {
 
 	/* 게시글 리스트 (페이징) */
 	public List<BoardModel> listCriteria(SearchCriteria cri) {
-		if (cri.getCategoryType() == null) {
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
 			cri.setCategoryType("");
 		}
-		if (cri.getSearchType() == null) {
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
 			cri.setSearchType("");
 		}
 		return repository.listCriteria(cri);
@@ -144,13 +210,81 @@ public class BoardService {
 		return repository.checkUser(boardNo);
 	}
 
-	public List<BoardModel> selectMyQuestions(SearchCriteria cri, int userNo) {
-		if (cri.getCategoryType() == null) {
+	public List<BoardModel> selectMyQuestions(SearchCriteria cri) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
 			cri.setCategoryType("");
 		}
-		if (cri.getSearchType() == null) {
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
 			cri.setSearchType("");
 		}
-		return repository.selectMyQuestions(cri, userNo);
+		cri.setUserNo(user.getUserNo());
+		return repository.selectMyQuestions(cri);
 	}
+
+	public int countMyQuestionsPaging(SearchCriteria cri) {
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
+			cri.setSearchType("");
+		}
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		cri.setUserNo(user.getUserNo());
+		return repository.countMyQuestionsPaging(cri);
+	}
+
+	/* 즐겨찾기 */
+	public void boardBookMark(BoardModel model) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.setUserNo(user.getUserNo());
+		repository.boardBookMark(model);
+	}
+
+	public List<BoardModel> myFavorite(SearchCriteria cri) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
+			cri.setSearchType("");
+		}
+		cri.setUserNo(user.getUserNo());
+		return repository.selectMyFavorite(cri);
+
+	}
+
+	public int countMyFavoritePaging(SearchCriteria cri) {
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
+			cri.setSearchType("");
+		}
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		cri.setUserNo(user.getUserNo());
+		return repository.countMyFavoritePaging(cri);
+	}
+
+	public void bookMarkMemoRegist(BookMarkModel bookMarkModel) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		bookMarkModel.setUserNo(user.getUserNo());
+		repository.bookMarkMemoRegist(bookMarkModel);
+	}
+
+	public BookMarkModel memoSelect(int boardNo) {
+		BookMarkModel bookMarkModel = new BookMarkModel();
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		bookMarkModel.setUserNo(user.getUserNo());
+		bookMarkModel.setBoardNo(boardNo);
+
+		return repository.memoSelect(bookMarkModel);
+	}
+
+	public void boardBookMarkUnCheck(BoardModel model) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.setUserNo(user.getUserNo());
+		repository.boardBookMarkUnCheck(model);
+	}
+
 }
