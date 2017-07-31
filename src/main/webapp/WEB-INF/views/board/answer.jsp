@@ -15,6 +15,7 @@
 }
 .comment-wrapper {
 	padding: 10px;
+	margin-bottom:10px;
 	border: 1px dotted #c9302c;
 	border-radius: 10px;
 }
@@ -74,17 +75,20 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				data : $('.answer-form').serialize(),
 				success : function(result) {
 					var list = $.parseJSON(result);
-					alert('답글이 달렸습니다.');
+					alert('답변이 달렸습니다.');
 					$(".emptyContent").remove();
-					$("#listComment").append("<div id='comment-"+list.commentNo+"' class='comment-wrapper-wrapper'> <div class='comment-wrapper' id='"+list.commentNo+"'>"
-							+ "<div class='comment' id='content-"+list.commentNo+"'>"+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>"
-							+ "<div class='pull-right' class='comment-list'>"
-							+ '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;'
-							+ '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp'
-							+ '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'">Comment</button>&nbsp;'
-							+ '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">Comment ▼</button></div></div>'
-							+ '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div>'
-						);
+					var str = "<div class='whole-wrapper' id='whole-wrapper-"+ list.commentNo +"'>";
+						str += '<div class="answer-hate glyphicon glyphicon-heart" comment-no="'+ list.commentNo +'" style="font-size:15px; color:#eee;"></div>';
+						str += '<span  id="answer-like-count-'+ list.commentNo +'" style="font-size:12px; color:#888;"> '+0+'</span>';
+						str += "<div id='comment-"+list.commentNo+"' class='comment-wrapper-wrapper'> <div class='comment-wrapper' id='"+list.commentNo+"'>";
+						str += "<div class='comment' id='content-"+list.commentNo+"'>"+ list.commentContent + "</div><span class='badge'>Commented By  ${user.userName}</span>";
+						str += "<div class='pull-right' class='comment-list'>";
+						str += '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;';
+						str += '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp';
+						str += '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'">Comment</button>&nbsp;';
+						str += '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">Comment ▼</button></div></div>';
+						str += '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div></div>';
+					$("#listComment").append(str);
 					$('.summernote').summernote('code', '');
 				}
 			});
@@ -123,15 +127,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				contentType : false,
 				data : data,
 				success : function(result) {
-					var list = $.parseJSON(result);
-					if(Number(list) < 0) {
-						$("#comment-"+commentNo).remove();
-					} else if(Number(list) > 0) {
-						$("#content-"+commentNo).html("삭제 된 답변입니다.");
-						$("#" + commentNo + " .comment-modify").remove();
-						$("#" + commentNo + " .comment-delete").remove();
-						$("#" + commentNo + " .comment-comment").remove();
-					}
+					$("#whole-wrapper-"+commentNo).remove();
 				}
 			});
 		}
@@ -200,6 +196,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 					var list = $.parseJSON(result);
 					$('.comment-comment-write').remove();
 					$('.comment-comment').attr("disabled",false);
+					$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 					$('#comment-view-'+commentNo).val('closed');
 					$('#comment-view-'+commentNo).click();
 				}
@@ -292,7 +289,8 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			}
 		});
 	});
-	/* 답변 삭제 버튼 클릭 이벤트 */
+	
+	/* 댓글 삭제 버튼 클릭 이벤트 */
 	$(document).on("click",".answer-comment-delete", function() {
 		var commentNo = $(this).attr("comment-no");
 		var data = "commentNo=" + commentNo;
@@ -300,7 +298,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 		if (result) {
 			$.ajax({
 				type : 'GET',
-				url : '/comment/delete',
+				url : '/comment/comment/delete',
 				dataType : 'text',
 				processData : false,
 				contentType : false,
@@ -480,20 +478,18 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						<div class="emptyContent">답변이 없습니다.</div>
 					</c:if>
 					<c:forEach var="comment" items="${comment}">
-						<div class="whole-wrapper">
-							<div  style="diplay:block;">
-								<c:choose>
-									<c:when test="${comment.userNo eq 1}">
-										<div class="answer-like glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#FF3636;"></div>
-									</c:when>
-									<c:otherwise>
-										<div class="answer-hate glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#eee;"></div>
-									</c:otherwise>
-								</c:choose>
-								<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
-							</div>
+						<div class="whole-wrapper" id="whole-wrapper-${comment.commentNo}">
+							<c:choose>
+								<c:when test="${comment.userNo eq 1}">
+									<div class="answer-like glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#FF3636;"></div>
+								</c:when>
+								<c:otherwise>
+									<div class="answer-hate glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:15px; color:#eee;"></div>
+								</c:otherwise>
+							</c:choose>
+							<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
 							<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
-								<div class="comment-wrapper" id="${comment.commentNo}" >
+								<div class="comment-wrapper" id="${comment.commentNo}" style="margin-bottom:10px;">
 									<c:if test="${comment.commentEnabled eq 1 }">
 										<div class="comment" id="content-${comment.commentNo}"> ${comment.commentContent} </div>
 									</c:if>

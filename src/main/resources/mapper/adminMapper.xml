@@ -5,6 +5,12 @@
 
 <mapper namespace="com.hyunhye.admin.repository.AdminRepository">
 
+	<resultMap id="boardList" type="board">
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
+		<result property="boardNo" column="board_no" />
+	</resultMap>
+	
 	<resultMap id="userList" type="user">
 		<result property="userNo" column="user_no" />
 		<result property="userId" column="user_id" />
@@ -16,6 +22,7 @@
 	<resultMap id="categoryList" type="category">
 		<result property="categoryNo" column="category_no" />
 		<result property="categoryItem" column="category_item" />
+		<result property="categoryEnabled" column="category_enabled" />
 	</resultMap>
 	
 	<select id="categoryAdd">
@@ -31,10 +38,23 @@
 			category_no, 
 			category_item
 		FROM CATEGORY
+		WHERE category_enabled = 0
+	</select>
+	
+	<select id="categoryCount" resultType="int">
+		SELECT
+			count(board_no)
+		FROM CATEGORY
+		JOIN BOARD
+		ON CATEGORY.category_no = BOARD.category_no
+		WHERE 
+			CATEGORY.category_no = #{categoryNo}
 	</select>
 	
 	<delete id="categoryDelete">
-		DELETE FROM CATEGORY
+		UPDATE CATEGORY
+		SET 
+			category_enabled = 0
 		WHERE 
 			category_no = #{categoryNo}
 	</delete>

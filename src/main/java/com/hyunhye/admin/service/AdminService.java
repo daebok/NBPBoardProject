@@ -42,4 +42,8 @@ public class AdminService {
 	public void userDelete(UserModel userModel) {
 		repository.userDelete(userModel);
 	}
+
+	public int categoryCount(CategoryModel categoryModel) {
+		return repository.categoryCount(categoryModel);
+	}
 }

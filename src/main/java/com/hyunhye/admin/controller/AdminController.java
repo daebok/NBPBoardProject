@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.CategoryModel;
@@ -35,6 +36,15 @@ public class AdminController {
 		List<CategoryModel> list = adminService.categoryListAll();
 		model.addAttribute("categoryList", list);
 		return "admin/categoryManage";
+	}
+
+	@ResponseBody
+	@RequestMapping("categoryCount")
+	public ResponseEntity<Integer> categoryCount(@ModelAttribute CategoryModel categoryModel) {
+		ResponseEntity<Integer> entity = null;
+		entity = new ResponseEntity<Integer>(adminService.categoryCount(categoryModel), HttpStatus.OK);
+
+		return entity;
 	}
 
 	@RequestMapping(value = "categoryAdd", method = {RequestMethod.POST, RequestMethod.GET})

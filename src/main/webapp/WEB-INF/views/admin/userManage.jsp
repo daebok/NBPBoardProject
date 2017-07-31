@@ -93,7 +93,7 @@
 					<div class="list-1">아이디</div>
 					<div class="list-2">이름</div>
 					<div class="list-3">등급</div>
-					<div class="list-14">삭제</div>
+					<div class="list-4">삭제</div>
 				</div>
 					<c:forEach var="user" items="${userList}">
 						<form name="form" method="get" action="/admin/categoryDelete" class="form-horizontal" id="${user.userNo}">

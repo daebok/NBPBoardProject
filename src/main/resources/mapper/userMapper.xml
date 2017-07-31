@@ -28,6 +28,13 @@
 			#{userName}
 		)
 	</insert>
+	
+	<insert id="userPasswordChange">
+		UPDATE SET USER 
+			user_password = #{userPassword}
+		WHERE 
+			user_id = #{userId}
+	</insert>
 
 
 	<delete id="userDelete">
@@ -41,7 +48,8 @@
 			count(user_no)
 		FROM USER
 		WHERE
-			user_id = #{userId} AND
+			user_id = #{userId} 
+			AND
 			user_password = #{userPassword}
 	</select>
 

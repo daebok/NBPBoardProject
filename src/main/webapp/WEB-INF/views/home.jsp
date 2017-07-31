@@ -16,16 +16,15 @@
 			<div class="col-md-12">
 				<hr>
 				<c:forEach var="board" items="${model}">
-					<h1>
+					<h3>
 						<a href="<c:url value='/board/answer?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
-					</h1>
-					<p>${board.boardContent}</p>
+					</h3>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span>
 						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted ${board.boardDate}</span>
 						<div class="pull-right">
-							<span class="label label-success">댓글: ${board.commentCount}</span>
-							<span class="label label-primary">조회수: ${board.boardViewCount}</span>
+							<span class="label label-success">answers: ${board.commentCount}</span>
+							<span class="label label-primary">views: ${board.boardViewCount}</span>
 							<span class="label label-warning">${board.categoryItem}</span>
 						</div>
 					</div>

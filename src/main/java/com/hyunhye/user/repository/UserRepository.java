@@ -19,4 +19,6 @@ public interface UserRepository {
 	public int userSelect(String id);
 
 	public Map<String, Object> selectUser(String userId);
+
+	public void userPasswordChange(UserModel model);
 }

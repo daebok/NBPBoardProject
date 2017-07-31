@@ -11,4 +11,6 @@ public class CategoryModel {
 	private int categoryNo;
 	/* 카테고리 항목이름 */
 	private String categoryItem;
+	/* 카테고리 사용가능 유무 */
+	private String categoryEnabled;
 }

@@ -51,4 +51,8 @@ public class UserService {
 	public int userSelect(String userId) {
 		return repository.userSelect(userId);
 	}
+
+	public void userPasswordChange(UserModel model) {
+		repository.userPasswordChange(model);
+	}
 }

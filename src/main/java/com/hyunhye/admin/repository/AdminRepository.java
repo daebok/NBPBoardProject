@@ -24,4 +24,6 @@ public interface AdminRepository {
 
 	public void userDelete(UserModel userModel);
 
+	public int categoryCount(CategoryModel categoryModel);
+
 }

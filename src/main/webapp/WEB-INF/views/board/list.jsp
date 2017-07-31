@@ -54,11 +54,12 @@
 		</div>
 		<div class="container-fluid">
 			<div class="col-md-12">
+				<c:if test="${empty list}">
+					<div>검색 결과 없음</div>
+				</c:if>
 				<c:forEach var="board" items="${list}">
 					<h3>
-						<a
-							href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}"
-							id="boardNo">${board.boardTitle}</a>
+						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
 					</h3>
 					<p id="content">${board.boardContentSummary}</p>
 					<div>
