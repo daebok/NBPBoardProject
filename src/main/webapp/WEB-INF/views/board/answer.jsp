@@ -326,7 +326,8 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			contentType : false,
 			data : data,
 			success : function(result) {
-				console.log('success');
+				var count = $('#answer-like-count-'+commentNo).html();
+				$('#answer-like-count-'+commentNo).html(Number(count)+1);
 			}
 		});
 	});
@@ -344,7 +345,8 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			contentType : false,
 			data : data,
 			success : function(result) {
-				console.log('success');
+				var count = $('#answer-like-count-'+commentNo).html();
+				$('#answer-like-count-'+commentNo).html(Number(count)-1);
 			}
 		});
 	});
@@ -466,7 +468,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 										<div class="answer-hate glyphicon glyphicon-heart" comment-no="${comment.commentNo}" style="font-size:25px; color:#eee;"></div>
 									</c:otherwise>
 								</c:choose>
-								<span  id="answer-like" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
+								<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
 							</div>
 							<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
 								<div class="comment-wrapper" id="${comment.commentNo}" >
