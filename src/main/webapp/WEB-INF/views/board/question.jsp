@@ -18,7 +18,7 @@
 		$(".newUploadedList").append( "<input type='hidden' name='boardFilesNo' value='"+fileId+"'/>");
 	});
 	$(document).ready(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
 		var blank_pattern = /[\s]/g;
 		$("#questionButton").click(function() {
 			var title = $("#title").val();

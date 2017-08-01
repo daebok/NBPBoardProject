@@ -38,7 +38,7 @@
 		}
 	});
 	$("#modifyButton").click(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
 		var blank_pattern = /[\s]/g;
 		
 		var title = $("#title").val();

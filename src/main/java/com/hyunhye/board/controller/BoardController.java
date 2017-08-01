@@ -85,6 +85,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
+	/* 비속어 체크 */
 	@ResponseBody
 	@RequestMapping(value = "badWordsCheck", method = RequestMethod.POST)
 	public ResponseEntity<List<String>> badWordsCheck(@ModelAttribute BoardModel model) {
