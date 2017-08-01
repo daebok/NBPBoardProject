@@ -87,14 +87,35 @@
 	</select>
 
 	<select id="boardListAll" resultMap="boardList">
-		<include refid='selectBoard'></include>
-		<include refid="join_category"></include>
-		<include refid="join_user"></include>
-		<include refid="left_join_comment"></include>
-		<include refid="left_join_file"></include>
-		group by board_no
-		ORDER BY BOARD.board_view_cnt desc
-		limit 0, 10
+		SELECT 
+			B.board_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			count(comment_no) as comment_count,
+			count(file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, 
+					BOARD.board_content_summary, BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+				FROM BOARD 
+				ORDER BY BOARD.board_view_cnt desc 
+				LIMIT 0, 10
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		JOIN USER
+			ON B.user_no = USER.user_no
+		LEFT JOIN COMMENT
+			ON B.board_no = COMMENT.board_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.board_view_cnt desc
 	</select>
 
 	<insert id="boardRegist">
@@ -200,62 +221,113 @@
 	</delete>
 	
 	<select id="listCriteria" resultMap="boardList">
-		<include refid='selectBoard'></include>
-		<include refid="join_category"></include>
-		<include refid="join_user"></include>
-		<include refid="left_join_comment"></include>
-		<include refid="left_join_file"></include>
-		<if test="categoryType != '' ">
-			WHERE
-			<include refid="category_search"></include>
-		</if>
-		<if test="searchType != '' ">
-			<if test="categoryType != '' ">
-				AND
-			</if>
-			<if test="categoryType == '' ">
-				WHERE
-			</if>
-			<include refid="search_search"></include>
-		</if>
-		group by board_no
-		ORDER BY BOARD.board_no desc, BOARD.board_date desc
-		limit #{startBoardNo}, #{perPageNum}
+		SELECT 
+			B.board_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			count(comment_no) as comment_count,
+			count(file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+				FROM BOARD
+				<if test="categoryType != '' ">
+					WHERE
+					<include refid="category_search"></include>
+				</if>
+				<if test="searchType != '' ">
+					<if test="categoryType != '' ">
+						AND
+					</if>
+					<if test="categoryType == '' ">
+						WHERE
+					</if>
+					<include refid="search_search"></include>
+				</if> 
+				ORDER BY BOARD.board_no desc 
+				LIMIT #{startBoardNo}, #{perPageNum}
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		JOIN USER
+			ON B.user_no = USER.user_no
+		LEFT JOIN COMMENT
+			ON B.board_no = COMMENT.board_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.board_no desc
 	</select>
 	
 	<select id="selectMyQuestions" resultMap="boardList">
 		SELECT 
-			BOARD.board_no, 
-			BOARD.category_no,
+			B.board_no,  
 			CATEGORY.category_item, 
-			BOARD.board_title, 
-			BOARD.board_content_summary, 
-			BOARD.board_date, 
-			BOARD.board_view_cnt,
-			count(comment_no) as comment_count
-		FROM BOARD
-		<include refid="join_category"></include>
-		<include refid="left_join_comment"></include>
-		WHERE
-			BOARD.user_no = #{userNo} 
-		group by board_no
-		ORDER BY BOARD.board_no desc, BOARD.board_date desc
-		limit #{startBoardNo}, #{perPageNum}
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			count(comment_no) as comment_count,
+			count(file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+				FROM BOARD
+				WHERE BOARD.user_no = #{userNo} 
+				ORDER BY BOARD.board_no desc 
+				LIMIT #{startBoardNo}, #{perPageNum}
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		LEFT JOIN COMMENT
+			ON B.board_no = COMMENT.board_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.board_no desc
 	</select>
 	
 	<select id="selectMyFavorite" resultMap="boardList">
-		<include refid='selectBoard'></include>
-		<include refid="join_category"></include>
-		<include refid="join_user"></include>
-		<include refid="left_join_comment"></include>
-		<include refid="left_join_file"></include>
-		JOIN BOOKMARK
-		ON BOARD.board_no = BOOKMARK.board_no
-		WHERE
-			BOOKMARK.user_no = #{userNo} 
-		group by board_no
-		ORDER BY BOARD.board_no desc, BOARD.board_date desc
-		limit #{startBoardNo}, #{perPageNum}
+		SELECT 
+			B.board_no, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			count(comment_no) as comment_count,
+			count(file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+				FROM BOARD
+				JOIN BOOKMARK
+					ON BOARD.board_no = BOOKMARK.board_no
+				WHERE BOOKMARK.user_no = #{userNo} 
+				ORDER BY BOARD.board_no desc 
+				LIMIT #{startBoardNo}, #{perPageNum}
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		JOIN USER
+			ON B.user_no = USER.user_no
+		LEFT JOIN COMMENT
+			ON B.board_no = COMMENT.board_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.board_no desc
 	</select>
 	
 	<select id="countMyQuestionsPaging" resultType="int">
@@ -323,21 +395,6 @@
 				 board_title like CONCAT('%',#{keyword},'%') 
 			</when>
 		</choose>
-	</sql>
-	
-	<sql id="selectBoard">
-		SELECT 
-			BOARD.board_no, 
-			USER.user_name, 
-			CATEGORY.category_item, 
-			BOARD.category_no,
-			BOARD.board_title, 
-			BOARD.board_content_summary, 
-			BOARD.board_date, 
-			BOARD.board_view_cnt,
-			count(comment_no) as comment_count,
-			count(file_no) as file_count
-		FROM BOARD
 	</sql>
 	
 	<sql id="join_user">

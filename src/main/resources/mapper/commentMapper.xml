@@ -41,7 +41,6 @@
 			USER.user_name, 
 			USER.user_id, 
 			COMMENT.comment_no, 
-			COMMENT.comment_no as no,
 			COMMENT.comment_no as number, 
 			COMMENT.comment_content, 
 			COMMENT.comment_date, 
@@ -49,7 +48,7 @@
 			USER.user_name,
 			count(COMMENT_LIKE.comment_no) as comment_like_count,
 			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as user_no,
-			(SELECT count(comment_no) FROM BOARD.COMMENT WHERE COMMENT.comment_parent_no = no) as comment_comment_count
+			(SELECT count(comment_no) FROM BOARD.COMMENT WHERE COMMENT.comment_parent_no = number) as comment_comment_count
 		FROM COMMENT
 		JOIN  USER
 		ON COMMENT.user_no = USER.user_no
