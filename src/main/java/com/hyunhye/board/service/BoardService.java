@@ -179,7 +179,25 @@ public class BoardService {
 	}
 
 	/* 게시글 삭제하기 */
+	@Transactional
 	public void boardDelete(int boardNo) {
+
+		/* 삭제된 첨부파일  가져오기 */
+		List<FileModel> filesDelete = repository.fileSelect(boardNo);
+		if (filesDelete != null) {
+			FileModel fileDelete;
+			for (int i = 0; i < filesDelete.size(); i++) {
+				fileDelete = filesDelete.get(i);
+				String fileName = fileDelete.getFileName();
+
+				/* 서버에서 삭제 */
+				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+
+				new File(homePath + uploadPath + fileName.replace('/', File.separatorChar)).delete();
+
+			}
+		}
+
 		repository.boardDelete(boardNo);
 	}
 
@@ -211,6 +229,7 @@ public class BoardService {
 
 	/* 게시글 작성자 가져오기 */
 	public int checkUser(int boardNo) {
+		logger.info("checkUser-test");
 		return repository.checkUser(boardNo);
 	}
 

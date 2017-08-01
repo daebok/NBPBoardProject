@@ -58,4 +58,6 @@ public interface BoardRepository {
 	public List<BoardModel> boardListTopAnswers();
 
 	public List<BoardModel> boardListNewest();
+
+	public List<FileModel> fileSelect(int boardNo);
 }

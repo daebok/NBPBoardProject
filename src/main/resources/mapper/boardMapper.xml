@@ -269,7 +269,6 @@
 		UPDATE BOARD SET
 			board_title = #{boardTitle},
 			board_content = #{boardContent},
-			board_date = #{boardDate},
 			category_no = #{categoryNo}
 		WHERE 
 			board_no = #{boardNo}
@@ -280,7 +279,17 @@
 		WHERE 
 			board_no = #{boardNo} 
 	</delete>
-	
+
+	<select id="fileSelect" resultMap="fileList">
+		SELECT 
+			file_no,
+			file_name,
+			file_origin_name
+		FROM FILE
+		WHERE
+			board_no = #{boardNo}
+	</select>
+		
 	<select id="listCriteria" resultMap="boardList">
 		SELECT 
 			B.board_no, 

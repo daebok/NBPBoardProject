@@ -38,7 +38,7 @@
 		}
 	});
 	$("#modifyButton").click(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/<>]/gi;
 		var blank_pattern = /[\s]/g;
 		
 		var title = $("#title").val();
@@ -115,7 +115,7 @@
 	<!-- header end -->
 	<div class="container">
 		<div class="container-fluid" style="margin-bottom: 30px">
-			<form:form action="question/modify" method="post" name="form" class="modify-form form-horizontal"  enctype="multipart/form-data">
+			<form:form action="question/modify" method="post" name="form" class="modify-form form-horizontal" id="register-form" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="title">Title</label>
 					<input type="text" name="boardTitle" id="title" value="${model.boardTitle}" maxlength="100" size="20" class="form-control"  /> 
