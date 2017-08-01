@@ -38,7 +38,7 @@
 			category_no, 
 			category_item
 		FROM CATEGORY
-		WHERE category_enabled = 0
+		WHERE category_enabled = 1
 	</select>
 	
 	<select id="categoryCount" resultType="int">

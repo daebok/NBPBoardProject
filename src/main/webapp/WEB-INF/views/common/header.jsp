@@ -38,8 +38,8 @@
 			
 			<div class="pull-right">
 				<sec:authorize access="isAuthenticated()">
-						<a href="<c:url value='/board/myinfo'/>" id="my-qustions" class="btn btn-default">My Info</a>
-						
+						<a href="<c:url value='/board/myquestions'/>" id="my-qustions" class="btn btn-default">My Questions</a>
+						<a href="<c:url value='/board/myfavorite'/>" id="favorite" class="btn btn-default">My Favorite</a>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<a href="<c:url value='/admin/admin'/>" id="admin" class="btn btn-success">ADMIN</a>
 						</sec:authorize>

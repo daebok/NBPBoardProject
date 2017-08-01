@@ -23,49 +23,57 @@
 			height : 300,
 			callbacks: {
 				onImageUpload: function(files, editor, welEditable) {
-					for (var i = files.length - 1; i >= 0; i--) {
-						sendFile(files[i],this);
+					var form = $('.file')[0];
+					var formData = new FormData(form);
+					for (var index = files.length - 1; index >= 0; index--) {
+						formData.append('files', files[index]);
+						
+						var str = "<div class='list-group-item' id='file-list-"+index+"'>";
+						str += "<div class='list-1'>" + files[index].name +"</div>";
+						str += "<div class='list-2'>" + files[index].size + " bytes </div>";
+						str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
+						$(".newUploadedList").append(str);
 					}
 				}
-			}
-		});
-		$("#modifyButton").click(function() {
-			var title = $("#title").val();
-			var content = $("#content").val();
-			if (title == "") {
-				alert("제목을 입력하세요.");
-				$("#title").focus();
-				return;
-			}
-			if (content == "") {
-				alert("내용를 입력하세요.");
-				$("#content").focus();
-				return;
-			}
-			document.form.action = "/board/question/modify"
-			document.form.submit();
-		});
-		
-		$("#category").val('${model.categoryNo}').prop("selected", true);
-		
-		/* 파일 업로드 */
-		$(".file").on("change", function(event) {
-			$(".newUploadedList > * ").remove();
-			for(var index = 0 ; index < $(".file")[0].files.length; index++) {
-				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
-				str += "<div class='list-1'>" + $(".file")[0].files[index].name +"</div>";
-				str += "<div class='list-2'>" + $(".file")[0].files[index].size + " bytes </div>";
-				str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
-				$(".newUploadedList").append(str);
-			}
-		});
-		
-		/* 파일 삭제 */
-		$(".file-delete-button").on("click", function(){
-			$(this).parent('div').parent('div').remove();
-			$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+$(this).attr("id")+">");
-		});
+		}
 	});
+	$("#modifyButton").click(function() {
+		var title = $("#title").val();
+		var content = $("#content").val();
+		if (title == "") {
+			alert("제목을 입력하세요.");
+			$("#title").focus();
+			return;
+		}
+		if (content == "") {
+			alert("내용를 입력하세요.");
+			$("#content").focus();
+			return;
+		}
+		document.form.action = "/board/question/modify"
+		document.form.submit();
+	});
+	
+	$("#category").val('${model.categoryNo}').prop("selected", true);
+	
+	/* 파일 업로드 */
+	$(".file").on("change", function(event) {
+		// $(".newUploadedList > * ").remove();
+		for(var index = 0 ; index < $(".file")[0].files.length; index++) {
+			var str = "<div class='list-group-item' id='file-list-"+index+"'>";
+			str += "<div class='list-1'>" + $(".file")[0].files[index].name +"</div>";
+			str += "<div class='list-2'>" + $(".file")[0].files[index].size + " bytes </div>";
+			str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
+			$(".newUploadedList").append(str);
+		}
+	});
+	
+	/* 파일 삭제 */
+	$(".file-delete-button").on("click", function(){
+		$(this).parent('div').parent('div').remove();
+		$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+$(this).attr("id")+">");
+	});
+});
 </script>
 </head>
 <body>

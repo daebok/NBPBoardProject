@@ -4,35 +4,39 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
+<script type="text/javascript">
+$('#myTab a[href="#profile"]').tab('show') // Select tab by name
+$('#myTab a:first').tab('show') // Select first tab
+$('#myTab a:last').tab('show') // Select last tab
+$('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
+</script>
 </head>
 <body>
 	<!-- header start -->
 	<%@include file="common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
-		<div class="container-fluid">
-				<%@include file="common/search.jsp"%>
-				<b>★ Top 10</b>
-			<div class="col-md-12">
-				<hr>
-				<c:forEach var="board" items="${model}">
-					<h3>
-						<a href="<c:url value='/board/answer?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
-					</h3>
-					<div>
-						<span class="badge">Posted By ${board.userName}</span>
-						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted ${board.boardDate}</span>
-						<div class="pull-right">
-							<span class="label label-success">answers: ${board.commentCount}</span>
-							<span class="label label-primary">views: ${board.boardViewCount}</span>
-							<span class="label label-warning">${board.categoryItem}</span>
-						</div>
-					</div>
-					<hr>
-				</c:forEach>
+		<%@include file="common/search.jsp"%>
+		<h5><b>Top Questions</b></h5>
+		<div role="tabpanel">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#home"
+					aria-controls="home" role="tab" data-toggle="tab">Views</a></li>
+				<li role="presentation"><a href="#profile"
+					aria-controls="profile" role="tab" data-toggle="tab">Favorites</a></li>
+				<li role="presentation"><a href="#answer"
+					aria-controls="profile" role="tab" data-toggle="tab">Answers</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="home"><c:import url="/board/views" ></c:import></div>
+				<div role="tabpanel" class="tab-pane" id="profile"><c:import url="/board/views" ></c:import></div>
+				<div role="tabpanel" class="tab-pane" id="answer"><c:import url="/board/views" ></c:import></div>
 			</div>
+
 		</div>
 	</div>
-
 </body>
 </html>

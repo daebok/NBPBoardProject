@@ -46,21 +46,21 @@
 	<%@include file="../common/header.jsp"%>
 
 	<div class="container">
-		<div class="container-fluid">
+		<div class="container-fluid" >
 			<div class="row">
 				<%@include file="../common/search.jsp"%>
 				<b>All Questions</b>
 			</div>
 		</div>
-		<div class="container-fluid">
+		<div class="container-fluid" >
 			<div class="col-md-12">
 				<c:if test="${empty list}">
 					<div>검색 결과 없음</div>
 				</c:if>
 				<c:forEach var="board" items="${list}">
-					<h3>
+					<h4>
 						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
-					</h3>
+					</h4>
 					<p id="content">${board.boardContentSummary}</p>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span> <span

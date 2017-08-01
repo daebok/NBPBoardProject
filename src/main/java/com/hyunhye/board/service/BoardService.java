@@ -51,6 +51,7 @@ public class BoardService {
 		/* HTML 태그 제거 */
 		String boardSummary = boardModel.getBoardContent()
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		logger.info("boardSummary:{}", boardSummary);
 		boardModel.setBoardContentSummary(boardSummary);
 
 		repository.boardRegist(boardModel);
@@ -145,7 +146,7 @@ public class BoardService {
 
 		/* 파일 업로드 */
 		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-		for (int index = 1; index < files.length; index++) {
+		for (int index = 0; index < files.length; index++) {
 			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
 				index2++;
 				continue;
@@ -157,7 +158,7 @@ public class BoardService {
 
 			/* 파일을 첨부하지 않았을 때 */
 			if (fileContentType.equals("")) {
-				break;
+				continue;
 			}
 
 			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,

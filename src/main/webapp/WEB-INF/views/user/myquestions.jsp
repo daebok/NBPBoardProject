@@ -21,26 +21,9 @@
 
 	}
 </style>
-<script>
-	$(document).ready(
-		function(){
-			$('#searchButton').on("click", function(){
-				self.location = "list"
-					+ '${pageMaker.makeQuery(1)}'
-					+ "&categoryType="
-					+ $("#categoryType option:selected").val()
-					+ "&searchType="
-					+ $("#searchType option:selected").val()
-					+ "&keyword="+encodeURIComponent($('#keyword').val());
-				
-			});	
-		
-		})
-</script>
 </head>
 <body>
 	<%@include file="../common/header.jsp"%>
-	
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
@@ -50,9 +33,9 @@
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
-					<h3>
+					<h4>
 						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
-					</h3>
+					</h4>
 					<div>
 						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted ${board.boardDate}</span>
 						<div class="pull-right">

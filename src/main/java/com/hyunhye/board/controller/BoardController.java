@@ -203,8 +203,6 @@ public class BoardController {
 	public ResponseEntity<String> commentRegist(@ModelAttribute BookMarkModel bookMarkModel) {
 		ResponseEntity<String> entity = null;
 
-		logger.info("bookMarkModel.getBoardNo:{}", bookMarkModel.getBoardNo());
-		logger.info("bookMarkModel.getBookmarkMemo:{}", bookMarkModel.getBookmarkMemo());
 		boardService.bookMarkMemoRegist(bookMarkModel);
 		entity = new ResponseEntity<String>(HttpStatus.OK);
 		return entity;

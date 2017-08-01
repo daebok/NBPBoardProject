@@ -77,7 +77,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">카테고리</div>
 			<div class="panel-body">
-				<form name="form" method="get" class="form-horizontal" id="category-add-form">
+				<form:form name="form" method="get" class="form-horizontal" id="category-add-form">
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>Add</b></label>
 						<div class="col-sm-10">
@@ -86,7 +86,7 @@
 							<button type="button" class="category-add-button btn btn-default" style="float:left;">Add</button>
 						</div>
 					</div>
-				</form>
+				</form:form>
 			</div>
 			<div class="list-group">
 				<div class="list-group-item">

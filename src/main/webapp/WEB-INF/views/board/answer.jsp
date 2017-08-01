@@ -32,7 +32,7 @@
 }
 .comment-comment-textarea {
 	float: left;
-	margin-left: 30px;
+	margin-left: 140px;
 	margin-bottom: 20px;
 }
 .comment-comment-button {
@@ -48,9 +48,14 @@
 	float: left;
 }
 .comment-comment-list {
-	margin-left: 60px;
+	width: 550px;
+	margin-left: 150px;
 	margin-top: -10px;
-	border-color: #989898;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px dotted #989898;
+	border-radius: 1px;
 }
 .comment {
 	word-break:break-all
@@ -85,8 +90,8 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						str += "<div class='pull-right' class='comment-list'>";
 						str += '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;';
 						str += '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp';
-						str += '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'">Comment</button>&nbsp;';
-						str += '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">Comment ▼</button></div></div>';
+						str += '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">0 Comment ▼</button></div></div>';
+						str += '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'" style="margin-bottom:10px;">add a Comment</button>';
 						str += '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div></div>';
 					$("#listComment").append(str);
 					$('.summernote').summernote('code', '');
@@ -193,11 +198,12 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				},
 				data : $('.comment-form').serialize(),
 				success : function(result) {
-					var list = $.parseJSON(result);
 					$('.comment-comment-write').remove();
 					$('.comment-comment').attr("disabled",false);
 					$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 					$('#comment-view-'+commentNo).val('closed');
+					var count = parseInt($('#comment-view-'+commentNo).html());
+					$('#comment-view-'+commentNo).html((count+1) + " Comment ▲");
 					$('#comment-view-'+commentNo).click();
 				}
 			});
@@ -209,8 +215,9 @@ var header = $("meta[name='_csrf_header']").attr("content");
 		$('.comment-comment-write').remove();
 		$('.comment-comment').attr("disabled",false);
 		var commentNo = $(this).attr('comment-no');
+		var count = parseInt($(this).html());
 		if($(this).val() == 'closed'){
-			$(this).html("Comment ▲");
+			$(this).html(count + " Comment ▲");
 			$(this).val('open');
 			var data = "commentNo=" + commentNo;
 			$.ajax({
@@ -234,7 +241,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				}
 			});
 		} else if($(this).val() == 'open'){
-			$(this).html("Comment ▼");
+			$(this).html(count + " Comment ▼");
 			$(this).val('closed');
 			$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 		}
@@ -471,7 +478,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 		</div>
 
 		<div class="container-fluid" style="margin-bottom: 50px" >
-			<div class="col-lg-8">
+			<div class="col-lg-9">
 				<span class="commentTitle">${answerCount.commentCount} Answer</span>
 				<div id="listComment" class="col-lg-12">
 					<c:if test='${empty comment}'>
@@ -516,19 +523,20 @@ var header = $("meta[name='_csrf_header']").attr("content");
 													<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
 												</sec:authorize>
 											</c:if>
-											<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}">Comment</button>
 										</c:if>
-										<button type="button" class="comment-comment-selct btn btn-default" id = "comment-view-${comment.commentNo}" comment-no="${comment.commentNo}" value='closed'>Comment ▼</button>
+										<button type="button" class="comment-comment-selct btn btn-default" 
+												id = "comment-view-${comment.commentNo}" comment-no="${comment.commentNo}" value='closed'>${comment.commentCommentCount} Comment ▼</button>
 									</div>
 								</div>
-								<div class='comment-comment-wrapper' id='comment-comment-list'></div>
+								<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}" style="margin-bottom:10px;">add a Comment</button>
+								<div class='comment-comment-wrapper' id='comment-comment-list' style="margin-bottom:45px; margin-top:-40px;"></div>
 							</div>
 						</div>
 					</c:forEach>
 				</div>
 			</div>
 			<sec:authorize access="isAuthenticated()">
-				<div class="col-lg-8" style="margin-top: 50px;">
+				<div class="col-lg-9" style="margin-top: 50px;">
 					<form:form name="form" class="answer-form">
 						<input type="hidden" name="boardNo" value="${model.boardNo}">
 						<label for="content">Your Answer</label>
