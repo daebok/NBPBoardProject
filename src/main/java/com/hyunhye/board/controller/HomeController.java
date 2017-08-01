@@ -14,22 +14,27 @@ public class HomeController {
 	/* 게시글 목록을 가지고 홈 화면으로 이동 */
 	@RequestMapping("board")
 	public String home(Model model) {
+		model.addAttribute("categoryList", boardService.categoryListAll());
 		return "home";
 	}
 
-	/* 게시글 목록을 가지고 홈 화면으로 이동 */
+	/* 조회수가 가장 많은 순 */
 	@RequestMapping("board/views")
 	public String homeViews(Model model) {
 		model.addAttribute("model", boardService.boardListAll());
-		model.addAttribute("categoryList", boardService.categoryListAll());
 		return "home_views";
 	}
 
-	/* 게시글 목록을 가지고 홈 화면으로 이동 */
+	/* 즐겨찾기를 가장 많이 한 순 */
 	@RequestMapping("board/favorites")
 	public String homeFavorites(Model model) {
-		model.addAttribute("model", boardService.boardListAll());
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		return "home_views";
+	}
+
+	/* 답변 수가 가장 많은 순 */
+	@RequestMapping("board/answers")
+	public String homeAnswers(Model model) {
+		model.addAttribute("model", boardService.boardListTopAnswers());
 		return "home_views";
 	}
 }

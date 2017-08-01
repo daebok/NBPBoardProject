@@ -40,6 +40,10 @@ public class BoardService {
 		return repository.boardListAll();
 	}
 
+	public List<BoardModel> boardListTopAnswers() {
+		return repository.boardListTopAnswers();
+	}
+
 	/*
 	 * 게시글 작성하기
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
@@ -287,5 +291,4 @@ public class BoardService {
 		model.setUserNo(user.getUserNo());
 		repository.boardBookMarkUnCheck(model);
 	}
-
 }

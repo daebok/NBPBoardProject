@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyunhye.board.repository.BoardRepository">
 
@@ -88,7 +88,8 @@
 
 	<select id="boardListAll" resultMap="boardList">
 		SELECT 
-			B.board_no, 
+			B.board_no,
+			B.board_no as number, 
 			USER.user_name, 
 			CATEGORY.category_item, 
 			B.category_no,
@@ -96,7 +97,7 @@
 			B.board_content_summary, 
 			B.board_date, 
 			B.board_view_cnt,
-			count(comment_no) as comment_count,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			count(file_no) as file_count
 		FROM (
 				SELECT 
@@ -110,12 +111,41 @@
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
 			ON B.user_no = USER.user_no
-		LEFT JOIN COMMENT
-			ON B.board_no = COMMENT.board_no
 		LEFT JOIN FILE
 			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_view_cnt desc
+	</select>
+	
+	<select id="boardListTopAnswers" resultMap="boardList">
+		SELECT 
+			B.board_no,
+			USER.user_name, 
+			CATEGORY.category_item, 
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			B.comment_count,
+			count(FILE.file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.board_no as number, BOARD.user_no, BOARD.category_no, BOARD.board_title, 
+					BOARD.board_content_summary, BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,
+					(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count
+				FROM BOARD 
+				ORDER BY comment_count desc 
+				LIMIT 0, 10
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		JOIN USER
+			ON B.user_no = USER.user_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.comment_count desc;
 	</select>
 
 	<insert id="boardRegist">
@@ -223,6 +253,7 @@
 	<select id="listCriteria" resultMap="boardList">
 		SELECT 
 			B.board_no, 
+			B.board_no as number,
 			USER.user_name, 
 			CATEGORY.category_item, 
 			B.category_no,
@@ -230,7 +261,7 @@
 			B.board_content_summary, 
 			B.board_date, 
 			B.board_view_cnt,
-			count(comment_no) as comment_count,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			count(file_no) as file_count
 		FROM (
 				SELECT 
@@ -257,8 +288,6 @@
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
 			ON B.user_no = USER.user_no
-		LEFT JOIN COMMENT
-			ON B.board_no = COMMENT.board_no
 		LEFT JOIN FILE
 			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
@@ -267,14 +296,15 @@
 	
 	<select id="selectMyQuestions" resultMap="boardList">
 		SELECT 
-			B.board_no,  
+			B.board_no,
+			B.board_no as number,
 			CATEGORY.category_item, 
 			B.category_no,
 			B.board_title, 
 			B.board_content_summary, 
 			B.board_date, 
 			B.board_view_cnt,
-			count(comment_no) as comment_count,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			count(file_no) as file_count
 		FROM (
 				SELECT 
@@ -287,8 +317,6 @@
 			) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
-		LEFT JOIN COMMENT
-			ON B.board_no = COMMENT.board_no
 		LEFT JOIN FILE
 			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
@@ -297,7 +325,8 @@
 	
 	<select id="selectMyFavorite" resultMap="boardList">
 		SELECT 
-			B.board_no, 
+			B.board_no,
+			B.board_no as number, 
 			USER.user_name, 
 			CATEGORY.category_item, 
 			B.category_no,
@@ -305,7 +334,7 @@
 			B.board_content_summary, 
 			B.board_date, 
 			B.board_view_cnt,
-			count(comment_no) as comment_count,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			count(file_no) as file_count
 		FROM (
 				SELECT 
@@ -322,8 +351,6 @@
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
 			ON B.user_no = USER.user_no
-		LEFT JOIN COMMENT
-			ON B.board_no = COMMENT.board_no
 		LEFT JOIN FILE
 			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
@@ -405,16 +432,6 @@
 	<sql id="join_category">
 		JOIN CATEGORY
 		ON BOARD.category_no = CATEGORY.category_no
-	</sql>
-	
-	<sql id="left_join_comment">
-		LEFT JOIN COMMENT
-		ON BOARD.board_no = COMMENT.board_no
-	</sql>
-	
-	<sql id="left_join_file">
-		LEFT JOIN FILE
-		ON BOARD.board_no = FILE.board_no
 	</sql>
 	
 	<sql id="left_join_bookmark">

@@ -54,4 +54,6 @@ public interface BoardRepository {
 	public BookMarkModel memoSelect(BookMarkModel bookMarkModel);
 
 	public void boardBookMarkUnCheck(BoardModel model);
+
+	public List<BoardModel> boardListTopAnswers();
 }
