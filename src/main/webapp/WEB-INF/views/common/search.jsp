@@ -18,6 +18,8 @@
 			<c:out value="${cri.searchType eq 'content'?'selected':''}"/>>내용</option>
 		<option value="title"
 			<c:out value="${cri.searchType eq 'title'?'selected':''}"/>>제목</option>
+		<option value="writer"
+			<c:out value="${cri.searchType eq 'writer'?'selected':''}"/>>작성자</option>
 	</select> 
 	<input name="keyword" id="keyword" value="${cri.keyword}"> 
 	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">

@@ -57,6 +57,9 @@ public class BoardService {
 		/* HTML 태그 제거 */
 		String boardSummary = boardModel.getBoardContent()
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		if (boardSummary.length() > 300) {
+			boardSummary = boardSummary.substring(0, 300);
+		}
 		boardModel.setBoardContentSummary(boardSummary);
 
 		repository.boardRegist(boardModel);

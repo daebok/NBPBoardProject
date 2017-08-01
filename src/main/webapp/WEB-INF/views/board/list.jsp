@@ -10,7 +10,7 @@
 <head>
 <style type="text/css">
 <!-- 말 줄임 -->
-#content {
+#content-summary {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: box;
@@ -58,7 +58,7 @@
 					<h4>
 						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
 					</h4>
-					<p id="content">${board.boardContentSummary}</p>
+					<p id="content-summary">${board.boardContentSummary}</p>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span> 
 						<span class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>

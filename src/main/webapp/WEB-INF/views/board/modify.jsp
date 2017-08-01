@@ -38,20 +38,53 @@
 		}
 	});
 	$("#modifyButton").click(function() {
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		var blank_pattern = /[\s]/g;
+		
 		var title = $("#title").val();
 		var content = $("#content").val();
-		if (title == "") {
-			alert("제목을 입력하세요.");
+		
+		if (blank_pattern.test(title) == true) {
+			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
 		}
-		if (content == "") {
+		
+		if (special_pattern.test(title) == true) {
+			alert('제목에 특수문자는 사용할 수 없습니다.');
+			$('#title').focus();
+			return false;
+		}
+		
+		if (blank_pattern.test(content) == true) {
 			alert("내용를 입력하세요.");
 			$("#content").focus();
 			return;
 		}
-		document.form.action = "/board/question/modify"
-		document.form.submit();
+		
+		/* 비속어 처리 */
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			type: 'POST', 
+			url: '/board/badWordsCheck', 
+			dataType : 'text',
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			data: $('#register-form').serialize(),
+			success: function (result) {
+				var list = $.parseJSON(result);
+				console.log(list);
+				if(list.length != 0) {
+					alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
+					$("#content").focus();
+				} else {
+					document.form.action = "/board/question/modify"
+					document.form.submit();
+				}
+			}
+		});
 	});
 	
 	$("#category").val('${model.categoryNo}').prop("selected", true);

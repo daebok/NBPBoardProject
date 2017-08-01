@@ -300,6 +300,8 @@
 					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
 				FROM BOARD
 				<if test="categoryType != '' ">
+					<include refid="join_category"></include>
+					<include refid="join_user"></include>
 					WHERE
 					<include refid="category_search"></include>
 				</if>
@@ -308,6 +310,7 @@
 						AND
 					</if>
 					<if test="categoryType == '' ">
+						<include refid="join_user"></include>
 						WHERE
 					</if>
 					<include refid="search_search"></include>
@@ -406,6 +409,7 @@
 		SELECT COUNT(board_no) 
 		FROM BOARD
 		<include refid="join_category"></include>
+		<include refid="join_user"></include>
 		<if test="categoryType != '' ">
 			WHERE
 			<include refid="category_search"></include>
@@ -443,14 +447,17 @@
 	<sql id="search_search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				( board_content like CONCAT('%',#{keyword},'%')
-				OR board_title like CONCAT('%',#{keyword},'%') )
+				( BOARD.board_content like CONCAT('%',#{keyword},'%')
+				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				 board_content like CONCAT('%',#{keyword},'%')
+				BOARD.board_content like CONCAT('%',#{keyword},'%')
 			</when>
 			<when test="searchType == 'title'">
-				 board_title like CONCAT('%',#{keyword},'%') 
+				BOARD.board_title like CONCAT('%',#{keyword},'%') 
+			</when>
+			<when test="searchType == 'writer'">
+				USER.user_id = #{keyword}
 			</when>
 		</choose>
 	</sql>
