@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hyunhye.admin.model.NoticeModel;
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.user.model.UserModel;
@@ -87,4 +88,41 @@ public class AdminController {
 
 		return new ResponseEntity<String>("user deleted", HttpStatus.OK);
 	}
+
+	/* 공지사항 */
+	@RequestMapping("notice")
+	public String notice(Model model) {
+		model.addAttribute("noticeList", adminService.noticeListAll());
+		return "admin/notice";
+	}
+
+	@RequestMapping("noticeRegist")
+	public String noticeRegistPage() {
+		return "admin/noticeManage";
+	}
+
+	@RequestMapping("notice/regist")
+	public String noticeRegist(NoticeModel noticeModel) {
+		adminService.noticeRegist(noticeModel);
+		return "redirect:/admin/notice";
+	}
+
+	@RequestMapping("notice/delete")
+	public String noticeDelete(NoticeModel noticeModel) {
+		adminService.deleteNotice(noticeModel);
+		return "redirect:/admin/notice";
+	}
+
+	@RequestMapping("notice/modifyPage")
+	public String noticeModifyPage(NoticeModel noticeModel, Model model) {
+		model.addAttribute("model", adminService.noticeSelect(noticeModel));
+		return "admin/noticeModify";
+	}
+
+	@RequestMapping("notice/modify")
+	public String noticeModify(NoticeModel noticeModel, Model model) {
+		adminService.noticeModify(noticeModel);
+		return "redirect:/admin/notice";
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.hyunhye.admin.model.NoticeModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.user.model.UserModel;
 
@@ -25,5 +26,15 @@ public interface AdminRepository {
 	public void userDelete(UserModel userModel);
 
 	public int categoryCount(CategoryModel categoryModel);
+
+	public List<NoticeModel> noticeListAll();
+
+	public void noticeRegist(NoticeModel noticeModel);
+
+	public NoticeModel noticeSelect(NoticeModel noticeModel);
+
+	public void deleteNotice(NoticeModel noticeModel);
+
+	public void noticeModify(NoticeModel noticeModel);
 
 }

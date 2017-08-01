@@ -3,11 +3,14 @@ package com.hyunhye.admin.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.hyunhye.admin.model.NoticeModel;
 import com.hyunhye.admin.repository.AdminRepository;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.UserModelDetails;
 
 @Service
 public class AdminService {
@@ -45,5 +48,28 @@ public class AdminService {
 
 	public int categoryCount(CategoryModel categoryModel) {
 		return repository.categoryCount(categoryModel);
+	}
+
+	public List<NoticeModel> noticeListAll() {
+		return repository.noticeListAll();
+	}
+
+	public void noticeRegist(NoticeModel noticeModel) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		noticeModel.setUserNo(user.getUserNo());
+
+		repository.noticeRegist(noticeModel);
+	}
+
+	public NoticeModel noticeSelect(NoticeModel noticeModel) {
+		return repository.noticeSelect(noticeModel);
+	}
+
+	public void deleteNotice(NoticeModel noticeModel) {
+		repository.deleteNotice(noticeModel);
+	}
+
+	public void noticeModify(NoticeModel noticeModel) {
+		repository.noticeModify(noticeModel);
 	}
 }

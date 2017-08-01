@@ -8,6 +8,7 @@
 <html>
 <head>
 <style type="text/css">
+<!-- 말 줄임 -->
 #content {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -21,39 +22,34 @@
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 3
 }
+.notice-title{
+	background-color: #337ab7;
+	color: white;
+	padding: 10px;
+}
+.notice-content {
+	color: #337ab7;
+}
 </style>
-<script>
-	$(document).ready(
-			function() {
-				$('#searchButton').on(
-						"click",
-						function(event) {
-							self.location = "list"
-									+ '${pageMaker.makeQuery(1)}'
-									+ "&categoryType="
-									+ $("#categoryType option:selected").val()
-									+ "&searchType="
-									+ $("#searchType option:selected").val()
-									+ "&keyword="
-									+ encodeURIComponent($('#keyword').val());
-
-						});
-
-			})
-</script>
 </head>
 <body>
 	<%@include file="../common/header.jsp"%>
-
 	<div class="container">
 		<div class="container-fluid" >
-			<div class="row">
-				<%@include file="../common/search.jsp"%>
-				<b>All Questions</b>
+			<div class="pull-right" style="height:100%; width:22%">
+				<div class="notice-title">Notice</div>
+				<div style="border: 3px solid #337ab7; padding:10px;">
+					<c:forEach var="notice" items="${notice}">
+					<h6>
+						<span class="glyphicon glyphicon-bullhorn" style="color:#777;"></span>
+						<a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content">${notice.noticeTitle}</a>
+					</h6>
+					</c:forEach>
+				</div>
 			</div>
-		</div>
-		<div class="container-fluid" >
-			<div class="col-md-12">
+			<%@include file="../common/search.jsp"%>
+			<b>All Questions</b>
+			<div class="col-md-9">
 				<c:if test="${empty list}">
 					<div>검색 결과 없음</div>
 				</c:if>
@@ -64,8 +60,7 @@
 					<p id="content">${board.boardContentSummary}</p>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span> <span
-							class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted
-							${board.boardDate}</span>
+							class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted ${board.boardDate}</span>
 
 						<div class="pull-right">
 							<span class="label label-success">answer:${board.commentCount}</span> 
@@ -78,8 +73,7 @@
 					</div>
 					<hr>
 				</c:forEach>
-			</div>
-
+				
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
 					<c:if test="${pageMaker.prev}">
@@ -100,6 +94,8 @@
 					</c:if>
 				</ul>
 			</div>
+			</div>
+
 		</div>
 	</div>
 </body>

@@ -30,7 +30,7 @@ $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
 			</ul>
 
 			<!-- Tab panes -->
-			<div class="tab-content">
+			<div class="tab-content" style="margin:20px;">
 				<div role="tabpanel" class="tab-pane active" id="home"><c:import url="/board/views" ></c:import></div>
 				<div role="tabpanel" class="tab-pane" id="profile"><c:import url="/board/views" ></c:import></div>
 				<div role="tabpanel" class="tab-pane" id="answer"><c:import url="/board/views" ></c:import></div>

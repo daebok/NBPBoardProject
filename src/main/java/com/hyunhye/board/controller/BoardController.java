@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
+import com.hyunhye.admin.model.NoticeModel;
+import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
@@ -40,10 +42,13 @@ public class BoardController {
 	Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 	@Autowired
-	public BoardService boardService;
+	private BoardService boardService;
 
 	@Autowired
-	public CommentService commentService;
+	private CommentService commentService;
+
+	@Autowired
+	private AdminService adminService;
 
 	/* 질문하기 페이지 이동  */
 	@RequestMapping("question")
@@ -65,13 +70,14 @@ public class BoardController {
 		model.addAttribute("categoryList", boardService.categoryListAll());
 		model.addAttribute("pageMaker", pageMaker);
 
+		model.addAttribute("notice", adminService.noticeListAll());
+
 		return "board/list";
 	}
 
 	/* 게시글 작성하기  */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file,
-		Principal principal)
+	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		boardService.boardRegist(user.getUserNo(), model, file);
@@ -81,7 +87,7 @@ public class BoardController {
 	/* 게시글 상세 보기 */
 	@RequestMapping("answer")
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
-		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
+		Model model, HttpServletRequest request, HttpServletResponse response) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		/* 조회수 */
@@ -214,6 +220,12 @@ public class BoardController {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user", user);
 		return "user/myinfo";
+	}
+
+	@RequestMapping("notice")
+	public String noticeSelect(NoticeModel noticeModel, Model model) {
+		model.addAttribute("model", adminService.noticeSelect(noticeModel));
+		return "admin/noticeView";
 	}
 
 }

@@ -25,6 +25,14 @@
 		<result property="categoryEnabled" column="category_enabled" />
 	</resultMap>
 	
+	<resultMap id="noticeList" type="notice">
+		<result property="noticeNo" column="notice_no" />
+		<result property="userNo" column="user_no" />
+		<result property="noticeTitle" column="notice_title" />
+		<result property="noticeContent" column="notice_content" />
+	</resultMap>
+	
+	<!-- 카테고리 관리 -->
 	<select id="categoryAdd">
 		INSERT INTO CATEGORY (
 			category_item
@@ -66,6 +74,7 @@
 			category_no = #{categoryNo}
 	</update>
 	
+	<!-- 회원 관리 -->
 	<select id="userListAll" resultMap="userList">
 		SELECT
 			user_no,
@@ -87,4 +96,50 @@
 		WHERE 
 			user_no = #{userNo}
 	</delete>
+	
+	<!-- 공지사항 관리 -->
+	<insert id="noticeRegist">
+		INSERT INTO NOTICE (
+			notice_title,
+			notice_content,
+			user_no
+		) VALUES (
+			#{noticeTitle},
+			#{noticeContent},
+			#{userNo}
+		)
+	</insert>
+	
+	<select id="noticeListAll" resultMap="noticeList">
+		SELECT
+			notice_no,
+			notice_title,
+			notice_content
+		FROM NOTICE
+	</select>
+	
+	<select id="noticeSelect" resultMap="noticeList">
+		SELECT
+			notice_no,
+			notice_title,
+			notice_content
+		FROM NOTICE
+		WHERE
+			notice_no = #{noticeNo}
+	</select>
+	
+	<delete id="deleteNotice">
+		DELETE FROM NOTICE
+		WHERE 
+			notice_no = #{noticeNo}
+	</delete>
+	
+	<update id="noticeModify">
+		UPDATE NOTICE
+		SET 
+			notice_title = #{noticeTitle},
+			notice_content = #{noticeContent}
+		WHERE
+			notice_no = #{noticeNo}
+	</update>
 </mapper>
