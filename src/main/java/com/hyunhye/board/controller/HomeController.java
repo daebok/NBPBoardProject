@@ -25,9 +25,10 @@ public class HomeController {
 		return "home_views";
 	}
 
-	/* 즐겨찾기를 가장 많이 한 순 */
-	@RequestMapping("board/favorites")
+	/* 최신 순 */
+	@RequestMapping("board/newest")
 	public String homeFavorites(Model model) {
+		model.addAttribute("model", boardService.boardListNewest());
 		return "home_views";
 	}
 

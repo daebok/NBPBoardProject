@@ -80,8 +80,18 @@ public class BoardController {
 	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		boardService.boardRegist(user.getUserNo(), model, file);
 		return "redirect:/board/list";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "badWordsCheck", method = RequestMethod.POST)
+	public ResponseEntity<List<String>> badWordsCheck(@ModelAttribute BoardModel model) {
+		ResponseEntity<List<String>> entity = new ResponseEntity<List<String>>(boardService.badWordsCheck(model),
+			HttpStatus.OK);
+
+		return entity;
 	}
 
 	/* 게시글 상세 보기 */

@@ -1,5 +1,7 @@
 package com.hyunhye.board.model;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -16,7 +18,7 @@ public class BoardModel {
 	/* 게시글 Summary */
 	private String boardContentSummary;
 	/* 게시글 작성 날짜 */
-	private String boardDate;
+	private Date boardDate;
 	/* 게시글 첨부 파일 */
 	private String[] boardFiles;
 	/* 게시글 첨부 파일 번호 */

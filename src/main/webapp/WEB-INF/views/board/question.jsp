@@ -31,12 +31,30 @@
 				$("#content").focus();
 				return;
 			}
-			
-			var that = $("#register-form");
-			var str = "";
 
-			document.form.action = "/board/question/ask"
-			document.form.submit();
+			/* 비속어 처리 */
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				type: 'POST', 
+				url: '/board/badWordsCheck', 
+				dataType : 'text',
+				beforeSend : function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
+				data: $('#register-form').serialize(),
+				success: function (result) {
+					var list = $.parseJSON(result);
+					console.log(list);
+					if(list.length != 0) {
+						alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
+						$("#content").focus();
+					} else {
+						document.form.action = "/board/question/ask"
+						document.form.submit();
+					}
+				}
+			});
 		});
 		
 		$('.summernote').summernote({

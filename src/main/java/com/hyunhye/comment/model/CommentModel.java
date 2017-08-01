@@ -1,5 +1,7 @@
 package com.hyunhye.comment.model;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -12,7 +14,7 @@ public class CommentModel {
 	/* 답변 내용 */
 	private String commentContent;
 	/* 답변 작성 날짜 */
-	private String commentDate;
+	private Date commentDate;
 	/* 답변 작성 날짜 */
 	private int commentParentNo;
 	/* 답변 개수 */

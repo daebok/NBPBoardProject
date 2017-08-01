@@ -22,11 +22,13 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						str += '<span  id="answer-like-count-'+ list.commentNo +'" style="font-size:12px; color:#888;"> '+0+'</span>';
 						str += "<div id='comment-"+list.commentNo+"' class='comment-wrapper-wrapper'> <div class='comment-wrapper' id='"+list.commentNo+"'>";
 						str += "<div class='comment' id='content-"+list.commentNo+"'>"+ list.commentContent + "</div><span class='badge'>Commented By  "+list.userName+"</span>";
+						str += '<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">';
+						str += '<fmt:formatDate value="'+list.commentDate+'" pattern="yyyy/MM/dd"/></span>'
 						str += "<div class='pull-right' class='comment-list'>";
 						str += '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;';
 						str += '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp';
 						str += '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">0 Comment ▼</button></div></div>';
-						str += '<button type="button" class="comment-comment btn btn-default" comment-no="'+list.commentNo+'" style="margin-bottom:10px;">add a Comment</button>';
+						str += '<button type="button" class="comment-comment btn btn-default btn-sm" comment-no="'+list.commentNo+'" style="margin-bottom:10px;">add a Comment</button>';
 						str += '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div></div>';
 					$("#listComment").append(str);
 					$('.summernote').summernote('code', '');

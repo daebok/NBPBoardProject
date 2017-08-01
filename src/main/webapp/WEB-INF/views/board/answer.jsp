@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
@@ -21,9 +22,9 @@ $(document).on("click",".comment-comment",function() {
 	str += '<form name="form" class="comment-form">';
 	str += '<input type="hidden" name="boardNo" value="'+${model.boardNo}+'">';
 	str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
-	str += '<textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea" name="commentContent"></textarea>';
-	str += '<div><button type="button" class="comment-comment-button btn btn-default" comment-no="'+commentNo+'">Ok</button>';
-	str += '<button type="button" class="comment-comment-cancel-button btn btn-default">Cancel</button></div>';
+	str += '<textarea cols="60" size="8" class="comment-comment-textarea" id="comment-comment-textarea" name="commentContent"></textarea>';
+	str += '<div><button type="button" class="comment-comment-button btn btn-default btn-sm" comment-no="'+commentNo+'">Ok</button>';
+	str += '<button type="button" class="comment-comment-cancel-button btn btn-default btn-sm">Cancel</button></div>';
 	str += '</form></div>';
 	$('#comment-'+commentNo+' > .comment-comment-wrapper').append(str);
 });
@@ -56,9 +57,7 @@ $(document).on('click','#book-mark',function(){
 		dataType : 'text',
 		processData : false,
 		contentType : false,
-		data : data,
-		success : function(result) {
-		}
+		data : data
 	});
 });
 
@@ -185,7 +184,8 @@ $(document).ready(
 											<span class="badge commentName">Commented By ${comment.userName} </span>
 										</c:otherwise>
 									</c:choose>
-									<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">${comment.commentDate}</span>
+									<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">
+										<fmt:formatDate value="${comment.commentDate}" pattern="yyyy/MM/dd"/></span>
 									<div class="pull-right" class="comment-list" id="comment-list">
 										<c:if test="${comment.commentEnabled eq 1 }">
 											<c:if test="${user.username == comment.userId}">
@@ -202,7 +202,7 @@ $(document).ready(
 												id = "comment-view-${comment.commentNo}" comment-no="${comment.commentNo}" value='closed'>${comment.commentCommentCount} Comment ▼</button>
 									</div>
 								</div>
-								<button type="button" class="comment-comment btn btn-default" comment-no="${comment.commentNo}" style="margin-bottom:10px;">add a Comment</button>
+								<button type="button" class="comment-comment btn btn-default btn-sm" comment-no="${comment.commentNo}" style="margin-bottom:10px;">add a Comment</button>
 								<div class='comment-comment-wrapper' id='comment-comment-list' style="margin-bottom:45px; margin-top:-40px;"></div>
 							</div>
 						</div>

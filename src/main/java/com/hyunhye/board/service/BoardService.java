@@ -2,8 +2,6 @@ package com.hyunhye.board.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -44,6 +42,10 @@ public class BoardService {
 		return repository.boardListTopAnswers();
 	}
 
+	public List<BoardModel> boardListNewest() {
+		return repository.boardListNewest();
+	}
+
 	/*
 	 * 게시글 작성하기
 	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
@@ -55,7 +57,6 @@ public class BoardService {
 		/* HTML 태그 제거 */
 		String boardSummary = boardModel.getBoardContent()
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		logger.info("boardSummary:{}", boardSummary);
 		boardModel.setBoardContentSummary(boardSummary);
 
 		repository.boardRegist(boardModel);
@@ -120,11 +121,6 @@ public class BoardService {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		int userNo = user.getUserNo();
 
-		Date dt = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = sdf.format(dt);
-
-		boardModel.setBoardDate(currentTime);
 		boardModel.setUserNo(userNo);
 
 		/* 삭제된 첨부파일  가져오기 */
@@ -291,4 +287,13 @@ public class BoardService {
 		model.setUserNo(user.getUserNo());
 		repository.boardBookMarkUnCheck(model);
 	}
+
+	public List<String> badWordsCheck(BoardModel model) {
+		String boardSummary = model.getBoardContent()
+			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		boardSummary += model.getBoardTitle();
+		List<String> badWords = Filtering.badWordFilteringContainsStream(boardSummary);
+		return badWords;
+	}
+
 }

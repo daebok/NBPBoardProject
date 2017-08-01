@@ -85,7 +85,7 @@
 			<form:form action="question/modify" method="post" name="form" class="modify-form form-horizontal"  enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="boardTitle" value="${model.boardTitle}" maxlength="80" id="title" /> 
+					<input type="text" name="boardTitle" id="title" value="${model.boardTitle}" maxlength="100" size="20" class="form-control"  /> 
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>

@@ -117,6 +117,37 @@
 		ORDER BY B.board_view_cnt desc
 	</select>
 	
+	<select id="boardListNewest" resultMap="boardList">
+		SELECT 
+			B.board_no,
+			B.board_no as number, 
+			USER.user_name, 
+			CATEGORY.category_item, 
+			B.category_no,
+			B.board_title, 
+			B.board_content_summary, 
+			B.board_date, 
+			B.board_view_cnt,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
+			count(file_no) as file_count
+		FROM (
+				SELECT 
+					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, 
+					BOARD.board_content_summary, BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+				FROM BOARD 
+				ORDER BY BOARD.board_no desc 
+				LIMIT 0, 10
+			) B
+		JOIN CATEGORY
+			ON B.category_no = CATEGORY.category_no
+		JOIN USER
+			ON B.user_no = USER.user_no
+		LEFT JOIN FILE
+			ON B.board_no = FILE.board_no
+		GROUP BY B.board_no
+		ORDER BY B.board_no desc
+	</select>
+	
 	<select id="boardListTopAnswers" resultMap="boardList">
 		SELECT 
 			B.board_no,

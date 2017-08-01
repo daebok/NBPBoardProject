@@ -56,4 +56,6 @@ public interface BoardRepository {
 	public void boardBookMarkUnCheck(BoardModel model);
 
 	public List<BoardModel> boardListTopAnswers();
+
+	public List<BoardModel> boardListNewest();
 }

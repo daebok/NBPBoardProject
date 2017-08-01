@@ -3,8 +3,8 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <form:form name="form" method="post" action="/board/list">
-	<select name="categoryType" id="categoryType">
-		<option value="null"
+	<select name="categoryType" id="categoryType" >
+		<option value="null" 
 			<c:out value="${cri.categoryType eq 'null'?'selected':''}"/>>---</option>
 		<c:forEach var="category" items="${categoryList}">
 			<option value="${category.categoryItem}"
@@ -20,5 +20,5 @@
 			<c:out value="${cri.searchType eq 'title'?'selected':''}"/>>제목</option>
 	</select> 
 	<input name="keyword" id="keyword" value="${cri.keyword}"> 
-	<input type="submit" id="searchButton" class="btn btn-default" value="검색">
+	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">
 </form:form>
