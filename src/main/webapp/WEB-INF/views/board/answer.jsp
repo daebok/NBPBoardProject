@@ -59,9 +59,13 @@ $(document).on('click','#book-mark',function(){
 
 /* 게시글 삭제 */
 $(document).on('click','#delete',function() {
-	var result = confirm('게시물을 삭제하시겠습니까?');
-	if (result) {
-		location.replace('/board/delete?boardNo=${model.boardNo}');
+	if (confirm('게시물을 삭제하시겠습니까?')) {
+		if('${answerCount.commentCount}' > 0) {
+			alert("게시글에 답변이 있으므로 삭제 할 수 없습니다.\n삭제를 원하시면 관리자에게 문의하세요.");
+			return;
+		} else {
+			location.replace('/board/delete?boardNo=${model.boardNo}');
+		}
 	} 
 });
 

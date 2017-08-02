@@ -14,7 +14,7 @@ import com.hyunhye.board.model.SearchCriteria;
 @Repository
 public interface BoardRepository {
 
-	public List<BoardModel> boardListAll();
+	public List<BoardModel> boardListViews();
 
 	public List<CategoryModel> categoryListAll();
 
@@ -32,9 +32,9 @@ public interface BoardRepository {
 
 	public void deleteFile(String fileDelete);
 
-	public List<BoardModel> listCriteria(SearchCriteria cri);
+	public List<BoardModel> selectListAll(SearchCriteria cri);
 
-	public int countPaging(SearchCriteria cri);
+	public int countListAllPaging(SearchCriteria cri);
 
 	public void increaseViewCount(int boardNo);
 

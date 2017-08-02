@@ -88,8 +88,8 @@ public class AdminService {
 	}
 
 	/* 공지사항 삭제 */
-	public void deleteNotice(NoticeModel noticeModel) {
-		repository.deleteNotice(noticeModel);
+	public void noticeDelete(NoticeModel noticeModel) {
+		repository.noticeDelete(noticeModel);
 	}
 
 	/* 공지사항 수정 */

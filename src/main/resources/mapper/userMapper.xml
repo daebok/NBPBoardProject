@@ -11,11 +11,6 @@
 		<result property="userPassword" column="user_password" />
 		<result property="userName" column="user_name" />
 	</resultMap>
-	
-	<resultMap id="categoryList" type="category">
-		<result property="categoryNo" column="category_no" />
-		<result property="categoryItem" column="category_item" />
-	</resultMap>
 
 	<insert id="userRegist">
 		INSERT INTO USER (
@@ -36,35 +31,7 @@
 			user_id = #{userId}
 	</insert>
 
-
-	<delete id="userDelete">
-		DELETE FROM USER
-		WHERE
-			user_id = #{userId}
-	</delete>
-
-	<select id="loginCheck" resultType="int">
-		SELECT
-			count(user_no)
-		FROM USER
-		WHERE
-			user_id = #{userId} 
-			AND
-			user_password = #{userPassword}
-	</select>
-
-	<select id="viewUser" resultMap="userList">
-		SELECT
-			user_no,
-			user_name,
-			user_id
-		FROM USER
-		WHERE
-			user_id = #{userId} AND
-			user_password = #{userPassword}
-	</select>
-
-	<select id="userSelect" resultType="Integer" parameterType="String">
+	<select id="duplicationId" resultType="Integer" parameterType="String">
 		SELECT COUNT(*)
 		FROM USER
 		WHERE 
@@ -83,12 +50,5 @@
 		WHERE
 			USER.user_id = #{userId} 
 	</select>
-	
-	<select id="categoryAdd">
-		INSERT INTO CATEGORY (
-			category_item
-		) VALUES (
-			#{categoryItem}
-		)
-	</select>
+
 </mapper>

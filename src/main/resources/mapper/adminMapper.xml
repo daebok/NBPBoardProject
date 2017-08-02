@@ -144,7 +144,7 @@
 			notice_no = #{noticeNo}
 	</select>
 	
-	<delete id="deleteNotice">
+	<delete id="noticeDelete">
 		DELETE FROM NOTICE
 		WHERE 
 			notice_no = #{noticeNo}

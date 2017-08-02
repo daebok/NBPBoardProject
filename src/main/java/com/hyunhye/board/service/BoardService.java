@@ -38,8 +38,8 @@ public class BoardService {
 
 	/** 게시글  Top10 리스트 **/
 	/* 조회순*/
-	public List<BoardModel> boardListAll() {
-		return repository.boardListAll();
+	public List<BoardModel> boardListViews() {
+		return repository.boardListViews();
 	}
 
 	/* 답변순 */
@@ -145,7 +145,7 @@ public class BoardService {
 	}
 
 	/* 5. 게시글 리스트 (페이징) */
-	public List<BoardModel> listCriteria(SearchCriteria cri) {
+	public List<BoardModel> selectListAll(SearchCriteria cri) {
 		/* 검색 타입 null 체크 */
 		cri = searchTypecheck(cri);
 
@@ -154,7 +154,7 @@ public class BoardService {
 			cri = keywordCheck(cri);
 		}
 
-		return repository.listCriteria(cri);
+		return repository.selectListAll(cri);
 	}
 
 	/* 검색 시, null 체크 */
@@ -178,8 +178,8 @@ public class BoardService {
 	}
 
 	/* 게시글 개수 구하기 */
-	public int listCountCriteria(SearchCriteria cri) {
-		return repository.countPaging(cri);
+	public int countListAllPaging(SearchCriteria cri) {
+		return repository.countListAllPaging(cri);
 	}
 
 	/* 조회수 */

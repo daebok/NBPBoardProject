@@ -45,6 +45,7 @@
 		<result property="fileSize" column="file_size" />
 	</resultMap>
 	
+	<!-- 첨부파일 -->
 	<insert id="addFile">
 		INSERT INTO FILE (
 			board_no, 
@@ -78,6 +79,17 @@
 			file_name = #{fileDelete}
 	</delete>
 	
+	<select id="fileSelect" resultMap="fileList">
+		SELECT 
+			file_no,
+			file_name,
+			file_origin_name
+		FROM FILE
+		WHERE
+			board_no = #{boardNo}
+	</select>
+	
+	<!-- 카테고리 리스트 -->
 	<select id="categoryListAll" resultMap="categoryList">
 		SELECT 
 			category_item,
@@ -86,7 +98,9 @@
 		WHERE category_enabled = 1
 	</select>
 
-	<select id="boardListAll" resultMap="boardList">
+	<!-- 홈 화면에 보여줄 게시글 리스트 -->	
+	<!-- 1. 조회수 순 -->
+	<select id="boardListViews" resultMap="boardList">
 		SELECT 
 			B.board_no,
 			B.board_no as number, 
@@ -117,6 +131,7 @@
 		ORDER BY B.board_view_cnt desc
 	</select>
 	
+	<!-- 2. 최신 순 -->
 	<select id="boardListNewest" resultMap="boardList">
 		SELECT 
 			B.board_no,
@@ -148,6 +163,7 @@
 		ORDER BY B.board_no desc
 	</select>
 	
+	<!-- 3. 답변 순 -->
 	<select id="boardListTopAnswers" resultMap="boardList">
 		SELECT 
 			B.board_no,
@@ -179,6 +195,7 @@
 		ORDER BY B.comment_count desc;
 	</select>
 
+	<!-- 게시글 등록  -->
 	<insert id="boardRegist">
 		INSERT INTO BOARD (
 			user_no, 
@@ -194,7 +211,50 @@
 			#{boardContentSummary}
 		)
 	</insert>
-	
+
+	<!-- 게시글 상세 보기 -->
+	<select id="boardSelect" resultMap="boardList">
+		SELECT 
+			BOARD.board_no, 
+			BOARD.user_no, 
+			USER.user_name, 
+			USER.user_id,
+			CATEGORY.category_item,
+			BOARD.category_no,  
+			BOARD.board_title, 
+			BOARD.board_content, 
+			BOARD.board_date,
+			BOARD.board_view_cnt,
+			(SELECT 1 FROM BOARD.BOOKMARK WHERE BOOKMARK.user_no = #{userNo} AND BOOKMARK.board_no = #{boardNo}) as bookmark_check
+		FROM BOARD 
+		JOIN CATEGORY
+			ON BOARD.category_no = CATEGORY.category_no
+		JOIN  USER
+			ON BOARD.user_no = USER.user_no
+		LEFT JOIN BOARD.BOOKMARK
+			ON BOARD.board_no = BOOKMARK.board_no
+		WHERE 
+			BOARD.board_no = #{boardNo}
+	</select>
+
+	<!-- 게시글 수정 -->
+	<select id="boardModify" resultMap="boardList">
+		UPDATE BOARD SET
+			board_title = #{boardTitle},
+			board_content = #{boardContent},
+			category_no = #{categoryNo}
+		WHERE 
+			board_no = #{boardNo}
+	</select>
+
+	<!-- 게시글 삭제 -->
+	<delete id="boardDelete"> 
+		DELETE FROM BOARD 
+		WHERE 
+			board_no = #{boardNo} 
+	</delete>
+
+	<!-- 즐겨찾기 -->
 	<update id="bookMarkMemoRegist">
 		UPDATE BOOKMARK
 		SET 
@@ -243,54 +303,9 @@
 			AND
 			board_no = #{boardNo}
 	</select>
-
-	<select id="boardSelect" resultMap="boardList">
-		SELECT 
-			BOARD.board_no, 
-			BOARD.user_no, 
-			USER.user_name, 
-			USER.user_id,
-			CATEGORY.category_item,
-			BOARD.category_no,  
-			BOARD.board_title, 
-			BOARD.board_content, 
-			BOARD.board_date,
-			BOARD.board_view_cnt,
-			(SELECT 1 FROM BOARD.BOOKMARK WHERE BOOKMARK.user_no = #{userNo} AND BOOKMARK.board_no = #{boardNo}) as bookmark_check
-		FROM BOARD 
-		<include refid="join_category"></include>
-		<include refid="join_user"></include>
-		<include refid="left_join_bookmark"></include>
-		WHERE 
-			BOARD.board_no = #{boardNo}
-	</select>
-
-	<select id="boardModify" resultMap="boardList">
-		UPDATE BOARD SET
-			board_title = #{boardTitle},
-			board_content = #{boardContent},
-			category_no = #{categoryNo}
-		WHERE 
-			board_no = #{boardNo}
-	</select>
-
-	<delete id="boardDelete"> 
-		DELETE FROM BOARD 
-		WHERE 
-			board_no = #{boardNo} 
-	</delete>
-
-	<select id="fileSelect" resultMap="fileList">
-		SELECT 
-			file_no,
-			file_name,
-			file_origin_name
-		FROM FILE
-		WHERE
-			board_no = #{boardNo}
-	</select>
-		
-	<select id="listCriteria" resultMap="boardList">
+	
+	<!-- 게시글 리스트 -->	
+	<select id="selectListAll" resultMap="boardList">
 		SELECT 
 			B.board_no, 
 			B.board_no as number,
@@ -308,25 +323,14 @@
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
 					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
 				FROM BOARD
-				<if test="categoryType != '' ">
-					<include refid="join_category"></include>
-					<include refid="join_user"></include>
-					WHERE
-					<include refid="category_search"></include>
-				</if>
-				<if test="searchType != '' ">
-					<if test="categoryType != '' ">
-						AND
-					</if>
-					<if test="categoryType == '' ">
-						<include refid="join_user"></include>
-						WHERE
-					</if>
-					<include refid="search_search"></include>
-				</if> 
+				JOIN  USER
+					ON BOARD.user_no = USER.user_no
+				JOIN CATEGORY
+					ON BOARD.category_no = CATEGORY.category_no
+				<include refid="search"></include>
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
-			) B
+		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
@@ -357,7 +361,7 @@
 				WHERE BOARD.user_no = #{userNo} 
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
-			) B
+		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
 		LEFT JOIN FILE
@@ -389,7 +393,7 @@
 				GROUP BY BOARD.board_no
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
-			) B
+		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
 		LEFT JOIN FILE
@@ -421,7 +425,7 @@
 				WHERE BOOKMARK.user_no = #{userNo} 
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
-			) B
+		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
@@ -430,6 +434,17 @@
 			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
+	</select>
+	
+	<!-- 페이징을 위한 게시글 개수 구하기 -->	
+	<select id="countListAllPaging" resultType="int">
+		SELECT COUNT(board_no) 
+		FROM BOARD
+		JOIN CATEGORY
+			ON BOARD.category_no = CATEGORY.category_no
+		JOIN  USER
+			ON BOARD.user_no = USER.user_no
+		<include refid="search"></include>
 	</select>
 	
 	<select id="countMyQuestionsPaging" resultType="int">
@@ -448,7 +463,7 @@
 					ON BOARD.board_no = COMMENT.board_no
 				WHERE BOARD.user_no = #{userNo}  
 				GROUP BY BOARD.board_no
-			) B; 
+			) B
 	</select>
 	
 	<select id="countMyFavoritePaging" resultType="int">
@@ -458,26 +473,7 @@
 			BOOKMARK.user_no = #{userNo}
 	</select>
 	
-	<select id="countPaging" resultType="int">
-		SELECT COUNT(board_no) 
-		FROM BOARD
-		<include refid="join_category"></include>
-		<include refid="join_user"></include>
-		<if test="categoryType != '' ">
-			WHERE
-			<include refid="category_search"></include>
-		</if>
-		<if test="searchType != '' ">
-			<if test="categoryType != '' ">
-				AND
-			</if>
-			<if test="categoryType == '' ">
-				WHERE
-			</if>
-			<include refid="search_search"></include>
-		</if>
-	</select>
-	
+	<!-- 게시글의 해당 작성자 확인 -->
 	<select id="checkUser" resultType="int">
 		SELECT 
 			user_no 
@@ -486,6 +482,7 @@
 			board_no = #{boardNo}
 	</select>
 	
+	<!-- 조회수 증가 -->
 	<update id="increaseViewCount">
 		UPDATE BOARD SET 
 			board_view_cnt = board_view_cnt + 1 
@@ -493,11 +490,28 @@
 			board_no = #{boardNo}
 	</update>
 
-	<sql id="category_search">
+	<!-- 검색 조건 -->
+	<sql id="search">
+		<if test="categoryType != '' ">
+			WHERE
+			<include refid="categoryType_search"></include>
+		</if>
+		<if test="searchType != '' ">
+			<if test="categoryType != '' ">
+				AND
+			</if>
+			<if test="categoryType == '' ">
+				WHERE
+			</if>
+			<include refid="searchType_search"></include>
+		</if> 
+	</sql>
+
+	<sql id="categoryType_search">
 		CATEGORY.category_item = #{categoryType}
 	</sql>
 	
-	<sql id="search_search">
+	<sql id="searchType_search">
 		<choose>
 			<when test="searchType == 'title_content'">
 				( BOARD.board_content like CONCAT('%',#{modifiedKeyword},'%')
@@ -513,20 +527,5 @@
 				USER.user_id = #{modifiedKeyword}
 			</when>
 		</choose>
-	</sql>
-	
-	<sql id="join_user">
-		JOIN  USER
-		ON BOARD.user_no = USER.user_no
-	</sql>
-	
-	<sql id="join_category">
-		JOIN CATEGORY
-		ON BOARD.category_no = CATEGORY.category_no
-	</sql>
-	
-	<sql id="left_join_bookmark">
-		LEFT JOIN BOARD.BOOKMARK
-		ON BOARD.board_no = BOOKMARK.board_no
 	</sql>
 </mapper>

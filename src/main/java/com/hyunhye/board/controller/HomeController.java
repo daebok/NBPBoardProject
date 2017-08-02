@@ -23,7 +23,7 @@ public class HomeController {
 	/* 조회수가 가장 많은 순 */
 	@RequestMapping("board/views")
 	public String homeViews(Model model) {
-		model.addAttribute("model", boardService.boardListAll());
+		model.addAttribute("model", boardService.boardListViews());
 		return "home_views";
 	}
 

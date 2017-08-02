@@ -16,7 +16,7 @@ public interface UserRepository {
 
 	public UserModel viewUser(UserModel model);
 
-	public int userSelect(String id);
+	public int duplicationId(String id);
 
 	public Map<String, Object> selectUser(String userId);
 

@@ -59,12 +59,12 @@ public class BoardController {
 	@RequestMapping("list")
 	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 한 페이지에 보여줄 게시글 */
-		model.addAttribute("list", boardService.listCriteria(cri));
+		model.addAttribute("list", boardService.selectListAll(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.listCountCriteria(cri));
+		pageMaker.setTotalCount(boardService.countListAllPaging(cri));
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());

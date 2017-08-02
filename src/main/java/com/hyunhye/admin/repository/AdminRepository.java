@@ -33,7 +33,7 @@ public interface AdminRepository {
 
 	public NoticeModel noticeSelect(NoticeModel noticeModel);
 
-	public void deleteNotice(NoticeModel noticeModel);
+	public void noticeDelete(NoticeModel noticeModel);
 
 	public void noticeModify(NoticeModel noticeModel);
 

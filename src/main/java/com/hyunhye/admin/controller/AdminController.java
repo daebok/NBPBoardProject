@@ -129,7 +129,7 @@ public class AdminController {
 	/* 공지사항 삭제 */
 	@RequestMapping("notice/delete")
 	public String noticeDelete(NoticeModel noticeModel) {
-		adminService.deleteNotice(noticeModel);
+		adminService.noticeDelete(noticeModel);
 		return "redirect:/admin/notice";
 	}
 

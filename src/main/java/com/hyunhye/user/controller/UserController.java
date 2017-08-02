@@ -45,6 +45,6 @@ public class UserController {
 	/* 아이디 중복 확인 */
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int duplicationId(@RequestBody String userId) {
-		return service.userSelect(userId);
+		return service.duplicationId(userId);
 	}
 }
