@@ -5,19 +5,26 @@
 <html>
 <head>
 <script type="text/javascript">
-$('#myTab a[href="#newest"]').tab('show') // Select tab by name
-$('#myTab a:first').tab('show') // Select first tab
-$('#myTab a:last').tab('show') // Select last tab
-$('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
+	$('#myTab a[href="#newest"]').tab('show'); // Select tab by name
+	$('#myTab a:first').tab('show'); // Select first tab
+	$('#myTab a:last').tab('show'); // Select last tab
+	$('#myTab li:eq(2) a').tab('show'); // Select third tab (0-indexed)
+
+	var error = '${requestScope["errorMessage"]}';
+	if(error != "") {
+		alert(error);
+	}
 </script>
 </head>
 <body>
+
 	<!-- header start -->
 	<%@include file="common/header.jsp"%>
 	<!-- header end -->
 	<div class="container">
 		<%@include file="common/search.jsp"%>
 		<h5><b>Top Questions</b></h5>
+	
 		<div role="tabpanel">
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">

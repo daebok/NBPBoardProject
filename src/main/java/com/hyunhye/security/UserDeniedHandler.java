@@ -22,7 +22,7 @@ public class UserDeniedHandler implements AccessDeniedHandler {
 		logger.info("Message : {}", accessDeniedException.getMessage());
 		logger.info("StackTrace : {}", accessDeniedException.getStackTrace());
 
-		request.setAttribute("errorMesssag", accessDeniedException.getMessage());
+		request.setAttribute("errorMessage", accessDeniedException.getMessage());
 		request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
 	}
 
