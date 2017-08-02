@@ -208,7 +208,7 @@ $(document).ready(
 				<p>${model.boardContent}</p>
 				<div>
 					<c:forEach var="attach" items="${attach}">
-						<a href='/upload/downloadFile?fileName=${attach.fileName}'> ${attach.fileOriginName} </a>
+						<a href='/board/downloadFile?fileName=${attach.fileName}'> ${attach.fileOriginName} </a>
 						<br>
 					</c:forEach>
 				</div>

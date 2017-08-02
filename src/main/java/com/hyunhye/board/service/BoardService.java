@@ -1,18 +1,18 @@
 package com.hyunhye.board.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.BookMarkModel;
@@ -22,191 +22,134 @@ import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.common.Filtering;
-import com.hyunhye.common.UploadFileUtils;
-import com.hyunhye.user.model.UserModelDetails;
+import com.hyunhye.security.UserSession;
 
 @Service
 public class BoardService {
-	Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
 	public BoardRepository repository;
 
+	@Autowired
+	private UploadService uploadService;
+
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	/* 게시글 리스트 */
+	/*
+	 * 1. 게시글  Top10 리스트
+	 */
+	/* 조회순*/
 	public List<BoardModel> boardListAll() {
 		return repository.boardListAll();
 	}
 
+	/* 답변순 */
 	public List<BoardModel> boardListTopAnswers() {
 		return repository.boardListTopAnswers();
 	}
 
+	/* 최신순 */
 	public List<BoardModel> boardListNewest() {
 		return repository.boardListNewest();
 	}
 
 	/*
-	 * 게시글 작성하기
-	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
+	 * 2. 게시글
 	 */
+
+	/* 2-1. 게시글 작성하기 */
+	/* 파일을 동시에 저장하기 위해 트랜잭션 사용 */
 	@Transactional
 	public void boardRegist(int userNo, BoardModel boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
 
-		/* HTML 태그 제거 */
-		String boardSummary = boardModel.getBoardContent()
+		/* 제거된 태그를 boardContentSummary에 담는다. */
+		String summary = createSummary(boardModel.getBoardContent());
+		boardModel.setBoardContentSummary(summary);
+
+		/* 1. 작성 된 게시글 저장 */
+		repository.boardRegist(boardModel);
+
+		/* 2. 업로드 된 파일 저장 */
+		uploadService.fileRegist(boardModel, files);
+	}
+
+	/* HTML 태그 제거 */
+	public String createSummary(String originalContent) {
+		String boardSummary = originalContent
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		/* 300글자가 넘어가면 자르기 */
 		if (boardSummary.length() > 300) {
 			boardSummary = boardSummary.substring(0, 300);
 		}
-		boardModel.setBoardContentSummary(boardSummary);
+		/* 제거된 태그를 boardContentSummary에 담는다. */
+		return boardSummary;
 
-		repository.boardRegist(boardModel);
-
-		/* 삭제된 첨부파일 번호 가져오기 */
-		int[] filesNo = boardModel.getBoardFilesNo();
-		int index2 = 0;
-
-		/* 파일 업로드 */
-		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-		for (int index = 0; index < files.length; index++) {
-			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
-				index2++;
-				continue;
-			}
-			MultipartFile file = files[index];
-
-			String fileOriginalName = file.getOriginalFilename();
-			long fileSize = file.getSize();
-			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
-
-			/* 파일을 첨부하지 않았을 때 */
-			if (fileContentType.equals("")) {
-				continue;
-			}
-
-			/* 1. 서버에 업로드 */
-			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,
-				file.getBytes());
-			FileModel fileModel = new FileModel();
-			fileModel.setFileName(fileName);
-			fileModel.setFileOriginName(fileOriginalName);
-			fileModel.setFileExtension(fileContentType);
-			fileModel.setFileSize(fileSize);
-
-			/* 2. 데이터베이스에 저장 */
-			repository.addFile(fileModel);
-
-		}
 	}
 
-	/* 해당 게시글 상세 보기 */
+	/* 비속어 체크 */
+	public List<String> badWordsCheck(BoardModel model) {
+		String boardSummary = model.getBoardContent()
+			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		boardSummary += model.getBoardTitle();
+		List<String> badWords = Filtering.badWordFilteringContainsStream(boardSummary);
+		return badWords;
+	}
+
+	/* 2-2. 해당 게시글 상세 보기 */
 	public BoardModel boardSelect(int boardNo) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		BoardModel boardModel = new BoardModel();
 		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(user.getUserNo());
+		boardModel.setUserNo(UserSession.getUserNo());
 		return repository.boardSelect(boardModel);
 	}
 
-	/* 첨부파일 등록 */
+	/* 조회수 */
+	public void setViewCookies(int boardNo, HttpServletRequest request, HttpServletResponse response) {
+		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + UserSession.getUserNo());
+		int cookieMaxAge = 60 * 5; // 쿠키가 5 분 동안만 유지 할 수 있도록 한다.
+		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
+			increaseViewCount(boardNo);
+			Cookie cookie = new Cookie(boardNo + "&" + UserSession.getUserNo(), "view");
+			cookie.setMaxAge(cookieMaxAge);
+			response.addCookie(cookie);
+		}
+	}
+
+	/* 등록 된 첨부파일 가져오기  */
 	public List<FileModel> getAttach(int boardNo) {
 		return repository.getFile(boardNo);
 	}
 
-	/*
-	 * 게시글 수정하기
-	 * 파일을 동시에 저장하기 위해 트랜잭션 사용
-	 */
+	/* 2-3. 게시글 수정하기*/
+	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
 	@Transactional
-	public BoardModel boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		int userNo = user.getUserNo();
+	public void boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
+		boardModel.setUserNo(UserSession.getUserNo());
 
-		boardModel.setUserNo(userNo);
+		/* 1) 업로드 된 파일 중에서 삭제버튼 누른 파일 삭제하기 */
+		uploadService.fileDelete(boardModel);
 
-		/* 삭제된 첨부파일  가져오기 */
-		String[] filesDelete = boardModel.getBoardFilesDelete();
-		if (filesDelete != null) {
-			String fileDelete;
-			for (int i = 0; i < filesDelete.length; i++) {
-				fileDelete = filesDelete[i];
+		/* 2) 새로 업로드 된 파일 저장 */
+		uploadService.fileRegist(boardModel, files);
 
-				/* 1. 서버에서 삭제 */
-				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-
-				new File(homePath + uploadPath + fileDelete.replace('/', File.separatorChar)).delete();
-
-				/* 2. 데이버베이스에서 삭제*/
-				repository.deleteFile(fileDelete);
-			}
-		}
-
-		/* 삭제된 첨부파일 번호 가져오기 */
-		int[] filesNo = boardModel.getBoardFilesNo();
-		int index2 = 0;
-
-		/* 파일 업로드 */
-		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-		for (int index = 0; index < files.length; index++) {
-			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
-				index2++;
-				continue;
-			}
-			MultipartFile file = files[index];
-			String fileOriginalName = file.getOriginalFilename();
-			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
-			long fileSize = file.getSize();
-
-			/* 파일을 첨부하지 않았을 때 */
-			if (fileContentType.equals("")) {
-				continue;
-			}
-
-			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,
-				file.getBytes());
-			FileModel fileModel = new FileModel();
-			fileModel.setFileName(fileName);
-			fileModel.setFileOriginName(fileOriginalName);
-			fileModel.setFileExtension(fileContentType);
-			fileModel.setFileSize(fileSize);
-
-			repository.addFile(fileModel);
-		}
-
-		return repository.boardModify(boardModel);
+		/* 3) 기존 게시글 수정하기 */
+		repository.boardModify(boardModel);
 	}
 
-	/* 게시글 삭제하기 */
+	/* 2-4. 게시글 삭제하기 */
 	@Transactional
 	public void boardDelete(int boardNo) {
 
-		/* 삭제된 첨부파일  가져오기 */
-		List<FileModel> filesDelete = repository.fileSelect(boardNo);
-		if (filesDelete != null) {
-			FileModel fileDelete;
-			for (int i = 0; i < filesDelete.size(); i++) {
-				fileDelete = filesDelete.get(i);
-				String fileName = fileDelete.getFileName();
+		/* 1) 해당 게시물에 첨부된 파일 서버에서 삭제 */
+		uploadService.fileDeletFromDatabase(boardNo);
 
-				/* 서버에서 삭제 */
-				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-				new File(homePath + uploadPath + fileName.replace('/', File.separatorChar)).delete();
-			}
-		}
-
+		/* 2) 기존 게시물 삭제하기 */
 		repository.boardDelete(boardNo);
 	}
 
-	/* 카테고리 목록 가져오기 */
-	public List<CategoryModel> categoryListAll() {
-		return repository.categoryListAll();
-	}
-
-	/* 게시글 리스트 (페이징) */
+	/* 2-5. 게시글 리스트 (페이징) */
 	public List<BoardModel> listCriteria(SearchCriteria cri) {
 		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
 			cri.setCategoryType("");
@@ -215,6 +158,17 @@ public class BoardService {
 			cri.setSearchType("");
 		}
 		return repository.listCriteria(cri);
+	}
+
+	/* 검색 시, null 체크 */
+	public SearchCriteria searchTypecheck(SearchCriteria cri) {
+		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
+			cri.setCategoryType("");
+		}
+		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
+			cri.setSearchType("");
+		}
+		return cri;
 	}
 
 	/* 게시글 개수 구하기 */
@@ -228,83 +182,85 @@ public class BoardService {
 	}
 
 	/* 게시글 작성자 가져오기 */
+	/* 인터셉터에서 사용 */
 	public int checkUser(int boardNo) {
-		logger.info("checkUser-test");
 		return repository.checkUser(boardNo);
 	}
 
-	public List<BoardModel> selectMyQuestions(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	/* 3. 카테고리 목록 가져오기 */
+	public List<CategoryModel> categoryListAll() {
+		return repository.categoryListAll();
+	}
 
-		cri.setUserNo(user.getUserNo());
+	/*
+	 * 4. 내 질문 모아 보기
+	 */
+
+	/* 4-1. 내 질문 모아 보기 (전체) */
+	public List<BoardModel> selectMyQuestions(Criteria cri) {
+		cri.setUserNo(UserSession.getUserNo());
 		return repository.selectMyQuestions(cri);
 	}
 
+	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsPaging(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		cri.setUserNo(user.getUserNo());
+		cri.setUserNo(UserSession.getUserNo());
 		return repository.countMyQuestionsPaging(cri);
 	}
 
-	/* 즐겨찾기 */
+	/* 4-2. 내 질문 모아 보기 (답변한 것만) */
+	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
+		cri.setUserNo(UserSession.getUserNo());
+		return repository.selectMyQuestionsAnswered(cri);
+	}
+
+	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
+	public int countMyQuestionsAnsweredPaging(Criteria cri) {
+		cri.setUserNo(UserSession.getUserNo());
+		return repository.countMyQuestionsAnsweredPaging(cri);
+	}
+
+	/*
+	 * 5. 즐겨찾기
+	 */
+
+	/* 즐겨찾기 저장하기 */
 	public void boardBookMark(BoardModel model) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.setUserNo(user.getUserNo());
+		model.setUserNo(UserSession.getUserNo());
 		repository.boardBookMark(model);
 	}
 
+	/* 즐겨찾기 리스트 */
 	public List<BoardModel> myFavorite(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		cri.setUserNo(user.getUserNo());
+		cri.setUserNo(UserSession.getUserNo());
 		return repository.selectMyFavorite(cri);
 
 	}
 
+	/* 즐겨 찾기 리스트 전체 개수 구하기 */
 	public int countMyFavoritePaging(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		cri.setUserNo(user.getUserNo());
+		cri.setUserNo(UserSession.getUserNo());
 		return repository.countMyFavoritePaging(cri);
 	}
 
+	/* 즐겨찾기 메모 저장 하기  */
 	public void bookMarkMemoRegist(BookMarkModel bookMarkModel) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		bookMarkModel.setUserNo(user.getUserNo());
+		bookMarkModel.setUserNo(UserSession.getUserNo());
 		repository.bookMarkMemoRegist(bookMarkModel);
 	}
 
+	/* 즐겨찾기 메모 불러오기  */
 	public BookMarkModel memoSelect(int boardNo) {
 		BookMarkModel bookMarkModel = new BookMarkModel();
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		bookMarkModel.setUserNo(user.getUserNo());
+		bookMarkModel.setUserNo(UserSession.getUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
 		return repository.memoSelect(bookMarkModel);
 	}
 
+	/* 즐겨찾기 해제  */
 	public void boardBookMarkUnCheck(BoardModel model) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.setUserNo(user.getUserNo());
+		model.setUserNo(UserSession.getUserNo());
 		repository.boardBookMarkUnCheck(model);
 	}
-
-	public List<String> badWordsCheck(BoardModel model) {
-		String boardSummary = model.getBoardContent()
-			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		boardSummary += model.getBoardTitle();
-		List<String> badWords = Filtering.badWordFilteringContainsStream(boardSummary);
-		return badWords;
-	}
-
-	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		cri.setUserNo(user.getUserNo());
-		return repository.selectMyQuestionsAnswered(cri);
-	}
-
-	public int countMyQuestionsAnsweredPaging(Criteria cri) {
-		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		cri.setUserNo(user.getUserNo());
-		return repository.countMyQuestionsAnsweredPaging(cri);
-	}
-
 }

@@ -117,7 +117,7 @@ $(document).ready(
 						<c:forEach var="attach" items="${attach}">
 							<div class="uploadedList">
 								<div class="list-group-item">
-									<div class="list-1"><a href='/upload/downloadFile?fileName=${attach.fileName}'>${attach.fileOriginName}</a></div>
+									<div class="list-1"><a href='/board/downloadFile?fileName=${attach.fileName}'>${attach.fileOriginName}</a></div>
 									<div class="list-2">${attach.fileSize} bytes</div>
 								</div>
 							</div>
