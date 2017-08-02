@@ -35,7 +35,7 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/myfavorite/memo${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
+						<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
 					</h4>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span>
@@ -53,17 +53,17 @@
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
 					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 					</c:if>
 
 					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 						<li 
 							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myquestions${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+							<a href="/board/myquestions${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 						</li>
 					</c:forEach>
 					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 					</c:if>
 				</ul>
 			</div>

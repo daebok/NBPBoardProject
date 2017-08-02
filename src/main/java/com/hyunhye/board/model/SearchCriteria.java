@@ -12,6 +12,4 @@ public class SearchCriteria extends Criteria {
 	private String keyword;
 	/* 카테고리 타입 */
 	private String categoryType;
-	/* 사용자 번호 */
-	private int userNo;
 }

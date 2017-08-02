@@ -157,6 +157,7 @@ $(document).ready(
 					<c:if test='${empty comment}'>
 						<div class="emptyContent">답변이 없습니다.</div>
 					</c:if>
+					
 					<c:forEach var="comment" items="${comment}">
 						<div class="whole-wrapper" id="whole-wrapper-${comment.commentNo}">
 							<c:choose>
@@ -170,12 +171,7 @@ $(document).ready(
 							<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
 							<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
 								<div class="comment-wrapper" id="${comment.commentNo}" style="margin-bottom:10px;">
-									<c:if test="${comment.commentEnabled eq 1 }">
-										<div class="comment" id="content-${comment.commentNo}"> ${comment.commentContent} </div>
-									</c:if>
-									<c:if test="${comment.commentEnabled ne 1 }">
-										<div class="comment" id="content-${comment.commentNo}">삭제 된 답변입니다.</div>
-									</c:if>
+									<div class="comment" id="content-${comment.commentNo}"> ${comment.commentContent} </div>
 									<c:choose>
 										<c:when test="${model.userName == comment.userName}">
 											<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
@@ -187,16 +183,14 @@ $(document).ready(
 									<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">
 										<fmt:formatDate value="${comment.commentDate}" pattern="yyyy/MM/dd"/></span>
 									<div class="pull-right" class="comment-list" id="comment-list">
-										<c:if test="${comment.commentEnabled eq 1 }">
-											<c:if test="${user.username == comment.userId}">
-												<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
+										<c:if test="${user.username == comment.userId}">
+											<button type="button" class="comment-modify btn btn-default" comment-no="${comment.commentNo}">Modify</button>
+											<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
+										</c:if>
+										<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
+											<sec:authorize access="hasRole('ROLE_ADMIN')">
 												<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-											</c:if>
-											<c:if test="${user.username != comment.userId}"> <!-- 관리자 권한 -->
-												<sec:authorize access="hasRole('ROLE_ADMIN')">
-													<button type="button" class="comment-delete btn btn-default" comment-no="${comment.commentNo}">Delete</button>
-												</sec:authorize>
-											</c:if>
+											</sec:authorize>
 										</c:if>
 										<button type="button" class="comment-comment-selct btn btn-default" 
 												id = "comment-view-${comment.commentNo}" comment-no="${comment.commentNo}" value='closed'>${comment.commentCommentCount} Comment ▼</button>

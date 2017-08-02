@@ -72,4 +72,9 @@ public class AdminService {
 	public void noticeModify(NoticeModel noticeModel) {
 		repository.noticeModify(noticeModel);
 	}
+
+	public Integer categoryCheck(CategoryModel categoryModel) {
+		// TODO Auto-generated method stub
+		return repository.categoryCheck(categoryModel);
+	}
 }

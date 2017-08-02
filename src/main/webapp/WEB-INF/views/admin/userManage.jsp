@@ -7,19 +7,6 @@
 <title>Home</title>
 <script>
 	$(document).ready(function() {
-		$("#category-add-button").click(function() {
-			var userId = $("#categoryItem").val();
-			if (userId == "") {
-				alert("카테고리 항목을 입력하세요.");
-				$("#category-item").focus();
-				return;
-			}
-			var result = confirm('카테고리를 추가하시겠습니까?');
-			if (result) {
-				document.form.action = "/admin/categoryAdd"
-				document.form.submit();
-			} 
-		});
 		$(".user-authority").click(function() {
 			var userNo = $(this).attr('user-no');
 			var userAuthority = $("select[name=userAuthority] option:selected").val();

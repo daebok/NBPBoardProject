@@ -6,19 +6,48 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
+<sec:csrfMetaTags/>
 <title>Home</title>
 <script>
 	$(document).on('click',".category-add-button", function() {
-		var userId = $("#categoryItem").val();
-		if (userId == "") {
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
+		var blank_pattern = /[\s]/g;
+		
+		var categoryItem = $("#category-item").val();
+		if (blank_pattern.test(categoryItem) == true) {
 			alert("카테고리 항목을 입력하세요.");
+			$("#category-item").focus();
+			return;
+		}
+		if (special_pattern.test(categoryItem) == true) {
+			alert("카테고리에 특수문자를 입력 할 수 없습니다.");
 			$("#category-item").focus();
 			return;
 		}
 		var result = confirm('카테고리를 추가하시겠습니까?');
 		if (result) {
-			document.form.action = "/admin/categoryAdd"
-			document.form.submit();
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				type: 'POST', 
+				url: '/admin/categoryCheck', 
+				dataType : 'text',
+				beforeSend : function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
+				data: $('#category-add-form').serialize(),
+				success: function (result) {
+					var list = $.parseJSON(result);
+					if(parseInt(list) > 0) {
+						alert("카테고리가 이미 존재합니다.");
+						$("#category-item").focus();
+						return;
+					} else {
+						document.form.action = "/admin/categoryAdd"
+						document.form.submit();
+					}
+				}
+			});
 		} 
 	});
 	$(document).on('click',".category-delete", function() {

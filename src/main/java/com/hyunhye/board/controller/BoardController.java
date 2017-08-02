@@ -30,6 +30,7 @@ import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
@@ -150,7 +151,7 @@ public class BoardController {
 
 	/* 내 질문들 보기 */
 	@RequestMapping("myquestions")
-	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myQuestions(@ModelAttribute("cri") Criteria cri, Model model) {
 
 		model.addAttribute("list", boardService.selectMyQuestions(cri));
 
@@ -158,6 +159,24 @@ public class BoardController {
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(boardService.countMyQuestionsPaging(cri));
 
+		model.addAttribute("check", 0);
+		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("pageMaker", pageMaker);
+
+		return "user/myquestions";
+	}
+
+	/* 내 질문들 보기 (답변 달린 것만) */
+	@RequestMapping("myquestions/answered")
+	public String myQuestionsAnswered(@ModelAttribute("cri") Criteria cri, Model model) {
+
+		model.addAttribute("list", boardService.selectMyQuestionsAnswered(cri));
+
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(boardService.countMyQuestionsAnsweredPaging(cri));
+
+		model.addAttribute("check", 1);
 		model.addAttribute("categoryList", boardService.categoryListAll());
 		model.addAttribute("pageMaker", pageMaker);
 
@@ -186,7 +205,7 @@ public class BoardController {
 
 	/* 즐겨찾기 목록 보기 */
 	@RequestMapping("myfavorite")
-	public String myFavorite(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myFavorite(@ModelAttribute("cri") Criteria cri, Model model) {
 		model.addAttribute("list", boardService.myFavorite(cri));
 
 		PageMaker pageMaker = new PageMaker();

@@ -67,6 +67,16 @@ public class AdminController {
 		return "redirect:/admin/category";
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "categoryCheck", method = RequestMethod.POST)
+	public ResponseEntity<Integer> categoryCheck(@ModelAttribute CategoryModel categoryModel) {
+
+		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(adminService.categoryCheck(categoryModel),
+			HttpStatus.OK);
+
+		return entity;
+	}
+
 	/* 회원 관리 */
 	@RequestMapping("user")
 	public String user(Model model) {

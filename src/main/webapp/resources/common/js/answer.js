@@ -260,6 +260,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 		});
 	});
 	
+	/* 답변 좋아요 해제 */
 	$(document).on('click', '.answer-like', function(){
 		var commentNo = $(this).attr('comment-no');
 		var data = "commentNo=" + commentNo;

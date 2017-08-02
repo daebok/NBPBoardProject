@@ -59,6 +59,14 @@
 			CATEGORY.category_no = #{categoryNo}
 	</select>
 	
+	<select id="categoryCheck" resultType="int">
+		SELECT
+			count(category_no)
+		FROM CATEGORY
+		WHERE 
+			CATEGORY.category_item = #{categoryItem}
+	</select>
+	
 	<delete id="categoryDelete">
 		UPDATE CATEGORY
 		SET 

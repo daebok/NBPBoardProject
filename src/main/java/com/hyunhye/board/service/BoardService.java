@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
+import com.hyunhye.common.Filtering;
 import com.hyunhye.common.UploadFileUtils;
 import com.hyunhye.user.model.UserModelDetails;
 
@@ -192,9 +194,7 @@ public class BoardService {
 
 				/* 서버에서 삭제 */
 				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-
 				new File(homePath + uploadPath + fileName.replace('/', File.separatorChar)).delete();
-
 			}
 		}
 
@@ -233,25 +233,14 @@ public class BoardService {
 		return repository.checkUser(boardNo);
 	}
 
-	public List<BoardModel> selectMyQuestions(SearchCriteria cri) {
+	public List<BoardModel> selectMyQuestions(Criteria cri) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
-		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
+
 		cri.setUserNo(user.getUserNo());
 		return repository.selectMyQuestions(cri);
 	}
 
-	public int countMyQuestionsPaging(SearchCriteria cri) {
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
-		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
+	public int countMyQuestionsPaging(Criteria cri) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		cri.setUserNo(user.getUserNo());
 		return repository.countMyQuestionsPaging(cri);
@@ -264,26 +253,14 @@ public class BoardService {
 		repository.boardBookMark(model);
 	}
 
-	public List<BoardModel> myFavorite(SearchCriteria cri) {
+	public List<BoardModel> myFavorite(Criteria cri) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
-		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
 		cri.setUserNo(user.getUserNo());
 		return repository.selectMyFavorite(cri);
 
 	}
 
-	public int countMyFavoritePaging(SearchCriteria cri) {
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
-		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
+	public int countMyFavoritePaging(Criteria cri) {
 		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		cri.setUserNo(user.getUserNo());
 		return repository.countMyFavoritePaging(cri);
@@ -316,6 +293,18 @@ public class BoardService {
 		boardSummary += model.getBoardTitle();
 		List<String> badWords = Filtering.badWordFilteringContainsStream(boardSummary);
 		return badWords;
+	}
+
+	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		cri.setUserNo(user.getUserNo());
+		return repository.selectMyQuestionsAnswered(cri);
+	}
+
+	public int countMyQuestionsAnsweredPaging(Criteria cri) {
+		UserModelDetails user = (UserModelDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		cri.setUserNo(user.getUserNo());
+		return repository.countMyQuestionsAnsweredPaging(cri);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.hyunhye.board.service;
+package com.hyunhye.common;
 
 import java.util.Arrays;
 import java.util.List;

@@ -10,6 +10,8 @@ public class Criteria {
 	private int perPageNum;
 	/* 시작 데이터 번호 */
 	private int startBoardNo;
+	/* 사용자 번호 */
+	private int userNo;
 
 	/*
 	 * 디폴트: 시작 페이지=1, 페이지 당 데이터 개수=10

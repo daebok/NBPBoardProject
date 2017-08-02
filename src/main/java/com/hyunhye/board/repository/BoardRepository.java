@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 
@@ -39,15 +40,15 @@ public interface BoardRepository {
 
 	public int checkUser(int boardNo);
 
-	public List<BoardModel> selectMyQuestions(SearchCriteria cri);
+	public List<BoardModel> selectMyQuestions(Criteria cri);
 
-	public int countMyQuestionsPaging(SearchCriteria cri);
+	public int countMyQuestionsPaging(Criteria cri);
 
 	public void boardBookMark(BoardModel model);
 
-	public int countMyFavoritePaging(SearchCriteria cri);
+	public int countMyFavoritePaging(Criteria cri);
 
-	public List<BoardModel> selectMyFavorite(SearchCriteria cri);
+	public List<BoardModel> selectMyFavorite(Criteria cri);
 
 	public void bookMarkMemoRegist(BookMarkModel bookMarkModel);
 
@@ -60,4 +61,8 @@ public interface BoardRepository {
 	public List<BoardModel> boardListNewest();
 
 	public List<FileModel> fileSelect(int boardNo);
+
+	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri);
+
+	public int countMyQuestionsAnsweredPaging(Criteria cri);
 }

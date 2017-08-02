@@ -21,8 +21,6 @@ public class CommentModel {
 	private int commentCount;
 	/* 답변 좋아요 개수 */
 	private int commentLikeCount;
-	/* 답변 존재 여부 */
-	private int commentEnabled;
 	/* 댓글 여부 */
 	private int commentCommentCount;
 	/* 게시판 번호 */

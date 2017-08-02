@@ -37,4 +37,6 @@ public interface AdminRepository {
 
 	public void noticeModify(NoticeModel noticeModel);
 
+	public Integer categoryCheck(CategoryModel categoryModel);
+
 }

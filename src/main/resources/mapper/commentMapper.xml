@@ -16,7 +16,6 @@
 		<result property="commentCount" column="comment_count" />
 		<result property="commentLikeCount" column="comment_like_count" />
 		<result property="commentParentNo" column="comment_parent_no" />
-		<result property="commentEnabled" column="comment_enabled" />
 		<result property="commentCommentCount" column="comment_comment_count" />
 	</resultMap>
 	
@@ -44,7 +43,6 @@
 			COMMENT.comment_no as number, 
 			COMMENT.comment_content, 
 			COMMENT.comment_date, 
-			COMMENT.comment_enabled,
 			USER.user_name,
 			count(COMMENT_LIKE.comment_no) as comment_like_count,
 			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as user_no,
@@ -97,13 +95,6 @@
 	<select id="commentUpdate" resultMap="commentList">
 		UPDATE COMMENT SET
 			comment_content = #{commentContent}
-		WHERE 
-			comment_no = #{commentNo}
-	</select>
-	
-	<select id="commentUpdateNull" resultMap="commentList">
-		UPDATE COMMENT SET
-			comment_enabled = 0
 		WHERE 
 			comment_no = #{commentNo}
 	</select>

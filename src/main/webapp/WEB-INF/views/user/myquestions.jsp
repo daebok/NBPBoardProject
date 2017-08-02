@@ -6,22 +6,7 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<style type="text/css">
-	#content{ 
-		display: -webkit-box; 
-		display: -ms-flexbox; 
-		display: box; 
-		margin-top:1px; 
-		max-height:80px; 
-		overflow:hidden; 
-		vertical-align:top; 
-		text-overflow: ellipsis; 
-		word-break:break-all; 
-		-webkit-box-orient:vertical; 
-		-webkit-line-clamp:3
-
-	}
-</style>
+<title>My Questions</title>
 </head>
 <body>
 	<%@include file="../common/header.jsp"%>
@@ -29,13 +14,22 @@
 		<div class="container-fluid">
 			<div class="row">
 				<b>My Questions</b>
+				&nbsp;
+				<c:choose>
+					<c:when test="${check eq 0 || check eq null}">
+						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
+					</c:when>
+					<c:otherwise>
+						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/answer${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
+						<a href="${path}/board/answer${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
 					</h4>
 					<div>
 						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
@@ -52,17 +46,17 @@
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
 					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 					</c:if>
 
 					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 						<li 
 							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myquestions${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+							<a href="/board/myquestions${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 						</li>
 					</c:forEach>
 					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 					</c:if>
 				</ul>
 			</div>
