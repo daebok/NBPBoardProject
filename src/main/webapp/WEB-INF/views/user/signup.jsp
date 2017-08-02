@@ -98,9 +98,9 @@
 </script>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+	
 	<div class="container">
 		<div class="container-fluid">
 			<form:form name="form" action="insert" method="post" class="form-horizontal">
@@ -140,5 +140,8 @@
 			</form:form>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>

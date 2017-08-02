@@ -81,9 +81,9 @@
 </style>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading">회원 정보</div>
@@ -97,34 +97,37 @@
 					<div class="list-3">등급</div>
 					<div class="list-4">삭제</div>
 				</div>
-					<c:forEach var="user" items="${userList}">
-						<form name="form" method="get" action="/admin/categoryDelete" class="form-horizontal" id="${user.userNo}">
-							<div class="list-group-item">
-								<div class="list-1">${user.userId}</div>
-								<div class="list-2">${user.userName}</div>
-								<div class="list-3">
-									<select name="userAuthority">
-										<c:choose>
-											<c:when test="${user.userAuthority == 'ROLE_ADMIN'}">
-												<option selected value="ROLE_ADMIN">관리자</option>
-												<option value="ROLE_USER">회원</option>
-											</c:when>
-											<c:otherwise>
-												<option value="ROLE_ADMIN">관리자</option>
-												<option selected value="ROLE_USER">회원</option>
-											</c:otherwise>
-										</c:choose>
-									</select>
-									<button type="button" class="user-authority btn btn-default" user-no="${user.userNo}">ok</button>
-								</div>
-								<div class="list-4">
-									<button type="button" class="user-delete btn btn-success" user-no="${user.userNo}">Delete</button>
-								</div>
+				<c:forEach var="user" items="${userList}">
+					<form name="form" method="get" action="/admin/categoryDelete" class="form-horizontal" id="${user.userNo}">
+						<div class="list-group-item">
+							<div class="list-1">${user.userId}</div>
+							<div class="list-2">${user.userName}</div>
+							<div class="list-3">
+								<select name="userAuthority">
+									<c:choose>
+										<c:when test="${user.userAuthority == 'ROLE_ADMIN'}">
+											<option selected value="ROLE_ADMIN">관리자</option>
+											<option value="ROLE_USER">회원</option>
+										</c:when>
+										<c:otherwise>
+											<option value="ROLE_ADMIN">관리자</option>
+											<option selected value="ROLE_USER">회원</option>
+										</c:otherwise>
+									</c:choose>
+								</select>
+								<button type="button" class="user-authority btn btn-default" user-no="${user.userNo}">ok</button>
 							</div>
-						</form>
-					</c:forEach>
+							<div class="list-4">
+								<button type="button" class="user-delete btn btn-success" user-no="${user.userNo}">Delete</button>
+							</div>
+						</div>
+					</form>
+				</c:forEach>
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

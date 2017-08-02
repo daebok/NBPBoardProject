@@ -114,9 +114,8 @@
 
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
 
 	<div class="container">
 		<div class="container-fluid" style="margin-bottom: 30px">
@@ -162,6 +161,9 @@
 			</form:form>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>
 					 

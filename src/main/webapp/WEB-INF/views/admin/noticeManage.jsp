@@ -63,9 +63,9 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<form:form name="form" action="/admin/notice/regist" method="post" class="form-horizontal" id="category-add-form">
 			<div class="form-group">
@@ -82,5 +82,8 @@ $(document).ready(function() {
 			</div>
 		</form:form>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

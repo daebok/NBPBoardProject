@@ -17,9 +17,9 @@ $(document).on('click','#delete',function() {
 </script>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+	
 	<div class="container">
 		<div class="container-fluid">
 			<div class="col-md-12">
@@ -35,5 +35,8 @@ $(document).on('click','#delete',function() {
 			</div>
 		</div>
 	</div>
+		
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>

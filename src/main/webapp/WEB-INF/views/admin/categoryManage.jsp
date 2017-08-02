@@ -99,9 +99,9 @@
 </style>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading">카테고리</div>
@@ -139,5 +139,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

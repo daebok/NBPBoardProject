@@ -9,9 +9,9 @@
 <title>Notice</title>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<div style="margin-bottom:20px;">
 			<a href="<c:url value='/admin/noticeRegist'/>" class="btn btn-default">New Notice</a>
@@ -27,5 +27,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

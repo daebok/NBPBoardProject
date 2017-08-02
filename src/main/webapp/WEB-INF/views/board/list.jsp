@@ -34,7 +34,9 @@
 </style>
 </head>
 <body>
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
+	
 	<div class="container">
 		<div class="container-fluid" >
 			<div class="pull-right" style="height:100%; width:22%">
@@ -95,8 +97,10 @@
 				</ul>
 			</div>
 			</div>
-
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>

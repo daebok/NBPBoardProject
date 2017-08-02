@@ -65,6 +65,8 @@
 		FROM CATEGORY
 		WHERE 
 			CATEGORY.category_item = #{categoryItem}
+			AND 
+			category_enabled = 1
 	</select>
 	
 	<delete id="categoryDelete">

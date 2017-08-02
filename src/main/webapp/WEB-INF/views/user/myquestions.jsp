@@ -9,6 +9,7 @@
 <title>My Questions</title>
 </head>
 <body>
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid">
@@ -62,5 +63,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>

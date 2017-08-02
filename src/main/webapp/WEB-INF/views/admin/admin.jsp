@@ -7,9 +7,9 @@
 <title>Home</title>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<div class="container-fluid">
 			<a href="<c:url value='/admin/user'/>" id="login" class="btn btn-default">User Management</a>
@@ -17,5 +17,8 @@
 			<a href="<c:url value='/admin/notice'/>" id="login" class="btn btn-default">Notice</a>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

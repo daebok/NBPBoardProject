@@ -13,24 +13,25 @@ $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
 </script>
 </head>
 <body>
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
+	
 	<div class="container">
 		<div role="tabpanel">
-			<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="active"><a href="#home"
 					aria-controls="home" role="tab" data-toggle="tab">My Questions</a></li>
 				<li role="presentation"><a href="#profile"
 					aria-controls="profile" role="tab" data-toggle="tab">My Favorite</a></li>
 			</ul>
-
-			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="home"><c:import url="/board/myquestions" ></c:import></div>
 				<div role="tabpanel" class="tab-pane" id="profile"><c:import url="/board/myfavorite" ></c:import></div>
 			</div>
-
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>

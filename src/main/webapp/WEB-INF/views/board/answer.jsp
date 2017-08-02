@@ -90,9 +90,9 @@ $(document).ready(
 </script>
 </head>
 <body>
-	<!-- header start -->
+	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- header end -->
+
 	<div class="container">
 		<div class="container-fluid">
 			<div class="pull-right" style="margin-bottom:10px;">
@@ -217,5 +217,8 @@ $(document).ready(
 			</div>
 		</div>
 	</div>
+	
+	<!-- footer -->
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html>
