@@ -11,20 +11,22 @@
 <script src="<c:url value="/resources/common/js/upload.js" />"></script>
 <link href="<c:url value="/resources/common/css/file-css.css" />" rel="stylesheet">
 <script>
+	
 	/* 파일 삭제 */
 	$(document).on('click','.file-delete-button',function(){
 		var fileId = $(this).attr('id');
 		$('#file-list-'+fileId).remove();
 		$(".newUploadedList").append( "<input type='hidden' name='boardFilesNo' value='"+fileId+"'/>");
 	});
+
 	$(document).ready(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
-		var blank_pattern = /[\s]/g;
+		var special_pattern = /[`@#$%^&*|\\\'\";:\/<>]/gi;
+		
 		$("#questionButton").click(function() {
 			var title = $("#title").val();
 			var content = $("#content").val();
 
-			if (blank_pattern.test(title) == true) {
+			if (title.replace(/\s|　/gi, '') == '') {
 				alert("제목를 입력하세요.");
 				$("#title").focus();
 				return;
@@ -36,7 +38,10 @@
 				return false;
 			}
 			
-			if (blank_pattern.test(content) == true) {
+			var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
+			htmlRemoveContent.replace(/&nbsp;/g, "");
+			
+			if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
 				alert("내용를 입력하세요.");
 				$("#content").focus();
 				return;
@@ -66,8 +71,11 @@
 					}
 				}
 			});
+			
+			
 		});
 		
+		/* 썸머 노트 */
 		$('.summernote').summernote({
 			height : 200,
 			width: 100,
@@ -82,19 +90,17 @@
 						str += "<div class='list-1'>" + files[index].name +"</div>";
 						str += "<div class='list-2'>" + files[index].size + " bytes </div>";
 						str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
-						$(".newUploadedList").append(str);
+						$(".summernoteUploadedList").append(str);
 					}
 				}
 			}
 		});
 		
+		
 		/* 파일 업로드 */
 		$(".file").on("change", function(event) {
-			// $(".newUploadedList > * ").remove();
-			var form = $('.file')[0];
-			var formData = new FormData(form);
+			$(".newUploadedList > * ").remove();
 			for(var index = 0 ; index < $(this)[0].files.length; index++) {
-				formData.append('files', $(this)[0].files[index]);
 				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 				str += "<div class='list-1'>" + $(this)[0].files[index].name +"</div>";
 				str += "<div class='list-2'>" + $(this)[0].files[index].size + " bytes </div>";
@@ -134,7 +140,7 @@
 					<div class="filebox"> 
 						<input class="upload-name" value="파일선택" disabled="disabled" > 
 						<label for="input-file">업로드</label> 
-						<input type="file" name="files" multiple="multiple" class="file upload-hidden" id="input-file" maxlength="5">
+						<input type="file" name="files" class="file upload-hidden" id="input-file" maxlength="5" multiple>
 					</div>
 					<div class="panel panel-default">
 						<div class="list-group">
@@ -144,6 +150,7 @@
 								<div class="list-3"><b>삭제</b></div>
 							</div>
 							<div class="newUploadedList"></div>
+							<div class="summernoteUploadedList"></div>
 						</div>
 					</div>
 				</div>

@@ -32,19 +32,18 @@
 						str += "<div class='list-1'>" + files[index].name +"</div>";
 						str += "<div class='list-2'>" + files[index].size + " bytes </div>";
 						str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
-						$(".newUploadedList").append(str);
+						$(".summernoteUploadedList").append(str);
 					}
 				}
 		}
 	});
 	$("#modifyButton").click(function() {
 		var special_pattern = /[`@#$%^&*|\\\'\";:\/<>]/gi;
-		var blank_pattern = /[\s]/g;
 		
 		var title = $("#title").val();
 		var content = $("#content").val();
 		
-		if (blank_pattern.test(title) == true) {
+		if (title.replace(/\s|　/gi, '') == '') {
 			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
@@ -56,7 +55,9 @@
 			return false;
 		}
 		
-		if (blank_pattern.test(content) == true) {
+		var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
+		htmlRemoveContent.replace(/&nbsp;/g, "");
+		if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
 			alert("내용를 입력하세요.");
 			$("#content").focus();
 			return;
@@ -91,7 +92,7 @@
 	
 	/* 파일 업로드 */
 	$(".file").on("change", function(event) {
-		// $(".newUploadedList > * ").remove();
+		$(".newUploadedList > * ").remove();
 		for(var index = 0 ; index < $(".file")[0].files.length; index++) {
 			var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 			str += "<div class='list-1'>" + $(".file")[0].files[index].name +"</div>";
@@ -152,6 +153,7 @@
 								</div>
 							</c:forEach>
 							<div class="newUploadedList"></div>
+							<div class="summernoteUploadedList"></div>
 						</div>
 					</div>
 				</div>
