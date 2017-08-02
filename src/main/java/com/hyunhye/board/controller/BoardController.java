@@ -82,7 +82,7 @@ public class BoardController {
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
 	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
-		boardService.boardRegist(UserSession.getUserNo(), model, file);
+		boardService.boardRegist(UserSession.currentUserNo(), model, file);
 		return "redirect:/board/list";
 	}
 
@@ -106,7 +106,7 @@ public class BoardController {
 		boardService.setViewCookies(boardNo, request, response);
 
 		/* 세션에 저장된 사용자 정보 */
-		model.addAttribute("user", UserSession.getUserInfo());
+		model.addAttribute("user", UserSession.currentUserInfo());
 
 		/* 해당 게시글 */
 		model.addAttribute("model", boardService.boardSelect(boardNo));
@@ -212,14 +212,16 @@ public class BoardController {
 	/** 즐겨찾기 **/
 	/* 즐겨찾기 추가 */
 	@RequestMapping(value = "bookmark", method = RequestMethod.GET)
-	public void boardBookMark(@ModelAttribute BoardModel model) {
+	public ResponseEntity<String> boardBookMark(@ModelAttribute BoardModel model) {
 		boardService.boardBookMark(model);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/* 즐겨찾기 해제 */
 	@RequestMapping(value = "bookmark/uncheck", method = RequestMethod.GET)
-	public void boardBookMarkUnCheck(@ModelAttribute BoardModel model) {
+	public ResponseEntity<String> boardBookMarkUnCheck(@ModelAttribute BoardModel model) {
 		boardService.boardBookMarkUnCheck(model);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/* 즐겨찾기 목록 보기 */
@@ -249,7 +251,7 @@ public class BoardController {
 		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
 
 		/* 현재 사용자 정보 */
-		model.addAttribute("user", UserSession.getUserInfo());
+		model.addAttribute("user", UserSession.currentUserInfo());
 
 		/* 게시글 상세 정보 */
 		model.addAttribute("model", boardService.boardSelect(boardNo));
@@ -270,15 +272,16 @@ public class BoardController {
 
 	/* 즐겨찾기 메모 작성 */
 	@RequestMapping(value = "memo", method = RequestMethod.POST)
-	public void commentRegist(@ModelAttribute BookMarkModel bookMarkModel) {
+	public ResponseEntity<String> commentRegist(@ModelAttribute BookMarkModel bookMarkModel) {
 		boardService.bookMarkMemoRegist(bookMarkModel);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/** 내 정보 보기 **/
 	/* 내정보 상세 보기 */
 	@RequestMapping("myinfo")
 	public String boardMemo(Model model) {
-		model.addAttribute("user", UserSession.getUserInfo());
+		model.addAttribute("user", UserSession.currentUserInfo());
 		return "user/myinfo";
 	}
 

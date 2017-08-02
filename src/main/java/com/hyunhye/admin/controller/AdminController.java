@@ -88,14 +88,21 @@ public class AdminController {
 	@RequestMapping("userModify")
 	public ResponseEntity<String> userModify(@ModelAttribute UserModel userModel) {
 		adminService.userModify(userModel);
-		return new ResponseEntity<String>("user modified", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/* 회원 삭제 */
 	@RequestMapping("userDelete")
 	public ResponseEntity<String> userDelete(@ModelAttribute UserModel userModel) {
 		adminService.userDelete(userModel);
-		return new ResponseEntity<String>("user deleted", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	/* 회원 삭제 */
+	@RequestMapping("onlyUserDelete")
+	public ResponseEntity<String> onlyUserDelete(@ModelAttribute UserModel userModel) {
+		adminService.onlyUserDelete(userModel);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/** 공지사항 **/

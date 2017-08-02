@@ -27,18 +27,33 @@
 			var userNo = $(this).attr('user-no');
 			var result = confirm('회원을 삭제하시겠습니까?');
 			if (result) {
+				var result2 = confirm('회원이 작성한 게시물을 모두 삭제하시겠습니까?\n(취소를 누르면 게시글은 남고 회원만 삭제됩니다.)');
 				var data = "userNo=" + userNo;
-				$.ajax({
-					type : 'GET',
-					url : '/admin/userDelete',
-					dataType : 'text',
-					processData : false,
-					contentType : false,
-					data : data,
-					success:function(result){
-						$("#"+userNo).hide();
-					}
-				});
+				if(result2){
+					$.ajax({
+						type : 'GET',
+						url : '/admin/userDelete',
+						dataType : 'text',
+						processData : false,
+						contentType : false,
+						data : data,
+						success:function(result){
+							$("#"+userNo).remove();
+						}
+					});
+				} else {
+					$.ajax({
+						type : 'GET',
+						url : '/admin/onlyUserDelete',
+						dataType : 'text',
+						processData : false,
+						contentType : false,
+						data : data,
+						success:function(result){
+							$("#"+userNo).remove();
+						}
+					});
+				}
 			}
 		});
 	});

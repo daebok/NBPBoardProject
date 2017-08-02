@@ -90,6 +90,7 @@
 			user_name,
 			user_authority
 		FROM USER
+		WHERE user_enabled = 1
 	</select>
 	
 	<update id="userModify">
@@ -104,6 +105,13 @@
 		WHERE 
 			user_no = #{userNo}
 	</delete>
+	
+	<update id="onlyUserDelete">
+		UPDATE USER SET
+			user_enabled = 0
+		WHERE
+			user_no = #{userNo}
+	</update>
 	
 	<!-- 공지사항 관리 -->
 	<insert id="noticeRegist">

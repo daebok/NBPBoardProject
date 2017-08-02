@@ -65,6 +65,10 @@ public class AdminService {
 		repository.userDelete(userModel);
 	}
 
+	public void onlyUserDelete(UserModel userModel) {
+		repository.onlyUserDelete(userModel);
+	}
+
 	/** 공지사항 **/
 	/* 공지사항 리스트 */
 	public List<NoticeModel> noticeListAll() {
@@ -73,7 +77,7 @@ public class AdminService {
 
 	/* 공지사항 등록 */
 	public void noticeRegist(NoticeModel noticeModel) {
-		noticeModel.setUserNo(UserSession.getUserNo());
+		noticeModel.setUserNo(UserSession.currentUserNo());
 
 		repository.noticeRegist(noticeModel);
 	}
@@ -92,5 +96,6 @@ public class AdminService {
 	public void noticeModify(NoticeModel noticeModel) {
 		repository.noticeModify(noticeModel);
 	}
+
 
 }

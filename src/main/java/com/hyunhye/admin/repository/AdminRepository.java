@@ -39,4 +39,6 @@ public interface AdminRepository {
 
 	public Integer categoryCheck(CategoryModel categoryModel);
 
+	public void onlyUserDelete(UserModel userModel);
+
 }

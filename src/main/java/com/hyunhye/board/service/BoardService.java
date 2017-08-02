@@ -96,17 +96,17 @@ public class BoardService {
 	public BoardModel boardSelect(int boardNo) {
 		BoardModel boardModel = new BoardModel();
 		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(UserSession.getUserNo());
+		boardModel.setUserNo(UserSession.currentUserNo());
 		return repository.boardSelect(boardModel);
 	}
 
 	/* 조회수 */
 	public void setViewCookies(int boardNo, HttpServletRequest request, HttpServletResponse response) {
-		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + UserSession.getUserNo());
+		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + UserSession.currentUserNo());
 		int cookieMaxAge = 60 * 5; // 쿠키가 5 분 동안만 유지 할 수 있도록 한다.
 		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
 			increaseViewCount(boardNo);
-			Cookie cookie = new Cookie(boardNo + "&" + UserSession.getUserNo(), "view");
+			Cookie cookie = new Cookie(boardNo + "&" + UserSession.currentUserNo(), "view");
 			cookie.setMaxAge(cookieMaxAge);
 			response.addCookie(cookie);
 		}
@@ -121,7 +121,7 @@ public class BoardService {
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
 	@Transactional
 	public void boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
-		boardModel.setUserNo(UserSession.getUserNo());
+		boardModel.setUserNo(UserSession.currentUserNo());
 
 		/* 1) 업로드 된 파일 중에서 삭제버튼 누른 파일 삭제하기 */
 		uploadService.fileDelete(boardModel);
@@ -201,58 +201,58 @@ public class BoardService {
 	/** 내 질문 모아 보기  **/
 	/* 1. 내 질문 모아 보기 (전체) */
 	public List<BoardModel> selectMyQuestions(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.selectMyQuestions(cri);
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsPaging(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.countMyQuestionsPaging(cri);
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
 	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.selectMyQuestionsAnswered(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsAnsweredPaging(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.countMyQuestionsAnsweredPaging(cri);
 	}
 
 	/** 즐겨찾기 **/
 	/* 즐겨찾기 저장하기 */
 	public void boardBookMark(BoardModel model) {
-		model.setUserNo(UserSession.getUserNo());
+		model.setUserNo(UserSession.currentUserNo());
 		repository.boardBookMark(model);
 	}
 
 	/* 즐겨찾기 리스트 */
 	public List<BoardModel> myFavorite(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.selectMyFavorite(cri);
 
 	}
 
 	/* 즐겨 찾기 리스트 전체 개수 구하기 */
 	public int countMyFavoritePaging(Criteria cri) {
-		cri.setUserNo(UserSession.getUserNo());
+		cri.setUserNo(UserSession.currentUserNo());
 		return repository.countMyFavoritePaging(cri);
 	}
 
 	/* 즐겨찾기 메모 저장 하기  */
 	public void bookMarkMemoRegist(BookMarkModel bookMarkModel) {
-		bookMarkModel.setUserNo(UserSession.getUserNo());
+		bookMarkModel.setUserNo(UserSession.currentUserNo());
 		repository.bookMarkMemoRegist(bookMarkModel);
 	}
 
 	/* 즐겨찾기 메모 불러오기  */
 	public BookMarkModel memoSelect(int boardNo) {
 		BookMarkModel bookMarkModel = new BookMarkModel();
-		bookMarkModel.setUserNo(UserSession.getUserNo());
+		bookMarkModel.setUserNo(UserSession.currentUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
 		return repository.memoSelect(bookMarkModel);
@@ -260,7 +260,7 @@ public class BoardService {
 
 	/* 즐겨찾기 해제  */
 	public void boardBookMarkUnCheck(BoardModel model) {
-		model.setUserNo(UserSession.getUserNo());
+		model.setUserNo(UserSession.currentUserNo());
 		repository.boardBookMarkUnCheck(model);
 	}
 }

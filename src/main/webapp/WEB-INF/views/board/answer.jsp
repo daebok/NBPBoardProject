@@ -39,11 +39,7 @@ $(document).on('click','#book-mark-uncheck',function(){
 		dataType : 'text',
 		processData : false,
 		contentType : false,
-		data : data,
-		success : function(result) {
-			$('.book-mark-alarm').show(1000);
-			$('.book-mark-alarm').hide(2000);
-		}
+		data : data
 	});
 });
 /* 즐겨찾기 해제 */
@@ -76,6 +72,7 @@ $(document).on('click','#list',function() {
 	document.form.submit();
 });
 
+/* 섬머노트 */
 $(document).ready(
 	function() {
 		$('.summernote').summernote({

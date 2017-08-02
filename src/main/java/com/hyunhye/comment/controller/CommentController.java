@@ -50,8 +50,9 @@ public class CommentController {
 
 	/* 3. 답변 수정 */
 	@RequestMapping("modify")
-	public void commentUpdate(@ModelAttribute CommentModel commentModel) {
+	public ResponseEntity<String> commentUpdate(@ModelAttribute CommentModel commentModel) {
 		service.commentUpdate(commentModel);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/* 4. 답변 가져오기 */
@@ -83,20 +84,23 @@ public class CommentController {
 
 	/* 댓글 삭제 */
 	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
-	public void commentDelete(@RequestParam("commentNo") int commentNo) {
+	public ResponseEntity<String> commentDelete(@RequestParam("commentNo") int commentNo) {
 		service.commentDelete(commentNo);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/** 답변 좋아요 **/
 	/* 1. 답변 좋아요 */
 	@RequestMapping(value = "like", method = RequestMethod.GET)
-	public void commentLike(@ModelAttribute CommentModel model) {
+	public ResponseEntity<String> commentLike(@ModelAttribute CommentModel model) {
 		service.commentLike(model);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/* 2. 답변 좋아요 취소*/
 	@RequestMapping(value = "hate", method = RequestMethod.GET)
-	public void commenHate(@ModelAttribute CommentModel model) {
+	public ResponseEntity<String> commenHate(@ModelAttribute CommentModel model) {
 		service.commenHate(model);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 }

@@ -17,7 +17,7 @@ public class CommentService {
 
 	/* 답변 등록 */
 	public void commentRegist(CommentModel commentModel) {
-		commentModel.setUserNo(UserSession.getUserNo());
+		commentModel.setUserNo(UserSession.currentUserNo());
 
 		if (commentModel.getCommentNo() != 0) {
 			commentModel.setCommentParentNo(commentModel.getCommentNo());
@@ -30,7 +30,7 @@ public class CommentService {
 	/* 답변 리스트 */
 	public List<CommentModel> commentListAll(int boardNo) {
 		CommentModel commentModel = new CommentModel();
-		commentModel.setUserNo(UserSession.getUserNo());
+		commentModel.setUserNo(UserSession.currentUserNo());
 		commentModel.setBoardNo(boardNo);
 
 		return repository.commentListAll(commentModel);
@@ -83,13 +83,13 @@ public class CommentService {
 
 	/* 답변 좋아요 */
 	public void commentLike(CommentModel model) {
-		model.setUserNo(UserSession.getUserNo());
+		model.setUserNo(UserSession.currentUserNo());
 		repository.commentLike(model);
 	}
 
 	/* 답변 좋아요 취소 */
 	public void commenHate(CommentModel model) {
-		model.setUserNo(UserSession.getUserNo());
+		model.setUserNo(UserSession.currentUserNo());
 		repository.commenHate(model);
 	}
 
