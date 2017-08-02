@@ -52,6 +52,7 @@ public class UserService {
 		return repository.userSelect(userId);
 	}
 
+	/* 비밀번호 변경 */
 	public void userPasswordChange(UserModel model) {
 		repository.userPasswordChange(model);
 	}
