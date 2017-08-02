@@ -68,10 +68,10 @@ public class BoardService {
 		String summary = createSummary(boardModel.getBoardContent());
 		boardModel.setBoardContentSummary(summary);
 
-		/* 1. 작성 된 게시글 저장 */
+		/* 1) 작성 된 게시글 저장 */
 		repository.boardRegist(boardModel);
 
-		/* 2. 업로드 된 파일 저장 */
+		/* 2) 업로드 된 파일 저장 */
 		uploadService.fileRegist(boardModel, files);
 	}
 
@@ -151,12 +151,14 @@ public class BoardService {
 
 	/* 2-5. 게시글 리스트 (페이징) */
 	public List<BoardModel> listCriteria(SearchCriteria cri) {
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
+		/* 검색 타입 null 체크 */
+		cri = searchTypecheck(cri);
+
+		/* 검색 키워드 <> 체크 */
+		if (cri.getKeyword() != null) {
+			cri = keywordCheck(cri);
 		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
+
 		return repository.listCriteria(cri);
 	}
 
@@ -168,6 +170,15 @@ public class BoardService {
 		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
 			cri.setSearchType("");
 		}
+		return cri;
+	}
+
+	/* <> 검색 처리 */
+	public SearchCriteria keywordCheck(SearchCriteria cri) {
+		String modifiedKeyword = cri.getKeyword().replaceAll("<", "&lt;");
+		modifiedKeyword = modifiedKeyword.replaceAll(">", "&gt;");
+		cri.setModifiedKeyword(modifiedKeyword);
+
 		return cri;
 	}
 

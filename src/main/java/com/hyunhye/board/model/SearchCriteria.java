@@ -10,6 +10,8 @@ public class SearchCriteria extends Criteria {
 	private String searchType;
 	/* 검색 할 키워드 */
 	private String keyword;
+	/* 실제 검색 할 키워드 */
+	private String modifiedKeyword;
 	/* 카테고리 타입 */
 	private String categoryType;
 }

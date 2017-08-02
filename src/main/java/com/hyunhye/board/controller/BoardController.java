@@ -71,8 +71,10 @@ public class BoardController {
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());
+
 		/* 페이징에 사용될 변수 */
 		model.addAttribute("pageMaker", pageMaker);
+
 		/* 공지사항 */
 		model.addAttribute("notice", adminService.noticeListAll());
 

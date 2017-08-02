@@ -33,12 +33,12 @@
 	</beans:bean>
 
 	<!-- Interceptor -->
-	<beans:bean id="boardInterceptor" class="com.hyunhye.interceptor.BoardInterceptor" />
+<!-- 	<beans:bean id="boardInterceptor" class="com.hyunhye.interceptor.BoardInterceptor" />
 	<interceptors>
 		<interceptor>
 			<mapping path="/board/modify" />
 			<mapping path="/board/delete" />
 			<beans:ref bean="boardInterceptor" />
 		</interceptor>
-	</interceptors>
+	</interceptors> -->
 </beans:beans>

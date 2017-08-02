@@ -500,17 +500,17 @@
 	<sql id="search_search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				( BOARD.board_content like CONCAT('%',#{keyword},'%')
-				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
+				( BOARD.board_content like CONCAT('%',#{modifiedKeyword},'%')
+				OR BOARD.board_title like CONCAT('%',#{modifiedKeyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARD.board_content like CONCAT('%',#{keyword},'%')
+				BOARD.board_content like CONCAT('%',#{modifiedKeyword},'%')
 			</when>
 			<when test="searchType == 'title'">
-				BOARD.board_title like CONCAT('%',#{keyword},'%') 
+				BOARD.board_title like CONCAT('%',#{modifiedKeyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
-				USER.user_id = #{keyword}
+				USER.user_id = #{modifiedKeyword}
 			</when>
 		</choose>
 	</sql>

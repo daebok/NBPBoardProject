@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
@@ -37,7 +36,7 @@ public class UserController {
 
 	/* 회원 등록 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
-	public String userRegist(@ModelAttribute UserModel model, RedirectAttributes rttr) {
+	public String userRegist(@ModelAttribute UserModel model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		service.userRegist(model);
 		return "redirect:/user/loginPage";

@@ -149,8 +149,10 @@
 								<div class="list-2"><b>크기</b></div>
 								<div class="list-3"><b>삭제</b></div>
 							</div>
-							<div class="newUploadedList"></div>
-							<div class="summernoteUploadedList"></div>
+							<div class="list-group-item">
+								<div class="newUploadedList"></div>
+								<div class="summernoteUploadedList"></div>
+							</div>
 						</div>
 					</div>
 				</div>
