@@ -35,7 +35,7 @@ public class UploadService {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	/* 1. 파일 등록 */
+	/* 파일 등록 */
 	public void fileRegist(BoardModel boardModel, MultipartFile[] files) throws Exception {
 
 		/* 삭제된 첨부파일 번호 가져오기 */
@@ -75,7 +75,7 @@ public class UploadService {
 		}
 	}
 
-	/* 2. 파일 삭제 (삭제 버튼으로 눌린 파일 삭제) */
+	/* 파일 삭제 (삭제 버튼으로 눌린 파일 삭제) */
 	public void fileDelete(BoardModel boardModel) {
 		/* 삭제된 첨부파일  가져오기 */
 		String[] filesDelete = boardModel.getBoardFilesDelete();
@@ -95,7 +95,7 @@ public class UploadService {
 		}
 	}
 
-	/* 3.파일 삭제 (게시물에 첨부된 file 모두 삭제) */
+	/* 파일 삭제 (게시물에 첨부된 file 모두 삭제) */
 	public void fileDeletFromDatabase(int boardNo) {
 		/* 삭제된 첨부파일  가져오기 */
 		List<FileModel> filesDelete = repository.fileSelect(boardNo);
@@ -114,7 +114,7 @@ public class UploadService {
 		}
 	}
 
-	/* 4. 파일 다운로드 */
+	/* 파일 다운로드 */
 	public ResponseEntity<byte[]> fileDownload(String fileName) throws IOException {
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;

@@ -36,9 +36,7 @@ public class BoardService {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	/*
-	 * 1. 게시글  Top10 리스트
-	 */
+	/** 게시글  Top10 리스트 **/
 	/* 조회순*/
 	public List<BoardModel> boardListAll() {
 		return repository.boardListAll();
@@ -54,11 +52,8 @@ public class BoardService {
 		return repository.boardListNewest();
 	}
 
-	/*
-	 * 2. 게시글
-	 */
-
-	/* 2-1. 게시글 작성하기 */
+	/** 게시글 **/
+	/* 1. 게시글 작성하기 */
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용 */
 	@Transactional
 	public void boardRegist(int userNo, BoardModel boardModel, MultipartFile[] files) throws Exception {
@@ -97,7 +92,7 @@ public class BoardService {
 		return badWords;
 	}
 
-	/* 2-2. 해당 게시글 상세 보기 */
+	/* 2. 해당 게시글 상세 보기 */
 	public BoardModel boardSelect(int boardNo) {
 		BoardModel boardModel = new BoardModel();
 		boardModel.setBoardNo(boardNo);
@@ -122,7 +117,7 @@ public class BoardService {
 		return repository.getFile(boardNo);
 	}
 
-	/* 2-3. 게시글 수정하기*/
+	/* 3. 게시글 수정하기*/
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
 	@Transactional
 	public void boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
@@ -138,7 +133,7 @@ public class BoardService {
 		repository.boardModify(boardModel);
 	}
 
-	/* 2-4. 게시글 삭제하기 */
+	/* 4. 게시글 삭제하기 */
 	@Transactional
 	public void boardDelete(int boardNo) {
 
@@ -149,7 +144,7 @@ public class BoardService {
 		repository.boardDelete(boardNo);
 	}
 
-	/* 2-5. 게시글 리스트 (페이징) */
+	/* 5. 게시글 리스트 (페이징) */
 	public List<BoardModel> listCriteria(SearchCriteria cri) {
 		/* 검색 타입 null 체크 */
 		cri = searchTypecheck(cri);
@@ -203,11 +198,8 @@ public class BoardService {
 		return repository.categoryListAll();
 	}
 
-	/*
-	 * 4. 내 질문 모아 보기
-	 */
-
-	/* 4-1. 내 질문 모아 보기 (전체) */
+	/** 내 질문 모아 보기  **/
+	/* 1. 내 질문 모아 보기 (전체) */
 	public List<BoardModel> selectMyQuestions(Criteria cri) {
 		cri.setUserNo(UserSession.getUserNo());
 		return repository.selectMyQuestions(cri);
@@ -219,7 +211,7 @@ public class BoardService {
 		return repository.countMyQuestionsPaging(cri);
 	}
 
-	/* 4-2. 내 질문 모아 보기 (답변한 것만) */
+	/* 2. 내 질문 모아 보기 (답변한 것만) */
 	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
 		cri.setUserNo(UserSession.getUserNo());
 		return repository.selectMyQuestionsAnswered(cri);
@@ -231,10 +223,7 @@ public class BoardService {
 		return repository.countMyQuestionsAnsweredPaging(cri);
 	}
 
-	/*
-	 * 5. 즐겨찾기
-	 */
-
+	/** 즐겨찾기 **/
 	/* 즐겨찾기 저장하기 */
 	public void boardBookMark(BoardModel model) {
 		model.setUserNo(UserSession.getUserNo());

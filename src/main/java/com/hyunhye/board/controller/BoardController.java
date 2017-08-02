@@ -46,10 +46,7 @@ public class BoardController {
 	@Autowired
 	private UploadService uploadService;
 
-	/*
-	 * 1. 게시글
-	 */
-
+	/** 게시글 **/
 	/* 질문하기 페이지 이동  */
 	@RequestMapping("question")
 	public String question(Model model) {
@@ -164,10 +161,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	/*
-	 * 2. 내 질문 모아보기
-	 */
-
+	/** 내 질문 모아 보기 **/
 	/* 1. 전체 리스트 */
 	@RequestMapping("myquestions")
 	public String myQuestions(@ModelAttribute("cri") Criteria cri, Model model) {
@@ -215,10 +209,7 @@ public class BoardController {
 		return "user/myquestions";
 	}
 
-	/*
-	 * 3. 즐겨찾기
-	 */
-
+	/** 즐겨찾기 **/
 	/* 즐겨찾기 추가 */
 	@RequestMapping(value = "bookmark", method = RequestMethod.GET)
 	public void boardBookMark(@ModelAttribute BoardModel model) {
@@ -283,10 +274,7 @@ public class BoardController {
 		boardService.bookMarkMemoRegist(bookMarkModel);
 	}
 
-	/*
-	 * 4. 내정보 보기
-	 */
-
+	/** 내 정보 보기 **/
 	/* 내정보 상세 보기 */
 	@RequestMapping("myinfo")
 	public String boardMemo(Model model) {
@@ -294,10 +282,7 @@ public class BoardController {
 		return "user/myinfo";
 	}
 
-	/*
-	 * 5. 공지사항
-	 */
-
+	/** 공지사항  **/
 	/* 공지사항 보기 */
 	@RequestMapping("notice")
 	public String noticeSelect(NoticeModel noticeModel, Model model) {

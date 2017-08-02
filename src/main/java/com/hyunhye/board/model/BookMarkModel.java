@@ -7,8 +7,12 @@ import lombok.Data;
 @Data
 @Alias("bookmark")
 public class BookMarkModel {
+	/* 즐겨찾기 번호 */
 	private int bookmarkNo;
+	/* 사용자 번호 */
 	private int userNo;
+	/* 게시판 번호 */
 	private int boardNo;
+	/* 즐겨찾기 메모 */
 	private String bookmarkMemo;
 }
