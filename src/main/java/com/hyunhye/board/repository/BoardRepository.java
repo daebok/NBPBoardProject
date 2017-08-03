@@ -40,9 +40,9 @@ public interface BoardRepository {
 
 	public int checkUser(int boardNo);
 
-	public List<BoardModel> selectMyQuestions(Criteria cri);
+	public List<BoardModel> selectMyQuestions(SearchCriteria cri);
 
-	public int countMyQuestionsPaging(Criteria cri);
+	public int countMyQuestionsPaging(SearchCriteria cri);
 
 	public void boardBookMark(BoardModel model);
 
@@ -62,7 +62,7 @@ public interface BoardRepository {
 
 	public List<FileModel> fileSelect(int boardNo);
 
-	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri);
+	public List<BoardModel> selectMyQuestionsAnswered(SearchCriteria cri);
 
-	public int countMyQuestionsAnsweredPaging(Criteria cri);
+	public int countMyQuestionsAnsweredPaging(SearchCriteria cri);
 }

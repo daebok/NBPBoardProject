@@ -11,6 +11,7 @@
 	<%@include file="../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid">
+			<%@include file="../common/myquestions-search.jsp"%>
 			<div class="row">
 				<b>My Questions</b>&nbsp;
 				<c:choose>
@@ -44,23 +45,46 @@
 				</c:forEach>
 			</div>
 
-			<div class="page-nation">
-				<ul class="pagination pagination-large">
-					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
-					</c:if>
-
-					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-						<li 
-							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myquestions${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
-						</li>
-					</c:forEach>
-					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
-					</c:if>
-				</ul>
-			</div>
+			<c:choose>
+				<c:when test="${check eq 0 || check eq null}">
+					<div class="page-nation">
+						<ul class="pagination pagination-large">
+							<c:if test="${pageMaker.prev}">
+								<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+							</c:if>
+		
+							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+								<li 
+									<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+									<a href="/board/myquestions${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+								</li>
+							</c:forEach>
+							<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+								<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+							</c:if>
+						</ul>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="page-nation">
+						<ul class="pagination pagination-large">
+							<c:if test="${pageMaker.prev}">
+								<li class="disabled"><span><a href="/board/myquestions/answered${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+							</c:if>
+		
+							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+								<li 
+									<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+									<a href="/board/myquestions/answered${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
+								</li>
+							</c:forEach>
+							<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+								<li class="disabled"><span><a href="/board/myquestions/answereds${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+							</c:if>
+						</ul>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	

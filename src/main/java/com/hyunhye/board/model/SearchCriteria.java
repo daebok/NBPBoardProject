@@ -14,4 +14,6 @@ public class SearchCriteria extends Criteria {
 	private String modifiedKeyword;
 	/* 카테고리 타입 */
 	private String categoryType;
+	/* 날짜 */
+	private String date;
 }

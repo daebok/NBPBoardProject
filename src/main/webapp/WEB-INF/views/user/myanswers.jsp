@@ -21,9 +21,6 @@
 						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
 					</c:otherwise>
 				</c:choose>
-				<div class="pull-right">
-					<a href="<c:url value='/board/myanswers'/>" class="btn btn-default btn-sm">My Answers</a>
-				</div>
 			</div>
 		</div>
 		<div class="container-fluid">

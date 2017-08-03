@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
-<form:form name="form" method="get" action="/board/list">
+<form:form name="form" method="get" action="/board/myquestions">
 	<div style="line-height:20px;">
 		<label for="categoryType"> Category </label>
 		<select name="categoryType" id="categoryType" style="padding:2px;">
@@ -29,6 +29,5 @@
 	<input name="keyword" id="keyword" value="${cri.keyword}">
 	<input type="date" name="date" value="${cri.date}">
 	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">
-	<a href="<c:url value='/board/list'/>" id="list" class="btn btn-default btn-sm">Clear</a>
+	<a href="<c:url value='/board/myquestions'/>" id="list" class="btn btn-default btn-sm">Clear</a>
 </form:form>
-

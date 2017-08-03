@@ -12,6 +12,7 @@
 <link href="<c:url value="/resources/common/css/file-css.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/common/css/answer-css.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/common/js/answer.js" />"></script>
+
 <script>
 /* 1. 댓글 달기 textarea 생성 */
 $(document).on("click",".comment-comment",function() {
@@ -69,22 +70,6 @@ $(document).on('click','#delete',function() {
 	} 
 });
 
-/* $(document).on('click','#goto-list', function() {
-	console.log("here!!")
-	var section = "${section}";
-	var section2 = Number(section);
-	if(section2 == 1 ) {
-		$('.list-form').action = "/board/list"
-		$('.list-form').submit();
-	} else if(section2 == 2 ) {
-		$('.list-form').action = "/board/myquestions"
-		$('.list-form').submit();
-	} else {
-		$('.list-form').action = "/board/list"
-		$('.list-form').submit();
-	}
-}); */
-
 /* 섬머노트 */
 $(document).ready(
 	function() {
@@ -94,7 +79,7 @@ $(document).ready(
 					sendFile(files[0], editor,welEditable);
 			}
 		});
-q});
+});
 </script>
 </head>
 <body>

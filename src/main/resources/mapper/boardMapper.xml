@@ -242,7 +242,8 @@
 		UPDATE BOARD SET
 			board_title = #{boardTitle},
 			board_content = #{boardContent},
-			category_no = #{categoryNo}
+			category_no = #{categoryNo},
+			board_content_summary = #{boardContentSummary}
 		WHERE 
 			board_no = #{boardNo}
 	</select>
@@ -343,7 +344,7 @@
 		SELECT 
 			B.board_no,
 			B.board_no as number,
-			CATEGORY.category_item, 
+			B.category_item, 
 			B.category_no,
 			B.board_title, 
 			B.board_content_summary, 
@@ -354,14 +355,15 @@
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
-					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content, CATEGORY.category_item
 				FROM BOARD
+				JOIN CATEGORY
+					ON BOARD.category_no = CATEGORY.category_no
 				WHERE BOARD.user_no = #{userNo} 
+				<include refid="search2"></include>
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
 		) B
-		JOIN CATEGORY
-			ON B.category_no = CATEGORY.category_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
 	</select>
@@ -434,16 +436,17 @@
 		FROM BOARD
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
-		JOIN  USER
-			ON BOARD.user_no = USER.user_no
 		<include refid="search"></include>
 	</select>
 	
 	<select id="countMyQuestionsPaging" resultType="int">
 		SELECT COUNT(board_no) 
 		FROM BOARD
+		JOIN CATEGORY
+			ON BOARD.category_no = CATEGORY.category_no
 		WHERE
 			BOARD.user_no = #{userNo} 
+		<include refid="search2"></include>
 	</select>
 	
 	<select id="countMyQuestionsAnsweredPaging" resultType="int">
@@ -497,6 +500,28 @@
 			</if>
 			<include refid="searchType_search"></include>
 		</if> 
+		<if test="date != '' and date != null">
+			<choose>
+				<when test="categoryType != '' || searchType != ''"> AND</when>
+				<otherwise>WHERE</otherwise>
+			</choose>
+			<include refid="date_search"></include>
+		</if> 
+	</sql>
+	
+	<sql id="search2">
+		<if test="categoryType != '' ">
+			AND
+			<include refid="categoryType_search"></include>
+		</if>
+		<if test="searchType != '' ">
+			AND
+			<include refid="searchType_search"></include>
+		</if> 
+		<if test="date != '' and date != null">
+			AND
+			<include refid="date_search"></include>
+		</if> 
 	</sql>
 
 	<sql id="categoryType_search">
@@ -506,18 +531,22 @@
 	<sql id="searchType_search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				( BOARD.board_content like CONCAT('%',#{modifiedKeyword},'%')
+				( BOARD.board_content_summary like CONCAT('%',#{modifiedKeyword},'%')
 				OR BOARD.board_title like CONCAT('%',#{modifiedKeyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARD.board_content like CONCAT('%',#{modifiedKeyword},'%')
+				BOARD.board_content_summary like CONCAT('%',#{modifiedKeyword},'%')
 			</when>
 			<when test="searchType == 'title'">
-				BOARD.board_title like CONCAT('%',#{modifiedKeyword},'%') 
+				BOARD.board_content_summary like CONCAT('%',#{modifiedKeyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
 				USER.user_id = #{modifiedKeyword}
 			</when>
 		</choose>
+	</sql>
+	
+	<sql id="date_search">
+		DATE(BOARD.board_date) = #{date}
 	</sql>
 </mapper>

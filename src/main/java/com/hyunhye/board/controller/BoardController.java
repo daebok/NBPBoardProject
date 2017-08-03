@@ -155,7 +155,7 @@ public class BoardController {
 		/* 게시글 수정하기 */
 		boardService.boardModify(model, file);
 
-		return "redirect:/board/answer?boardNo=" + model.getBoardNo();
+		return "redirect:/board/question?boardNo=" + model.getBoardNo();
 	}
 
 	/* 게시글 삭제 */
@@ -169,7 +169,7 @@ public class BoardController {
 	/** 내 질문 모아 보기 **/
 	/* 1. 전체 리스트 */
 	@RequestMapping("myquestions")
-	public String myQuestions(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 내 질문 전체 리스트 */
 		model.addAttribute("list", boardService.selectMyQuestions(cri));
 
@@ -192,7 +192,7 @@ public class BoardController {
 
 	/* 2. 답변 달린 것만 */
 	@RequestMapping("myquestions/answered")
-	public String myQuestionsAnswered(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String myQuestionsAnswered(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 답변 달린 내 질문 리스트 */
 		model.addAttribute("list", boardService.selectMyQuestionsAnswered(cri));
 

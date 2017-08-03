@@ -36,7 +36,7 @@
 		}
 	});
 	$("#modifyButton").click(function() {
-		var special_pattern = /[`@#$%^&*|\\\'\";:\/<>]/gi;
+		var special_pattern = /[\\<>]/gi;
 		
 		var title = $("#title").val();
 		var content = $("#content").val();
@@ -48,7 +48,7 @@
 		}
 		
 		if (special_pattern.test(title) == true) {
-			alert('제목에 특수문자는 사용할 수 없습니다.');
+			alert('제목에 \<>는 사용할 수 없습니다.');
 			$('#title').focus();
 			return false;
 		}

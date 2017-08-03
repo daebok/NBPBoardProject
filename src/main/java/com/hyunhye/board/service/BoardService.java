@@ -8,6 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ import com.hyunhye.security.UserSession;
 
 @Service
 public class BoardService {
+	Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
 	public BoardRepository repository;
@@ -74,11 +77,11 @@ public class BoardService {
 	public String createSummary(String originalContent) {
 		String boardSummary = originalContent
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		/* 300글자가 넘어가면 자르기 */
+		/* 300글자가 넘어가면 자르기
 		if (boardSummary.length() > 300) {
 			boardSummary = boardSummary.substring(0, 300);
 		}
-		/* 제거된 태그를 boardContentSummary에 담는다. */
+		 제거된 태그를 boardContentSummary에 담는다. */
 		return boardSummary;
 
 	}
@@ -123,6 +126,10 @@ public class BoardService {
 	public void boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
 		boardModel.setUserNo(UserSession.currentUserNo());
 
+		/* 제거된 태그를 boardContentSummary에 담는다. */
+		String summary = createSummary(boardModel.getBoardContent());
+		boardModel.setBoardContentSummary(summary);
+
 		/* 1) 업로드 된 파일 중에서 삭제버튼 누른 파일 삭제하기 */
 		uploadService.fileDelete(boardModel);
 
@@ -153,7 +160,6 @@ public class BoardService {
 		if (cri.getKeyword() != null) {
 			cri = keywordCheck(cri);
 		}
-
 		return repository.selectListAll(cri);
 	}
 
@@ -200,25 +206,33 @@ public class BoardService {
 
 	/** 내 질문 모아 보기  **/
 	/* 1. 내 질문 모아 보기 (전체) */
-	public List<BoardModel> selectMyQuestions(Criteria cri) {
+	public List<BoardModel> selectMyQuestions(SearchCriteria cri) {
+		/* 검색 타입 null 체크 */
+		cri = searchTypecheck(cri);
+
+		/* 검색 키워드 <> 체크 */
+		if (cri.getKeyword() != null) {
+			cri = keywordCheck(cri);
+		}
+
 		cri.setUserNo(UserSession.currentUserNo());
 		return repository.selectMyQuestions(cri);
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
-	public int countMyQuestionsPaging(Criteria cri) {
+	public int countMyQuestionsPaging(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
 		return repository.countMyQuestionsPaging(cri);
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
-	public List<BoardModel> selectMyQuestionsAnswered(Criteria cri) {
+	public List<BoardModel> selectMyQuestionsAnswered(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
 		return repository.selectMyQuestionsAnswered(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
-	public int countMyQuestionsAnsweredPaging(Criteria cri) {
+	public int countMyQuestionsAnsweredPaging(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
 		return repository.countMyQuestionsAnsweredPaging(cri);
 	}

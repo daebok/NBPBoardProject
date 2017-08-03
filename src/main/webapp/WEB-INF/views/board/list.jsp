@@ -5,25 +5,23 @@
 <html>
 <head>
 <style type="text/css">
-<!-- 말 줄임 -->
 #content-summary {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: box;
-	margin-top: 1px;
-	max-height: 80px;
-	overflow: hidden;
-	vertical-align: top;
+	line-height: 20px;
+	width: 100%;
 	text-overflow: ellipsis;
-	word-break: break-all;
+	overflow: hidden;
+	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3
+	display: -webkit-box;
+	word-wrap: break-word;
 }
-.notice-title{
+
+.notice-title {
 	background-color: #337ab7;
 	color: white;
 	padding: 10px;
 }
+
 .notice-content {
 	color: #337ab7;
 }

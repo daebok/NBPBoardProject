@@ -69,6 +69,7 @@ public class PageMaker {
 			.queryParam("categoryType", ((SearchCriteria)cri).getCategoryType())
 			.queryParam("searchType", ((SearchCriteria)cri).getSearchType())
 			.queryParam("keyword", encoding(((SearchCriteria)cri).getKeyword()))
+			.queryParam("date", encoding(((SearchCriteria)cri).getDate()))
 			.build();
 
 		return uriComponents.toUriString();
