@@ -32,7 +32,6 @@
 <body>
 	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	
 	<div class="container">
 		<div class="container-fluid" >
 			<div class="pull-right" style="height:100%; width:22%">
@@ -41,7 +40,7 @@
 					<c:forEach var="notice" items="${notice}">
 					<h6>
 						<span class="glyphicon glyphicon-bullhorn" style="color:#777;"></span>
-						<a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content">${notice.noticeTitle}</a>
+						<a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content"><c:out value="${notice.noticeTitle}"/></a>
 					</h6>
 					</c:forEach>
 				</div>
@@ -61,11 +60,11 @@
 						<span class="badge">Posted By ${board.userName}</span> 
 						<span class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
 						<div class="pull-right">
-							<span class="label label-success">answer:${board.commentCount}</span> 
-							<span class="label label-primary">views:${board.boardViewCount}</span> 
-							<span class="label label-warning">${board.categoryItem}</span>
+							<span class="label label-success">answer:<c:out value="${board.commentCount}"/></span> 
+							<span class="label label-primary">views:<c:out value="${board.boardViewCount}"/></span> 
+							<span class="label label-warning"><c:out value="${board.categoryItem}"/></span>
 							<span style="font-size:12px;"> Attach
-								<span class="badge" style="font-size:12px;">${board.fileCount}</span>
+								<span class="badge" style="font-size:12px;"><c:out value="${board.fileCount}"/></span>
 							</span>
 						</div>
 					</div>
@@ -74,20 +73,15 @@
 				<div class="page-nation">
 					<ul class="pagination pagination-large">
 						<c:if test="${pageMaker.prev}">
-							<li class="disabled"><span><a
-									href="/board/list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
+							<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
 						</c:if>
-	
-						<c:forEach var="idx" begin="${pageMaker.startPage}"
-							end="${pageMaker.endPage}">
-							<li
-								<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+						<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+							<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
 								<a href="/board/list${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
 							</li>
 						</c:forEach>
 						<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-							<li class="disabled"><span><a
-									href="/board/list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+							<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 						</c:if>
 					</ul>
 				</div>

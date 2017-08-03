@@ -369,7 +369,7 @@
 	<select id="selectMyQuestionsAnswered" resultMap="boardList">
 		SELECT 
 			B.board_no,
-			B.board_no,
+			B.board_no as number,
 			CATEGORY.category_item, 
 			B.category_no,
 			B.board_title, 

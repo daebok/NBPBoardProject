@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.comment.model.CommentModel;
 
 @Repository
@@ -36,5 +37,9 @@ public interface CommentRepository {
 	public void commenHate(CommentModel model);
 
 	public void commentDelete(int commentNo);
+
+	public List<CommentModel> selectMyAnswers(Criteria cri);
+
+	public int countMyAnswersPaging(Criteria cri);
 
 }

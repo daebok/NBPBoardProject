@@ -119,6 +119,7 @@ public class BoardController {
 
 		/* 해당 게시글의 답변 목록*/
 		model.addAttribute("comment", commentService.commentListAll(boardNo));
+
 		return "board/question";
 	}
 
@@ -207,6 +208,29 @@ public class BoardController {
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "user/myquestions";
+	}
+
+	/* 2. 내 답변 */
+	@RequestMapping("myanswers")
+	public String myAnswers(@ModelAttribute("cri") Criteria cri, Model model) {
+		/* 답변 달린 내 질문 리스트 */
+		model.addAttribute("list", commentService.selectMyAnswers(cri));
+
+		/* 페이징 계산하기 */
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(commentService.countMyAnswersPaging(cri));
+
+		/* 답변 달린 것만임을 알려주는 변수 */
+		model.addAttribute("check", 1);
+
+		/* 카테고리 리스트 */
+		model.addAttribute("categoryList", boardService.categoryListAll());
+
+		/* 페이징 정보 */
+		model.addAttribute("pageMaker", pageMaker);
+
+		return "user/myanswers";
 	}
 
 	/** 즐겨찾기 **/

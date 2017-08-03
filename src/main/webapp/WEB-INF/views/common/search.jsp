@@ -23,4 +23,5 @@
 	</select> 
 	<input name="keyword" id="keyword" value="${cri.keyword}"> 
 	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">
+	<a href="<c:url value='/board/list'/>" id="list" class="btn btn-default btn-sm">Clear</a>
 </form:form>

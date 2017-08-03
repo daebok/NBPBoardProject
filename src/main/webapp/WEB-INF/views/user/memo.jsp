@@ -36,6 +36,7 @@ $(document).on("click",".memo-ok-button", function(event) {
 /* 4. 댓글 리스트 보기 */
 $(document).on("click",".comment-comment-selct",function() {
 	$('.comment-comment-write').remove();
+	$('.comment-comment').attr("disabled",false);
 	var commentNo = $(this).attr('comment-no');
 	var count = parseInt($(this).html());
 	if($(this).val() == 'closed'){
@@ -50,13 +51,7 @@ $(document).on("click",".comment-comment-selct",function() {
 			contentType : false,
 			data : data,
 			success : function(result) {
-				var list = $.parseJSON(result);
-				for (var i = 0; i < list.commentCommentContent.length; i++) {
-					$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='answer-comment-"+list.commentCommentContent[i].commentNo+"'> "
-						+ "<div class='comment' id='comment-comment-text-"+list.commentCommentContent[i].commentNo+"'>"+list.commentCommentContent[i].commentContent + "</div>"
-						+ "<span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
-					);
-				}
+				$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result);
 			}
 		});
 	} else if($(this).val() == 'open'){
@@ -167,7 +162,7 @@ $(document).ready(
 					</c:choose>
 				</div>
 				<div class="pull-left" style="margin-right:5px;">
-					<form:form name="form" action="/board/answer" method="get">
+					<form:form name="form" action="/board/question" method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />

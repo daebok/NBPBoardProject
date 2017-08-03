@@ -60,6 +60,39 @@
 		ORDER BY COMMENT.comment_no
 	</select>
 	
+	<select id="selectMyAnswers" resultMap="commentList">
+		SELECT
+			C.comment_no, 
+			C.comment_content, 
+			C.comment_date,
+			C.board_no
+		FROM (
+				SELECT
+					COMMENT.comment_no, 
+					COMMENT.comment_content, 
+					COMMENT.comment_date,
+					COMMENT.board_no
+					FROM COMMENT
+					WHERE
+						COMMENT.user_no = #{userNo}
+						AND
+						comment_parent_no = 0
+					ORDER BY COMMENT.comment_no
+					LIMIT #{startBoardNo}, #{perPageNum}
+			) C
+		group by C.comment_no
+		ORDER BY C.comment_no
+	</select>
+	
+	<select id="countMyAnswersPaging" resultType="int">
+		SELECT COUNT(comment_no) 
+		FROM COMMENT
+		WHERE
+			COMMENT.user_no = #{userNo}
+			AND
+			comment_parent_no = 0
+	</select>
+	
 	<insert id="commentRegist">
 		INSERT INTO COMMENT (
 			board_no, 

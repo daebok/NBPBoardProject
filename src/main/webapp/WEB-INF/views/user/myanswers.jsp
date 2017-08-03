@@ -27,19 +27,18 @@
 			</div>
 		</div>
 		<div class="container-fluid">
-			<div class="col-md-12">
-				<c:forEach var="board" items="${list}">
-					<h4>
-						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}"/></a>
-					</h4>
+			<div class="col-md-12" style="margin-top:20px;">
+				<c:forEach var="comment" items="${list}">
 					<div>
-						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
-						<div class="pull-right">
-							<span class="label label-success">answer: <c:out value="${board.commentCount}"/></span>
-							<span class="label label-primary">views: <c:out value="${board.boardViewCount}"/></span>
-							<span class="label label-warning"><c:out value="${board.categoryItem}"/></span>
-						</div>
+						<form:form name="form" action="/board/question" method="get">
+							<input type="hidden" name="boardNo" value="${comment.boardNo}" /> 
+							<button type="submit" class="btn btn-primary btn-sm">View Question </button>
+						</form:form>
 					</div>
+					<div class="row">
+						${comment.commentContent}
+					</div>
+					<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${comment.commentDate}" pattern="yyyy/MM/dd"/></span>
 					<hr>
 				</c:forEach>
 			</div>
@@ -47,17 +46,17 @@
 			<div class="page-nation">
 				<ul class="pagination pagination-large">
 					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 					</c:if>
 
 					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 						<li 
 							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myquestions${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+							<a href="/board/myanswers${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 						</li>
 					</c:forEach>
 					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/myquestions${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+						<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 					</c:if>
 				</ul>
 			</div>
