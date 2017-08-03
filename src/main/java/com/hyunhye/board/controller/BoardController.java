@@ -99,7 +99,9 @@ public class BoardController {
 
 	/* 게시글 상세 보기 */
 	@RequestMapping("question")
-	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
+	public String boardSelect(@RequestParam("boardNo") int boardNo,
+		@RequestParam(value = "section", defaultValue = "1") int section,
+		@ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response) {
 
 		/* 조회수 */
@@ -119,6 +121,8 @@ public class BoardController {
 
 		/* 해당 게시글의 답변 목록*/
 		model.addAttribute("comment", commentService.commentListAll(boardNo));
+
+		model.addAttribute("section", section);
 
 		return "board/question";
 	}

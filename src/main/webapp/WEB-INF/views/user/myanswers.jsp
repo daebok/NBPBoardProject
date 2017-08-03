@@ -12,7 +12,7 @@
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
-				<b>My Questions</b>&nbsp;
+				<b>My Answers</b>&nbsp;
 				<c:choose>
 					<c:when test="${check eq 0 || check eq null}">
 						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
@@ -32,6 +32,7 @@
 					<div>
 						<form:form name="form" action="/board/question" method="get">
 							<input type="hidden" name="boardNo" value="${comment.boardNo}" /> 
+							<input type="hidden" name="section" value="3" /> 
 							<button type="submit" class="btn btn-primary btn-sm">View Question </button>
 						</form:form>
 					</div>

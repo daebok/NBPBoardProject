@@ -69,12 +69,21 @@ $(document).on('click','#delete',function() {
 	} 
 });
 
-/* 게시글 보기 */
-$(document).on('click','#list',function() {
-	document.form.method = "get";
-	document.form.action = "/board/list"
-	document.form.submit();
-});
+/* $(document).on('click','#goto-list', function() {
+	console.log("here!!")
+	var section = "${section}";
+	var section2 = Number(section);
+	if(section2 == 1 ) {
+		$('.list-form').action = "/board/list"
+		$('.list-form').submit();
+	} else if(section2 == 2 ) {
+		$('.list-form').action = "/board/myquestions"
+		$('.list-form').submit();
+	} else {
+		$('.list-form').action = "/board/list"
+		$('.list-form').submit();
+	}
+}); */
 
 /* 섬머노트 */
 $(document).ready(
@@ -85,8 +94,7 @@ $(document).ready(
 					sendFile(files[0], editor,welEditable);
 			}
 		});
-	}
-);
+q});
 </script>
 </head>
 <body>
@@ -138,7 +146,8 @@ $(document).ready(
 					</c:if>
 				</div>
 				<div class="pull-left">
-					<form:form name="form" action="list" method="post">
+				<c:if test="${section eq 1}">
+					<form:form name="form" action="list" method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
@@ -147,6 +156,29 @@ $(document).ready(
 						<input type="hidden" name="keyword" value="${cri.keyword}" />
 						<button type="submit" id="list" class="btn btn-primary">List</button>
 					</form:form>
+				</c:if>
+				<c:if test="${section eq 2}">
+					<form:form name="form" action="myquestions" method="get">
+						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
+						<input type="hidden" name="page" value="${cri.page}" /> 
+						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
+						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
+						<input type="hidden" name="keyword" value="${cri.keyword}" />
+						<button type="submit" id="list" class="btn btn-primary">List</button>
+					</form:form>
+				</c:if>
+				<c:if test="${section eq 3}">
+					<form:form name="form" action="myanswers" method="get">
+						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
+						<input type="hidden" name="page" value="${cri.page}" /> 
+						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
+						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
+						<input type="hidden" name="keyword" value="${cri.keyword}" />
+						<button type="submit" id="list" class="btn btn-primary">List</button>
+					</form:form>
+				</c:if>
 				</div>
 			</div>
 		</div>
@@ -154,7 +186,7 @@ $(document).ready(
 		<%@include file="answer.jsp"%>
 		
 		<div class="col-lg-9" style="margin-top: 50px;">
-			<form:form name="form" class="answer-form">
+			<form:form name="form" method="get" class="answer-form">
 				<input type="hidden" name="boardNo" value="${model.boardNo}">
 				<label for="content">Your Answer</label>
 				<textarea class="summernote" name="commentContent" id="comment-content"></textarea>

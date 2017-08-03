@@ -30,7 +30,7 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}"/></a>
+						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=2" id="boardNo">${board.boardTitle}</a>
 					</h4>
 					<div>
 						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
