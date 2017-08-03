@@ -29,15 +29,6 @@ public class CommentController {
 
 	/** 답변 **/
 	/* 1. 답변 달기 */
-	/*@ResponseBody
-	@RequestMapping(value = "regist", method = RequestMethod.POST)
-	public ResponseEntity<CommentModel> commentRegist(@ModelAttribute CommentModel commentModel) {
-		service.commentRegist(commentModel);
-		ResponseEntity<CommentModel> entity = new ResponseEntity<CommentModel>(service.commentLastSelect(),
-			HttpStatus.OK);
-		return entity;
-	}*/
-
 	@RequestMapping(value = "regist", method = RequestMethod.POST)
 	public String commentRegist(@ModelAttribute CommentModel commentModel, Model model) {
 		service.commentRegist(commentModel);
@@ -85,13 +76,10 @@ public class CommentController {
 
 	/** 댓글 **/
 	/* 1. 댓글 가져오기 */
-	@ResponseBody
 	@RequestMapping(value = "comment/select", method = RequestMethod.GET)
-	public HashMap<String, Object> commentCommentSelect(@ModelAttribute CommentModel model) {
-		HashMap<String, Object> hashmap = new HashMap<String, Object>();
-		hashmap.put("commentCommentContent", service.commentCommentSelect(model));
-
-		return hashmap;
+	public String commentCommentSelect(@ModelAttribute CommentModel commentModel, Model model) {
+		model.addAttribute("commentComment", service.commentCommentSelect(commentModel));
+		return "board/comment-form";
 	}
 
 	/* 댓글 삭제 */

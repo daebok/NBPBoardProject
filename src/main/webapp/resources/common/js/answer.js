@@ -14,7 +14,6 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				},
 				data : $('.answer-form').serialize(),
 				success : function(result) {
-					// var list = $.parseJSON(result);
 					alert('답변이 달렸습니다.');
 					$(".emptyContent").remove();
 					$("#listComment").append(result);
@@ -138,16 +137,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				contentType : false,
 				data : data,
 				success : function(result) {
-					var list = $.parseJSON(result);
-					for (var i = 0; i < list.commentCommentContent.length; i++) {
-						$('#comment-'+commentNo+' > .comment-comment-wrapper').append("<div class='comment-wrapper comment-comment-list' id='answer-comment-"+list.commentCommentContent[i].commentNo+"'> "
-							+ "<div class='comment' id='comment-comment-text-"+list.commentCommentContent[i].commentNo+"'>"+list.commentCommentContent[i].commentContent + "</div>"
-							+ "<span class='badge'>Commented By "+list.commentCommentContent[i].userName+"</span>"
-							+ "<div class='pull-right comment-list-list' >"
-							+ '<button type="button" class="comment-comment-modify btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Modify</button>&nbsp;'
-							+ '<button type="button" class="answer-comment-delete btn btn-default" comment-no="'+list.commentCommentContent[i].commentNo+'">Delete</button></div></div>'
-						);
-					}
+					$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result);
 				}
 			});
 		} else if($(this).val() == 'open'){
