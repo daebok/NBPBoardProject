@@ -317,7 +317,7 @@
 			B.board_date, 
 			B.board_view_cnt,
 			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
-			count(file_no) as file_count
+			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
@@ -335,8 +335,6 @@
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
 			ON B.user_no = USER.user_no
-		LEFT JOIN FILE
-			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
 	</select>
@@ -352,7 +350,7 @@
 			B.board_date, 
 			B.board_view_cnt,
 			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
-			count(file_no) as file_count
+			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
@@ -364,8 +362,6 @@
 		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
-		LEFT JOIN FILE
-			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
 	</select>
@@ -381,7 +377,7 @@
 			B.board_date, 
 			B.board_view_cnt,
 			B.comment_count,
-			count(file_no) as file_count
+			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
@@ -396,8 +392,6 @@
 		) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
-		LEFT JOIN FILE
-			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
 	</select>
@@ -414,7 +408,7 @@
 			B.board_date, 
 			B.board_view_cnt,
 			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
-			count(file_no) as file_count
+			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
@@ -430,8 +424,6 @@
 			ON B.category_no = CATEGORY.category_no
 		JOIN USER
 			ON B.user_no = USER.user_no
-		LEFT JOIN FILE
-			ON B.board_no = FILE.board_no
 		GROUP BY B.board_no
 		ORDER BY B.board_no desc
 	</select>

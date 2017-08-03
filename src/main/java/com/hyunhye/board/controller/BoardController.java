@@ -48,11 +48,11 @@ public class BoardController {
 
 	/** 게시글 **/
 	/* 질문하기 페이지 이동  */
-	@RequestMapping("question")
+	@RequestMapping("ask")
 	public String question(Model model) {
 		/* 카테고리 불러오기 */
 		model.addAttribute("list", boardService.categoryListAll());
-		return "/board/question";
+		return "/board/ask";
 	}
 
 	/* 리스트 목록 보기 (페이징) */
@@ -98,7 +98,7 @@ public class BoardController {
 	}
 
 	/* 게시글 상세 보기 */
-	@RequestMapping("answer")
+	@RequestMapping("question")
 	public String boardSelect(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response) {
 
@@ -119,7 +119,7 @@ public class BoardController {
 
 		/* 해당 게시글의 답변 목록*/
 		model.addAttribute("comment", commentService.commentListAll(boardNo));
-		return "board/answer";
+		return "board/question";
 	}
 
 	/* 파일 다운로드 */

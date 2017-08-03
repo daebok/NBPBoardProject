@@ -1,6 +1,6 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-/* 답변 달기 */
+	/* 답변 달기 */
 	$(document).on("click","#comment-button", function(event) {
 		event.preventDefault();
 		var commentContent = $('#comment-content').val();
@@ -14,23 +14,10 @@ var header = $("meta[name='_csrf_header']").attr("content");
 				},
 				data : $('.answer-form').serialize(),
 				success : function(result) {
-					var list = $.parseJSON(result);
+					// var list = $.parseJSON(result);
 					alert('답변이 달렸습니다.');
 					$(".emptyContent").remove();
-					var str = "<div class='whole-wrapper' id='whole-wrapper-"+ list.commentNo +"'>";
-						str += '<div class="answer-hate glyphicon glyphicon-heart" comment-no="'+ list.commentNo +'" style="font-size:15px; color:#eee;"></div>';
-						str += '<span  id="answer-like-count-'+ list.commentNo +'" style="font-size:12px; color:#888;"> '+0+'</span>';
-						str += "<div id='comment-"+list.commentNo+"' class='comment-wrapper-wrapper'> <div class='comment-wrapper' id='"+list.commentNo+"'>";
-						str += "<div class='comment' id='content-"+list.commentNo+"'>"+ list.commentContent + "</div><span class='badge'>Commented By  "+list.userName+"</span>";
-						str += '<span class="badge commentName" style="background-color:#ffffff; color:#8c8c8c">';
-						str += '<fmt:formatDate value="'+list.commentDate+'" pattern="yyyy/MM/dd"/></span>'
-						str += "<div class='pull-right' class='comment-list'>";
-						str += '<button type="button" class="comment-modify btn btn-default" comment-no="'+list.commentNo+'">Modify</button>&nbsp;';
-						str += '<button type="button" class="comment-delete btn btn-default" comment-no="'+list.commentNo+'">Delete</button>&nbsp';
-						str += '<button type="button" class="comment-comment-selct btn btn-default '+list.commentNo+'" comment-no="'+list.commentNo+'" id="comment-view-'+list.commentNo+'" value="closed">0 Comment ▼</button></div></div>';
-						str += '<button type="button" class="comment-comment btn btn-default btn-sm" comment-no="'+list.commentNo+'" style="margin-bottom:10px;">add a Comment</button>';
-						str += '<div class="comment-comment-wrapper" id="comment-comment-list"></div></div></div>';
-					$("#listComment").append(str);
+					$("#listComment").append(result);
 					$('.summernote').summernote('code', '');
 				}
 			});
