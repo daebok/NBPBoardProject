@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
@@ -12,7 +11,7 @@
 			<div class="col-md-11">
 				<c:forEach var="board" items="${model}">
 					<h4>
-						<a href="<c:url value='/board/answer?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
+						<a href="<c:url value='/board/question?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
 					</h4>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span>

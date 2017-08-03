@@ -1,17 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <style>
-	.wrapper {
-		height: 40px;
-	}
-	.wrapper-2 {
-		margin-left:20px;
-		line-height: 40px;
-	}
+.wrapper {
+	height: 40px;
+}
+.wrapper-2 {
+	margin-left:20px;
+	line-height: 40px;
+}
 </style>
 <div class="container"  style="margin-top:40px;">
 	<div class="container-fluid" >
@@ -51,7 +48,7 @@
 	</div>		
 	<div class="container-fluid">
 		<div class="pull-right">
-			<a href="<c:url value='/board/question'/>" id="question" class="btn btn-primary">? Ask Question</a>
+			<a href="<c:url value='/board/ask'/>" id="question" class="btn btn-primary">? Ask Question</a>
 			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-primary">Questions</a>
 		</div>
 	</div>
