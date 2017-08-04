@@ -2,6 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
+<script>
+	$(document).on("click","#searchButton",function() {
+		var keyword = $("#keyword").val();
+		keyword.replace(/"/gi, "&quot;");
+		
+		document.form.action = "/board/myquestions"
+		document.form.submit();
+	});
+</script>
 <form:form name="form" method="get" action="/board/myquestions">
 	<div style="line-height:20px;">
 		<label for="categoryType"> Category </label>

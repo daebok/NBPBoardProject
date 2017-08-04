@@ -14,8 +14,6 @@ import com.hyunhye.board.model.SearchCriteria;
 @Repository
 public interface BoardRepository {
 
-	public List<BoardModel> boardListViews();
-
 	public List<CategoryModel> categoryListAll();
 
 	public void boardRegist(BoardModel boardModel);
@@ -55,10 +53,6 @@ public interface BoardRepository {
 	public BookMarkModel memoSelect(BookMarkModel bookMarkModel);
 
 	public void boardBookMarkUnCheck(BoardModel model);
-
-	public List<BoardModel> boardListTopAnswers();
-
-	public List<BoardModel> boardListNewest();
 
 	public List<FileModel> fileSelect(int boardNo);
 

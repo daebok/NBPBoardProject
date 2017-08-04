@@ -35,10 +35,9 @@ public class Filtering {
 		+ "짜식,짜아식,쪼다,쫍빱,찌랄,창녀,캐년,캐놈,캐스끼,캐스키,캐시키,탱구,팔럼,퍽큐,호로,호로놈,호로새끼,호로색,"
 		+ "호로쉑,호로스까이,호로스키,후라들,후래자식,후레,후뢰,씨ㅋ발,ㅆ1발,씌발,띠발,띄발,뛰발,띠ㅋ발,뉘뮈";
 	public static String[] array = badWords2.split(",");
+	public static List<String> array2 = Arrays.asList(array);
 
 	public static List<String> badWordFilteringContainsStream(String content) {
-		List<String> array2 = Arrays.asList(array);
-
 		List<String> list = array2.stream()
 			.parallel()
 			.filter(s -> content.contains(s))

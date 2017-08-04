@@ -3,7 +3,6 @@ package com.hyunhye.board.service;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,29 +30,10 @@ public class BoardService {
 	Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
-	public BoardRepository repository;
+	public BoardRepository boardRepository;
 
 	@Autowired
 	private UploadService uploadService;
-
-	@Resource(name = "uploadPath")
-	private String uploadPath;
-
-	/** 게시글  Top10 리스트 **/
-	/* 조회순*/
-	public List<BoardModel> boardListViews() {
-		return repository.boardListViews();
-	}
-
-	/* 답변순 */
-	public List<BoardModel> boardListTopAnswers() {
-		return repository.boardListTopAnswers();
-	}
-
-	/* 최신순 */
-	public List<BoardModel> boardListNewest() {
-		return repository.boardListNewest();
-	}
 
 	/** 게시글 **/
 	/* 1. 게시글 작성하기 */
@@ -67,7 +47,7 @@ public class BoardService {
 		boardModel.setBoardContentSummary(summary);
 
 		/* 1) 작성 된 게시글 저장 */
-		repository.boardRegist(boardModel);
+		boardRepository.boardRegist(boardModel);
 
 		/* 2) 업로드 된 파일 저장 */
 		uploadService.fileRegist(boardModel, files);
@@ -100,7 +80,7 @@ public class BoardService {
 		BoardModel boardModel = new BoardModel();
 		boardModel.setBoardNo(boardNo);
 		boardModel.setUserNo(UserSession.currentUserNo());
-		return repository.boardSelect(boardModel);
+		return boardRepository.boardSelect(boardModel);
 	}
 
 	/* 조회수 */
@@ -117,7 +97,7 @@ public class BoardService {
 
 	/* 등록 된 첨부파일 가져오기  */
 	public List<FileModel> getAttach(int boardNo) {
-		return repository.getFile(boardNo);
+		return boardRepository.getFile(boardNo);
 	}
 
 	/* 3. 게시글 수정하기*/
@@ -137,7 +117,7 @@ public class BoardService {
 		uploadService.fileRegist(boardModel, files);
 
 		/* 3) 기존 게시글 수정하기 */
-		repository.boardModify(boardModel);
+		boardRepository.boardModify(boardModel);
 	}
 
 	/* 4. 게시글 삭제하기 */
@@ -148,7 +128,7 @@ public class BoardService {
 		uploadService.fileDeletFromDatabase(boardNo);
 
 		/* 2) 기존 게시물 삭제하기 */
-		repository.boardDelete(boardNo);
+		boardRepository.boardDelete(boardNo);
 	}
 
 	/* 5. 게시글 리스트 (페이징) */
@@ -160,7 +140,14 @@ public class BoardService {
 		if (cri.getKeyword() != null) {
 			cri = keywordCheck(cri);
 		}
-		return repository.selectListAll(cri);
+
+		/* 검색 키워드 따옴표 체크 */
+		if (cri.getKeyword() != null) {
+			logger.info("cri.getKeyword():{}", cri.getKeyword());
+			cri.setKeyword(cri.getKeyword().replaceAll("\"", "&quot;"));
+		}
+
+		return boardRepository.selectListAll(cri);
 	}
 
 	/* 검색 시, null 체크 */
@@ -185,23 +172,23 @@ public class BoardService {
 
 	/* 게시글 개수 구하기 */
 	public int countListAllPaging(SearchCriteria cri) {
-		return repository.countListAllPaging(cri);
+		return boardRepository.countListAllPaging(cri);
 	}
 
 	/* 조회수 */
 	public void increaseViewCount(int boardNo) {
-		repository.increaseViewCount(boardNo);
+		boardRepository.increaseViewCount(boardNo);
 	}
 
 	/* 게시글 작성자 가져오기 */
 	/* 인터셉터에서 사용 */
 	public int checkUser(int boardNo) {
-		return repository.checkUser(boardNo);
+		return boardRepository.checkUser(boardNo);
 	}
 
 	/* 3. 카테고리 목록 가져오기 */
 	public List<CategoryModel> categoryListAll() {
-		return repository.categoryListAll();
+		return boardRepository.categoryListAll();
 	}
 
 	/** 내 질문 모아 보기  **/
@@ -215,52 +202,57 @@ public class BoardService {
 			cri = keywordCheck(cri);
 		}
 
+		/* 검색 키워드 따옴표 체크 */
+		if (cri.getKeyword() != null) {
+			cri.setKeyword(cri.getKeyword().replaceAll("\"", "&quot;"));
+		}
+
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.selectMyQuestions(cri);
+		return boardRepository.selectMyQuestions(cri);
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsPaging(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.countMyQuestionsPaging(cri);
+		return boardRepository.countMyQuestionsPaging(cri);
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
 	public List<BoardModel> selectMyQuestionsAnswered(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.selectMyQuestionsAnswered(cri);
+		return boardRepository.selectMyQuestionsAnswered(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsAnsweredPaging(SearchCriteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.countMyQuestionsAnsweredPaging(cri);
+		return boardRepository.countMyQuestionsAnsweredPaging(cri);
 	}
 
 	/** 즐겨찾기 **/
 	/* 즐겨찾기 저장하기 */
 	public void boardBookMark(BoardModel model) {
 		model.setUserNo(UserSession.currentUserNo());
-		repository.boardBookMark(model);
+		boardRepository.boardBookMark(model);
 	}
 
 	/* 즐겨찾기 리스트 */
 	public List<BoardModel> myFavorite(Criteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.selectMyFavorite(cri);
+		return boardRepository.selectMyFavorite(cri);
 
 	}
 
 	/* 즐겨 찾기 리스트 전체 개수 구하기 */
 	public int countMyFavoritePaging(Criteria cri) {
 		cri.setUserNo(UserSession.currentUserNo());
-		return repository.countMyFavoritePaging(cri);
+		return boardRepository.countMyFavoritePaging(cri);
 	}
 
 	/* 즐겨찾기 메모 저장 하기  */
 	public void bookMarkMemoRegist(BookMarkModel bookMarkModel) {
 		bookMarkModel.setUserNo(UserSession.currentUserNo());
-		repository.bookMarkMemoRegist(bookMarkModel);
+		boardRepository.bookMarkMemoRegist(bookMarkModel);
 	}
 
 	/* 즐겨찾기 메모 불러오기  */
@@ -269,12 +261,12 @@ public class BoardService {
 		bookMarkModel.setUserNo(UserSession.currentUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
-		return repository.memoSelect(bookMarkModel);
+		return boardRepository.memoSelect(bookMarkModel);
 	}
 
 	/* 즐겨찾기 해제  */
 	public void boardBookMarkUnCheck(BoardModel model) {
 		model.setUserNo(UserSession.currentUserNo());
-		repository.boardBookMarkUnCheck(model);
+		boardRepository.boardBookMarkUnCheck(model);
 	}
 }

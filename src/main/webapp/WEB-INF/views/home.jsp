@@ -15,6 +15,7 @@
 	if(error != "") {
 		alert(error);
 	}
+
 </script>
 </head>
 <body>
@@ -33,9 +34,9 @@
 				<li role="presentation"><a href="#answers" aria-controls="answers" role="tab" data-toggle="tab">Answers</a></li>
 			</ul>
 			<div class="tab-content" style="margin:20px;">
-				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/board/newest" ></c:import></div>
-				<div role="tabpanel" class="tab-pane" id="views"><c:import url="/board/views" ></c:import></div>
-				<div role="tabpanel" class="tab-pane" id="answers"><c:import url="/board/answers" ></c:import></div>
+				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/board/home?tab=1" ></c:import></div>
+				<div role="tabpanel" class="tab-pane" id="views"><c:import url="/board/home?tab=2" ></c:import></div>
+				<div role="tabpanel" class="tab-pane" id="answers"><c:import url="/board/home?tab=3" ></c:import></div>
 			</div>
 		</div>
 	</div>
