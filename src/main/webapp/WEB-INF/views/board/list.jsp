@@ -51,9 +51,9 @@
 				</c:if>
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo">${board.boardTitle}</a>
+						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false" /></a>
 					</h4>
-					<p id="content-summary">${board.boardContentSummary}</p>
+					<p id="content-summary"><c:out value="${board.boardContentSummary}" escapeXml="false" /></p>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span> 
 						<span class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>

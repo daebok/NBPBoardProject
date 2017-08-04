@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.admin.repository.AdminRepository">
+
+	<resultMap id="noticeList" type="notice">
+		<result property="noticeNo" column="notice_no" />
+		<result property="userNo" column="user_no" />
+		<result property="noticeTitle" column="notice_title" />
+		<result property="noticeContent" column="notice_content" />
+	</resultMap>
+	
+	<!-- 공지사항  추가 -->
+	<insert id="noticeInsert">
+		INSERT INTO NOTICE (
+			notice_title,
+			notice_content,
+			user_no
+		) VALUES (
+			#{noticeTitle},
+			#{noticeContent},
+			#{userNo}
+		)
+	</insert>
+	
+	<!-- 공지사항  리스트 가져오기  -->
+	<select id="noticeListAll" resultMap="noticeList">
+		SELECT
+			notice_no,
+			notice_title,
+			notice_content
+		FROM NOTICE
+	</select>
+	
+	<!-- 공지사항  상세보기 -->
+	<select id="noticeSelectOne" resultMap="noticeList">
+		SELECT
+			notice_no,
+			notice_title,
+			notice_content
+		FROM NOTICE
+		WHERE
+			notice_no = #{noticeNo}
+	</select>
+	
+	<!-- 공지사항  삭제하기 -->
+	<delete id="noticeDelete">
+		DELETE FROM NOTICE
+		WHERE 
+			notice_no = #{noticeNo}
+	</delete>
+	
+	<!-- 공지사항  수정하기 -->
+	<update id="noticeUpdate">
+		UPDATE NOTICE
+		SET 
+			notice_title = #{noticeTitle},
+			notice_content = #{noticeContent}
+		WHERE
+			notice_no = #{noticeNo}
+	</update>
+</mapper>

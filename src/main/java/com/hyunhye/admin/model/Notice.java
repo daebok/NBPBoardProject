@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Alias("notice")
-public class NoticeModel {
+public class Notice {
 	private int noticeNo;
 	private int userNo;
 	private String noticeTitle;

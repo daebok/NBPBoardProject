@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.board.repository.CategoryRepository">
+
+	<resultMap id="categoryList" type="category">
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
+		<result property="categoryEnabled" column="category_enabled" />
+	</resultMap>
+
+	<!-- 카테고리 리스트 불러오기 -->
+	<select id="categorySelectList" resultMap="categoryList">
+		SELECT 
+			category_item,
+			category_no
+		FROM CATEGORY
+		WHERE category_enabled = 1
+	</select>
+
+	<!-- 카테고리 추가하기 -->
+	<select id="categoryInsert">
+		INSERT INTO CATEGORY (
+			category_item
+		) VALUES (
+			#{categoryItem}
+		)
+	</select>
+	
+	<!-- 해당 카테고리를 가진 게시물 개수 가져오기 -->
+	<select id="boardSelectCountOfCategory" resultType="int">
+		SELECT
+			count(board_no)
+		FROM CATEGORY
+		JOIN BOARD
+		ON CATEGORY.category_no = BOARD.category_no
+		WHERE 
+			CATEGORY.category_no = #{categoryNo}
+	</select>
+	
+	<!-- 카테고리 삭제하기 -->
+	<delete id="categoryDelete">
+		UPDATE CATEGORY
+		SET 
+			category_enabled = 0
+		WHERE 
+			category_no = #{categoryNo}
+	</delete>
+	
+	<!-- 현재 같은 카테고리의 이름이 있는지 체크 -->
+	<select id="categoryCheck" resultType="int">
+		SELECT
+			count(category_no)
+		FROM CATEGORY
+		WHERE 
+			CATEGORY.category_item = #{categoryItem}
+			AND 
+			category_enabled = 1
+	</select>
+
+</mapper>

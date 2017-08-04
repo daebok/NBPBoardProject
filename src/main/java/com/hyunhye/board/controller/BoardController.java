@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hyunhye.admin.model.NoticeModel;
+import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.service.AdminService;
-import com.hyunhye.board.model.BoardModel;
-import com.hyunhye.board.model.BookMarkModel;
+import com.hyunhye.board.model.Board;
+import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
@@ -46,25 +46,33 @@ public class BoardController {
 	@Autowired
 	private UploadService uploadService;
 
-	/** 게시글 **/
-	/* 질문하기 페이지 이동  */
+	/**
+	 * 게시물 작성하기 페이지 이동
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("ask")
-	public String question(Model model) {
-		/* 카테고리 불러오기 */
+	public String goAskPage(Model model) {
+		/* 카테고리 목록  불러오기 */
 		model.addAttribute("list", boardService.categoryListAll());
 		return "/board/ask";
 	}
 
-	/* 리스트 목록 보기 (페이징) */
+	/**
+	 * 전체 게시물 리스트 목록 보기
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("list")
-	public String listCriteria(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 한 페이지에 보여줄 게시글 */
-		model.addAttribute("list", boardService.selectListAll(cri));
+		model.addAttribute("list", boardService.boardSelectList(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.countListAllPaging(cri));
+		pageMaker.setTotalCount(boardService.boardSelectListCount(cri));
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());
@@ -78,18 +86,28 @@ public class BoardController {
 		return "board/list";
 	}
 
-	/* 게시글 작성하기  */
+	/**
+	 * 게시글 작성하기
+	 * @param model
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardRegist(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
+	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
-		boardService.boardRegist(UserSession.currentUserNo(), model, file);
+		boardService.boardInsert(UserSession.currentUserNo(), model, file);
 		return "redirect:/board/list";
 	}
 
-	/* 비속어 체크 */
+	/**
+	 * 비속어 체크
+	 * @param model
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "badWordsCheck", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> badWordsCheck(@ModelAttribute BoardModel model) {
+	public ResponseEntity<List<String>> badWordsCheck(@ModelAttribute Board model) {
 		/* 게시글에 포함 된 비속어 리스트 */
 		ResponseEntity<List<String>> entity = new ResponseEntity<List<String>>(boardService.badWordsCheck(model),
 			HttpStatus.OK);
@@ -97,9 +115,18 @@ public class BoardController {
 		return entity;
 	}
 
-	/* 게시글 상세 보기 */
+	/**
+	 * 게시글 상세 보기
+	 * @param boardNo
+	 * @param section
+	 * @param cri
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("question")
-	public String boardSelect(@RequestParam("boardNo") int boardNo,
+	public String boardSelectOne(@RequestParam("boardNo") int boardNo,
 		@RequestParam(value = "section", defaultValue = "1") int section,
 		@ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response) {
@@ -111,7 +138,7 @@ public class BoardController {
 		model.addAttribute("user", UserSession.currentUserInfo());
 
 		/* 해당 게시글 */
-		model.addAttribute("model", boardService.boardSelect(boardNo));
+		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 해당 게시글에 포함된 첨부 파일 */
 		model.addAttribute("attach", boardService.getAttach(boardNo));
@@ -127,18 +154,28 @@ public class BoardController {
 		return "board/question";
 	}
 
-	/* 파일 다운로드 */
+	/**
+	 * 파일 다운로드
+	 * @param fileName
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping("downloadFile")
-	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
+	public ResponseEntity<byte[]> fileDownload(String fileName) throws Exception {
 		return uploadService.fileDownload(fileName);
 	}
 
-	/* 게시글 수정화면으로 이동 */
+	/**
+	 * 게시글 수정화면으로 이동
+	 * @param boardNo
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("modify")
-	public String modify(@RequestParam("boardNo") int boardNo, Model model) {
+	public String goBoardUpdatePage(@RequestParam("boardNo") int boardNo, Model model) {
 		/* 해당 게시글 */
-		model.addAttribute("model", boardService.boardSelect(boardNo));
+		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 카테고리 리스트 */
 		model.addAttribute("list", boardService.categoryListAll());
@@ -148,17 +185,28 @@ public class BoardController {
 		return "board/modify";
 	}
 
-	/* 게시글 수정 등록 */
+	/**
+	 * 게시글 수정하기
+	 * @param model
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "question/modify", method = RequestMethod.POST)
-	public String boardModify(@ModelAttribute BoardModel model, @RequestParam("files") MultipartFile[] file)
+	public String boardUpdate(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file)
 		throws IOException, Exception {
 		/* 게시글 수정하기 */
-		boardService.boardModify(model, file);
+		boardService.boardUpdate(model, file);
 
 		return "redirect:/board/question?boardNo=" + model.getBoardNo();
 	}
 
-	/* 게시글 삭제 */
+	/**
+	 * 게시글 삭제
+	 * @param boardNo
+	 * @return
+	 */
 	@RequestMapping("delete")
 	public String boardDelete(@RequestParam("boardNo") int boardNo) {
 		/* 게시글 삭제하기 */
@@ -166,12 +214,16 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	/** 내 질문 모아 보기 **/
-	/* 1. 전체 리스트 */
+	/**
+	 * 내 질문 모아보기 전체 리스트
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("myquestions")
-	public String myQuestions(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myQuestionsSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 내 질문 전체 리스트 */
-		model.addAttribute("list", boardService.selectMyQuestions(cri));
+		model.addAttribute("list", boardService.myQuestionsSelectList(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
@@ -190,11 +242,16 @@ public class BoardController {
 		return "user/myquestions";
 	}
 
-	/* 2. 답변 달린 것만 */
+	/**
+	 * 내 질문 모아보기 전체 리스트 (답변 달린 것만)
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("myquestions/answered")
-	public String myQuestionsAnswered(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myQuestionsAnsweredSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 답변 달린 내 질문 리스트 */
-		model.addAttribute("list", boardService.selectMyQuestionsAnswered(cri));
+		model.addAttribute("list", boardService.myQuestionsAnsweredSelectList(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
@@ -203,7 +260,6 @@ public class BoardController {
 
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);
-
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());
@@ -214,9 +270,14 @@ public class BoardController {
 		return "user/myquestions";
 	}
 
-	/* 2. 내 답변 */
+	/**
+	 *  내 답변 모아보기 전체 리스트
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("myanswers")
-	public String myAnswers(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String myAnswersSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
 		/* 답변 달린 내 질문 리스트 */
 		model.addAttribute("list", commentService.selectMyAnswers(cri));
 
@@ -237,32 +298,43 @@ public class BoardController {
 		return "user/myanswers";
 	}
 
-	/** 즐겨찾기 **/
-	/* 즐겨찾기 추가 */
+	/**
+	 * 즐겨찾기 추가하기
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "bookmark", method = RequestMethod.GET)
-	public ResponseEntity<String> boardBookMark(@ModelAttribute BoardModel model) {
-		boardService.boardBookMark(model);
+	public ResponseEntity<String> bookmarkInsert(@ModelAttribute Board model) {
+		boardService.bookmarkInsert(model);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/* 즐겨찾기 해제 */
+	/**
+	 * 즐겨찾기 해제하기
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "bookmark/uncheck", method = RequestMethod.GET)
-	public ResponseEntity<String> boardBookMarkUnCheck(@ModelAttribute BoardModel model) {
-		boardService.boardBookMarkUnCheck(model);
+	public ResponseEntity<String> bookmarkDelete(@ModelAttribute Board model) {
+		boardService.bookmarkDelete(model);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/* 즐겨찾기 목록 보기 */
+	/**
+	 * 즐겨찾기 리스트 보기
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("myfavorite")
-	public String myFavorite(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String myFavoriteSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 즐겨찾기 전체 목록 */
-		model.addAttribute("list", boardService.myFavorite(cri));
+		model.addAttribute("list", boardService.myFavoriteSelectList(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(boardService.countMyFavoritePaging(cri));
-
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());
@@ -273,16 +345,25 @@ public class BoardController {
 		return "user/myfavorite";
 	}
 
-	/* 즐겨찾기 상세 보기 */
+	/**
+	 * 증겨찾기 상세 보기
+	 * @param boardNo
+	 * @param cri
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @param principal
+	 * @return
+	 */
 	@RequestMapping("myfavorite/memo")
-	public String boardMemo(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
+	public String bookmarkSelectOne(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
 
 		/* 현재 사용자 정보 */
 		model.addAttribute("user", UserSession.currentUserInfo());
 
 		/* 게시글 상세 정보 */
-		model.addAttribute("model", boardService.boardSelect(boardNo));
+		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 첨부파일 */
 		model.addAttribute("attach", boardService.getAttach(boardNo));
@@ -294,30 +375,30 @@ public class BoardController {
 		model.addAttribute("comment", commentService.commentListAll(boardNo));
 
 		/* 즐겨찾기 된 해당 게시글의 메모 */
-		model.addAttribute("memo", boardService.memoSelect(boardNo));
+		model.addAttribute("memo", boardService.bookmarkMemoSelect(boardNo));
 		return "user/memo";
 	}
 
-	/* 즐겨찾기 메모 작성 */
+	/**
+	 * 즐겨찾기 메모 작성하기
+	 * @param bookMarkModel
+	 * @return
+	 */
 	@RequestMapping(value = "memo", method = RequestMethod.POST)
-	public ResponseEntity<String> commentRegist(@ModelAttribute BookMarkModel bookMarkModel) {
-		boardService.bookMarkMemoRegist(bookMarkModel);
+	public ResponseEntity<String> bookmarkMemoUpdate(@ModelAttribute BookMark bookMarkModel) {
+		boardService.bookmarkMemoUpdate(bookMarkModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/** 내 정보 보기 **/
-	/* 내정보 상세 보기 */
-	@RequestMapping("myinfo")
-	public String boardMemo(Model model) {
-		model.addAttribute("user", UserSession.currentUserInfo());
-		return "user/myinfo";
-	}
-
-	/** 공지사항  **/
-	/* 공지사항 보기 */
+	/**
+	 * 공지사항 상세보기
+	 * @param noticeModel
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("notice")
-	public String noticeSelect(NoticeModel noticeModel, Model model) {
-		model.addAttribute("model", adminService.noticeSelect(noticeModel));
+	public String noticeSelectOne(Notice noticeModel, Model model) {
+		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
 		return "admin/noticeView";
 	}
 

@@ -18,9 +18,9 @@
 					<c:when test="${check eq 0 || check eq null}">
 						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
 					</c:when>
-					<c:otherwise>
+					<c:when test="${check eq 1}">
 						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
-					</c:otherwise>
+					</c:when>
 				</c:choose>
 				<div class="pull-right">
 					<a href="<c:url value='/board/myanswers'/>" class="btn btn-default btn-sm">My Answers</a>

@@ -4,9 +4,8 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <script>
 	$(document).on("click","#searchButton",function() {
-		var keyword = $("#keyword").val();
-		keyword.replace(/"/gi, "&quot;");
-		console.log(keyword);
+		/* var keyword = htmlentities($('#keyword').val());
+		$('#keyword').val(keyword); */
 		
 		document.form.action = "/board/list"
 		document.form.submit();
@@ -16,8 +15,8 @@
 	<div style="line-height:20px;">
 		<label for="categoryType"> Category </label>
 		<select name="categoryType" id="categoryType" style="padding:2px;">
-			<option value="null"
-				<c:out value="${cri.categoryType eq 'null'?'selected':''}"/>>---</option>
+			<option value= 'all'
+				<c:out value="${cri.categoryType eq 'all' ?'selected':''}"/>>전체</option>
 			<c:forEach var="category" items="${categoryList}">
 				<option value="${category.categoryItem}"
 					<c:out value="${cri.categoryType eq category.categoryItem ?'selected':''}"/>> ${category.categoryItem}</option>
@@ -36,9 +35,9 @@
 				<c:out value="${cri.searchType eq 'writer'?'selected':''}"/>>작성자</option>
 		</select> 
 	</div>
-	<input type="text" name="keyword" id="keyword" value="${cri.keyword}">
+	<!-- <input type="text" name="keyword" id="keyword" value="${cri.keyword}"> -->
+	<input type="text" name="keyword" id="keyword" value="<c:out value='${cri.keyword}'/>">
 	<input type="date" name="date" value="${cri.date}">
 	<input type="button" id="searchButton" class="btn btn-default btn-sm" value="검색">
 	<a href="<c:url value='/board/list'/>" id="list" class="btn btn-default btn-sm">Clear</a>
 </form:form>
-

@@ -4,41 +4,23 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.hyunhye.admin.model.NoticeModel;
-import com.hyunhye.board.model.CategoryModel;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.admin.model.Notice;
 
 @Repository
 public interface AdminRepository {
+	/** 공지사항  추가 **/
+	public void noticeInsert(Notice noticeModel);
 
-	public void categoryAdd(CategoryModel categoryModel);
+	/** 공지사항  리스트 가져오기 **/
+	public List<Notice> noticeListAll();
 
-	public List<CategoryModel> categoryListAll();
+	/** 공지사항  상세보기**/
+	public Notice noticeSelectOne(Notice noticeModel);
 
-	public void categoryDelete(CategoryModel categoryModel);
+	/** 공지사항  삭제하기 **/
+	public void noticeDelete(Notice noticeModel);
 
-	public void categoryModify(CategoryModel categoryModel);
-
-	public List<UserModel> userListAll();
-
-	public void userModify(UserModel userModel);
-
-	public void userDelete(UserModel userModel);
-
-	public int categoryCount(CategoryModel categoryModel);
-
-	public List<NoticeModel> noticeListAll();
-
-	public void noticeRegist(NoticeModel noticeModel);
-
-	public NoticeModel noticeSelect(NoticeModel noticeModel);
-
-	public void noticeDelete(NoticeModel noticeModel);
-
-	public void noticeModify(NoticeModel noticeModel);
-
-	public Integer categoryCheck(CategoryModel categoryModel);
-
-	public void onlyUserDelete(UserModel userModel);
+	/** 공지사항  수정하기 **/
+	public void noticeUpdate(Notice noticeModel);
 
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Alias("category")
-public class CategoryModel {
+public class Category {
 	/* 카테고리 번호 */
 	private int categoryNo;
 	/* 카테고리 항목이름 */

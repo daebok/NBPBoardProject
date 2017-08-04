@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Alias("board")
-public class BoardModel {
+public class Board {
 	/* 게시판 번호 */
 	private int boardNo;
 	/* 게시글 제목 */

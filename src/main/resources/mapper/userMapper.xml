@@ -11,7 +11,40 @@
 		<result property="userPassword" column="user_password" />
 		<result property="userName" column="user_name" />
 	</resultMap>
+	
+		
+	<select id="userSelectList" resultMap="userList">
+		SELECT
+			user_no,
+			user_id, 
+			user_name,
+			user_authority
+		FROM USER
+		WHERE user_enabled = 1
+	</select>
 
+	
+	<update id="userAuthorityUpdate">
+		UPDATE USER SET
+			user_authority = #{userAuthority}
+		WHERE 
+			user_no = #{userNo}
+	</update>
+	
+	<delete id="userWithBoardDelete">
+		DELETE FROM USER
+		WHERE 
+			user_no = #{userNo}
+	</delete>
+	
+	<update id="onlyUserDelete">
+		UPDATE USER SET
+			user_enabled = 0
+		WHERE
+			user_no = #{userNo}
+	</update>
+	
+	
 	<insert id="userRegist">
 		INSERT INTO USER (
 			user_id,
@@ -50,5 +83,6 @@
 		WHERE
 			USER.user_id = #{userId} 
 	</select>
+
 
 </mapper>

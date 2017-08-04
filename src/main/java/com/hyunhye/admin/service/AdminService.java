@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hyunhye.admin.model.NoticeModel;
+import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.repository.AdminRepository;
-import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Category;
+import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.security.UserSession;
 import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.repository.UserRepository;
 
 @Service
 public class AdminService {
@@ -17,84 +19,84 @@ public class AdminService {
 	@Autowired
 	AdminRepository repository;
 
+	@Autowired
+	CategoryRepository categoryRepository;
+
+	@Autowired
+	UserRepository userRepository;
+
 	/** 카테고리 관리 **/
 	/* 카테고리 추가 */
-	public void categoryAdd(CategoryModel categoryModel) {
-		repository.categoryAdd(categoryModel);
+	public void categoryInsert(Category categoryModel) {
+		categoryRepository.categoryInsert(categoryModel);
 	}
 
 	/* 카테고리 목록 가져오기 */
-	public List<CategoryModel> categoryListAll() {
-		return repository.categoryListAll();
+	public List<Category> categorySelectList() {
+		return categoryRepository.categorySelectList();
 	}
 
-	/* 카테고리 개수 구하기 */
-	public int categoryCount(CategoryModel categoryModel) {
-		return repository.categoryCount(categoryModel);
+	/* 카테고리를 가진 게시물 개수 구하기 */
+	public int boardSelectCountOfCategory(Category categoryModel) {
+		return categoryRepository.boardSelectCountOfCategory(categoryModel);
 	}
 
 	/* 카테고리 삭제 */
-	public void categoryDelete(CategoryModel categoryModel) {
-		repository.categoryDelete(categoryModel);
-	}
-
-	/* 카테고리 수정 */
-	public void categoryModify(CategoryModel categoryModel) {
-		repository.categoryModify(categoryModel);
+	public void categoryDelete(Category categoryModel) {
+		categoryRepository.categoryDelete(categoryModel);
 	}
 
 	/* 카테고리 중복 체크 */
-	public Integer categoryCheck(CategoryModel categoryModel) {
-		// TODO Auto-generated method stub
-		return repository.categoryCheck(categoryModel);
+	public Integer categoryCheck(Category categoryModel) {
+		return categoryRepository.categoryCheck(categoryModel);
 	}
 
 	/** 회원 관리 **/
 	/* 회원 정보 리스트 */
-	public List<UserModel> userListAll() {
-		return repository.userListAll();
+	public List<UserModel> userSelectList() {
+		return userRepository.userSelectList();
 	}
 
 	/* 회원 정보 변경 */
-	public void userModify(UserModel userModel) {
-		repository.userModify(userModel);
+	public void userAuthorityUpdate(UserModel userModel) {
+		userRepository.userAuthorityUpdate(userModel);
 	}
 
 	/* 회원 삭제 */
-	public void userDelete(UserModel userModel) {
-		repository.userDelete(userModel);
+	public void userWithBoardDelete(UserModel userModel) {
+		userRepository.userWithBoardDelete(userModel);
 	}
 
 	public void onlyUserDelete(UserModel userModel) {
-		repository.onlyUserDelete(userModel);
+		userRepository.onlyUserDelete(userModel);
 	}
 
 	/** 공지사항 **/
-	/* 공지사항 리스트 */
-	public List<NoticeModel> noticeListAll() {
+	/* 공지사항  리스트 가져오기 */
+	public List<Notice> noticeListAll() {
 		return repository.noticeListAll();
 	}
 
-	/* 공지사항 등록 */
-	public void noticeRegist(NoticeModel noticeModel) {
+	/* 공지사항  추가 */
+	public void noticeInsert(Notice noticeModel) {
 		noticeModel.setUserNo(UserSession.currentUserNo());
 
-		repository.noticeRegist(noticeModel);
+		repository.noticeInsert(noticeModel);
 	}
 
-	/* 공지사항 한개 가져오기 */
-	public NoticeModel noticeSelect(NoticeModel noticeModel) {
-		return repository.noticeSelect(noticeModel);
+	/* 공지사항  상세보기 */
+	public Notice noticeSelectOne(Notice noticeModel) {
+		return repository.noticeSelectOne(noticeModel);
 	}
 
-	/* 공지사항 삭제 */
-	public void noticeDelete(NoticeModel noticeModel) {
+	/* 공지사항  삭제하기 */
+	public void noticeDelete(Notice noticeModel) {
 		repository.noticeDelete(noticeModel);
 	}
 
-	/* 공지사항 수정 */
-	public void noticeModify(NoticeModel noticeModel) {
-		repository.noticeModify(noticeModel);
+	/* 공지사항  수정하기  */
+	public void noticeUpdate(Notice noticeModel) {
+		repository.noticeUpdate(noticeModel);
 	}
 
 

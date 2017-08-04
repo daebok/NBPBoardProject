@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Filtering {
+public class BadWordFilteringUtils {
 
 	public static String badWords2 = "10새,10새기,10새리,10세리,10쉐이,10쉑,10스,10쌔,"
 		+ "10쌔기,10쎄,10알,10창,10탱,18것,18넘,18년,18노,18놈,18뇬,18럼,18롬,18새,18새끼,18색"

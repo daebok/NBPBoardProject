@@ -15,14 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
-import com.hyunhye.board.model.BoardModel;
-import com.hyunhye.board.model.BookMarkModel;
-import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Board;
+import com.hyunhye.board.model.BookMark;
+import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
-import com.hyunhye.common.Filtering;
+import com.hyunhye.board.repository.CategoryRepository;
+import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.security.UserSession;
 
 @Service
@@ -33,13 +34,16 @@ public class BoardService {
 	public BoardRepository boardRepository;
 
 	@Autowired
+	public CategoryRepository categoryRepository;
+
+	@Autowired
 	private UploadService uploadService;
 
 	/** 게시글 **/
 	/* 1. 게시글 작성하기 */
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용 */
 	@Transactional
-	public void boardRegist(int userNo, BoardModel boardModel, MultipartFile[] files) throws Exception {
+	public void boardInsert(int userNo, Board boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
 
 		/* 제거된 태그를 boardContentSummary에 담는다. */
@@ -47,7 +51,7 @@ public class BoardService {
 		boardModel.setBoardContentSummary(summary);
 
 		/* 1) 작성 된 게시글 저장 */
-		boardRepository.boardRegist(boardModel);
+		boardRepository.boardInsert(boardModel);
 
 		/* 2) 업로드 된 파일 저장 */
 		uploadService.fileRegist(boardModel, files);
@@ -57,30 +61,24 @@ public class BoardService {
 	public String createSummary(String originalContent) {
 		String boardSummary = originalContent
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		/* 300글자가 넘어가면 자르기
-		if (boardSummary.length() > 300) {
-			boardSummary = boardSummary.substring(0, 300);
-		}
-		 제거된 태그를 boardContentSummary에 담는다. */
 		return boardSummary;
 
 	}
 
 	/* 비속어 체크 */
-	public List<String> badWordsCheck(BoardModel model) {
-		String boardSummary = model.getBoardContent()
-			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+	public List<String> badWordsCheck(Board model) {
+		String boardSummary = createSummary(model.getBoardContent());
 		boardSummary += model.getBoardTitle();
-		List<String> badWords = Filtering.badWordFilteringContainsStream(boardSummary);
+		List<String> badWords = BadWordFilteringUtils.badWordFilteringContainsStream(boardSummary);
 		return badWords;
 	}
 
 	/* 2. 해당 게시글 상세 보기 */
-	public BoardModel boardSelect(int boardNo) {
-		BoardModel boardModel = new BoardModel();
+	public Board boardSelectOne(int boardNo) {
+		Board boardModel = new Board();
 		boardModel.setBoardNo(boardNo);
 		boardModel.setUserNo(UserSession.currentUserNo());
-		return boardRepository.boardSelect(boardModel);
+		return boardRepository.boardSelectOne(boardModel);
 	}
 
 	/* 조회수 */
@@ -103,7 +101,7 @@ public class BoardService {
 	/* 3. 게시글 수정하기*/
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
 	@Transactional
-	public void boardModify(BoardModel boardModel, MultipartFile[] files) throws IOException, Exception {
+	public void boardUpdate(Board boardModel, MultipartFile[] files) throws IOException, Exception {
 		boardModel.setUserNo(UserSession.currentUserNo());
 
 		/* 제거된 태그를 boardContentSummary에 담는다. */
@@ -117,7 +115,7 @@ public class BoardService {
 		uploadService.fileRegist(boardModel, files);
 
 		/* 3) 기존 게시글 수정하기 */
-		boardRepository.boardModify(boardModel);
+		boardRepository.boardUpdate(boardModel);
 	}
 
 	/* 4. 게시글 삭제하기 */
@@ -132,47 +130,14 @@ public class BoardService {
 	}
 
 	/* 5. 게시글 리스트 (페이징) */
-	public List<BoardModel> selectListAll(SearchCriteria cri) {
-		/* 검색 타입 null 체크 */
-		cri = searchTypecheck(cri);
-
-		/* 검색 키워드 <> 체크 */
-		if (cri.getKeyword() != null) {
-			cri = keywordCheck(cri);
-		}
-
-		/* 검색 키워드 따옴표 체크 */
-		if (cri.getKeyword() != null) {
-			logger.info("cri.getKeyword():{}", cri.getKeyword());
-			cri.setKeyword(cri.getKeyword().replaceAll("\"", "&quot;"));
-		}
-
-		return boardRepository.selectListAll(cri);
-	}
-
-	/* 검색 시, null 체크 */
-	public SearchCriteria searchTypecheck(SearchCriteria cri) {
-		if (cri.getCategoryType() == null || cri.getCategoryType().equals("null")) {
-			cri.setCategoryType("");
-		}
-		if (cri.getSearchType() == null || cri.getSearchType().equals("null")) {
-			cri.setSearchType("");
-		}
-		return cri;
-	}
-
-	/* <> 검색 처리 */
-	public SearchCriteria keywordCheck(SearchCriteria cri) {
-		String modifiedKeyword = cri.getKeyword().replaceAll("<", "&lt;");
-		modifiedKeyword = modifiedKeyword.replaceAll(">", "&gt;");
-		cri.setModifiedKeyword(modifiedKeyword);
-
-		return cri;
+	public List<Board> boardSelectList(SearchCriteria cri) {
+		cri.setOption(1);
+		return boardRepository.boardSelectList(cri);
 	}
 
 	/* 게시글 개수 구하기 */
-	public int countListAllPaging(SearchCriteria cri) {
-		return boardRepository.countListAllPaging(cri);
+	public int boardSelectListCount(SearchCriteria cri) {
+		return boardRepository.boardSelectListCount(cri);
 	}
 
 	/* 조회수 */
@@ -187,28 +152,16 @@ public class BoardService {
 	}
 
 	/* 3. 카테고리 목록 가져오기 */
-	public List<CategoryModel> categoryListAll() {
-		return boardRepository.categoryListAll();
+	public List<Category> categoryListAll() {
+		return categoryRepository.categorySelectList();
 	}
 
 	/** 내 질문 모아 보기  **/
 	/* 1. 내 질문 모아 보기 (전체) */
-	public List<BoardModel> selectMyQuestions(SearchCriteria cri) {
-		/* 검색 타입 null 체크 */
-		cri = searchTypecheck(cri);
-
-		/* 검색 키워드 <> 체크 */
-		if (cri.getKeyword() != null) {
-			cri = keywordCheck(cri);
-		}
-
-		/* 검색 키워드 따옴표 체크 */
-		if (cri.getKeyword() != null) {
-			cri.setKeyword(cri.getKeyword().replaceAll("\"", "&quot;"));
-		}
-
+	public List<Board> myQuestionsSelectList(SearchCriteria cri) {
+		cri.setOption(2);
 		cri.setUserNo(UserSession.currentUserNo());
-		return boardRepository.selectMyQuestions(cri);
+		return boardRepository.boardSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
@@ -218,9 +171,10 @@ public class BoardService {
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
-	public List<BoardModel> selectMyQuestionsAnswered(SearchCriteria cri) {
+	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri) {
+		cri.setOption(3);
 		cri.setUserNo(UserSession.currentUserNo());
-		return boardRepository.selectMyQuestionsAnswered(cri);
+		return boardRepository.myQuestionsAnsweredSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
@@ -230,17 +184,18 @@ public class BoardService {
 	}
 
 	/** 즐겨찾기 **/
-	/* 즐겨찾기 저장하기 */
-	public void boardBookMark(BoardModel model) {
-		model.setUserNo(UserSession.currentUserNo());
-		boardRepository.boardBookMark(model);
+	/* 즐겨찾기 리스트 */
+	public List<Board> myFavoriteSelectList(SearchCriteria cri) {
+		cri.setOption(4);
+		cri.setUserNo(UserSession.currentUserNo());
+		return boardRepository.boardSelectList(cri);
+
 	}
 
-	/* 즐겨찾기 리스트 */
-	public List<BoardModel> myFavorite(Criteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
-		return boardRepository.selectMyFavorite(cri);
-
+	/* 즐겨찾기 저장하기 */
+	public void bookmarkInsert(Board model) {
+		model.setUserNo(UserSession.currentUserNo());
+		boardRepository.bookmarkInsert(model);
 	}
 
 	/* 즐겨 찾기 리스트 전체 개수 구하기 */
@@ -250,23 +205,23 @@ public class BoardService {
 	}
 
 	/* 즐겨찾기 메모 저장 하기  */
-	public void bookMarkMemoRegist(BookMarkModel bookMarkModel) {
+	public void bookmarkMemoUpdate(BookMark bookMarkModel) {
 		bookMarkModel.setUserNo(UserSession.currentUserNo());
-		boardRepository.bookMarkMemoRegist(bookMarkModel);
+		boardRepository.bookmarkMemoUpdate(bookMarkModel);
 	}
 
 	/* 즐겨찾기 메모 불러오기  */
-	public BookMarkModel memoSelect(int boardNo) {
-		BookMarkModel bookMarkModel = new BookMarkModel();
+	public BookMark bookmarkMemoSelect(int boardNo) {
+		BookMark bookMarkModel = new BookMark();
 		bookMarkModel.setUserNo(UserSession.currentUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
-		return boardRepository.memoSelect(bookMarkModel);
+		return boardRepository.bookmarkMemoSelect(bookMarkModel);
 	}
 
 	/* 즐겨찾기 해제  */
-	public void boardBookMarkUnCheck(BoardModel model) {
+	public void bookmarkDelete(Board model) {
 		model.setUserNo(UserSession.currentUserNo());
-		boardRepository.boardBookMarkUnCheck(model);
+		boardRepository.bookmarkDelete(model);
 	}
 }

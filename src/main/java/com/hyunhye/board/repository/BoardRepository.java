@@ -4,25 +4,22 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.hyunhye.board.model.BoardModel;
-import com.hyunhye.board.model.BookMarkModel;
-import com.hyunhye.board.model.CategoryModel;
+import com.hyunhye.board.model.Board;
+import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
-import com.hyunhye.board.model.HomeModel;
+import com.hyunhye.board.model.Home;
 import com.hyunhye.board.model.SearchCriteria;
 
 @Repository
 public interface BoardRepository {
-	public List<BoardModel> selectBoardList(HomeModel homeModel);
+	public List<Board> selectBoardList(Home homeModel);
 
-	public List<CategoryModel> categoryListAll();
+	public void boardInsert(Board boardModel);
 
-	public void boardInsert(BoardModel boardModel);
+	public Board boardSelectOne(Board boardModel);
 
-	public BoardModel boardSelectOne(BoardModel boardModel);
-
-	public BoardModel boardUpdate(BoardModel boardModel);
+	public Board boardUpdate(Board boardModel);
 
 	public void boardDelete(int boardNo);
 
@@ -32,33 +29,33 @@ public interface BoardRepository {
 
 	public void deleteFile(String fileDelete);
 
-	public List<BoardModel> boardSelectList(SearchCriteria cri);
+	public List<Board> boardSelectList(SearchCriteria cri);
 
-	public int countListAllPaging(SearchCriteria cri);
+	public int boardSelectListCount(SearchCriteria cri);
 
 	public void increaseViewCount(int boardNo);
 
 	public int checkUser(int boardNo);
 
-	public List<BoardModel> selectMyQuestions(SearchCriteria cri);
+	public List<Board> myQuestionsSelectList(SearchCriteria cri);
 
 	public int countMyQuestionsPaging(SearchCriteria cri);
 
-	public void bookmarkInsert(BoardModel model);
+	public void bookmarkInsert(Board model);
 
 	public int countMyFavoritePaging(Criteria cri);
 
-	public List<BoardModel> selectMyFavorite(Criteria cri);
+	public List<Board> myFavoriteSelectList(Criteria cri);
 
-	public void bookmarkMemoUpdate(BookMarkModel bookMarkModel);
+	public void bookmarkMemoUpdate(BookMark bookMarkModel);
 
-	public BookMarkModel bookmarkMemoSelect(BookMarkModel bookMarkModel);
+	public BookMark bookmarkMemoSelect(BookMark bookMarkModel);
 
-	public void bookmarkDelete(BoardModel model);
+	public void bookmarkDelete(Board model);
 
 	public List<FileModel> fileSelect(int boardNo);
 
-	public List<BoardModel> selectMyQuestionsAnswered(SearchCriteria cri);
+	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri);
 
 	public int countMyQuestionsAnsweredPaging(SearchCriteria cri);
 }

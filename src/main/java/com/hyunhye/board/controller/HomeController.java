@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.hyunhye.board.model.HomeModel;
+import com.hyunhye.board.model.Home;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.board.service.HomeService;
 
@@ -28,7 +28,7 @@ public class HomeController {
 
 	/* 최신 순 */
 	@RequestMapping("board/home")
-	public String homeFavorites(@ModelAttribute HomeModel homeModel, Model model) {
+	public String homeFavorites(@ModelAttribute Home homeModel, Model model) {
 		model.addAttribute("model", homeService.selectBoardList(homeModel));
 		return "home_top";
 	}

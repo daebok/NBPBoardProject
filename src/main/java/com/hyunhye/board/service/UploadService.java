@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hyunhye.board.model.BoardModel;
+import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.common.MediaUtils;
@@ -36,7 +36,7 @@ public class UploadService {
 	private String uploadPath;
 
 	/* 파일 등록 */
-	public void fileRegist(BoardModel boardModel, MultipartFile[] files) throws Exception {
+	public void fileRegist(Board boardModel, MultipartFile[] files) throws Exception {
 
 		/* 삭제된 첨부파일 번호 가져오기 */
 		int[] filesNo = boardModel.getBoardFilesNo();
@@ -76,7 +76,7 @@ public class UploadService {
 	}
 
 	/* 파일 삭제 (삭제 버튼으로 눌린 파일 삭제) */
-	public void fileDelete(BoardModel boardModel) {
+	public void fileDelete(Board boardModel) {
 		/* 삭제된 첨부파일  가져오기 */
 		String[] filesDelete = boardModel.getBoardFilesDelete();
 		if (filesDelete != null) {
