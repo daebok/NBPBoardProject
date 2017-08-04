@@ -9,18 +9,20 @@ import com.hyunhye.board.model.BookMarkModel;
 import com.hyunhye.board.model.CategoryModel;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
+import com.hyunhye.board.model.HomeModel;
 import com.hyunhye.board.model.SearchCriteria;
 
 @Repository
 public interface BoardRepository {
+	public List<BoardModel> selectBoardList(HomeModel homeModel);
 
 	public List<CategoryModel> categoryListAll();
 
-	public void boardRegist(BoardModel boardModel);
+	public void boardInsert(BoardModel boardModel);
 
-	public BoardModel boardSelect(BoardModel boardModel);
+	public BoardModel boardSelectOne(BoardModel boardModel);
 
-	public BoardModel boardModify(BoardModel boardModel);
+	public BoardModel boardUpdate(BoardModel boardModel);
 
 	public void boardDelete(int boardNo);
 
@@ -30,7 +32,7 @@ public interface BoardRepository {
 
 	public void deleteFile(String fileDelete);
 
-	public List<BoardModel> selectListAll(SearchCriteria cri);
+	public List<BoardModel> boardSelectList(SearchCriteria cri);
 
 	public int countListAllPaging(SearchCriteria cri);
 
@@ -42,17 +44,17 @@ public interface BoardRepository {
 
 	public int countMyQuestionsPaging(SearchCriteria cri);
 
-	public void boardBookMark(BoardModel model);
+	public void bookmarkInsert(BoardModel model);
 
 	public int countMyFavoritePaging(Criteria cri);
 
 	public List<BoardModel> selectMyFavorite(Criteria cri);
 
-	public void bookMarkMemoRegist(BookMarkModel bookMarkModel);
+	public void bookmarkMemoUpdate(BookMarkModel bookMarkModel);
 
-	public BookMarkModel memoSelect(BookMarkModel bookMarkModel);
+	public BookMarkModel bookmarkMemoSelect(BookMarkModel bookMarkModel);
 
-	public void boardBookMarkUnCheck(BoardModel model);
+	public void bookmarkDelete(BoardModel model);
 
 	public List<FileModel> fileSelect(int boardNo);
 

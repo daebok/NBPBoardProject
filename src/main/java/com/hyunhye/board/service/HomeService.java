@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.model.BoardModel;
 import com.hyunhye.board.model.HomeModel;
-import com.hyunhye.board.repository.HomeRepository;
+import com.hyunhye.board.repository.BoardRepository;
 
 @Service
 public class HomeService {
 
 	@Autowired
-	public HomeRepository homeRepository;
+	public BoardRepository boardRepository;
 
 	/** 게시글  Top10 리스트 **/
 	public List<BoardModel> selectBoardList(HomeModel homeModel) {
-		return homeRepository.selectBoardList(homeModel);
+		return boardRepository.selectBoardList(homeModel);
 	}
 }
