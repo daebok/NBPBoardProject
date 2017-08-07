@@ -43,11 +43,22 @@ public class CommentController {
 
 	/* 2. 답변 리스트 */
 	@RequestMapping("list")
-	public String commentList(@RequestParam("boardNo") int boardNo, Model model) {
+	public String commentList(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
+		Model model) {
 		model.addAttribute("user", UserSession.currentUserInfo());
 		model.addAttribute("comment", service.commentListAll(boardNo));
 
 		return "board/answer";
+	}
+
+	/* 2. 답변 리스트 */
+	@RequestMapping("list/tab")
+	public String commentListTab(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
+		Model model) {
+		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("comment", service.commentListTabAll(boardNo, tab));
+
+		return "board/answer-tab";
 	}
 
 	/* 3. 답변 수정 */

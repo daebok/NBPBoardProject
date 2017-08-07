@@ -24,6 +24,7 @@
 				</c:choose>
 				<div class="pull-right">
 					<a href="<c:url value='/board/myanswers'/>" class="btn btn-default btn-sm">My Answers</a>
+					<a href="<c:url value='/board/answers/liked'/>" class="btn btn-default btn-sm">Liked Answers</a>
 				</div>
 			</div>
 		</div>

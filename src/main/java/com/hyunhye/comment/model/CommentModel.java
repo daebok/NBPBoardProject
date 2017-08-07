@@ -31,4 +31,6 @@ public class CommentModel {
 	private String userName;
 	/* 사용자 아이디 */
 	private String userId;
+	/* 탭 번호 */
+	private int tab;
 }

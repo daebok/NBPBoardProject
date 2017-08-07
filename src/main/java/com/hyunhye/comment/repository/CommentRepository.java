@@ -42,4 +42,8 @@ public interface CommentRepository {
 
 	public int countMyAnswersPaging(Criteria cri);
 
+	public List<CommentModel> commentListTabAll(CommentModel commentModel);
+
+	public List<CommentModel> answersLikedSelectList(Criteria cri);
+
 }

@@ -16,7 +16,7 @@
 		<label for="categoryType"> Category </label>
 		<select name="categoryType" id="categoryType" style="padding:2px;">
 			<option value="null"
-				<c:out value="${cri.categoryType eq 'null'?'selected':''}"/>>---</option>
+				<c:out value="${cri.categoryType eq 'all' ? 'selected':''}"/>>---</option>
 			<c:forEach var="category" items="${categoryList}">
 				<option value="${category.categoryItem}"
 					<c:out value="${cri.categoryType eq category.categoryItem ?'selected':''}"/>> ${category.categoryItem}</option>

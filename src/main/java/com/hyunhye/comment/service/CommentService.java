@@ -104,4 +104,18 @@ public class CommentService {
 		return repository.countMyAnswersPaging(cri);
 	}
 
+	public List<CommentModel> commentListTabAll(int boardNo, int tab) {
+		CommentModel commentModel = new CommentModel();
+		commentModel.setUserNo(UserSession.currentUserNo());
+		commentModel.setBoardNo(boardNo);
+		commentModel.setTab(tab);
+
+		return repository.commentListTabAll(commentModel);
+	}
+
+	public List<CommentModel> answersLikedSelectList(Criteria cri) {
+		cri.setUserNo(UserSession.currentUserNo());
+		return repository.answersLikedSelectList(cri);
+	}
+
 }
