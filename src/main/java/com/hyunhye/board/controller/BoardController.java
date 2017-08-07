@@ -132,7 +132,7 @@ public class BoardController {
 		Model model, HttpServletRequest request, HttpServletResponse response) {
 
 		/* 조회수 */
-		boardService.setViewCookies(boardNo, request, response);
+		boardService.setViewCookies(boardNo);
 
 		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSession.currentUserInfo());
@@ -289,8 +289,30 @@ public class BoardController {
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);
 
-		/* 카테고리 리스트 */
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		/* 답변 달린 것만임을 알려주는 변수 */
+		model.addAttribute("like", 0);
+
+		/* 페이징 정보 */
+		model.addAttribute("pageMaker", pageMaker);
+
+		return "user/myanswers";
+	}
+
+	@RequestMapping("answers/liked")
+	public String answersLikedSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
+		/* 답변 달린 내 질문 리스트 */
+		model.addAttribute("list", commentService.answersLikedSelectList(cri));
+
+		/* 페이징 계산하기 */
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(commentService.countMyAnswersPaging(cri));
+
+		/* 답변 달린 것만임을 알려주는 변수 */
+		model.addAttribute("check", 1);
+
+		/* 답변 달린 것만임을 알려주는 변수 */
+		model.addAttribute("like", 1);
 
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
@@ -346,7 +368,7 @@ public class BoardController {
 	}
 
 	/**
-	 * 증겨찾기 상세 보기
+	 * 즐겨찾기 상세 보기
 	 * @param boardNo
 	 * @param cri
 	 * @param model
@@ -400,6 +422,15 @@ public class BoardController {
 	public String noticeSelectOne(Notice noticeModel, Model model) {
 		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
 		return "admin/noticeView";
+	}
+
+	/**
+	 * contactUs 페이지로 이동
+	 * @return
+	 */
+	@RequestMapping("contactUs")
+	public String goContactUsPage() {
+		return "board/contact-us";
 	}
 
 }

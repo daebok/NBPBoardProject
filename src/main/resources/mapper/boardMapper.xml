@@ -254,18 +254,18 @@
 					WHERE BOARD.user_no = #{userNo} 
 					<include refid="search2"></include>
 				</if>
-				<if test="option == 4">
-					JOIN BOOKMARK
-						ON BOARD.board_no = BOOKMARK.board_no
-					WHERE BOOKMARK.user_no = #{userNo} 
-				</if>
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
 		) B
-		JOIN  USER
-			ON B.user_no = USER.user_no
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
+		JOIN  USER
+			ON B.user_no = USER.user_no
+		<if test="option == 4">
+			JOIN BOOKMARK
+				ON B.board_no = BOOKMARK.board_no
+			WHERE BOOKMARK.user_no = #{userNo} 
+		</if>
 	</select>
 	
 	<select id="myQuestionsAnsweredSelectList" resultMap="boardList">
@@ -350,23 +350,41 @@
 		WHERE 
 			board_no = #{boardNo}
 	</update>
+	
+	<insert id="baordViewInsert" >
+		INSERT INTO BOARD_VIEW (
+			board_no, 
+			user_no
+		) VALUES (
+			#{boardNo},
+			#{userNo}
+		)
+	</insert>
+	
+	<select id="boardViewSelect" resultType="int">
+		SELECT count(1)
+		FROM BOARD_VIEW
+		WHERE
+			board_no = #{boardNo} AND
+			user_no = #{userNo}
+	</select>
 
 	<!-- 검색 조건 -->
 	<sql id="search">
-		<if test="categoryType != 'all' and categoryType != null">
+		<if test="categoryType != 'all' and categoryType != null and categoryType != '' " >
 			WHERE
 			<include refid="categoryType_search"></include>
 		</if>
-		<if test="searchType != null ">
+		<if test="searchType != null and searchType != '' ">
 			<choose>
-				<when test="categoryType != 'all' and categoryType != null">AND</when>
+				<when test="categoryType != 'all' and categoryType != null and categoryType != ''">AND</when>
 				<otherwise>WHERE</otherwise>
 			</choose>
 			<include refid="searchType_search"></include>
 		</if> 
 		<if test="date != '' and date != null">
 			<choose>
-				<when test="(categoryType != 'all' and categoryType != null) || searchType != null"> AND</when>
+				<when test="(categoryType != 'all' and categoryType != null and categoryType != '') || (searchType != null and searchType != '')"> AND</when>
 				<otherwise>WHERE</otherwise>
 			</choose>
 			<include refid="date_search"></include>
@@ -374,11 +392,11 @@
 	</sql>
 	
 	<sql id="search2">
-		<if test="categoryType != 'all' and categoryType != null">
+		<if test="categoryType != 'all' and categoryType != null and categoryType != '' ">
 			AND
 			<include refid="categoryType_search"></include>
 		</if>
-		<if test="searchType != null ">
+		<if test="searchType != null and searchType != ''">
 			AND
 			<include refid="searchType_search"></include>
 		</if> 
@@ -399,18 +417,18 @@
 				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
+				BOARDB.board_content_summary like CONCAT('%',#{keyword},'%')
 			</when>
 			<when test="searchType == 'title'">
 				BOARD.board_content_summary like CONCAT('%',#{keyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
-				USER.user_id = #{modifiedKeyword}
+				USER.user_id = #{keyword}
 			</when>
 		</choose>
 	</sql>
 	
 	<sql id="date_search">
-		DATE(BOARD.board_date) = #{date}
+		DATE(B.board_date) = #{date}
 	</sql>
 </mapper>

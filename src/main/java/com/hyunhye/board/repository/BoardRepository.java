@@ -58,4 +58,8 @@ public interface BoardRepository {
 	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri);
 
 	public int countMyQuestionsAnsweredPaging(SearchCriteria cri);
+
+	public int boardViewSelect(Board boardModel);
+
+	public void baordViewInsert(Board boardModel);
 }

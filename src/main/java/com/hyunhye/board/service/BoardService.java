@@ -2,10 +2,9 @@ package com.hyunhye.board.service;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.WebUtils;
 
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
@@ -29,6 +27,8 @@ import com.hyunhye.security.UserSession;
 @Service
 public class BoardService {
 	Logger logger = LoggerFactory.getLogger(BoardService.class);
+	public static final Pattern SCRIPTS = Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>", Pattern.DOTALL);
+	public static final Pattern STYLE = Pattern.compile("<style[^>]*>.*</style>", Pattern.DOTALL);
 
 	@Autowired
 	public BoardRepository boardRepository;
@@ -45,6 +45,14 @@ public class BoardService {
 	@Transactional
 	public void boardInsert(int userNo, Board boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
+
+		/* style, script 태그 제거 */
+		Matcher matcher;
+		matcher = SCRIPTS.matcher(boardModel.getBoardContent());
+		boardModel.setBoardContent(matcher.replaceAll(""));
+
+		matcher = STYLE.matcher(boardModel.getBoardContent());
+		boardModel.setBoardContent(matcher.replaceAll(""));
 
 		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(boardModel.getBoardContent());
@@ -82,14 +90,16 @@ public class BoardService {
 	}
 
 	/* 조회수 */
-	public void setViewCookies(int boardNo, HttpServletRequest request, HttpServletResponse response) {
-		Cookie viewCount = WebUtils.getCookie(request, boardNo + "&" + UserSession.currentUserNo());
-		int cookieMaxAge = 60 * 5; // 쿠키가 5 분 동안만 유지 할 수 있도록 한다.
-		if (viewCount == null) { // 해당 쿠키을 가지고 있으면...
-			increaseViewCount(boardNo);
-			Cookie cookie = new Cookie(boardNo + "&" + UserSession.currentUserNo(), "view");
-			cookie.setMaxAge(cookieMaxAge);
-			response.addCookie(cookie);
+	public void setViewCookies(int boardNo) {
+		Board boardModel = new Board();
+		boardModel.setBoardNo(boardNo);
+		boardModel.setUserNo(UserSession.currentUserNo());
+		int check = boardRepository.boardViewSelect(boardModel);
+
+		/* 조회 한 적 없으면 증가 */
+		if (check <= 0) {
+			boardRepository.increaseViewCount(boardNo);
+			boardRepository.baordViewInsert(boardModel);
 		}
 	}
 
@@ -103,6 +113,14 @@ public class BoardService {
 	@Transactional
 	public void boardUpdate(Board boardModel, MultipartFile[] files) throws IOException, Exception {
 		boardModel.setUserNo(UserSession.currentUserNo());
+
+		/* style, script 태그, 제거 */
+		Matcher matcher;
+		matcher = SCRIPTS.matcher(boardModel.getBoardContent());
+		boardModel.setBoardContent(matcher.replaceAll(""));
+
+		matcher = STYLE.matcher(boardModel.getBoardContent());
+		boardModel.setBoardContent(matcher.replaceAll(""));
 
 		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(boardModel.getBoardContent());
@@ -153,7 +171,14 @@ public class BoardService {
 
 	/* 3. 카테고리 목록 가져오기 */
 	public List<Category> categoryListAll() {
-		return categoryRepository.categorySelectList();
+		List<Category> category = categoryRepository.categorySelectList();
+
+		List<Category> list = category.stream()
+			.parallel()
+			.filter(s -> s.getCategoryEnabled() != 0)
+			.collect(Collectors.toList());
+
+		return list;
 	}
 
 	/** 내 질문 모아 보기  **/
