@@ -29,7 +29,7 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.board.service.UploadService;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.security.UserSession;
+import com.hyunhye.security.UserSessionUtils;
 
 @RequestMapping("board")
 @Controller
@@ -96,7 +96,7 @@ public class BoardController {
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
 	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
-		boardService.boardInsert(UserSession.currentUserNo(), model, file);
+		boardService.boardInsert(UserSessionUtils.currentUserNo(), model, file);
 		return "redirect:/board/list";
 	}
 
@@ -135,7 +135,7 @@ public class BoardController {
 		boardService.setViewCookies(boardNo);
 
 		/* 세션에 저장된 사용자 정보 */
-		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 
 		/* 해당 게시글 */
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
@@ -382,7 +382,7 @@ public class BoardController {
 		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
 
 		/* 현재 사용자 정보 */
-		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 
 		/* 게시글 상세 정보 */
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));

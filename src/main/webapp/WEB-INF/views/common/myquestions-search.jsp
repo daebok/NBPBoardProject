@@ -2,15 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
-<script>
-	$(document).on("click","#searchButton",function() {
-		var keyword = $("#keyword").val();
-		keyword.replace(/"/gi, "&quot;");
-		
-		document.form.action = "/board/myquestions"
-		document.form.submit();
-	});
-</script>
+
 <form:form name="form" method="get" action="/board/myquestions">
 	<div style="line-height:20px;">
 		<label for="categoryType"> Category </label>
@@ -35,7 +27,7 @@
 				<c:out value="${cri.searchType eq 'writer'?'selected':''}"/>>작성자</option>
 		</select> 
 	</div>
-	<input name="keyword" id="keyword" value="${cri.keyword}">
+	<input name="keyword" id="keyword" value="<c:out value='${cri.keyword}'/>">
 	<input type="date" name="date" value="${cri.date}">
 	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">
 	<a href="<c:url value='/board/myquestions'/>" id="list" class="btn btn-default btn-sm">Clear</a>

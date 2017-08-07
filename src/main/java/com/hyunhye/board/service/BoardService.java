@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
@@ -22,7 +23,7 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
-import com.hyunhye.security.UserSession;
+import com.hyunhye.security.UserSessionUtils;
 
 @Service
 public class BoardService {
@@ -69,6 +70,7 @@ public class BoardService {
 	public String createSummary(String originalContent) {
 		String boardSummary = originalContent
 			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		boardSummary = HtmlUtils.htmlUnescape(boardSummary);
 		return boardSummary;
 
 	}
@@ -85,7 +87,7 @@ public class BoardService {
 	public Board boardSelectOne(int boardNo) {
 		Board boardModel = new Board();
 		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(UserSession.currentUserNo());
+		boardModel.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.boardSelectOne(boardModel);
 	}
 
@@ -93,7 +95,7 @@ public class BoardService {
 	public void setViewCookies(int boardNo) {
 		Board boardModel = new Board();
 		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(UserSession.currentUserNo());
+		boardModel.setUserNo(UserSessionUtils.currentUserNo());
 		int check = boardRepository.boardViewSelect(boardModel);
 
 		/* 조회 한 적 없으면 증가 */
@@ -112,7 +114,7 @@ public class BoardService {
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
 	@Transactional
 	public void boardUpdate(Board boardModel, MultipartFile[] files) throws IOException, Exception {
-		boardModel.setUserNo(UserSession.currentUserNo());
+		boardModel.setUserNo(UserSessionUtils.currentUserNo());
 
 		/* style, script 태그, 제거 */
 		Matcher matcher;
@@ -185,26 +187,26 @@ public class BoardService {
 	/* 1. 내 질문 모아 보기 (전체) */
 	public List<Board> myQuestionsSelectList(SearchCriteria cri) {
 		cri.setOption(2);
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.boardSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsPaging(SearchCriteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.countMyQuestionsPaging(cri);
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
 	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri) {
 		cri.setOption(3);
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.myQuestionsAnsweredSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
 	public int countMyQuestionsAnsweredPaging(SearchCriteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.countMyQuestionsAnsweredPaging(cri);
 	}
 
@@ -212,33 +214,33 @@ public class BoardService {
 	/* 즐겨찾기 리스트 */
 	public List<Board> myFavoriteSelectList(SearchCriteria cri) {
 		cri.setOption(4);
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.boardSelectList(cri);
 
 	}
 
 	/* 즐겨찾기 저장하기 */
 	public void bookmarkInsert(Board model) {
-		model.setUserNo(UserSession.currentUserNo());
+		model.setUserNo(UserSessionUtils.currentUserNo());
 		boardRepository.bookmarkInsert(model);
 	}
 
 	/* 즐겨 찾기 리스트 전체 개수 구하기 */
 	public int countMyFavoritePaging(Criteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return boardRepository.countMyFavoritePaging(cri);
 	}
 
 	/* 즐겨찾기 메모 저장 하기  */
 	public void bookmarkMemoUpdate(BookMark bookMarkModel) {
-		bookMarkModel.setUserNo(UserSession.currentUserNo());
+		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
 		boardRepository.bookmarkMemoUpdate(bookMarkModel);
 	}
 
 	/* 즐겨찾기 메모 불러오기  */
 	public BookMark bookmarkMemoSelect(int boardNo) {
 		BookMark bookMarkModel = new BookMark();
-		bookMarkModel.setUserNo(UserSession.currentUserNo());
+		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
 		return boardRepository.bookmarkMemoSelect(bookMarkModel);
@@ -246,7 +248,7 @@ public class BoardService {
 
 	/* 즐겨찾기 해제  */
 	public void bookmarkDelete(Board model) {
-		model.setUserNo(UserSession.currentUserNo());
+		model.setUserNo(UserSessionUtils.currentUserNo());
 		boardRepository.bookmarkDelete(model);
 	}
 }
