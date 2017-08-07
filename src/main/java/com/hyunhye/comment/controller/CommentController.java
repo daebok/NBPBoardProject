@@ -47,22 +47,6 @@ public class CommentController {
 
 	/**
 	 * 답변 리스트
-	 * @param boardNo
-	 * @param tab
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("list")
-	public String answerListAllSelect(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
-		Model model) {
-		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("comment", service.answerListAllSelect(boardNo));
-
-		return "board/answer";
-	}
-
-	/**
-	 * 답변 리스트
 	 * 조회수 순, 좋아요 순으로 볼 수 있도록 tab
 	 * @param boardNo
 	 * @param tab

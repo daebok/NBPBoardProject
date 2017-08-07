@@ -164,8 +164,9 @@ public class BoardService {
 	}
 
 	/* 5. 게시글 리스트 (페이징) */
-	public List<Board> boardSelectList(SearchCriteria cri) {
+	public List<Board> boardSelectList(SearchCriteria cri, int tab) {
 		cri.setOption(1);
+		cri.setTab(tab);
 		return boardRepository.boardSelectList(cri);
 	}
 

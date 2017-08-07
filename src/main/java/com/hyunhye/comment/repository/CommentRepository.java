@@ -10,9 +10,6 @@ import com.hyunhye.comment.model.Comment;
 @Repository
 public interface CommentRepository {
 
-	/** 답변 전체 리스트 **/
-	public List<Comment> answerListAllSelect(Comment commentModel);
-
 	/** 답변 전체 개수 **/
 	public Comment answerCount(int boardNo);
 

@@ -32,7 +32,7 @@
 	<%@include file="../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid" >
-			<div class="pull-right" style="height:100%; width:22%">
+			<div class="pull-right" style="height:100%; width:20%">
 				<div class="notice-title">Notice</div>
 				<div style="border: 3px solid #337ab7; padding:10px;">
 					<c:forEach var="notice" items="${notice}">
@@ -43,9 +43,27 @@
 					</c:forEach>
 				</div>
 			</div>
+			
+			<!-- Search-->
 			<%@include file="../common/search.jsp"%>
-			<b>All Questions</b>
+			<!-- Body -->
 			<div class="col-md-9">
+				<b>All Questions</b>
+					<c:if test="${pageMaker.cri.tab == 1 }">
+						<a href="<c:url value='/board/list?tab=1'/>" class="tab-newest btn btn-warning btn-sm">Newest</a>
+						<a href="<c:url value='/board/list?tab=2'/>" class="tab-views btn btn-default btn-sm">Views</a>
+						<a href="<c:url value='/board/list?tab=3'/>" class="tab-answers btn btn-default btn-sm">Answers</a>
+					</c:if>
+					<c:if test="${pageMaker.cri.tab == 2 }">
+						<a href="<c:url value='/board/list?tab=1'/>" class="tab-newest btn btn-default btn-sm">Newest</a>
+						<a href="<c:url value='/board/list?tab=2'/>" class="tab-views btn btn-warning btn-sm">Views</a>
+						<a href="<c:url value='/board/list?tab=3'/>" class="tab-answers btn btn-default btn-sm">Answers</a>
+					</c:if>
+					<c:if test="${pageMaker.cri.tab == 3 }">
+						<a href="<c:url value='/board/list?tab=1'/>" class="tab-newest btn btn-default btn-sm">Newest</a>
+						<a href="<c:url value='/board/list?tab=2'/>" class="tab-views btn btn-default btn-sm">Views</a>
+						<a href="<c:url value='/board/list?tab=3'/>" class="tab-answers btn btn-warning btn-sm">Answers</a>
+					</c:if>
 				<c:if test="${empty list}">
 					<div>검색 결과 없음</div>
 				</c:if>

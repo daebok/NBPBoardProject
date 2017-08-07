@@ -34,32 +34,7 @@
 			comment_parent_no = #{commentNo}
 		ORDER BY comment_no
 	</select>
-	
-	<select id="answerListAllSelect" resultMap="commentList">
-		SELECT 
-			USER.user_name, 
-			USER.user_id, 
-			COMMENT.comment_no, 
-			COMMENT.comment_no as number, 
-			COMMENT.comment_content, 
-			COMMENT.comment_date, 
-			USER.user_name,
-			count(COMMENT_LIKE.comment_no) as comment_like_count,
-			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as user_no,
-			(SELECT count(comment_no) FROM BOARD.COMMENT WHERE COMMENT.comment_parent_no = number) as comment_comment_count
-		FROM COMMENT
-		JOIN  USER
-		ON COMMENT.user_no = USER.user_no
-		LEFT JOIN COMMENT_LIKE
-		ON  COMMENT.comment_no = COMMENT_LIKE.comment_no
-		WHERE 
-			board_no = #{boardNo}
-			AND
-			comment_parent_no = 0
-		group by COMMENT.comment_no
-		ORDER BY COMMENT.comment_no
-	</select>
-	
+
 	<select id="answerTabSelectListAll" resultMap="commentList">
 		SELECT 
 			USER.user_name, 

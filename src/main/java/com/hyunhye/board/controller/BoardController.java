@@ -64,9 +64,11 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri,
+		@RequestParam(value = "tab", defaultValue = "1") int tab,
+		Model model) {
 		/* 한 페이지에 보여줄 게시글 */
-		model.addAttribute("list", boardService.boardSelectList(cri));
+		model.addAttribute("list", boardService.boardSelectList(cri, tab));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
@@ -144,9 +146,6 @@ public class BoardController {
 
 		/* 해당 게시글의 답변 수 */
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
-
-		/* 해당 게시글의 답변 목록*/
-		model.addAttribute("comment", commentService.answerListAllSelect(boardNo));
 
 		model.addAttribute("section", section);
 
@@ -394,9 +393,6 @@ public class BoardController {
 
 		/* 게시글 답변 개수 */
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
-
-		/* 게시글 답변 리스트 */
-		model.addAttribute("comment", commentService.answerListAllSelect(boardNo));
 
 		/* 즐겨찾기 된 해당 게시글의 메모 */
 		model.addAttribute("memo", boardService.bookmarkMemoSelect(boardNo));

@@ -16,6 +16,7 @@ public class SearchCriteria extends Criteria {
 	private String categoryType;
 	/** 날짜 **/
 	private String date;
-	/** 리스트 번호 **/
+	/** 리스트 번호 (전체리스트인지, 내 질문 리스트인지, 즐겨찾기 리스트인지) **/
 	private int option;
+	private int tab;
 }

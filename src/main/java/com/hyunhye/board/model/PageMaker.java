@@ -64,6 +64,7 @@ public class PageMaker {
 	/* 검색과 페이징을 위한 URI 생성 */
 	public String makeSearch(int page) {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+			.queryParam("tab", ((SearchCriteria)cri).getTab())
 			.queryParam("page", page)
 			.queryParam("perPageNum", cri.getPerPageNum())
 			.queryParam("categoryType", ((SearchCriteria)cri).getCategoryType())

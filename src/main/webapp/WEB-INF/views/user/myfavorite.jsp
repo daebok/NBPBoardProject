@@ -59,7 +59,7 @@
 					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 						<li 
 							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myquestions${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+							<a href="/board/myfavorite${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 						</li>
 					</c:forEach>
 					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">

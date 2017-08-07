@@ -196,32 +196,44 @@
 			B.board_content_summary, 
 			B.board_date, 
 			B.board_view_cnt,
-			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
+			B.comment_count,
 			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM (
 				SELECT 
-					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
-					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,CATEGORY.category_item
+					BOARD.board_no, BOARD.board_no as number, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,CATEGORY.category_item,
+					(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count
 				FROM BOARD
 				JOIN CATEGORY
 					ON BOARD.category_no = CATEGORY.category_no
-				<if test="option == 1">
+				<if test="option == 1"> <!-- 전체 리스트 -->
 					<include refid="search"></include>
 				</if>
-				<if test="option == 2">
+				<if test="option == 2"> <!-- 내 질문 리스트 -->
 					WHERE BOARD.user_no = #{userNo} 
 					<include refid="search2"></include>
 				</if>
-				ORDER BY BOARD.board_no desc 
+				<if test="option == 4"> <!-- 즐겨찾기 리스트 -->
+					JOIN BOOKMARK
+						ON BOARD.board_no = BOOKMARK.board_no
+					WHERE BOOKMARK.user_no = #{userNo} 
+				</if>
+				<choose>
+					<when test="tab == 2"> <!-- 조회수 순 -->
+						ORDER BY BOARD.board_view_cnt desc 
+					</when>
+					<when test="tab == 3"> <!-- 답변 순 -->
+						ORDER BY comment_count desc 
+					</when>
+					<otherwise> <!-- 최신 순 -->
+						ORDER BY BOARD.board_no desc
+					</otherwise>
+				</choose>
 				LIMIT #{startBoardNo}, #{perPageNum}
 		) B
 		JOIN  USER
 			ON B.user_no = USER.user_no
-		<if test="option == 4">
-			JOIN BOOKMARK
-				ON B.board_no = BOOKMARK.board_no
-			WHERE BOOKMARK.user_no = #{userNo} 
-		</if>
+		
 	</select>
 	
 	<select id="myQuestionsAnsweredSelectList" resultMap="boardList">

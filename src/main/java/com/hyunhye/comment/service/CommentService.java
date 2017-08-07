@@ -16,6 +16,16 @@ public class CommentService {
 	@Autowired
 	CommentRepository repository;
 
+	/* 답변 전체 리스트 */
+	public List<Comment> answerTabSelectListAll(int boardNo, int tab) {
+		Comment commentModel = new Comment();
+		commentModel.setUserNo(UserSessionUtils.currentUserNo());
+		commentModel.setBoardNo(boardNo);
+		commentModel.setTab(tab);
+
+		return repository.answerTabSelectListAll(commentModel);
+	}
+
 	/* 답변 등록 */
 	public void answerInsert(Comment commentModel) {
 		commentModel.setUserNo(UserSessionUtils.currentUserNo());
@@ -26,15 +36,6 @@ public class CommentService {
 			commentModel.setCommentParentNo(0);
 		}
 		repository.answerInsert(commentModel);
-	}
-
-	/* 답변 리스트 */
-	public List<Comment> answerListAllSelect(int boardNo) {
-		Comment commentModel = new Comment();
-		commentModel.setUserNo(UserSessionUtils.currentUserNo());
-		commentModel.setBoardNo(boardNo);
-
-		return repository.answerListAllSelect(commentModel);
 	}
 
 	/* 답변 수정 */
@@ -77,7 +78,6 @@ public class CommentService {
 		return repository.commentCount();
 	}
 
-
 	/* 답변 좋아요 */
 	public void answerLikeInsert(Comment model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
@@ -90,25 +90,19 @@ public class CommentService {
 		repository.answerLikeDelete(model);
 	}
 
+	/* 내가 작성한 답변 리스트 */
 	public List<Comment> myAnswersSelect(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.myAnswersSelect(cri);
 	}
 
+	/* 내가 작성한 답변 개수 */
 	public int myAnswersListCount(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.myAnswersListCount(cri);
 	}
 
-	public List<Comment> answerTabSelectListAll(int boardNo, int tab) {
-		Comment commentModel = new Comment();
-		commentModel.setUserNo(UserSessionUtils.currentUserNo());
-		commentModel.setBoardNo(boardNo);
-		commentModel.setTab(tab);
-
-		return repository.answerTabSelectListAll(commentModel);
-	}
-
+	/* 내가 좋아요한 답변 리스트 */
 	public List<Comment> answersLikedSelectList(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.answersLikedSelectList(cri);
