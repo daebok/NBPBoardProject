@@ -11,6 +11,8 @@ import com.hyunhye.user.model.UserModel;
 public interface UserRepository {
 	public void userRegist(UserModel model);
 
+	public void naverUserRegist(UserModel model);
+
 	public int duplicationId(String id);
 
 	public Map<String, Object> selectUser(String userId);

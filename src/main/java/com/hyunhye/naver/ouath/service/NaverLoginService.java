@@ -23,7 +23,6 @@ import com.hyunhye.naver.ouath.model.NaverLoginApi;
 import com.hyunhye.naver.ouath.model.NaverProfile;
 import com.hyunhye.naver.ouath.model.NaverUser;
 
-
 @Service
 public class NaverLoginService {
 	Logger logger = LoggerFactory.getLogger(NaverLoginService.class);
@@ -32,6 +31,7 @@ public class NaverLoginService {
 	private static final String REDIRECT_URI = "http://localhost:8004/user/callback";
 	private static final String SESSION_STATE = "oauth_state";
 	private static final String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
+	private static final String DELETE_API_URL = "https://nid.naver.com/oauth2.0/token?grant_type=delete&";
 
 	public String getAuthorizationUrl(HttpSession session) {
 

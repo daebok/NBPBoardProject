@@ -10,6 +10,17 @@
 	line-height: 40px;
 }
 </style>
+<script>
+/* (function poll(){ 
+	$.ajax({
+		url: 'message-alarm', 
+		success: function(data){ 
+			$('.message-alarm').css('color','#FFBB00'); 
+		}, 
+		dataType: "json", complete: poll, timeout: 30000 }); 
+})();
+ */
+</script>
 <div class="container"  style="margin-top:40px;">
 	<div class="container-fluid" >
 		<h1>
@@ -25,6 +36,7 @@
 					</div>
 					<div class="pull-left wrapper-2">
 						<sec:authentication property="name"/>님 환영합니다.
+						<div class="message-alarm glyphicon glyphicon-bell" style="color:#888"></div>
 					</div>
 				</sec:authorize>
 			</div>
@@ -50,6 +62,7 @@
 		<div class="pull-right">
 			<a href="<c:url value='/board/ask'/>" id="question" class="btn btn-primary">? Ask Question</a>
 			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-primary">Questions</a>
+			<a href="<c:url value='/test'/>" id="list" class="btn btn-primary">Websocket Test</a>
 		</div>
 	</div>
 	<hr>

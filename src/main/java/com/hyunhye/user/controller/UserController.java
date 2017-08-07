@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,24 +28,23 @@ import com.hyunhye.user.service.UserService;
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
-	public UserService service;
+	private static OAuth2AccessToken oauthToken;
 
 	@Autowired
-	private BCryptPasswordEncoder encoder;
+	public UserService service;
 
 	@Autowired
 	private NaverLoginService naverLoginService;
 
 	/* 회원가입 페이지 이동 */
 	@RequestMapping("signup")
-	public String signup() {
+	public String goSignupPage() {
 		return "user/signup";
 	}
 
 	/* 로그인 페이지 이동 */
 	@RequestMapping("loginPage")
-	public String login(HttpSession session, Model model) {
+	public String goLoginPage(HttpSession session, Model model) {
 
 		/* 네아로 인증 URL을 생성하기 위하여 getAuthorizationUrl을 호출 */
 		String naverAuthUrl = naverLoginService.getAuthorizationUrl(session);
@@ -61,7 +59,9 @@ public class UserController {
 		throws IOException, InterruptedException, ExecutionException {
 
 		/* 네아로 인증이 성공적으로 완료되면 code 파라미터가 전달되며 이를 통해 access token을 발급 */
-		OAuth2AccessToken oauthToken = naverLoginService.getAccessToken(session, code, state);
+		oauthToken = naverLoginService.getAccessToken(session, code, state);
+
+		logger.info("oauthToken:{}", oauthToken);
 
 		NaverUser naverUser = naverLoginService.getUserProfile(oauthToken);
 		service.naverUserRegist(naverUser);
@@ -72,15 +72,13 @@ public class UserController {
 	/* 회원 등록 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
 	public String userRegist(@ModelAttribute UserModel model) {
-		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		service.userRegist(model);
 		return "redirect:/user/loginPage";
 	}
 
-
 	/* 아이디 중복 확인 */
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody int duplicationId(@RequestBody String userId) {
+	public @ResponseBody int checkIdDuplication(@RequestBody String userId) {
 		return service.duplicationId(userId);
 	}
 }

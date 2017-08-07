@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.naver.ouath.model.NaverUser;
@@ -25,8 +26,12 @@ public class UserService {
 	@Autowired
 	private UserAuthenticationService userAuthenticationService;
 
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+
 	/* 회원 등록 */
 	public void userRegist(UserModel model) {
+		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		userRepository.userRegist(model);
 	}
 
@@ -45,6 +50,7 @@ public class UserService {
 
 		int check = userRepository.selectNaverUser(naverUser.getEmail());
 
+		/* 기존에 한번 로그인을 했던 사용자라면  */
 		if (check >= 1) {
 			/* 로그인 */
 			setAuthentication(naverUser);
@@ -52,14 +58,15 @@ public class UserService {
 			return;
 		}
 
+		/* 회원 가입 */
 		UserModel userModel = new UserModel();
 		userModel.setUserId(naverUser.getEmail());
 		userModel.setUserName(naverUser.getName());
 
 		UUID uuid = UUID.randomUUID();
-		userModel.setUserPassword(uuid.toString());
+		userModel.setUserPassword(encoder.encode(uuid.toString()));
 
-		/* 회원 가입 */
+
 		userRepository.userRegist(userModel);
 
 		/* 로그인 */
