@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.model.Criteria;
-import com.hyunhye.comment.model.CommentModel;
+import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.repository.CommentRepository;
 import com.hyunhye.security.UserSessionUtils;
 
@@ -17,7 +17,7 @@ public class CommentService {
 	CommentRepository repository;
 
 	/* 답변 등록 */
-	public void commentRegist(CommentModel commentModel) {
+	public void answerInsert(Comment commentModel) {
 		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 
 		if (commentModel.getCommentNo() != 0) {
@@ -25,21 +25,21 @@ public class CommentService {
 		} else {
 			commentModel.setCommentParentNo(0);
 		}
-		repository.commentRegist(commentModel);
+		repository.answerInsert(commentModel);
 	}
 
 	/* 답변 리스트 */
-	public List<CommentModel> commentListAll(int boardNo) {
-		CommentModel commentModel = new CommentModel();
+	public List<Comment> answerListAllSelect(int boardNo) {
+		Comment commentModel = new Comment();
 		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 		commentModel.setBoardNo(boardNo);
 
-		return repository.commentListAll(commentModel);
+		return repository.answerListAllSelect(commentModel);
 	}
 
 	/* 답변 수정 */
-	public void commentUpdate(CommentModel commentModel) {
-		repository.commentUpdate(commentModel);
+	public void answerUpdate(Comment commentModel) {
+		repository.answerUpdate(commentModel);
 	}
 
 	/* 답변 삭제 */
@@ -53,67 +53,63 @@ public class CommentService {
 	}
 
 	/* 답변 개수 구하기 */
-	public CommentModel answerCount(int boardNo) {
+	public Comment answerCount(int boardNo) {
 		return repository.answerCount(boardNo);
 	}
 
 	/* 답변 가져오기 */
-	public CommentModel commentSelect(CommentModel commentModel) {
-		return repository.commentSelect(commentModel);
+	public Comment commentSelectOne(Comment commentModel) {
+		return repository.commentSelectOne(commentModel);
 	}
 
 	/* 마지막에 달른 답변 가져오기 */
-	public CommentModel commentLastSelect() {
+	public Comment commentLastSelect() {
 		return repository.commentLastSelect();
 	}
 
 	/* 댓글 리스트 */
-	public List<CommentModel> commentCommentSelect(CommentModel model) {
-		return repository.commentCommentSelect(model);
+	public List<Comment> answerCommentSelect(Comment model) {
+		return repository.answerCommentSelect(model);
 	}
 
 	/* 댓글 개수 구하기 */
-	public CommentModel commentCount() {
+	public Comment commentCount() {
 		return repository.commentCount();
 	}
 
-	/* 답변에 댓글 여부 확인 */
-	public Integer answerHasComment(int commentNo) {
-		return repository.answerHasComment(commentNo);
-	}
 
 	/* 답변 좋아요 */
-	public void commentLike(CommentModel model) {
+	public void answerLikeInsert(Comment model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
-		repository.commentLike(model);
+		repository.answerLikeInsert(model);
 	}
 
 	/* 답변 좋아요 취소 */
-	public void commenHate(CommentModel model) {
+	public void answerLikeDelete(Comment model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
-		repository.commenHate(model);
+		repository.answerLikeDelete(model);
 	}
 
-	public List<CommentModel> selectMyAnswers(Criteria cri) {
+	public List<Comment> myAnswersSelect(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.selectMyAnswers(cri);
+		return repository.myAnswersSelect(cri);
 	}
 
-	public int countMyAnswersPaging(Criteria cri) {
+	public int myAnswersListCount(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.countMyAnswersPaging(cri);
+		return repository.myAnswersListCount(cri);
 	}
 
-	public List<CommentModel> commentListTabAll(int boardNo, int tab) {
-		CommentModel commentModel = new CommentModel();
+	public List<Comment> answerTabSelectListAll(int boardNo, int tab) {
+		Comment commentModel = new Comment();
 		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 		commentModel.setBoardNo(boardNo);
 		commentModel.setTab(tab);
 
-		return repository.commentListTabAll(commentModel);
+		return repository.answerTabSelectListAll(commentModel);
 	}
 
-	public List<CommentModel> answersLikedSelectList(Criteria cri) {
+	public List<Comment> answersLikedSelectList(Criteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.answersLikedSelectList(cri);
 	}

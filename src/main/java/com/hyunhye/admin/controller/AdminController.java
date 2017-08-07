@@ -8,12 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Category;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.common.BadWordFilteringUtils;
+import com.hyunhye.user.model.User;
 
 @Controller
 @RequestMapping("admin")
@@ -88,8 +90,8 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "categoryCheck", method = RequestMethod.POST)
-	public ResponseEntity<Integer> categoryCheck(@ModelAttribute Category categoryModel) {
-		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(adminService.categoryCheck(categoryModel),
+	public ResponseEntity<Integer> categoryItemNameCheck(@ModelAttribute Category categoryModel) {
+		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(adminService.categoryItemNameCheck(categoryModel),
 			HttpStatus.OK);
 
 		return entity;
@@ -112,7 +114,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("userModify")
-	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute UserModel userModel) {
+	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute User userModel) {
 		adminService.userAuthorityUpdate(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -123,7 +125,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("userDelete")
-	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute UserModel userModel) {
+	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute User userModel) {
 		adminService.userWithBoardDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -134,7 +136,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("onlyUserDelete")
-	public ResponseEntity<String> onlyUserDelete(@ModelAttribute UserModel userModel) {
+	public ResponseEntity<String> onlyUserDelete(@ModelAttribute User userModel) {
 		adminService.onlyUserDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -203,6 +205,12 @@ public class AdminController {
 	public String noticeUpdate(Notice noticeModel, Model model) {
 		adminService.noticeUpdate(noticeModel);
 		return "redirect:/admin/notice";
+	}
+
+	@RequestMapping(value = "add/badword", method = RequestMethod.POST)
+	public String addBadWord(@RequestParam String badWord) {
+		BadWordFilteringUtils.badWordInsert(badWord);
+		return "redirect:/admin/admin";
 	}
 
 }

@@ -4,13 +4,13 @@ import lombok.Data;
 
 @Data
 public class Criteria {
-	/* 페이지 번호 */
+	/** 페이지 번호 **/
 	private int page;
-	/* 페이지 당 데이터 개수 */
+	/** 페이지 당 데이터 개수 **/
 	private int perPageNum;
-	/* 시작 데이터 번호 */
+	/** 시작 데이터 번호 **/
 	private int startBoardNo;
-	/* 사용자 번호 */
+	/** 사용자 번호 **/
 	private int userNo;
 
 	/*

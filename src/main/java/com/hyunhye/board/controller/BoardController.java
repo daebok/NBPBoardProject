@@ -1,7 +1,6 @@
 package com.hyunhye.board.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -141,13 +140,13 @@ public class BoardController {
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 해당 게시글에 포함된 첨부 파일 */
-		model.addAttribute("attach", boardService.getAttach(boardNo));
+		model.addAttribute("attach", boardService.fileSelect(boardNo));
 
 		/* 해당 게시글의 답변 수 */
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
 
 		/* 해당 게시글의 답변 목록*/
-		model.addAttribute("comment", commentService.commentListAll(boardNo));
+		model.addAttribute("comment", commentService.answerListAllSelect(boardNo));
 
 		model.addAttribute("section", section);
 
@@ -181,7 +180,7 @@ public class BoardController {
 		model.addAttribute("list", boardService.categoryListAll());
 
 		/* 첨부된 파일 */
-		model.addAttribute("attach", boardService.getAttach(boardNo));
+		model.addAttribute("attach", boardService.fileSelect(boardNo));
 		return "board/modify";
 	}
 
@@ -228,7 +227,7 @@ public class BoardController {
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.countMyQuestionsPaging(cri));
+		pageMaker.setTotalCount(boardService.myQuestionsSelectListCount(cri));
 
 		/* 전체리스트임을 알려주는 변수 */
 		model.addAttribute("check", 0);
@@ -256,7 +255,7 @@ public class BoardController {
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.countMyQuestionsAnsweredPaging(cri));
+		pageMaker.setTotalCount(boardService.myQuestionsAnsweredSelectListCount(cri));
 
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);
@@ -279,12 +278,12 @@ public class BoardController {
 	@RequestMapping("myanswers")
 	public String myAnswersSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
 		/* 답변 달린 내 질문 리스트 */
-		model.addAttribute("list", commentService.selectMyAnswers(cri));
+		model.addAttribute("list", commentService.myAnswersSelect(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(commentService.countMyAnswersPaging(cri));
+		pageMaker.setTotalCount(commentService.myAnswersListCount(cri));
 
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);
@@ -298,15 +297,21 @@ public class BoardController {
 		return "user/myanswers";
 	}
 
+	/**
+	 * 내가 좋아요한 답변 리스트
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("answers/liked")
 	public String answersLikedSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
-		/* 답변 달린 내 질문 리스트 */
+		/* 내가 좋아요한 답변 리스트 */
 		model.addAttribute("list", commentService.answersLikedSelectList(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(commentService.countMyAnswersPaging(cri));
+		pageMaker.setTotalCount(commentService.myAnswersListCount(cri));
 
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);
@@ -356,7 +361,7 @@ public class BoardController {
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.countMyFavoritePaging(cri));
+		pageMaker.setTotalCount(boardService.myFavoriteSelectListCount(cri));
 
 		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", boardService.categoryListAll());
@@ -372,14 +377,11 @@ public class BoardController {
 	 * @param boardNo
 	 * @param cri
 	 * @param model
-	 * @param request
-	 * @param response
-	 * @param principal
 	 * @return
 	 */
 	@RequestMapping("myfavorite/memo")
 	public String bookmarkSelectOne(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
-		Model model, HttpServletRequest request, HttpServletResponse response, Principal principal) {
+		Model model) {
 
 		/* 현재 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
@@ -388,13 +390,13 @@ public class BoardController {
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 첨부파일 */
-		model.addAttribute("attach", boardService.getAttach(boardNo));
+		model.addAttribute("attach", boardService.fileSelect(boardNo));
 
 		/* 게시글 답변 개수 */
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
 
 		/* 게시글 답변 리스트 */
-		model.addAttribute("comment", commentService.commentListAll(boardNo));
+		model.addAttribute("comment", commentService.answerListAllSelect(boardNo));
 
 		/* 즐겨찾기 된 해당 게시글의 메모 */
 		model.addAttribute("memo", boardService.bookmarkMemoSelect(boardNo));

@@ -68,13 +68,15 @@ public class BadWordFilteringUtils {
 		return list;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void badWordInsert(String badWord) {
 		badWords.concat("," + badWord);
 		properties.setProperty("badWords", badWords);
 		try {
-			properties.save(new FileOutputStream(ResourceUtils.getFile(badwordsPropertiesFile)), "");
+			properties.store(new FileOutputStream(ResourceUtils.getFile(badwordsPropertiesFile)), "");
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

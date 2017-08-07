@@ -19,9 +19,12 @@ import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
+import com.hyunhye.board.model.Home;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
+import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
+import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.security.UserSessionUtils;
 
@@ -38,7 +41,18 @@ public class BoardService {
 	public CategoryRepository categoryRepository;
 
 	@Autowired
+	private BookMarkRepository bookmarkRepository;
+
+	@Autowired
+	private FileRepository fileRepository;
+
+	@Autowired
 	private UploadService uploadService;
+
+	/** 게시글  Top10 리스트 **/
+	public List<Board> boardTop10SelectList(Home homeModel) {
+		return boardRepository.boardTop10SelectList(homeModel);
+	}
 
 	/** 게시글 **/
 	/* 1. 게시글 작성하기 */
@@ -106,8 +120,8 @@ public class BoardService {
 	}
 
 	/* 등록 된 첨부파일 가져오기  */
-	public List<FileModel> getAttach(int boardNo) {
-		return boardRepository.getFile(boardNo);
+	public List<FileModel> fileSelect(int boardNo) {
+		return fileRepository.fileSelect(boardNo);
 	}
 
 	/* 3. 게시글 수정하기*/
@@ -157,6 +171,7 @@ public class BoardService {
 
 	/* 게시글 개수 구하기 */
 	public int boardSelectListCount(SearchCriteria cri) {
+		cri.setOption(1);
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -166,7 +181,6 @@ public class BoardService {
 	}
 
 	/* 게시글 작성자 가져오기 */
-	/* 인터셉터에서 사용 */
 	public int checkUser(int boardNo) {
 		return boardRepository.checkUser(boardNo);
 	}
@@ -192,9 +206,10 @@ public class BoardService {
 	}
 
 	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
-	public int countMyQuestionsPaging(SearchCriteria cri) {
+	public int myQuestionsSelectListCount(SearchCriteria cri) {
+		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.countMyQuestionsPaging(cri);
+		return boardRepository.boardSelectListCount(cri);
 	}
 
 	/* 2. 내 질문 모아 보기 (답변한 것만) */
@@ -205,9 +220,9 @@ public class BoardService {
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
-	public int countMyQuestionsAnsweredPaging(SearchCriteria cri) {
+	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.countMyQuestionsAnsweredPaging(cri);
+		return boardRepository.myQuestionsAnsweredSelectListCount(cri);
 	}
 
 	/** 즐겨찾기 **/
@@ -219,22 +234,22 @@ public class BoardService {
 
 	}
 
+	/* 즐겨 찾기 리스트 전체 개수 구하기 */
+	public int myFavoriteSelectListCount(Criteria cri) {
+		cri.setUserNo(UserSessionUtils.currentUserNo());
+		return boardRepository.myFavoriteSelectListCount(cri);
+	}
+
 	/* 즐겨찾기 저장하기 */
 	public void bookmarkInsert(Board model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
-		boardRepository.bookmarkInsert(model);
-	}
-
-	/* 즐겨 찾기 리스트 전체 개수 구하기 */
-	public int countMyFavoritePaging(Criteria cri) {
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.countMyFavoritePaging(cri);
+		bookmarkRepository.bookmarkInsert(model);
 	}
 
 	/* 즐겨찾기 메모 저장 하기  */
 	public void bookmarkMemoUpdate(BookMark bookMarkModel) {
 		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
-		boardRepository.bookmarkMemoUpdate(bookMarkModel);
+		bookmarkRepository.bookmarkMemoUpdate(bookMarkModel);
 	}
 
 	/* 즐겨찾기 메모 불러오기  */
@@ -243,12 +258,12 @@ public class BoardService {
 		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
 		bookMarkModel.setBoardNo(boardNo);
 
-		return boardRepository.bookmarkMemoSelect(bookMarkModel);
+		return bookmarkRepository.bookmarkMemoSelect(bookMarkModel);
 	}
 
 	/* 즐겨찾기 해제  */
 	public void bookmarkDelete(Board model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
-		boardRepository.bookmarkDelete(model);
+		bookmarkRepository.bookmarkDelete(model);
 	}
 }

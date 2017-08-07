@@ -5,45 +5,57 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.hyunhye.board.model.Criteria;
-import com.hyunhye.comment.model.CommentModel;
+import com.hyunhye.comment.model.Comment;
 
 @Repository
 public interface CommentRepository {
 
-	public List<CommentModel> commentListAll(CommentModel commentModel);
+	/** 답변 전체 리스트 **/
+	public List<Comment> answerListAllSelect(Comment commentModel);
 
-	public void commentRegist(CommentModel commentModel);
+	/** 답변 전체 개수 **/
+	public Comment answerCount(int boardNo);
 
-	public void commentUpdate(CommentModel commentModel);
+	/** 답변 탭 리스트 **/
+	public List<Comment> answerTabSelectListAll(Comment commentModel);
 
+	/** 답변 작성하기 **/
+	public void answerInsert(Comment commentModel);
+
+	/** 답변 수정하기 **/
+	public void answerUpdate(Comment commentModel);
+
+	/** 답변 삭제하기 **/
 	public void answerDelete(int boardNo);
 
-	public CommentModel commentLastSelect();
+	/** 마지막 댓글 가져오기 (작성한 댓글) **/
+	public Comment commentLastSelect();
 
-	public CommentModel commentCount();
+	/** 댓글 개수 **/
+	public Comment commentCount();
 
-	public CommentModel answerCount(int boardNo);
+	/** 해당 댓글 가져오기 **/
+	public Comment commentSelectOne(Comment commentModel);
 
-	public CommentModel commentSelect(CommentModel commentModel);
+	/** 답변에 딸린 댓글 개수 **/
+	public List<Comment> answerCommentSelect(Comment commentModel);
 
-	public List<CommentModel> commentCommentSelect(CommentModel commentModel);
-
-	public void commentLike(CommentModel model);
-
-	public Integer answerHasComment(int commentNo);
-
-	public void commentUpdateNull(int commentNo);
-
-	public void commenHate(CommentModel model);
-
+	/** 댓글 삭제하기 **/
 	public void commentDelete(int commentNo);
 
-	public List<CommentModel> selectMyAnswers(Criteria cri);
+	/** 답변 좋아요 **/
+	public void answerLikeInsert(Comment model);
 
-	public int countMyAnswersPaging(Criteria cri);
+	/** 답변 좋아요 취소 **/
+	public void answerLikeDelete(Comment model);
 
-	public List<CommentModel> commentListTabAll(CommentModel commentModel);
+	/** 내가 작성한 답변 리스트 **/
+	public List<Comment> myAnswersSelect(Criteria cri);
 
-	public List<CommentModel> answersLikedSelectList(Criteria cri);
+	/** 내가 작성한 답변 개수 **/
+	public int myAnswersListCount(Criteria cri);
+
+	/** 내가 좋아요한 답변 리스트 **/
+	public List<Comment> answersLikedSelectList(Criteria cri);
 
 }

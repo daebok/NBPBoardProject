@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.board.repository.BoardRepository">
+	<resultMap id="fileList" type="file">
+		<result property="boardNo" column="board_no" />
+		<result property="fileNo" column="file_no" />
+		<result property="fileName" column="file_name" />
+		<result property="fileOriginName" column="file_origin_name" />
+		<result property="fileExtension" column="file_extension" />
+		<result property="fileSize" column="file_size" />
+	</resultMap>
+	
+	<!-- 첨부파일 -->
+	<insert id="fileInsert">
+		INSERT INTO FILE (
+			board_no, 
+			file_name, 
+			file_origin_name, 
+			file_extension,
+			file_size
+		) VALUES ( 
+			(SELECT board_no FROM BOARD ORDER BY board_no desc limit 1), 
+			#{fileName}, 
+			#{fileOriginName}, 
+			#{fileExtension}, 
+			#{fileSize} 
+		)
+	</insert>
+	
+	<select id="fileSelect" resultMap="fileList">
+		SELECT 
+			file_no, 
+			file_name, 
+			file_origin_name,
+			file_size
+		FROM FILE 
+		WHERE 
+			board_no = #{boardNo}; 
+	</select>
+	
+	<delete id="fileDelete">
+		DELETE FROM FILE 
+		WHERE 
+			file_name = #{fileDelete}
+	</delete>
+
+</mapper>

@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.admin.model.Notice;
-import com.hyunhye.admin.repository.AdminRepository;
+import com.hyunhye.admin.repository.NoticeRepository;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
-import com.hyunhye.security.UserSession;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.security.UserSessionUtils;
+import com.hyunhye.user.model.User;
 import com.hyunhye.user.repository.UserRepository;
 
 @Service
 public class AdminService {
 
 	@Autowired
-	AdminRepository repository;
+	NoticeRepository repository;
 
 	@Autowired
 	CategoryRepository categoryRepository;
@@ -47,27 +47,27 @@ public class AdminService {
 	}
 
 	/* 카테고리 중복 체크 */
-	public Integer categoryCheck(Category categoryModel) {
-		return categoryRepository.categoryCheck(categoryModel);
+	public Integer categoryItemNameCheck(Category categoryModel) {
+		return categoryRepository.categoryItemNameCheck(categoryModel);
 	}
 
 	/** 회원 관리 **/
 	/* 회원 정보 리스트 */
-	public List<UserModel> userSelectList() {
+	public List<User> userSelectList() {
 		return userRepository.userSelectList();
 	}
 
 	/* 회원 정보 변경 */
-	public void userAuthorityUpdate(UserModel userModel) {
+	public void userAuthorityUpdate(User userModel) {
 		userRepository.userAuthorityUpdate(userModel);
 	}
 
 	/* 회원 삭제 */
-	public void userWithBoardDelete(UserModel userModel) {
+	public void userWithBoardDelete(User userModel) {
 		userRepository.userWithBoardDelete(userModel);
 	}
 
-	public void onlyUserDelete(UserModel userModel) {
+	public void onlyUserDelete(User userModel) {
 		userRepository.onlyUserDelete(userModel);
 	}
 
@@ -79,7 +79,7 @@ public class AdminService {
 
 	/* 공지사항  추가 */
 	public void noticeInsert(Notice noticeModel) {
-		noticeModel.setUserNo(UserSession.currentUserNo());
+		noticeModel.setUserNo(UserSessionUtils.currentUserNo());
 
 		repository.noticeInsert(noticeModel);
 	}
@@ -98,6 +98,5 @@ public class AdminService {
 	public void noticeUpdate(Notice noticeModel) {
 		repository.noticeUpdate(noticeModel);
 	}
-
 
 }

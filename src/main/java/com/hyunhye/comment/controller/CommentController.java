@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hyunhye.comment.model.CommentModel;
+import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.service.CommentService;
 import com.hyunhye.security.UserSessionUtils;
 
@@ -27,11 +27,15 @@ public class CommentController {
 	@Autowired
 	CommentService service;
 
-	/** 답변 **/
-	/* 1. 답변 달기 */
+	/**
+	 * 답변 달기
+	 * @param commentModel
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "regist", method = RequestMethod.POST)
-	public String commentRegist(@ModelAttribute CommentModel commentModel, Model model) {
-		service.commentRegist(commentModel);
+	public String answerInsert(@ModelAttribute Comment commentModel, Model model) {
+		service.answerInsert(commentModel);
 
 		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
@@ -41,77 +45,117 @@ public class CommentController {
 		return "board/answer-form";
 	}
 
-	/* 2. 답변 리스트 */
+	/**
+	 * 답변 리스트
+	 * @param boardNo
+	 * @param tab
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("list")
-	public String commentList(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
+	public String answerListAllSelect(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("comment", service.commentListAll(boardNo));
+		model.addAttribute("comment", service.answerListAllSelect(boardNo));
 
 		return "board/answer";
 	}
 
-	/* 2. 답변 리스트 */
+	/**
+	 * 답변 리스트
+	 * 조회수 순, 좋아요 순으로 볼 수 있도록 tab
+	 * @param boardNo
+	 * @param tab
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("list/tab")
-	public String commentListTab(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
+	public String answerTabSelectListAll(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("comment", service.commentListTabAll(boardNo, tab));
+		model.addAttribute("comment", service.answerTabSelectListAll(boardNo, tab));
 
 		return "board/answer-tab";
 	}
 
-	/* 3. 답변 수정 */
+	/**
+	 * 답변 수정
+	 * @param commentModel
+	 * @return
+	 */
 	@RequestMapping("modify")
-	public ResponseEntity<String> commentUpdate(@ModelAttribute CommentModel commentModel) {
-		service.commentUpdate(commentModel);
+	public ResponseEntity<String> answerUpdate(@ModelAttribute Comment commentModel) {
+		service.answerUpdate(commentModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/* 4. 답변 가져오기 */
+	/**
+	 * 답변 수정시, 해당 답변 가져오기
+	 * @param model
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "select", method = RequestMethod.GET)
-	public HashMap<String, Object> commentSelect(@ModelAttribute CommentModel model) {
+	public HashMap<String, Object> commentSelectOne(@ModelAttribute Comment model) {
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
-		hashmap.put("commentContent", service.commentSelect(model).getCommentContent());
+		hashmap.put("commentContent", service.commentSelectOne(model).getCommentContent());
 
 		return hashmap;
 	}
 
-	/* 5. 답변 삭제 */
+	/**
+	 * 답변 삭제하기
+	 * @param commentNo
+	 * @return
+	 */
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
 	public ResponseEntity<String> answerDelete(@RequestParam("commentNo") int commentNo) {
 		service.answerDelete(commentNo);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/** 댓글 **/
-	/* 1. 댓글 가져오기 */
+	/**
+	 * 답변의 댓글 리스트 가져오기
+	 * @param commentModel
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "comment/select", method = RequestMethod.GET)
-	public String commentCommentSelect(@ModelAttribute CommentModel commentModel, Model model) {
-		model.addAttribute("commentComment", service.commentCommentSelect(commentModel));
+	public String answerCommentSelect(@ModelAttribute Comment commentModel, Model model) {
+		model.addAttribute("commentComment", service.answerCommentSelect(commentModel));
 		return "board/comment-form";
 	}
 
-	/* 댓글 삭제 */
+	/**
+	 * 답변의 댓글 삭제하기
+	 * @param commentNo
+	 * @return
+	 */
 	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
 	public ResponseEntity<String> commentDelete(@RequestParam("commentNo") int commentNo) {
 		service.commentDelete(commentNo);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/** 답변 좋아요 **/
-	/* 1. 답변 좋아요 */
+	/**
+	 * 답변 좋아요 누르기
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "like", method = RequestMethod.GET)
-	public ResponseEntity<String> commentLike(@ModelAttribute CommentModel model) {
-		service.commentLike(model);
+	public ResponseEntity<String> answerLikeInsert(@ModelAttribute Comment model) {
+		service.answerLikeInsert(model);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	/* 2. 답변 좋아요 취소*/
+	/**
+	 * 답변 좋아요 해제
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "hate", method = RequestMethod.GET)
-	public ResponseEntity<String> commenHate(@ModelAttribute CommentModel model) {
-		service.commenHate(model);
+	public ResponseEntity<String> answerLikeDelete(@ModelAttribute Comment model) {
+		service.answerLikeDelete(model);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 }

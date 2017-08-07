@@ -23,7 +23,7 @@ public class UserAuthenticationService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Map<String, Object> user = repository.selectUser(userName);
+		Map<String, Object> user = repository.userSelect(userName);
 		if (user == null) {
 			throw new UsernameNotFoundException(userName);
 		}

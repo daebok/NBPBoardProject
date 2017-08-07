@@ -50,7 +50,7 @@
 	</delete>
 	
 	<!-- 현재 같은 카테고리의 이름이 있는지 체크 -->
-	<select id="categoryCheck" resultType="int">
+	<select id="categoryItemNameCheck" resultType="int">
 		SELECT
 			count(category_no)
 		FROM CATEGORY

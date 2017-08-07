@@ -7,7 +7,7 @@
 	<div style="line-height:20px;">
 		<label for="categoryType"> Category </label>
 		<select name="categoryType" id="categoryType" style="padding:2px;">
-			<option value="null"
+			<option value="all"
 				<c:out value="${cri.categoryType eq 'all' ? 'selected':''}"/>>---</option>
 			<c:forEach var="category" items="${categoryList}">
 				<option value="${category.categoryItem}"

@@ -47,7 +47,7 @@ public class BadWordFilteringUtilsTest {
 
 		System.out.println(badWords);
 
-		badWords.concat(",fuck");
+		badWords.concat(",1");
 
 		properties.setProperty("badWords", badWords);
 		try {

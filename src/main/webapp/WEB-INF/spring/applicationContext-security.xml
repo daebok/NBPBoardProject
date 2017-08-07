@@ -19,6 +19,7 @@
 		<intercept-url pattern="/resources/**" access="permitAll" /> <!-- 리소스 모두 허용 -->
 		<intercept-url pattern="/board" access="permitAll" />
 		<intercept-url pattern="/board/**" access="isAuthenticated()" /> <!-- 나머지는 모두 권한이 있는 사람만 허용 -->
+		<!-- <intercept-url pattern="/board/**" access="permitAll" /> -->
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> <!-- 관리자 페이지 -->
 		
 

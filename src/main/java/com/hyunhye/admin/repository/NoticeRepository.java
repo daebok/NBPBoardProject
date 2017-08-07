@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.hyunhye.admin.model.Notice;
 
 @Repository
-public interface AdminRepository {
+public interface NoticeRepository {
 	/** 공지사항  추가 **/
 	public void noticeInsert(Notice noticeModel);
 

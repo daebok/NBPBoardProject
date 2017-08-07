@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.User;
 import com.hyunhye.user.repository.UserRepository;
 
 @Service
@@ -30,25 +30,25 @@ public class UserService {
 	private BCryptPasswordEncoder encoder;
 
 	/* 회원 등록 */
-	public void userRegist(UserModel model) {
+	public void userInsert(User model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
-		userRepository.userRegist(model);
+		userRepository.userInsert(model);
 	}
 
 	/* 해당 아이디를 가진 사용자가 있으면, 1 리턴 */
-	public int duplicationId(String userId) {
-		return userRepository.duplicationId(userId);
+	public int checkIdDuplication(String userId) {
+		return userRepository.checkIdDuplication(userId);
 	}
 
 	/* 비밀번호 변경 */
-	public void userPasswordChange(UserModel model) {
+	public void userPasswordChange(User model) {
 		userRepository.userPasswordChange(model);
 	}
 
 	/* 네이버 아이디로 로그인 시, 회원가입 별도 처리 */
-	public void naverUserRegist(NaverUser naverUser) {
+	public void naverUserInsert(NaverUser naverUser) {
 
-		int check = userRepository.selectNaverUser(naverUser.getEmail());
+		int check = userRepository.naverUserselect(naverUser.getEmail());
 
 		/* 기존에 한번 로그인을 했던 사용자라면  */
 		if (check >= 1) {
@@ -59,7 +59,7 @@ public class UserService {
 		}
 
 		/* 회원 가입 */
-		UserModel userModel = new UserModel();
+		User userModel = new User();
 		userModel.setUserId(naverUser.getEmail());
 		userModel.setUserName(naverUser.getName());
 
@@ -67,7 +67,7 @@ public class UserService {
 		userModel.setUserPassword(encoder.encode(uuid.toString()));
 
 
-		userRepository.userRegist(userModel);
+		userRepository.userInsert(userModel);
 
 		/* 로그인 */
 		setAuthentication(naverUser);

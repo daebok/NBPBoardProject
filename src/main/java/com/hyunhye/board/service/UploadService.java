@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.FileModel;
-import com.hyunhye.board.repository.BoardRepository;
+import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.MediaUtils;
 import com.hyunhye.common.UploadFileUtils;
 
@@ -30,7 +30,7 @@ public class UploadService {
 	Logger logger = LoggerFactory.getLogger(UploadService.class);
 
 	@Autowired
-	public BoardRepository repository;
+	private FileRepository fileRepository;
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
@@ -71,7 +71,7 @@ public class UploadService {
 			fileModel.setFileSize(fileSize);
 
 			/* 2. 데이터베이스에 저장 */
-			repository.addFile(fileModel);
+			fileRepository.fileInsert(fileModel);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class UploadService {
 				new File(homePath + uploadPath + fileDelete.replace('/', File.separatorChar)).delete();
 
 				/* 2. 데이버베이스에서 삭제*/
-				repository.deleteFile(fileDelete);
+				fileRepository.fileDelete(fileDelete);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ public class UploadService {
 	/* 파일 삭제 (게시물에 첨부된 file 모두 삭제) */
 	public void fileDeletFromDatabase(int boardNo) {
 		/* 삭제된 첨부파일  가져오기 */
-		List<FileModel> filesDelete = repository.fileSelect(boardNo);
+		List<FileModel> filesDelete = fileRepository.fileSelect(boardNo);
 
 		/* 파일 삭제하기 */
 		if (filesDelete != null) {

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Alias("user")
-public class UserModel {
+public class User {
 	/* 사용자 번호 */
 	private int userNo;
 	/* 사용자 아이디 */

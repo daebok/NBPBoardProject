@@ -44,53 +44,9 @@
 		<result property="fileExtension" column="file_extension" />
 		<result property="fileSize" column="file_size" />
 	</resultMap>
-	
-	<!-- 첨부파일 -->
-	<insert id="addFile">
-		INSERT INTO FILE (
-			board_no, 
-			file_name, 
-			file_origin_name, 
-			file_extension,
-			file_size
-		) VALUES ( 
-			(SELECT board_no FROM BOARD ORDER BY board_no desc limit 1), 
-			#{fileName}, 
-			#{fileOriginName}, 
-			#{fileExtension}, 
-			#{fileSize} 
-		)
-	</insert>
-	
-	<select id="getFile" resultMap="fileList">
-		SELECT 
-			file_no, 
-			file_name, 
-			file_origin_name,
-			file_size
-		FROM FILE 
-		WHERE 
-			board_no = #{boardNo}; 
-	</select>
-	
-	<delete id="deleteFile">
-		DELETE FROM FILE 
-		WHERE 
-			file_name = #{fileDelete}
-	</delete>
-	
-	<select id="fileSelect" resultMap="fileList">
-		SELECT 
-			file_no,
-			file_name,
-			file_origin_name
-		FROM FILE
-		WHERE
-			board_no = #{boardNo}
-	</select>
 
 	<!-- 홈 화면에 보여줄 게시글 리스트 -->	
-	<select id="selectBoardList" resultMap="boardList">
+	<select id="boardTop10SelectList" resultMap="boardList">
 		SELECT 
 			B.board_no,
 			USER.user_name, 
@@ -234,8 +190,8 @@
 			B.board_no, 
 			B.board_no as number,
 			USER.user_name, 
-			CATEGORY.category_item, 
-			CATEGORY.category_no,
+			B.category_item, 
+			B.category_no,
 			B.board_title, 
 			B.board_content_summary, 
 			B.board_date, 
@@ -245,8 +201,10 @@
 		FROM (
 				SELECT 
 					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
-					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content
+					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,CATEGORY.category_item
 				FROM BOARD
+				JOIN CATEGORY
+					ON BOARD.category_no = CATEGORY.category_no
 				<if test="option == 1">
 					<include refid="search"></include>
 				</if>
@@ -257,8 +215,6 @@
 				ORDER BY BOARD.board_no desc 
 				LIMIT #{startBoardNo}, #{perPageNum}
 		) B
-		JOIN CATEGORY
-			ON B.category_no = CATEGORY.category_no
 		JOIN  USER
 			ON B.user_no = USER.user_no
 		<if test="option == 4">
@@ -302,20 +258,17 @@
 		FROM BOARD
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
-		<include refid="search"></include>
-	</select>
-	
-	<select id="countMyQuestionsPaging" resultType="int">
-		SELECT COUNT(board_no) 
-		FROM BOARD
-		JOIN CATEGORY
-			ON BOARD.category_no = CATEGORY.category_no
+		<if test="option == 1">
+			<include refid="search"></include>
+		</if>
+		<if test="option == 2">
 		WHERE
 			BOARD.user_no = #{userNo} 
-		<include refid="search2"></include>
+			<include refid="search2"></include>
+		</if>
 	</select>
 	
-	<select id="countMyQuestionsAnsweredPaging" resultType="int">
+	<select id="myQuestionsAnsweredSelectListCount" resultType="int">
 		SELECT COUNT(B.board_count) 
 		FROM (
 				SELECT BOARD.board_no as board_count
@@ -327,7 +280,7 @@
 			) B
 	</select>
 	
-	<select id="countMyFavoritePaging" resultType="int">
+	<select id="myFavoriteSelectListCount" resultType="int">
 		SELECT COUNT(BOOKMARK.board_no) 
 		FROM BOOKMARK
 		WHERE
@@ -417,7 +370,7 @@
 				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARDB.board_content_summary like CONCAT('%',#{keyword},'%')
+				BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
 			</when>
 			<when test="searchType == 'title'">
 				BOARD.board_content_summary like CONCAT('%',#{keyword},'%') 

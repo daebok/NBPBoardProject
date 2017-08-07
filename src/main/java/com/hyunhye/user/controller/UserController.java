@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.User;
 import com.hyunhye.user.service.UserService;
 
 @Controller
@@ -36,13 +36,20 @@ public class UserController {
 	@Autowired
 	private NaverLoginService naverLoginService;
 
-	/* 회원가입 페이지 이동 */
+	/**
+	 * 회원가입 페이지 이동
+	 */
 	@RequestMapping("signup")
 	public String goSignupPage() {
 		return "user/signup";
 	}
 
-	/* 로그인 페이지 이동 */
+	/**
+	 * 로그인 페이지 이동
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("loginPage")
 	public String goLoginPage(HttpSession session, Model model) {
 
@@ -54,6 +61,13 @@ public class UserController {
 		return "user/login";
 	}
 
+	/**
+	 * 네이버 아이디로 로그인
+	 * @param code
+	 * @param state
+	 * @param session
+	 * @param model
+	 */
 	@RequestMapping("callback")
 	public String callback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model)
 		throws IOException, InterruptedException, ExecutionException {
@@ -64,21 +78,29 @@ public class UserController {
 		logger.info("oauthToken:{}", oauthToken);
 
 		NaverUser naverUser = naverLoginService.getUserProfile(oauthToken);
-		service.naverUserRegist(naverUser);
+		service.naverUserInsert(naverUser);
 
 		return "redirect:/board";
 	}
 
-	/* 회원 등록 */
+	/**
+	 * 회원 등록
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
-	public String userRegist(@ModelAttribute UserModel model) {
-		service.userRegist(model);
+	public String userInsert(@ModelAttribute User model) {
+		service.userInsert(model);
 		return "redirect:/user/loginPage";
 	}
 
-	/* 아이디 중복 확인 */
+	/**
+	 * 아이디 중복 확인
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int checkIdDuplication(@RequestBody String userId) {
-		return service.duplicationId(userId);
+		return service.checkIdDuplication(userId);
 	}
 }

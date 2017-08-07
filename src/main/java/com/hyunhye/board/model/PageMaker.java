@@ -10,17 +10,17 @@ import lombok.Data;
 
 @Data
 public class PageMaker {
-	/* 게시글 총 개수 */
+	/** 게시글 총 개수 **/
 	private int totalCount;
-	/* 시작 페이지 번호 */
+	/** 시작 페이지 번호 **/
 	private int startPage;
-	/* 끝 페이지  번호 */
+	/** 끝 페이지  번호 **/
 	private int endPage;
-	/* 이전 페이지 */
+	/** 이전 페이지 **/
 	private boolean prev;
-	/* 이후 페이지 */
+	/** 이후 페이지 **/
 	private boolean next;
-	/* 화면에 보여지는 페이지 개수 */
+	/** 화면에 보여지는 페이지 개수 **/
 	private int displayPageNum = 5;
 	private Criteria cri;
 

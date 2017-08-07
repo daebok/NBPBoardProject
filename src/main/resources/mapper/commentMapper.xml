@@ -19,7 +19,7 @@
 		<result property="commentCommentCount" column="comment_comment_count" />
 	</resultMap>
 	
-	<select id="commentCommentSelect" resultMap="commentList">
+	<select id="answerCommentSelect" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
 			USER.user_id, 
@@ -35,7 +35,7 @@
 		ORDER BY comment_no
 	</select>
 	
-	<select id="commentListAll" resultMap="commentList">
+	<select id="answerListAllSelect" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
 			USER.user_id, 
@@ -60,7 +60,7 @@
 		ORDER BY COMMENT.comment_no
 	</select>
 	
-	<select id="commentListTabAll" resultMap="commentList">
+	<select id="answerTabSelectListAll" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
 			USER.user_id, 
@@ -90,7 +90,7 @@
 		</if>
 	</select>
 	
-	<select id="selectMyAnswers" resultMap="commentList">
+	<select id="myAnswersSelect" resultMap="commentList">
 		SELECT
 			C.comment_no, 
 			C.comment_content, 
@@ -138,7 +138,7 @@
 		ORDER BY C.comment_no
 	</select>
 	
-	<select id="countMyAnswersPaging" resultType="int">
+	<select id="myAnswersListCount" resultType="int">
 		SELECT COUNT(comment_no) 
 		FROM COMMENT
 		WHERE
@@ -147,7 +147,7 @@
 			comment_parent_no = 0
 	</select>
 	
-	<insert id="commentRegist">
+	<insert id="answerInsert">
 		INSERT INTO COMMENT (
 			board_no, 
 			user_no, 
@@ -161,7 +161,7 @@
 		)
 	</insert>
 	
-	<insert id="commentLike">
+	<insert id="answerLikeInsert">
 		INSERT INTO COMMENT_LIKE (
 			user_no, 
 			comment_no
@@ -171,7 +171,7 @@
 		)
 	</insert>
 	
-	<delete id="commenHate">
+	<delete id="answerLikeDelete">
 		DELETE FROM COMMENT_LIKE 
 		WHERE
 			user_no = #{userNo}
@@ -179,7 +179,7 @@
 			comment_no = #{commentNo}
 	</delete>
 
-	<select id="commentUpdate" resultMap="commentList">
+	<select id="answerUpdate" resultMap="commentList">
 		UPDATE COMMENT SET
 			comment_content = #{commentContent}
 		WHERE 
@@ -226,7 +226,7 @@
 			comment_parent_no = 0
 	</select>
 	
-	<select id="commentSelect" resultMap="commentList">
+	<select id="commentSelectOne" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
 			USER.user_id, 

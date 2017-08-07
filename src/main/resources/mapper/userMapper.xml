@@ -45,7 +45,7 @@
 	</update>
 	
 	
-	<insert id="userRegist">
+	<insert id="userInsert">
 		INSERT INTO USER (
 			user_id,
 			user_password,
@@ -64,14 +64,14 @@
 			user_id = #{userId}
 	</insert>
 
-	<select id="duplicationId" resultType="Integer" parameterType="String">
+	<select id="checkIdDuplication" resultType="Integer" parameterType="String">
 		SELECT COUNT(*)
 		FROM USER
 		WHERE 
 			user_id = #{userId}
 	</select>
 	
-	<select id="selectUser" resultType="map">
+	<select id="userSelect" resultType="map">
 		SELECT
 			user_id as username,
  			user_password as password,
@@ -84,7 +84,7 @@
 			USER.user_id = #{userId} 
 	</select>
 	
-	<select id="selectNaverUser" resultType="int">
+	<select id="naverUserselect" resultType="int">
 		SELECT COUNT(1)
 		FROM USER
 		WHERE

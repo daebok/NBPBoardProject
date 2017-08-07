@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Alias("comment")
-public class CommentModel {
+public class Comment {
 	/* 답변 번호 */
 	private int commentNo;
 	/* 답변 내용 */
