@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.comment.model.CommentModel;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.security.UserSession;
+import com.hyunhye.security.UserSessionUtils;
 
 @Controller
 @RequestMapping("comment")
@@ -34,7 +34,7 @@ public class CommentController {
 		service.commentRegist(commentModel);
 
 		/* 세션에 저장된 사용자 정보 */
-		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 
 		model.addAttribute("comment", service.commentLastSelect());
 
@@ -45,7 +45,7 @@ public class CommentController {
 	@RequestMapping("list")
 	public String commentList(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
-		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 		model.addAttribute("comment", service.commentListAll(boardNo));
 
 		return "board/answer";
@@ -55,7 +55,7 @@ public class CommentController {
 	@RequestMapping("list/tab")
 	public String commentListTab(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
-		model.addAttribute("user", UserSession.currentUserInfo());
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 		model.addAttribute("comment", service.commentListTabAll(boardNo, tab));
 
 		return "board/answer-tab";

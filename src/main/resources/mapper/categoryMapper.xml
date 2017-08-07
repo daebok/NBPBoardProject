@@ -15,9 +15,9 @@
 	<select id="categorySelectList" resultMap="categoryList">
 		SELECT 
 			category_item,
-			category_no
+			category_no,
+			category_enabled
 		FROM CATEGORY
-		WHERE category_enabled = 1
 	</select>
 
 	<!-- 카테고리 추가하기 -->

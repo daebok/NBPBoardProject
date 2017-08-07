@@ -31,7 +31,7 @@ public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 		int userNo = service.checkUser(boardNo);
 
 		/* 현재 로그인 중인 아이디와 게시글 작성자와 비교하여 잘못된 경우 다시 목록으로 이동 */
-		if (!UserSession.hasRole("ROLE_ADMIN") && UserSession.currentUserNo() != userNo) {
+		if (!UserSessionUtils.hasRole("ROLE_ADMIN") && UserSessionUtils.currentUserNo() != userNo) {
 			return false;
 		}
 		return true;

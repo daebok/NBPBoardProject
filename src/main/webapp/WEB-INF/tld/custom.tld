@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>Category List</description>
+	<display-name>CommonUtil functions</display-name>
+	<tlib-version>1</tlib-version>
+	<short-name>category</short-name>
+
+	<tag>
+		<description>Category List</description>
+		<name>category</name>
+		<tag-class>com.hyunhye.taglib.CategoryListTag</tag-class>
+	</tag>
+</taglib>
+
+

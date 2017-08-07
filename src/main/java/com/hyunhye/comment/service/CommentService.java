@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.comment.model.CommentModel;
 import com.hyunhye.comment.repository.CommentRepository;
-import com.hyunhye.security.UserSession;
+import com.hyunhye.security.UserSessionUtils;
 
 @Service
 public class CommentService {
@@ -18,7 +18,7 @@ public class CommentService {
 
 	/* 답변 등록 */
 	public void commentRegist(CommentModel commentModel) {
-		commentModel.setUserNo(UserSession.currentUserNo());
+		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 
 		if (commentModel.getCommentNo() != 0) {
 			commentModel.setCommentParentNo(commentModel.getCommentNo());
@@ -31,7 +31,7 @@ public class CommentService {
 	/* 답변 리스트 */
 	public List<CommentModel> commentListAll(int boardNo) {
 		CommentModel commentModel = new CommentModel();
-		commentModel.setUserNo(UserSession.currentUserNo());
+		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 		commentModel.setBoardNo(boardNo);
 
 		return repository.commentListAll(commentModel);
@@ -84,29 +84,29 @@ public class CommentService {
 
 	/* 답변 좋아요 */
 	public void commentLike(CommentModel model) {
-		model.setUserNo(UserSession.currentUserNo());
+		model.setUserNo(UserSessionUtils.currentUserNo());
 		repository.commentLike(model);
 	}
 
 	/* 답변 좋아요 취소 */
 	public void commenHate(CommentModel model) {
-		model.setUserNo(UserSession.currentUserNo());
+		model.setUserNo(UserSessionUtils.currentUserNo());
 		repository.commenHate(model);
 	}
 
 	public List<CommentModel> selectMyAnswers(Criteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.selectMyAnswers(cri);
 	}
 
 	public int countMyAnswersPaging(Criteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.countMyAnswersPaging(cri);
 	}
 
 	public List<CommentModel> commentListTabAll(int boardNo, int tab) {
 		CommentModel commentModel = new CommentModel();
-		commentModel.setUserNo(UserSession.currentUserNo());
+		commentModel.setUserNo(UserSessionUtils.currentUserNo());
 		commentModel.setBoardNo(boardNo);
 		commentModel.setTab(tab);
 
@@ -114,7 +114,7 @@ public class CommentService {
 	}
 
 	public List<CommentModel> answersLikedSelectList(Criteria cri) {
-		cri.setUserNo(UserSession.currentUserNo());
+		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.answersLikedSelectList(cri);
 	}
 

@@ -24,6 +24,11 @@
 					var form = $('.file')[0];
 					var formData = new FormData(form);
 					for (var index = files.length - 1; index >= 0; index--) {
+						if(  files[index].size > 10485760 ) {
+							alert('10MB가 넘는 파일은 업로드 할 수 없습니다!!');
+							$('.file').val('');
+							continue;
+						}
 						formData.append('files', files[index]);
 						
 						var str = "<div class='list-group-item' id='file-list-"+index+"'>";
@@ -92,6 +97,11 @@
 	$(".file").on("change", function(event) {
 		$(".newUploadedList > * ").remove();
 		for(var index = 0 ; index < $(".file")[0].files.length; index++) {
+			if( $(this)[0].files[index].size > 10485760 ) {
+				alert('10MB가 넘는 파일은 업로드 할 수 없습니다!!');
+				$(this).val('');
+				break;
+			}
 			var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 			str += "<div class='list-1'>" + $(".file")[0].files[index].name +"</div>";
 			str += "<div class='list-2'>" + $(".file")[0].files[index].size + " bytes </div>";
@@ -121,11 +131,7 @@
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
-					<select name="categoryNo" id="category">
-						<c:forEach var="category" items="${list}">
-							<option value="${category.categoryNo}">${category.categoryItem}</option>
-						</c:forEach>
-					</select> 
+					<category:category />
 				</div>
 				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">${model.boardContent}</textarea>
 				<div class="form-group">

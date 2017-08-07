@@ -80,6 +80,7 @@ $(document).ready(
 			}
 		});
 });
+
 </script>
 </head>
 <body>
