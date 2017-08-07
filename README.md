@@ -17,5 +17,6 @@
 - http://localhost:8080/board/
 
 ## test account
-- ID: test
-- PASSWORD: 1234
+관리자 계정
+- ID: 123
+- PASSWORD: 123
