@@ -83,6 +83,11 @@
 		WHERE
 			USER.user_id = #{userId} 
 	</select>
-
-
+	
+	<select id="selectNaverUser" resultType="int">
+		SELECT COUNT(1)
+		FROM USER
+		WHERE
+			USER.user_id = #{userId} 
+	</select>
 </mapper>

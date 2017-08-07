@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.hyunhye.user.model.UserModelDetails;
 
 /* 현재 시큐리티에 저장된 사용자 정보 가져오는 클래스 */
-public class UserSession {
+public class UserSessionUtils {
 
 	public static String currentUserName() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

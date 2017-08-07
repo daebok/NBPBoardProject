@@ -24,6 +24,9 @@
 			document.form.submit();
 		});
 	});
+	function do_login(){
+		document.loginForm.submit();
+	}
 </script>
 </head>
 <body>
@@ -32,7 +35,7 @@
 	
 	<div class="container">
 		<div class="container-fluid">
-			<form:form name="form" method="post" class="form-horizontal">
+			<form:form name="form" action="/loginProcess" method="post" class="form-horizontal">
 				<c:if test="${param.error != null}">
 					<p>아이디와 비밀번호가 잘못되었습니다.</p>
 				</c:if>
@@ -55,8 +58,15 @@
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="button" id="loginButton" class="btn btn-default">Log In</button>
 					</div>
-				</div>
+				</div>			
+				
 			</form:form>
+			<!-- 네이버 아이디로 로그인 -->
+			<div style="margin-top: 10px" class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<a href="${url}"><img src="<c:url value="/resources/common/img/naverid_login_button.png" />" height=34 /></a>
+				</div>
+			</div>
 		</div>
 	</div>
 	

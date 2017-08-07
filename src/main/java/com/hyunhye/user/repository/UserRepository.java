@@ -24,4 +24,7 @@ public interface UserRepository {
 	public void userWithBoardDelete(UserModel userModel);
 
 	public void onlyUserDelete(UserModel userModel);
+
+	public int selectNaverUser(String email);
+
 }
