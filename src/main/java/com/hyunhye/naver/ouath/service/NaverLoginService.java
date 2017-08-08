@@ -1,6 +1,8 @@
 package com.hyunhye.naver.ouath.service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -11,6 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -26,12 +29,27 @@ import com.hyunhye.naver.ouath.model.NaverUser;
 @Service
 public class NaverLoginService {
 	Logger logger = LoggerFactory.getLogger(NaverLoginService.class);
-	private static final String CLIENT_ID = "NNj7dSxNfBX35e9x8k3R";
-	private static final String CLIENT_SECRET = "jcMBUQVYT4";
-	private static final String REDIRECT_URI = "http://localhost:8004/user/callback";
-	private static final String SESSION_STATE = "oauth_state";
-	private static final String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
-	private static final String DELETE_API_URL = "https://nid.naver.com/oauth2.0/token?grant_type=delete&";
+	private static final String naverLoginropertiesFile = "classpath:config/naver-login.properties";
+	private static String CLIENT_ID;
+	private static String CLIENT_SECRET;
+	private static String REDIRECT_URI;
+	private static String SESSION_STATE;
+	private static String PROFILE_API_URL;
+
+	static {
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream(ResourceUtils.getFile(naverLoginropertiesFile)));
+			CLIENT_ID = new String(properties.getProperty("CLIENT_ID").getBytes("ISO-8859-1"), "UTF-8");
+			CLIENT_SECRET = new String(properties.getProperty("CLIENT_SECRET").getBytes("ISO-8859-1"), "UTF-8");
+			REDIRECT_URI = new String(properties.getProperty("REDIRECT_URI").getBytes("ISO-8859-1"), "UTF-8");
+			SESSION_STATE = new String(properties.getProperty("SESSION_STATE").getBytes("ISO-8859-1"), "UTF-8");
+			PROFILE_API_URL = new String(properties.getProperty("PROFILE_API_URL").getBytes("ISO-8859-1"), "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public String getAuthorizationUrl(HttpSession session) {
 

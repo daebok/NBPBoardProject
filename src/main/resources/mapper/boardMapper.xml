@@ -396,4 +396,5 @@
 	<sql id="date_search">
 		DATE(B.board_date) = #{date}
 	</sql>
+
 </mapper>

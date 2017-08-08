@@ -11,16 +11,26 @@
 }
 </style>
 <script>
-/* (function poll(){ 
+
+function userInfo() {
 	$.ajax({
-		url: 'message-alarm', 
-		success: function(data){ 
-			$('.message-alarm').css('color','#FFBB00'); 
-		}, 
-		dataType: "json", complete: poll, timeout: 30000 }); 
-})();
- */
+		type : "GET",
+		url : "/user/info",
+		success : function(result) {
+			$("#user-info-dialog").html(result);
+		}
+	});
+	$("#user-info-dialog").dialog({
+			autoOpen: true,
+			modal: true,
+			resizable:false,
+			position: { my: "left", at: "right", of: "#user-info-button" },
+			title: "회원 정보"
+	});
+}
+
 </script>
+
 <div class="container"  style="margin-top:40px;">
 	<div class="container-fluid" >
 		<h1>
@@ -36,7 +46,8 @@
 					</div>
 					<div class="pull-left wrapper-2">
 						<sec:authentication property="name"/>님 환영합니다.
-						<div class="message-alarm glyphicon glyphicon-bell" style="color:#888"></div>
+						<a href='javascript:userInfo()'  class="glyphicon glyphicon-user" id="user-info-button" style="color:black"></a>
+						<div id="user-info-dialog"></div>
 					</div>
 				</sec:authorize>
 			</div>
@@ -62,7 +73,6 @@
 		<div class="pull-right">
 			<a href="<c:url value='/board/ask'/>" id="question" class="btn btn-primary">? Ask Question</a>
 			<a href="<c:url value='/board/list'/>" id="list" class="btn btn-primary">Questions</a>
-			<a href="<c:url value='/test'/>" id="list" class="btn btn-primary">Websocket Test</a>
 		</div>
 	</div>
 	<hr>

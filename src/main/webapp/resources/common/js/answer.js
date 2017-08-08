@@ -3,25 +3,6 @@ var header = $("meta[name='_csrf_header']").attr("content");
 var socket = new SockJS('/stomp');
 var stompClient = Stomp.over(socket);
 
-/* 웹 소켓 */
-/*stompClient.connect({}, function(frame) {
-	$('#console').append('Connected: ' + frame + '<br>');
-	stompClient.subscribe('/user/'+${user.userName}, function(message) {
-		$('#console').append(message.body + '<br>');
-	});
-});
-
-function disconnect() {
-	if (stompClient != null) {
-		stompClient.disconnect();
-	}
-	$('#console').append('Disconnected<br>');
-}
-
-function messageSend() {
-	stompClient.send("/stomp", {}, $('#message').val());
-}*/
-
 /* 답변 달기 */
 $(document).on("click","#comment-button", function(event) {
 	event.preventDefault();
@@ -44,8 +25,7 @@ $(document).on("click","#comment-button", function(event) {
 				$("#listComment").append(result);
 				$('.summernote').summernote('code', '');
 				
-				/* 웹 소켓 */
-				//messageSend(data);
+				
 			}
 		});
 	} else if ($(this).html() == 'Modify') {

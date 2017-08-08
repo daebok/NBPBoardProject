@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
 import com.hyunhye.user.model.User;
@@ -78,5 +79,17 @@ public class UserService {
 
 		SecurityContextHolder.getContext().setAuthentication(
 			new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+	}
+
+	/* 현재 비밀번호 확인 */
+	public boolean passwordCheck(User model) {
+		return encoder.matches(model.getUserPassword(), UserSessionUtils.currentUserPassword());
+	}
+
+	/* 비밀번호 변경 */
+	public void passwordUpdate(User model) {
+		model.setUserPassword(encoder.encode(model.getUserPassword()));
+		model.setUserNo(UserSessionUtils.currentUserNo());
+		userRepository.passwordUpdate(model);
 	}
 }

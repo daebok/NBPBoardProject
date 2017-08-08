@@ -8,12 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hyunhye.board.model.Home;
 import com.hyunhye.board.service.BoardService;
+import com.hyunhye.comment.service.CommentService;
 
 @Controller
 public class HomeController {
 
 	@Autowired
 	public BoardService boardService;
+
+	@Autowired
+	public CommentService commentService;
 
 	/**
 	 * 게시글 목록을 가지고 홈 화면으로 이동
@@ -38,8 +42,4 @@ public class HomeController {
 		return "home_top";
 	}
 
-	@RequestMapping("message-alarm")
-	public String homeMessageAlarm(Model model) {
-		return "home_top";
-	}
 }

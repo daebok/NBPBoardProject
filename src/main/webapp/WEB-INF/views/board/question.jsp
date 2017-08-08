@@ -103,22 +103,25 @@ $(document).ready(
 				<span class="label label-warning">${model.categoryItem} </span>
 				<h1>${model.boardTitle}</h1>
 				<p>${model.boardContent}</p>
-				<div class="panel panel-default">
-					<div class="list-group">
-						<div class="list-group-item">
-							<div class="list-1"><b>파일명</b></div>
-							<div class="list-2"><b>크기</b></div>
-						</div>
-						<c:forEach var="attach" items="${attach}">
-							<div class="uploadedList">
+				<c:if test="${not empty attach}">
+					<div class="panel panel-default">
+						<div class="list-group">
 								<div class="list-group-item">
-									<div class="list-1"><a href='/board/downloadFile?fileName=${attach.fileName}'>${attach.fileOriginName}</a></div>
-									<div class="list-2">${attach.fileSize} bytes</div>
+									<div class="list-1"><b>파일명</b></div>
+									<div class="list-2"><b>크기</b></div>
 								</div>
-							</div>
-						</c:forEach>
+							
+							<c:forEach var="attach" items="${attach}">
+								<div class="uploadedList">
+									<div class="list-group-item">
+										<div class="list-1"><a href='/board/downloadFile?fileName=${attach.fileName}'>${attach.fileOriginName}</a></div>
+										<div class="list-2">${attach.fileSize} bytes</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
-				</div>
+				</c:if>
 				<hr>
 				<div class="pull-right">
 					<c:if test="${user.username == model.userId}">

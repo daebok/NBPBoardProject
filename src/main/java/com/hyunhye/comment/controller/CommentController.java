@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.security.UserSessionUtils;
+import com.hyunhye.common.UserSessionUtils;
 
 @Controller
 @RequestMapping("comment")

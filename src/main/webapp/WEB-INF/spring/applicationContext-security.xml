@@ -59,7 +59,7 @@
 	<beans:bean id="userLoginSuccessHandler" class="com.hyunhye.security.UserLoginSuccessHandler"></beans:bean>
 	<beans:bean id="userLoginFailureHandler" class="com.hyunhye.security.UserLoginFailureHandler"></beans:bean>
  
-	<authentication-manager>
+	<authentication-manager  erase-credentials="false">
 		<authentication-provider user-service-ref="userServiceManager">
 		<password-encoder ref="passwordEncoder"/>
 		</authentication-provider>

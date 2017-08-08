@@ -29,4 +29,6 @@ public interface UserRepository {
 
 	public int naverUserselect(String email);
 
+	public void passwordUpdate(User model);
+
 }

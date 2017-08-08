@@ -9,7 +9,7 @@ import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.repository.NoticeRepository;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
-import com.hyunhye.security.UserSessionUtils;
+import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.user.model.User;
 import com.hyunhye.user.repository.UserRepository;
 

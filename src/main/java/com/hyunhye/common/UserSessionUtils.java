@@ -1,4 +1,4 @@
-package com.hyunhye.security;
+package com.hyunhye.common;
 
 import java.util.Collection;
 
@@ -27,6 +27,12 @@ public class UserSessionUtils {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserModelDetails user = (UserModelDetails)authentication.getPrincipal();
 		return user.getUsername();
+	}
+
+	public static String currentUserPassword() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserModelDetails user = (UserModelDetails)authentication.getPrincipal();
+		return user.getPassword();
 	}
 
 	public static UserModelDetails currentUserInfo() {

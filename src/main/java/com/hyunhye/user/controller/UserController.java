@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
 import com.hyunhye.user.model.User;
@@ -48,7 +51,6 @@ public class UserController {
 	 * 로그인 페이지 이동
 	 * @param session
 	 * @param model
-	 * @return
 	 */
 	@RequestMapping("loginPage")
 	public String goLoginPage(HttpSession session, Model model) {
@@ -86,7 +88,6 @@ public class UserController {
 	/**
 	 * 회원 등록
 	 * @param model
-	 * @return
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
 	public String userInsert(@ModelAttribute User model) {
@@ -97,10 +98,45 @@ public class UserController {
 	/**
 	 * 아이디 중복 확인
 	 * @param userId
-	 * @return
 	 */
 	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
 	public @ResponseBody int checkIdDuplication(@RequestBody String userId) {
 		return service.checkIdDuplication(userId);
+	}
+
+	/**
+	 * 내 정보보기
+	 * @param model
+	 */
+	@RequestMapping("info")
+	public String userinfo(Model model) {
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		return "user/user-info";
+	}
+
+	/**
+	 * 비밀번호 변경 페이지로 이동
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("password")
+	public String goPasswordChangePage(Model model) {
+		return "user/password-change";
+	}
+
+	/**
+	 * 비밀번호 변경 페이지에서, 현재 비밀번호와 일치하는지 확인
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "password/check", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> passwordCheck(@ModelAttribute User model) {
+		return new ResponseEntity<Boolean>(service.passwordCheck(model), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "password/change", method = RequestMethod.POST)
+	public String passwordUpdate(@ModelAttribute User model) {
+		service.passwordUpdate(model);
+		return "redirect:/board";
 	}
 }

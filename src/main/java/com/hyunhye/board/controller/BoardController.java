@@ -28,7 +28,7 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.board.service.UploadService;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.security.UserSessionUtils;
+import com.hyunhye.common.UserSessionUtils;
 
 @RequestMapping("board")
 @Controller

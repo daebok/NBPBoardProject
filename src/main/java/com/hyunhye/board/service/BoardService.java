@@ -26,7 +26,7 @@ import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
-import com.hyunhye.security.UserSessionUtils;
+import com.hyunhye.common.UserSessionUtils;
 
 @Service
 public class BoardService {

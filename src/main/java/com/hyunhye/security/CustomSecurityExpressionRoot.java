@@ -8,6 +8,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.WebSecurityExpressionRoot;
 
 import com.hyunhye.board.service.BoardService;
+import com.hyunhye.common.UserSessionUtils;
 
 public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 

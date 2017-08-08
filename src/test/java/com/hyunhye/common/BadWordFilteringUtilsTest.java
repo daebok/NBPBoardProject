@@ -28,7 +28,7 @@ public class BadWordFilteringUtilsTest {
 		Properties properties = new Properties();
 		FileInputStream in = null;
 		try {
-			in = new FileInputStream(ResourceUtils.getFile("classpath:config/badwords.properties"));
+			in = new FileInputStream(ResourceUtils.getFile("C:/Users/NAVER/Desktop/badwords.properties"));
 			properties.load(in);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,11 +47,12 @@ public class BadWordFilteringUtilsTest {
 
 		System.out.println(badWords);
 
-		badWords.concat(",1");
+		badWords.concat(",10");
 
 		properties.setProperty("badWords", badWords);
 		try {
-			properties.store(new FileOutputStream(ResourceUtils.getFile("classpath:config/badwords.properties")), "");
+			properties.store(new FileOutputStream(ResourceUtils.getFile("C:/Users/NAVER/Desktop/badwords.properties")),
+				"");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

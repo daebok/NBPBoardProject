@@ -13,11 +13,13 @@ import java.util.stream.Collectors;
 import org.springframework.util.ResourceUtils;
 
 public class BadWordFilteringUtils {
+	/** 비속어 리스트가 담긴 properties 파일 **/
 	private static String badwordsPropertiesFile = "classpath:config/badwords.properties";
 
 	/** properties **/
 	private static Properties properties = readProperties();
 
+	/** badWords String **/
 	private static String badWords;
 
 	/** badWords List **/
@@ -30,7 +32,10 @@ public class BadWordFilteringUtils {
 	public static Properties readProperties() {
 		properties = new Properties();
 		try {
-			properties.load(new FileInputStream(ResourceUtils.getFile(badwordsPropertiesFile)));
+			FileInputStream in = new FileInputStream(ResourceUtils.getFile(badwordsPropertiesFile));
+			properties.load(in);
+
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +62,7 @@ public class BadWordFilteringUtils {
 	/**
 	 * 비속어 체크
 	 * @param content
-	 * @return 비속어 리스트
+	 * @return 게시글에 포함된 비속어 리스트
 	 */
 	public static List<String> badWordFilteringContainsStream(String content) {
 		List<String> list = badWordsArray.stream()
@@ -68,15 +73,22 @@ public class BadWordFilteringUtils {
 		return list;
 	}
 
+	/**
+	 * 관리자에 의해 비속어 추가
+	 * @param badWord
+	 */
 	public static void badWordInsert(String badWord) {
 		badWords.concat("," + badWord);
 		properties.setProperty("badWords", badWords);
+		FileOutputStream out = null;
 		try {
-			properties.store(new FileOutputStream(ResourceUtils.getFile(badwordsPropertiesFile)), "");
+			out = new FileOutputStream(ResourceUtils.getFile(badwordsPropertiesFile));
+			properties.storeToXML(out, "");
+
+			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
