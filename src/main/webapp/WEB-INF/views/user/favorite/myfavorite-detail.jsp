@@ -147,7 +147,7 @@ $(document).ready(
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 
 	<div class="container">
 		<div class="container-fluid">
@@ -210,10 +210,10 @@ $(document).ready(
 		</div>
 
 		<!-- answer -->
-		<%@include file="../board/answer.jsp"%>
+		<%@include file="../../board/answer.jsp"%>
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>

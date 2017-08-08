@@ -23,7 +23,7 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
-import com.hyunhye.user.model.User;
+import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
 
 @Controller
@@ -44,7 +44,7 @@ public class UserController {
 	 */
 	@RequestMapping("signup")
 	public String goSignupPage() {
-		return "user/signup";
+		return "user/user/signup";
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class UserController {
 
 		/* 생성한 인증 URL을 View로 전달 */
 		model.addAttribute("url", naverAuthUrl);
-		return "user/login";
+		return "user/user/login";
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class UserController {
 	 * @param model
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
-	public String userInsert(@ModelAttribute User model) {
+	public String userInsert(@ModelAttribute UserModel model) {
 		service.userInsert(model);
 		return "redirect:/user/loginPage";
 	}
@@ -111,7 +111,7 @@ public class UserController {
 	@RequestMapping("info")
 	public String userinfo(Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		return "user/user-info";
+		return "user/user/user-info";
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class UserController {
 	 */
 	@RequestMapping("password")
 	public String goPasswordChangePage(Model model) {
-		return "user/password-change";
+		return "user/user/password-change";
 	}
 
 	/**
@@ -130,12 +130,12 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "password/check", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> passwordCheck(@ModelAttribute User model) {
+	public ResponseEntity<Boolean> passwordCheck(@ModelAttribute UserModel model) {
 		return new ResponseEntity<Boolean>(service.passwordCheck(model), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "password/change", method = RequestMethod.POST)
-	public String passwordUpdate(@ModelAttribute User model) {
+	public String passwordUpdate(@ModelAttribute UserModel model) {
 		service.passwordUpdate(model);
 		return "redirect:/board";
 	}

@@ -53,7 +53,7 @@ $(document).ready(function() {
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 
 	<div class="container">
 		<form:form name="form" method="post" class="form-horizontal" id="category-add-form">
@@ -74,6 +74,6 @@ $(document).ready(function() {
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html> 

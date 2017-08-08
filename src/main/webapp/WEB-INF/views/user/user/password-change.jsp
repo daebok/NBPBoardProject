@@ -62,7 +62,7 @@ function checkPwd() {
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 	
 	<div class="container">
 		<div style="margin:40px;">
@@ -108,6 +108,6 @@ function checkPwd() {
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>

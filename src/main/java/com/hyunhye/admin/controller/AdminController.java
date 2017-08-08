@@ -15,7 +15,7 @@ import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.common.BadWordFilteringUtils;
-import com.hyunhye.user.model.User;
+import com.hyunhye.user.model.UserModel;
 
 @Controller
 @RequestMapping("admin")
@@ -42,7 +42,7 @@ public class AdminController {
 	@RequestMapping("category")
 	public String categorySelectList(Model model) {
 		model.addAttribute("categoryList", adminService.categorySelectList());
-		return "admin/categoryManage";
+		return "admin/category/category-manage";
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class AdminController {
 	@RequestMapping("user")
 	public String userSelectList(Model model) {
 		model.addAttribute("userList", adminService.userSelectList());
-		return "admin/userManage";
+		return "admin/user/user-manage";
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("userModify")
-	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute User userModel) {
+	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute UserModel userModel) {
 		adminService.userAuthorityUpdate(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -125,7 +125,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("userDelete")
-	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute User userModel) {
+	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute UserModel userModel) {
 		adminService.userWithBoardDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -136,7 +136,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("onlyUserDelete")
-	public ResponseEntity<String> onlyUserDelete(@ModelAttribute User userModel) {
+	public ResponseEntity<String> onlyUserDelete(@ModelAttribute UserModel userModel) {
 		adminService.onlyUserDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -149,7 +149,7 @@ public class AdminController {
 	@RequestMapping("notice")
 	public String notice(Model model) {
 		model.addAttribute("noticeList", adminService.noticeListAll());
-		return "admin/notice";
+		return "admin/notice/notice";
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class AdminController {
 	 */
 	@RequestMapping("noticeRegist")
 	public String goNoticeInsertPage() {
-		return "admin/noticeManage";
+		return "admin/notice/notice-regist";
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class AdminController {
 	@RequestMapping("notice/modifyPage")
 	public String goNoticeUpdatePage(Notice noticeModel, Model model) {
 		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
-		return "admin/noticeModify";
+		return "admin/notice/notice-modify";
 	}
 
 	/**

@@ -8,10 +8,10 @@
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid">
-			<%@include file="../common/myquestions-search.jsp"%>
+			<%@include file="../../common/myquestions-search.jsp"%>
 			<div class="row">
 				<b>My Questions</b>&nbsp;
 				<c:choose>
@@ -90,6 +90,6 @@
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>

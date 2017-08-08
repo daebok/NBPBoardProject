@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
-import com.hyunhye.user.model.User;
+import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.repository.UserRepository;
 
 @Service
@@ -31,7 +31,7 @@ public class UserService {
 	private BCryptPasswordEncoder encoder;
 
 	/* 회원 등록 */
-	public void userInsert(User model) {
+	public void userInsert(UserModel model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		userRepository.userInsert(model);
 	}
@@ -42,7 +42,7 @@ public class UserService {
 	}
 
 	/* 비밀번호 변경 */
-	public void userPasswordChange(User model) {
+	public void userPasswordChange(UserModel model) {
 		userRepository.userPasswordChange(model);
 	}
 
@@ -60,7 +60,7 @@ public class UserService {
 		}
 
 		/* 회원 가입 */
-		User userModel = new User();
+		UserModel userModel = new UserModel();
 		userModel.setUserId(naverUser.getEmail());
 		userModel.setUserName(naverUser.getName());
 
@@ -82,12 +82,12 @@ public class UserService {
 	}
 
 	/* 현재 비밀번호 확인 */
-	public boolean passwordCheck(User model) {
+	public boolean passwordCheck(UserModel model) {
 		return encoder.matches(model.getUserPassword(), UserSessionUtils.currentUserPassword());
 	}
 
 	/* 비밀번호 변경 */
-	public void passwordUpdate(User model) {
+	public void passwordUpdate(UserModel model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		model.setUserNo(UserSessionUtils.currentUserNo());
 		userRepository.passwordUpdate(model);

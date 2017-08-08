@@ -5,30 +5,30 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.hyunhye.user.model.User;
+import com.hyunhye.user.model.UserModel;
 
 @Repository
 public interface UserRepository {
 
 	/** 회원등록  **/
-	public void userInsert(User model);
+	public void userInsert(UserModel model);
 
 	public int checkIdDuplication(String id);
 
 	public Map<String, Object> userSelect(String userId);
 
-	public void userPasswordChange(User model);
+	public void userPasswordChange(UserModel model);
 
-	public List<User> userSelectList();
+	public List<UserModel> userSelectList();
 
-	public void userAuthorityUpdate(User userModel);
+	public void userAuthorityUpdate(UserModel userModel);
 
-	public void userWithBoardDelete(User userModel);
+	public void userWithBoardDelete(UserModel userModel);
 
-	public void onlyUserDelete(User userModel);
+	public void onlyUserDelete(UserModel userModel);
 
 	public int naverUserselect(String email);
 
-	public void passwordUpdate(User model);
+	public void passwordUpdate(UserModel model);
 
 }

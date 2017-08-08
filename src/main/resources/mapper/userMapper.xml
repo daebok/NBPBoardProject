@@ -5,11 +5,12 @@
 
 <mapper namespace="com.hyunhye.user.repository.UserRepository">
 
-	<resultMap id="userList" type="userDetails">
+	<resultMap id="userList" type="user">
 		<result property="userNo" column="user_no" />
 		<result property="userId" column="user_id" />
 		<result property="userPassword" column="user_password" />
 		<result property="userName" column="user_name" />
+		<result property="userAuthority" column="user_authority" />
 	</resultMap>
 	
 		

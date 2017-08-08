@@ -18,7 +18,7 @@ $(document).on('click','#delete',function() {
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 	
 	<div class="container">
 		<div class="container-fluid">
@@ -37,6 +37,6 @@ $(document).on('click','#delete',function() {
 	</div>
 		
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>

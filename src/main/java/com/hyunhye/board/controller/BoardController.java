@@ -54,7 +54,7 @@ public class BoardController {
 	public String goAskPage(Model model) {
 		/* 카테고리 목록  불러오기 */
 		model.addAttribute("list", boardService.categoryListAll());
-		return "/board/ask";
+		return "/board/board-regist";
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class BoardController {
 		/* 공지사항 */
 		model.addAttribute("notice", adminService.noticeListAll());
 
-		return "board/list";
+		return "board/board-list";
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class BoardController {
 
 		model.addAttribute("section", section);
 
-		return "board/question";
+		return "board/board-detail";
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class BoardController {
 
 		/* 첨부된 파일 */
 		model.addAttribute("attach", boardService.fileSelect(boardNo));
-		return "board/modify";
+		return "board/board-modify";
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class BoardController {
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myquestions";
+		return "user/questions/myquestions";
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class BoardController {
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myquestions";
+		return "user/questions/myquestions";
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class BoardController {
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myanswers";
+		return "user/questions/myanswers";
 	}
 
 	/**
@@ -316,12 +316,12 @@ public class BoardController {
 		model.addAttribute("check", 1);
 
 		/* 답변 달린 것만임을 알려주는 변수 */
-		model.addAttribute("like", 1);
+		model.addAttribute("like", 0);
 
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myanswers";
+		return "user/questions/myanswers";
 	}
 
 	/**
@@ -368,7 +368,7 @@ public class BoardController {
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
-		return "user/myfavorite";
+		return "user/favorite/myfavorite-list";
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class BoardController {
 
 		/* 즐겨찾기 된 해당 게시글의 메모 */
 		model.addAttribute("memo", boardService.bookmarkMemoSelect(boardNo));
-		return "user/memo";
+		return "user/favorite/myfavorite-detail";
 	}
 
 	/**
@@ -419,7 +419,7 @@ public class BoardController {
 	@RequestMapping("notice")
 	public String noticeSelectOne(Notice noticeModel, Model model) {
 		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
-		return "admin/noticeView";
+		return "admin/notice/notice-view";
 	}
 
 	/**
@@ -428,7 +428,12 @@ public class BoardController {
 	 */
 	@RequestMapping("contactUs")
 	public String goContactUsPage() {
-		return "board/contact-us";
+		return "board/contact-us/contact-us";
+	}
+
+	@RequestMapping("contactUsRegist")
+	public String goContactUsInsertPage() {
+		return "board/contact-us/contact-regist";
 	}
 
 }

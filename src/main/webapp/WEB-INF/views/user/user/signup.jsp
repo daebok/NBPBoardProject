@@ -97,7 +97,7 @@
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../common/header.jsp"%>
+	<%@include file="../../common/header.jsp"%>
 	
 	<div class="container">
 		<div class="container-fluid">
@@ -140,6 +140,6 @@
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../common/footer.jsp"%>
+	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>

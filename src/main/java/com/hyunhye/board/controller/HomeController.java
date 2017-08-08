@@ -39,7 +39,7 @@ public class HomeController {
 	@RequestMapping("board/home")
 	public String boardTop10SelectList(@ModelAttribute Home homeModel, Model model) {
 		model.addAttribute("model", boardService.boardTop10SelectList(homeModel));
-		return "home_top";
+		return "home-top";
 	}
 
 }

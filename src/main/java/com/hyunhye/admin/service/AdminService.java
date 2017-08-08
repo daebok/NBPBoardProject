@@ -10,7 +10,7 @@ import com.hyunhye.admin.repository.NoticeRepository;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.common.UserSessionUtils;
-import com.hyunhye.user.model.User;
+import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.repository.UserRepository;
 
 @Service
@@ -53,21 +53,21 @@ public class AdminService {
 
 	/** 회원 관리 **/
 	/* 회원 정보 리스트 */
-	public List<User> userSelectList() {
+	public List<UserModel> userSelectList() {
 		return userRepository.userSelectList();
 	}
 
 	/* 회원 정보 변경 */
-	public void userAuthorityUpdate(User userModel) {
+	public void userAuthorityUpdate(UserModel userModel) {
 		userRepository.userAuthorityUpdate(userModel);
 	}
 
 	/* 회원 삭제 */
-	public void userWithBoardDelete(User userModel) {
+	public void userWithBoardDelete(UserModel userModel) {
 		userRepository.userWithBoardDelete(userModel);
 	}
 
-	public void onlyUserDelete(User userModel) {
+	public void onlyUserDelete(UserModel userModel) {
 		userRepository.onlyUserDelete(userModel);
 	}
 
