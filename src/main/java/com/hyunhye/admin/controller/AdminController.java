@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Category;
+import com.hyunhye.board.model.Criteria;
+import com.hyunhye.board.model.PageMaker;
+import com.hyunhye.board.service.BoardService;
 import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.user.model.UserModel;
 
@@ -24,13 +27,26 @@ public class AdminController {
 	@Autowired
 	public AdminService adminService;
 
+	@Autowired
+	private BoardService boardService;
+
 	/**
 	 * 관리자 페이지로 이동
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("admin")
-	public String goAdminPage(Model model) {
+	public String goAdminPage(@ModelAttribute Criteria cri, Model model) {
+		model.addAttribute("contact", boardService.contactSelectListAll(cri));
+
+		/* 페이징 계산하기 */
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(boardService.contactSelectListCount(cri));
+
+		/* 페이징 정보 */
+		model.addAttribute("pageMaker", pageMaker);
+
 		return "admin/admin";
 	}
 

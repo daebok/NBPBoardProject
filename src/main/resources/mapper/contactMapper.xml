@@ -35,6 +35,13 @@
 			contact_content,
 			contact_password
 		FROM CONTACT
+		ORDER BY
+			contact_no desc
+	</select>
+	
+	<select id="contactSelectListCount" resultType="int">
+		SELECT COUNT(contact_no) 
+		FROM CONTACT
 	</select>
 	
 	<select id="contactUsSelectOne" resultMap="contactList">
@@ -64,4 +71,9 @@
 			contact_password = #{contactPassword}
 	</select>
 	
+	<delete id="contactUsDelete">
+		DELETE FROM CONTACT
+		WHERE
+			contact_no = #{contactNo}
+	</delete>
 </mapper>

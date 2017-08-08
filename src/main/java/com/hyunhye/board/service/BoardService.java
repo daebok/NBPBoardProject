@@ -278,8 +278,12 @@ public class BoardService {
 		contactRepository.contactUsInsert(model);
 	}
 
-	public List<Contact> contactSelectListAll() {
-		return contactRepository.contactSelectListAll();
+	public int contactSelectListCount(Criteria cri) {
+		return contactRepository.contactSelectListCount(cri);
+	}
+
+	public List<Contact> contactSelectListAll(Criteria cri) {
+		return contactRepository.contactSelectListAll(cri);
 	}
 
 	public Contact contactUsSelectOne(Contact contactMoodel) {
@@ -293,4 +297,9 @@ public class BoardService {
 	public Integer contactUsPasswordCheck(Contact contactMoodel) {
 		return contactRepository.contactUsPasswordCheck(contactMoodel);
 	}
+
+	public void contactUsDelete(Contact contactMoodel) {
+		contactRepository.contactUsDelete(contactMoodel);
+	}
+
 }

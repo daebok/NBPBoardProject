@@ -4,12 +4,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>사용자정보</title>
-<style type="text/css">
-	.user-info{
-		width:250px;
-		height:100px;
-	}
-</style>
+	<style type="text/css">
+		.user-info{
+			width:250px;
+			height:100px;
+		}
+	</style>
 </head>
 <body>
 	<div class="user-info container">

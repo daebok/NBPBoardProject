@@ -10,25 +10,26 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#noticeButton").click(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-		var blank_pattern = /[\s]/g;
+		var special_pattern = /[\\<>]/gi;
 		
 		var title = $("#title").val();
 		var content = $("#content").val();
 		
-		if (blank_pattern.test(title) == true) {
+		if (title.replace(/\s|　/gi, '') == '') {
 			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
 		}
 		
 		if (special_pattern.test(title) == true) {
-			alert('제목에 특수문자는 사용할 수 없습니다.');
+			alert('제목에 \<>는 사용할 수 없습니다.');
 			$('#title').focus();
 			return false;
 		}
 
-		if (blank_pattern.test(content) == true) {
+		var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
+		htmlRemoveContent.replace(/&nbsp;/g, "");
+		if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
 			alert("내용를 입력하세요.");
 			$("#content").focus();
 			return;

@@ -425,29 +425,48 @@ public class BoardController {
 
 	/**
 	 * contactUs 페이지로 이동
+	 * 문의사항 리스트 보기
 	 * @return
 	 */
 	@RequestMapping("contactUs")
-	public String goContactUsPage(Model model) {
-		model.addAttribute("contact", boardService.contactSelectListAll());
+	public String goContactUsPage(@ModelAttribute Criteria cri, Model model) {
+		model.addAttribute("contact", boardService.contactSelectListAll(cri));
+
+		/* 페이징 계산하기 */
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(boardService.contactSelectListCount(cri));
+
+		/* 페이징 정보 */
+		model.addAttribute("pageMaker", pageMaker);
+
 		return "board/contact-us/contact-list";
 	}
 
 	/**
 	 * 문의하기 작성 페이지로 이동
-	 * @return
 	 */
 	@RequestMapping("contactUsRegist")
 	public String goContactUsInsertPage(Model model) {
 		return "board/contact-us/contact-regist";
 	}
 
+	/**
+	 * 문의하기 작성하기
+	 * @param model
+	 */
 	@RequestMapping("contactus/regist")
 	public String contactUsInsert(@ModelAttribute Contact model) {
 		boardService.contactUsInsert(model);
 		return "redirect:/board/contactUs";
 	}
 
+	/**
+	 * 문의하기 상세보기
+	 * @param contactMoodel
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("contactus/view")
 	public String contactUsSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
@@ -455,19 +474,43 @@ public class BoardController {
 		return "board/contact-us/contact-view";
 	}
 
+	/**
+	 * 문의하기에 비밀번호가 있나 확인
+	 * @param contactMoodel
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("contactus/password/is")
-	public ResponseEntity<Integer> contactUsPasswordSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
-		return new ResponseEntity<Integer>(boardService.contactUsPasswordSelectCount(contactMoodel), HttpStatus.OK);
+	public String contactUsPasswordSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
+		model.addAttribute("contact", contactMoodel.getContactNo());
+		return "board/contact-us/contact-password";
 	}
 
+	/**
+	 * 문의하기 비밀번호 확인 페이지로 이동
+	 * TODO 추후에 다이얼로그
+	 * @param contactMoodel
+	 * @param model
+	 */
 	@RequestMapping("contactus/password")
 	public String goContactUsPasswordCheckPage(@ModelAttribute Contact contactMoodel, Model model) {
 		model.addAttribute("contact", contactMoodel);
 		return "board/contact-us/contact-password";
 	}
 
+	/**
+	 * 해당 문의하기의 비밀번호 확인
+	 * @param contactMoodel
+	 * @param model
+	 */
 	@RequestMapping("contactus/password/check")
 	public ResponseEntity<Integer> contactUsPasswordCheck(@ModelAttribute Contact contactMoodel, Model model) {
 		return new ResponseEntity<Integer>(boardService.contactUsPasswordCheck(contactMoodel), HttpStatus.OK);
+	}
+
+	@RequestMapping("contactus/delete")
+	public String contactUsDelete(@ModelAttribute Contact contactMoodel) {
+		boardService.contactUsDelete(contactMoodel);
+		return "redirect:/board/contactUs";
 	}
 }

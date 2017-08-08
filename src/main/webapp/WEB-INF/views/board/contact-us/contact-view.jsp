@@ -7,7 +7,14 @@
 <html>
 <head>
 <title>Notice</title>
-
+<script type="text/javascript">
+$(document).on('click','#delete',function() {
+	var result = confirm('문의사항을 삭제하시겠습니까?');
+	if (result) {
+		location.replace('/board/contactus/delete?contactNo=${model.contactNo}');
+	} 
+});
+</script>
 </head>
 <body>
 	<!-- header -->
