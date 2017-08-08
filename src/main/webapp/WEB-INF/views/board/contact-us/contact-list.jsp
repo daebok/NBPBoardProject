@@ -7,6 +7,27 @@
 <sec:csrfMetaTags/>
 <title>Home</title>
 </head>
+<script type="text/javascript">
+	function passwordCheck(contactNo){
+		var data = "contactNo="+contactNo;
+		$.ajax({
+			type : 'GET',
+			url : '/board/contactus/password/is',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				var list = $.parseJSON(result);
+				if(Number(list) >= 1) {
+					location.href = "/board/contactus/password?contactNo="+contactNo;
+				} else {
+					location.href = "/board/contactus/view?contactNo="+contactNo;
+				}
+			}
+		});
+	}
+</script>
 <body>
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
@@ -22,9 +43,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">문의사항</div>
 			<div class="list-group">
-				<c:forEach var="notice" items="${noticeList}">
+				<c:forEach var="contact" items="${contact}">
 					<div class="list-group-item">
-						<h6><a href="<c:url value='/board/notice?&noticeNo=${notice.noticeNo}'/>">${notice.noticeTitle}</a></h6>
+						<h6><a href="javascript:passwordCheck('${contact.contactNo}')">${contact.contactTitle}</a></h6>
 					</div>
 				</c:forEach>
 			</div>

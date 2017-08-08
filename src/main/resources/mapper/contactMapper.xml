@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyunhye.board.repository.ContactRepository">
+
+	<resultMap id="contactList" type="contact">
+		<result property="contactNo" column="contact_no" />
+		<result property="userNo" column="user_no" />
+		<result property="contactTitle" column="contact_title" />
+		<result property="contactContent" column="contact_content" />
+		<result property="contactPassword" column="contact_password" />
+	</resultMap>
+
+	<insert id="contactUsInsert">
+		INSERT INTO CONTACT (
+			user_no,
+			contact_title,
+			contact_content,
+			contact_password
+		) VALUES (
+			#{userNo},
+			#{contactTitle},
+			#{contactContent},
+			#{contactPassword}
+		)
+	</insert>
+	
+	<select id="contactSelectListAll" resultMap="contactList">
+		SELECT 
+			contact_no,
+			user_no,
+			contact_title,
+			contact_content,
+			contact_password
+		FROM CONTACT
+	</select>
+	
+	<select id="contactUsSelectOne" resultMap="contactList">
+		SELECT 
+			contact_no,
+			user_no,
+			contact_title,
+			contact_content,
+			contact_password
+		FROM CONTACT
+		WHERE
+			contact_no = #{contactNo}	
+	</select>
+
+	<select id="contactUsPasswordSelectCount" resultType="int">
+		SELECT COUNT(contact_password)
+		FROM CONTACT
+		WHERE
+			contact_no = #{contactNo}
+	</select>
+	
+	<select id="contactUsPasswordCheck"  resultType="int">
+		SELECT COUNT(contact_password)
+		FROM CONTACT
+		WHERE
+			contact_no = #{contactNo} AND
+			contact_password = #{contactPassword}
+	</select>
+	
+</mapper>

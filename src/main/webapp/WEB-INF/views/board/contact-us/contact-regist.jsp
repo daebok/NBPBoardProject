@@ -1,38 +1,82 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<sec:csrfMetaTags/>
-<title>Home</title>
+<title>Notice</title>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#noticeButton").click(function() {
+		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		var blank_pattern = /[\s]/g;
+		
+		var title = $("#title").val();
+		var content = $("#content").val();
+		
+		if (blank_pattern.test(title) == true) {
+			alert("제목를 입력하세요.");
+			$("#title").focus();
+			return;
+		}
+		
+		if (special_pattern.test(title) == true) {
+			alert('제목에 특수문자는 사용할 수 없습니다.');
+			$('#title').focus();
+			return false;
+		}
+
+		if (blank_pattern.test(content) == true) {
+			alert("내용를 입력하세요.");
+			$("#content").focus();
+			return;
+		}
+
+		document.form.action = "/board/contactus/regist"
+		document.form.submit();
+	});
+	
+	$('.summernote').summernote({
+		height : 200
+	});
+});
+$(document).on("change","#password-check",function(){
+	var check = $(this).prop("checked");
+	if(check) {
+		$('#password').attr('disabled', false);
+	} else {
+		$('#password').attr('disabled', true);
+	}
+});
+</script>
 </head>
 <body>
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
 
-	<div class="container" style="height:100%;">
-		<div class="container-fluid" style="margin-bottom: 30px">
-			<p> 신고 및 문의 사항은 아래 주소로 연락 바랍니다. </p>
-			<a href="mailto:wikiki413@gmail.com" class="glyphicon glyphicon-send">&nbsp; wikiki413@gmail.com</a>
-		</div>
-		<div style="margin-bottom:20px; ">
-			<a href="<c:url value='/board/contactUsRegist'/>" class="btn btn-default">문의하기</a>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">문의사항</div>
-			<div class="list-group">
-				<c:forEach var="notice" items="${noticeList}">
-					<div class="list-group-item">
-						<h6><a href="<c:url value='/board/notice?&noticeNo=${notice.noticeNo}'/>">${notice.noticeTitle}</a></h6>
-					</div>
-				</c:forEach>
+	<div class="container">
+		<form:form name="form" method="post" class="form-horizontal">
+			<div class="form-group">
+				<label for="title">Title</label>
+				<input type="text" name="contactTitle" maxlength="100" id="title" size="20" class="form-control" />
 			</div>
-		</div>
+			<div class="form-group">
+				<div class="col-sm-10">
+					<textarea class="summernote" name="contactContent" id="content"></textarea>
+				</div>
+			</div>
+			<label for="password">비밀번호</label>
+			<input type="checkbox" id="password-check">
+			<input type="password" name="contactPassword" maxlength="4" id="password" size="4" disabled />
+			<div class="pull-right">
+				<button type="button" id="noticeButton" class="category-add-button btn btn-default" style="float:left;">문의하기</button>
+			</div>
+		</form:form>
 	</div>
 	
 	<!-- footer -->
 	<%@include file="../../common/footer.jsp"%>
 </body>
-</html>
-					 
+</html> 

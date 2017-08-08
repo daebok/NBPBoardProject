@@ -22,6 +22,7 @@ import com.hyunhye.admin.model.Notice;
 import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
+import com.hyunhye.board.model.Contact;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
@@ -427,13 +428,46 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("contactUs")
-	public String goContactUsPage() {
-		return "board/contact-us/contact-us";
+	public String goContactUsPage(Model model) {
+		model.addAttribute("contact", boardService.contactSelectListAll());
+		return "board/contact-us/contact-list";
 	}
 
+	/**
+	 * 문의하기 작성 페이지로 이동
+	 * @return
+	 */
 	@RequestMapping("contactUsRegist")
-	public String goContactUsInsertPage() {
+	public String goContactUsInsertPage(Model model) {
 		return "board/contact-us/contact-regist";
 	}
 
+	@RequestMapping("contactus/regist")
+	public String contactUsInsert(@ModelAttribute Contact model) {
+		boardService.contactUsInsert(model);
+		return "redirect:/board/contactUs";
+	}
+
+	@RequestMapping("contactus/view")
+	public String contactUsSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("model", boardService.contactUsSelectOne(contactMoodel));
+		return "board/contact-us/contact-view";
+	}
+
+	@RequestMapping("contactus/password/is")
+	public ResponseEntity<Integer> contactUsPasswordSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
+		return new ResponseEntity<Integer>(boardService.contactUsPasswordSelectCount(contactMoodel), HttpStatus.OK);
+	}
+
+	@RequestMapping("contactus/password")
+	public String goContactUsPasswordCheckPage(@ModelAttribute Contact contactMoodel, Model model) {
+		model.addAttribute("contact", contactMoodel);
+		return "board/contact-us/contact-password";
+	}
+
+	@RequestMapping("contactus/password/check")
+	public ResponseEntity<Integer> contactUsPasswordCheck(@ModelAttribute Contact contactMoodel, Model model) {
+		return new ResponseEntity<Integer>(boardService.contactUsPasswordCheck(contactMoodel), HttpStatus.OK);
+	}
 }

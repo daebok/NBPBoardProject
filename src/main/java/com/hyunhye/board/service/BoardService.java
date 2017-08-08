@@ -17,6 +17,7 @@ import org.springframework.web.util.HtmlUtils;
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Category;
+import com.hyunhye.board.model.Contact;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.Home;
@@ -24,6 +25,7 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
+import com.hyunhye.board.repository.ContactRepository;
 import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.common.UserSessionUtils;
@@ -45,6 +47,9 @@ public class BoardService {
 
 	@Autowired
 	private FileRepository fileRepository;
+
+	@Autowired
+	private ContactRepository contactRepository;
 
 	@Autowired
 	private UploadService uploadService;
@@ -266,5 +271,26 @@ public class BoardService {
 	public void bookmarkDelete(Board model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
 		bookmarkRepository.bookmarkDelete(model);
+	}
+
+	public void contactUsInsert(Contact model) {
+		model.setUserNo(UserSessionUtils.currentUserNo());
+		contactRepository.contactUsInsert(model);
+	}
+
+	public List<Contact> contactSelectListAll() {
+		return contactRepository.contactSelectListAll();
+	}
+
+	public Contact contactUsSelectOne(Contact contactMoodel) {
+		return contactRepository.contactUsSelectOne(contactMoodel);
+	}
+
+	public Integer contactUsPasswordSelectCount(Contact contactMoodel) {
+		return contactRepository.contactUsPasswordSelectCount(contactMoodel);
+	}
+
+	public Integer contactUsPasswordCheck(Contact contactMoodel) {
+		return contactRepository.contactUsPasswordCheck(contactMoodel);
 	}
 }
