@@ -119,7 +119,7 @@
 	</select>
 	
 	<select id="answersLikedSelectListCount" resultType="int">
-		SELECT COUNT(comment_no) 
+		SELECT COUNT(COMMENT.comment_no) 
 		FROM COMMENT
 		JOIN COMMENT_LIKE
 			ON COMMENT.comment_no = COMMENT_LIKE.comment_no
