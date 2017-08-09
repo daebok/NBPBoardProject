@@ -12,14 +12,15 @@
 	
 		<expression-handler ref="expressionHandler"/>
 		
-		<intercept-url pattern="/board/modify**" access="hasModifyRole()" /> <!-- 수정  권한 -->
-		<intercept-url pattern="/board/delete**" access="hasModifyRole()" /> <!-- 삭제 권한 -->
+		<intercept-url pattern="/board/modify**" access="hasBoardRole()" /> <!-- 게시글 수정  권한 -->
+		<intercept-url pattern="/board/delete**" access="hasBoardRole()" /> <!-- 게시글 삭제 권한 -->
+		<intercept-url pattern="/comment/modify**" access="hasAnswerRole()" /> <!-- 답변 수정 권한 -->
+		<intercept-url pattern="/comment/delete**" access="hasAnswerRole()" /> <!-- 답변 삭제 권한 -->
 		
 		<intercept-url pattern="/user/**" access="permitAll" /> <!-- 로그인 및 회원가입 모두 허용 -->
 		<intercept-url pattern="/resources/**" access="permitAll" /> <!-- 리소스 모두 허용 -->
 		<intercept-url pattern="/board" access="permitAll" />
 		<intercept-url pattern="/board/**" access="isAuthenticated()" /> <!-- 나머지는 모두 권한이 있는 사람만 허용 -->
-		<!-- <intercept-url pattern="/board/**" access="permitAll" /> -->
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> <!-- 관리자 페이지 -->
 		
 
@@ -34,9 +35,6 @@
 
 		<!-- 중복 로그인 설정 -->
 		<session-management>
-			<!-- max-sessions: 중복 로그인 가능한 세션 수 (1로 지정해야 중복 로그인 막을 수 있다) -->
-			<!-- expired-url: 중복 로그인이 발생하면, 먼저 로그인 한 세션이 끊어지게 된다. 세션이 끊어진 상태에서, 모든 
-				url을 호출할 경우, 끊어진 원인을 알려줄 장소 지정 -->
 			<concurrency-control 
 				max-sessions="1"
 				expired-url="/user/login/duplicate" />
@@ -61,7 +59,7 @@
  
 	<authentication-manager  erase-credentials="false">
 		<authentication-provider user-service-ref="userServiceManager">
-		<password-encoder ref="passwordEncoder"/>
+			<password-encoder ref="passwordEncoder"/>
 		</authentication-provider>
 	</authentication-manager>
 	
@@ -71,7 +69,5 @@
 	<beans:bean id="passwordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
 	</beans:bean>
-
-
 
 </beans:beans>

@@ -25,7 +25,6 @@ import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.common.UserSessionUtils;
-import com.hyunhye.contact.repository.ContactRepository;
 
 @Service
 public class BoardService {
@@ -42,9 +41,6 @@ public class BoardService {
 
 	@Autowired
 	private FileRepository fileRepository;
-
-	@Autowired
-	private ContactRepository contactRepository;
 
 	@Autowired
 	private UploadService uploadService;

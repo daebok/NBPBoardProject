@@ -10,8 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -28,7 +26,6 @@ import com.hyunhye.naver.ouath.model.NaverUser;
 
 @Service
 public class NaverLoginService {
-	Logger logger = LoggerFactory.getLogger(NaverLoginService.class);
 	private static final String naverLoginropertiesFile = "classpath:config/naver-login.properties";
 	private static String CLIENT_ID;
 	private static String CLIENT_SECRET;

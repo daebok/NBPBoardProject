@@ -20,7 +20,7 @@
 			<div class="list-group">
 				<c:forEach var="notice" items="${noticeList}">
 					<div class="list-group-item">
-						<h6><a href="<c:url value='/board/notice?&noticeNo=${notice.noticeNo}'/>"><html:unescape>${notice.noticeTitle}</html:unescape></a></h6>
+						<h6><a href="<c:url value='/board/notice?&noticeNo=${notice.noticeNo}'/>"><c:out value="${notice.noticeTitle}" escapeXml="false"/></a></h6>
 					</div>
 				</c:forEach>
 			</div>

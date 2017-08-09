@@ -310,7 +310,7 @@ public class BoardController {
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(commentService.myAnswersListCount(cri));
+		pageMaker.setTotalCount(commentService.answersLikedSelectListCount(cri));
 
 		/* 답변 달린 것만임을 알려주는 변수 */
 		model.addAttribute("check", 1);

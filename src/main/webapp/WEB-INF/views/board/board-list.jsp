@@ -55,7 +55,7 @@
 					<c:forEach var="board" items="${list}">
 						<h4>
 							<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo">
-								<html:unescape>${board.boardTitle}</html:unescape>
+								<c:out value="${board.boardTitle}" escapeXml="false"></c:out>
 							</a>
 						</h4>
 						<p id="content-summary">

@@ -12,7 +12,8 @@ public class Criteria {
 	private int startBoardNo;
 	/** 사용자 번호 **/
 	private int userNo;
-
+	/** option **/
+	private int option;
 	/*
 	 * 디폴트: 시작 페이지=1, 페이지 당 데이터 개수=10
 	 */

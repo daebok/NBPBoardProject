@@ -98,7 +98,7 @@ $(document).ready(
 			</div>
 			<div class="col-md-12">
 				<span class="label label-warning">${model.categoryItem} </span>
-				<h2><html:unescape>${model.boardTitle}</html:unescape></h2>
+				<h2><c:out value="${model.boardTitle}" escapeXml="false"/></h2>
 				<p><html:unescape>${model.boardContent}</html:unescape></p>
 				<c:if test="${not empty attach}">
 					<div class="panel panel-default">

@@ -17,7 +17,7 @@
 	top:0;
 	background-color: #fff;
 	padding:10px 40px;
-	z-index:1000;
+	z-index:100;
 	box-shadow: 5px 0px 20px lightgray;
 }
 .nav-title {
@@ -41,7 +41,7 @@ function userInfo() {
 			autoOpen: true,
 			modal: true,
 			resizable:false,
-			position: { my: "left", at: "right", of: "#user-info-button" },
+			position: { my: "top", at: "bottom", of: "#user-info-button" },
 			title: "회원 정보"
 	});
 }

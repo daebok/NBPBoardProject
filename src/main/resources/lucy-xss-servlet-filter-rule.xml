@@ -44,5 +44,16 @@
 			<param name="globalPrefixParameter" usePrefix="true"
 				useDefender="false" />
 		</params>
+		
 	</global>
+
+	<url-rule-set>
+
+		<!-- url disable이 true이면 지정한 url 내의 모든 파라메터는 필터링 되지 않는다. -->
+		<url-rule>
+			<url disable="true">/user</url>
+			<url disable="true">/user/loginPage</url>
+			<url disable="true">/user/callback</url>
+		</url-rule>
+	</url-rule-set>
 </config>

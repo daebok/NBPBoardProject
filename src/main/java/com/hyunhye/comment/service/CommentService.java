@@ -48,7 +48,7 @@ public class CommentService {
 		repository.answerDelete(commentNo);
 	}
 
-	/* 답변 삭제 */
+	/* 댓글 삭제 */
 	public void commentDelete(int commentNo) {
 		repository.commentDelete(commentNo);
 	}
@@ -63,7 +63,7 @@ public class CommentService {
 		return repository.commentSelectOne(commentModel);
 	}
 
-	/* 마지막에 달른 답변 가져오기 */
+	/* 마지막에 달린 답변 가져오기 */
 	public Comment commentLastSelect() {
 		return repository.commentLastSelect();
 	}
@@ -92,6 +92,7 @@ public class CommentService {
 
 	/* 내가 작성한 답변 리스트 */
 	public List<Comment> myAnswersSelect(Criteria cri) {
+		cri.setOption(1);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		return repository.myAnswersSelect(cri);
 	}
@@ -104,8 +105,20 @@ public class CommentService {
 
 	/* 내가 좋아요한 답변 리스트 */
 	public List<Comment> answersLikedSelectList(Criteria cri) {
+		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.answersLikedSelectList(cri);
+		return repository.myAnswersSelect(cri);
 	}
+
+	public int answersLikedSelectListCount(Criteria cri) {
+		cri.setUserNo(UserSessionUtils.currentUserNo());
+		return repository.answersLikedSelectListCount(cri);
+	}
+
+	/* 답변 작성자 번호 가져오기 */
+	public int checkUser(int commentNo) {
+		return repository.checkUser(commentNo);
+	}
+
 
 }

@@ -18,8 +18,7 @@
 		SET 
 			bookmark_memo = #{bookmarkMemo}
 		WHERE
-			board_no = #{boardNo}
-			AND
+			board_no = #{boardNo} AND
 			user_no = #{userNo}
 	</update>
 	
@@ -36,8 +35,7 @@
 	<delete id="bookmarkDelete">
 		DELETE FROM BOOKMARK 
 		WHERE
-			user_no = #{userNo}
-			AND
+			user_no = #{userNo} AND
 			board_no =#{boardNo}
 	</delete>
 
@@ -47,8 +45,7 @@
 		FROM
 			BOOKMARK
 		WHERE
-			user_no = #{userNo}
-			AND
+			user_no = #{userNo} AND
 			board_no = #{boardNo}
 	</select>
 	

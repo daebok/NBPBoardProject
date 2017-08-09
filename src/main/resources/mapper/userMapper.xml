@@ -23,7 +23,6 @@
 		FROM USER
 		WHERE user_enabled = 1
 	</select>
-
 	
 	<update id="userAuthorityUpdate">
 		UPDATE USER SET
@@ -44,7 +43,6 @@
 		WHERE
 			user_no = #{userNo}
 	</update>
-	
 	
 	<insert id="userInsert">
 		INSERT INTO USER (

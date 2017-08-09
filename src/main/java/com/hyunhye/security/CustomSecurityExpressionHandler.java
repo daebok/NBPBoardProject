@@ -9,18 +9,22 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 import com.hyunhye.board.service.BoardService;
+import com.hyunhye.comment.service.CommentService;
 
 public class CustomSecurityExpressionHandler extends DefaultWebSecurityExpressionHandler {
 	Logger logger = LoggerFactory.getLogger(CustomSecurityExpressionHandler.class);
 
 	@Autowired
-	BoardService service;
+	BoardService boardService;
 
+	@Autowired
+	CommentService commentService;
 
 	@Override
 	protected SecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication,
 		FilterInvocation fi) {
-		CustomSecurityExpressionRoot root = new CustomSecurityExpressionRoot(authentication, fi, service);
+		CustomSecurityExpressionRoot root = new CustomSecurityExpressionRoot(authentication, fi, boardService,
+			commentService);
 		root.setPermissionEvaluator(getPermissionEvaluator());
 		root.setRoleHierarchy(getRoleHierarchy());
 

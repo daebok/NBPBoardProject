@@ -44,7 +44,7 @@
 						</form:form>
 					</div>
 					<div class="row">
-						<html:unescape>${comment.commentContent}</html:unescape>
+						<c:out value="${comment.commentContent}" escapeXml="false"></c:out>
 					</div>
 					<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${comment.commentDate}" pattern="yyyy/MM/dd"/></span>
 					<hr>

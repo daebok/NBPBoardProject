@@ -55,4 +55,8 @@ public interface CommentRepository {
 	/** 내가 좋아요한 답변 리스트 **/
 	public List<Comment> answersLikedSelectList(Criteria cri);
 
+	public int checkUser(int commentNo);
+
+	public int answersLikedSelectListCount(Criteria cri);
+
 }

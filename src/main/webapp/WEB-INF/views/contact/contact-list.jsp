@@ -43,11 +43,11 @@
 					<div class="list-group-item">
 						<c:choose>
 							<c:when test="${contact.contactPassword ne null}">
-								<a href="javascript:passwordCheck('${contact.contactNo}')"><html:unescape>${contact.contactTitle}</html:unescape></a>
+								<a href="javascript:passwordCheck('${contact.contactNo}')"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
 								<span class="label label-danger" id="secret-label">비밀글</span>
 							</c:when>
 							<c:otherwise>
-								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>">${contact.contactTitle}</a>
+								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><c:out value="${contact.contactTitle} escapeXml="false"></c:out></a>
 							</c:otherwise>
 						</c:choose>
 						<div class="pull-right">

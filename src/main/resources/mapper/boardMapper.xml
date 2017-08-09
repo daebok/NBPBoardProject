@@ -22,27 +22,11 @@
 		<result property="bookmarkCheck" column="bookmark_check" />
 	</resultMap>
 	
-	<resultMap id="categoryList" type="category">
-		<result property="categoryNo" column="category_no" />
-		<result property="categoryItem" column="category_item" />
-		<result property="categoryEnabled" column="category_enabled" />
-	</resultMap>
-	
 	<resultMap id="bookmarkList" type="bookmark">
 		<result property="boardNo" column="board_no" />
 		<result property="userNo" column="user_no" />
 		<result property="bookmarkNo" column="bookmark_no" />
 		<result property="bookmarkMemo" column="bookmark_memo" />
-	</resultMap>
-
-
-	<resultMap id="fileList" type="file">
-		<result property="boardNo" column="board_no" />
-		<result property="fileNo" column="file_no" />
-		<result property="fileName" column="file_name" />
-		<result property="fileOriginName" column="file_origin_name" />
-		<result property="fileExtension" column="file_extension" />
-		<result property="fileSize" column="file_size" />
 	</resultMap>
 
 	<!-- 홈 화면에 보여줄 게시글 리스트 -->	
@@ -64,17 +48,11 @@
 					(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count
 				FROM BOARD 
 				<!-- 1. 최신 순 -->
-				<if test="tab == 1">
-					ORDER BY BOARD.board_no desc 
-				</if>
+				<if test="tab == 1"> ORDER BY BOARD.board_no desc </if>
 				<!-- 2. 조회수 순 -->
-				<if test="tab == 2">
-					ORDER BY BOARD.board_view_cnt desc 
-				</if>
+				<if test="tab == 2"> ORDER BY BOARD.board_view_cnt desc </if>
 				<!-- 2. 답변 순 -->
-				<if test="tab == 3">
-					ORDER BY comment_count desc 
-				</if>
+				<if test="tab == 3"> ORDER BY comment_count desc </if>
 				LIMIT 0, 10
 			) B
 		JOIN CATEGORY
@@ -378,7 +356,7 @@
 	<sql id="searchType_search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				( BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
+				( BOARD.board_content like CONCAT('%',#{keyword},'%')
 				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">

@@ -34,7 +34,21 @@
 			comment_parent_no = #{commentNo}
 		ORDER BY comment_no
 	</select>
-
+	
+	<insert id="answerInsert">
+		INSERT INTO COMMENT (
+			board_no, 
+			user_no, 
+			comment_content,
+			comment_parent_no
+		) VALUES (
+			#{boardNo}, 
+			#{userNo}, 
+			#{commentContent},
+			#{commentParentNo}
+		)
+	</insert>
+	
 	<select id="answerTabSelectListAll" resultMap="commentList">
 		SELECT 
 			USER.user_name, 
@@ -57,10 +71,10 @@
 			AND
 			comment_parent_no = 0
 		group by COMMENT.comment_no
-		<if test="tab == 1">
+		<if test="tab == 1"> <!-- 최신순 -->
 			ORDER BY COMMENT.comment_no
 		</if>
-		<if test="tab == 2">
+		<if test="tab == 2"> <!-- 좋아요 순 -->
 			ORDER BY comment_like_count desc
 		</if>
 	</select>
@@ -78,34 +92,17 @@
 					COMMENT.comment_date,
 					COMMENT.board_no
 					FROM COMMENT
-					WHERE
-						COMMENT.user_no = #{userNo}
-						AND
-						comment_parent_no = 0
-					ORDER BY COMMENT.comment_no
-					LIMIT #{startBoardNo}, #{perPageNum}
-			) C
-		group by C.comment_no
-		ORDER BY C.comment_no
-	</select>
-	
-	<select id="answersLikedSelectList" resultMap="commentList">
-		SELECT
-			C.comment_no, 
-			C.comment_content, 
-			C.comment_date,
-			C.board_no
-		FROM (
-				SELECT
-					COMMENT.comment_no, 
-					COMMENT.comment_content, 
-					COMMENT.comment_date,
-					COMMENT.board_no
-					FROM COMMENT
-					JOIN COMMENT_LIKE
-						ON COMMENT.comment_no = COMMENT_LIKE.comment_no
-					WHERE
-						COMMENT_LIKE.user_no = #{userNo}
+					<if test="option==1"> <!-- 내 답변 -->
+						WHERE
+							COMMENT.user_no = #{userNo} AND
+							comment_parent_no = 0
+					</if>
+					<if test="option==2"> <!-- 내가 좋아요한 답변 -->
+						JOIN COMMENT_LIKE
+							ON COMMENT.comment_no = COMMENT_LIKE.comment_no
+						WHERE
+							COMMENT_LIKE.user_no = #{userNo}
+					</if>
 					ORDER BY COMMENT.comment_no
 					LIMIT #{startBoardNo}, #{perPageNum}
 			) C
@@ -117,24 +114,18 @@
 		SELECT COUNT(comment_no) 
 		FROM COMMENT
 		WHERE
-			COMMENT.user_no = #{userNo}
-			AND
+			COMMENT.user_no = #{userNo}	AND
 			comment_parent_no = 0
 	</select>
 	
-	<insert id="answerInsert">
-		INSERT INTO COMMENT (
-			board_no, 
-			user_no, 
-			comment_content,
-			comment_parent_no
-		) VALUES (
-			#{boardNo}, 
-			#{userNo}, 
-			#{commentContent},
-			#{commentParentNo}
-		)
-	</insert>
+	<select id="answersLikedSelectListCount" resultType="int">
+		SELECT COUNT(comment_no) 
+		FROM COMMENT
+		JOIN COMMENT_LIKE
+			ON COMMENT.comment_no = COMMENT_LIKE.comment_no
+		WHERE
+			COMMENT_LIKE.user_no = #{userNo}
+	</select>
 	
 	<insert id="answerLikeInsert">
 		INSERT INTO COMMENT_LIKE (
@@ -149,8 +140,7 @@
 	<delete id="answerLikeDelete">
 		DELETE FROM COMMENT_LIKE 
 		WHERE
-			user_no = #{userNo}
-			AND
+			user_no = #{userNo} AND
 			comment_no = #{commentNo}
 	</delete>
 
@@ -164,8 +154,7 @@
 	<delete id="answerDelete" parameterType="int"> 
 		DELETE FROM COMMENT
 		WHERE 
-			comment_no = #{commentNo} 
-			OR
+			comment_no = #{commentNo} OR
 			comment_parent_no = #{commentNo}
 	</delete>
 
@@ -191,13 +180,12 @@
 		group by board_no
 	</select>
 	
-	<select id="answerCount" resultMap="commentList" parameterType="int">
+	<select id="answerCount" resultMap="commentList">
 		SELECT 
 			count(comment_no) as comment_count
 		FROM COMMENT 
 		WHERE 
-			board_no = #{boardNo}
-		AND 
+			board_no = #{boardNo} AND 
 			comment_parent_no = 0
 	</select>
 	
@@ -229,5 +217,13 @@
 		ON COMMENT.user_no = USER.user_no
 		WHERE 
 			comment_no = (SELECT comment_no FROM COMMENT ORDER BY comment_no desc LIMIT 1)
+	</select>
+	
+	<select id="checkUser" resultType="int">
+		SELECT 
+			user_no
+		FROM COMMENT
+		WHERE 
+			comment_no = #{commentNo}
 	</select>
 </mapper>
