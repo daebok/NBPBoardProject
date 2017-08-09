@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
-import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.contact.model.Contact;
 import com.hyunhye.contact.service.ContactService;
+import com.hyunhye.utils.UserSessionUtils;
 
 @RequestMapping("contact")
 @Controller

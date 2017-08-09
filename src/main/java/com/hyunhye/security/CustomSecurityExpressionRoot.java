@@ -9,7 +9,7 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionR
 
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.common.UserSessionUtils;
+import com.hyunhye.utils.UserSessionUtils;
 
 public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 

@@ -18,17 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hyunhye.admin.model.Notice;
-import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.service.BoardService;
-import com.hyunhye.board.service.UploadService;
+import com.hyunhye.board.service.CategoryService;
+import com.hyunhye.board.service.FileService;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.common.UserSessionUtils;
+import com.hyunhye.notice.model.Notice;
+import com.hyunhye.notice.service.NoticeService;
+import com.hyunhye.utils.UserSessionUtils;
 
 @RequestMapping("board")
 @Controller
@@ -40,10 +41,13 @@ public class BoardController {
 	private CommentService commentService;
 
 	@Autowired
-	private AdminService adminService;
+	private NoticeService adminService;
 
 	@Autowired
-	private UploadService uploadService;
+	private FileService uploadService;
+
+	@Autowired
+	private CategoryService categoryService;
 
 	/**
 	 * 게시물 작성하기 페이지 이동
@@ -53,7 +57,7 @@ public class BoardController {
 	@RequestMapping("ask")
 	public String goAskPage(Model model) {
 		/* 카테고리 목록  불러오기 */
-		model.addAttribute("list", boardService.categoryListAll());
+		model.addAttribute("list", categoryService.categorySelectList());
 		return "/board/board-regist";
 	}
 
@@ -76,7 +80,7 @@ public class BoardController {
 		pageMaker.setTotalCount(boardService.boardSelectListCount(cri));
 
 		/* 카테고리 리스트 */
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 
 		/* 페이징에 사용될 변수 */
 		model.addAttribute("pageMaker", pageMaker);
@@ -176,7 +180,7 @@ public class BoardController {
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
 		/* 카테고리 리스트 */
-		model.addAttribute("list", boardService.categoryListAll());
+		model.addAttribute("list", categoryService.categorySelectList());
 
 		/* 첨부된 파일 */
 		model.addAttribute("attach", boardService.fileSelect(boardNo));
@@ -232,7 +236,7 @@ public class BoardController {
 		model.addAttribute("check", 0);
 
 		/* 카테고리 리스트 */
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
@@ -260,7 +264,7 @@ public class BoardController {
 		model.addAttribute("check", 1);
 
 		/* 카테고리 리스트 */
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
@@ -363,7 +367,7 @@ public class BoardController {
 		pageMaker.setTotalCount(boardService.myFavoriteSelectListCount(cri));
 
 		/* 카테고리 리스트 */
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 
 		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);

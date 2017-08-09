@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.repository.CommentRepository;
-import com.hyunhye.common.UserSessionUtils;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Service
 public class CommentService {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hyunhye.board.model.Home;
 import com.hyunhye.board.service.BoardService;
-import com.hyunhye.comment.service.CommentService;
+import com.hyunhye.board.service.CategoryService;
 
 @Controller
 public class HomeController {
@@ -17,7 +17,7 @@ public class HomeController {
 	public BoardService boardService;
 
 	@Autowired
-	public CommentService commentService;
+	private CategoryService categoryService;
 
 	/**
 	 * 게시글 목록을 가지고 홈 화면으로 이동
@@ -26,7 +26,7 @@ public class HomeController {
 	 */
 	@RequestMapping("board")
 	public String home(Model model) {
-		model.addAttribute("categoryList", boardService.categoryListAll());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 		return "home";
 	}
 

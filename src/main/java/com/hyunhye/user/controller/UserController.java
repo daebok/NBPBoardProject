@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Controller
 @RequestMapping("user")

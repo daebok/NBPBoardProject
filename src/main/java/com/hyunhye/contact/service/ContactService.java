@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.model.Criteria;
-import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.contact.model.Contact;
 import com.hyunhye.contact.repository.ContactRepository;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Service
 public class ContactService {

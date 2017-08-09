@@ -1,4 +1,4 @@
-package com.hyunhye.admin.model;
+package com.hyunhye.notice.model;
 
 import org.apache.ibatis.type.Alias;
 

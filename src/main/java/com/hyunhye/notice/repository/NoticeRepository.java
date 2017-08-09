@@ -1,10 +1,10 @@
-package com.hyunhye.admin.repository;
+package com.hyunhye.notice.repository;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.hyunhye.admin.model.Notice;
+import com.hyunhye.notice.model.Notice;
 
 @Repository
 public interface NoticeRepository {

@@ -1,4 +1,4 @@
-package com.hyunhye.common;
+package com.hyunhye.utils;
 
 import java.util.HashMap;
 import java.util.Map;

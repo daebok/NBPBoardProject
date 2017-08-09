@@ -11,24 +11,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hyunhye.admin.model.Notice;
-import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
-import com.hyunhye.common.BadWordFilteringUtils;
+import com.hyunhye.board.service.CategoryService;
 import com.hyunhye.contact.service.ContactService;
+import com.hyunhye.notice.model.Notice;
+import com.hyunhye.notice.service.NoticeService;
 import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.service.UserService;
+import com.hyunhye.utils.BadWordFilteringUtils;
 
 @Controller
 @RequestMapping("admin")
 public class AdminController {
 
 	@Autowired
-	public AdminService adminService;
+	public NoticeService adminService;
 
 	@Autowired
 	private ContactService contactService;
+
+	@Autowired
+	private CategoryService categoryService;
+
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 관리자 페이지로 이동
@@ -57,7 +65,7 @@ public class AdminController {
 	 */
 	@RequestMapping("category")
 	public String categorySelectList(Model model) {
-		model.addAttribute("categoryList", adminService.categorySelectList());
+		model.addAttribute("categoryList", categoryService.categorySelectList());
 		return "admin/category/category-manage";
 	}
 
@@ -70,7 +78,7 @@ public class AdminController {
 	@RequestMapping("categoryCount")
 	public ResponseEntity<Integer> boardSelectCountOfCategory(@ModelAttribute Category categoryModel) {
 		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(
-			adminService.boardSelectCountOfCategory(categoryModel),
+			categoryService.boardSelectCountOfCategory(categoryModel),
 			HttpStatus.OK);
 
 		return entity;
@@ -83,7 +91,7 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "categoryAdd", method = {RequestMethod.POST, RequestMethod.GET})
 	public String categoryInsert(@ModelAttribute Category categoryModel) {
-		adminService.categoryInsert(categoryModel);
+		categoryService.categoryInsert(categoryModel);
 		return "redirect:/admin/category";
 	}
 
@@ -95,7 +103,7 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "categoryDelete", method = {RequestMethod.POST, RequestMethod.GET})
 	public String categoryDelete(@ModelAttribute Category categoryModel) {
-		adminService.categoryDelete(categoryModel);
+		categoryService.categoryDelete(categoryModel);
 		return "redirect:/admin/category";
 	}
 
@@ -107,7 +115,8 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping(value = "categoryCheck", method = RequestMethod.POST)
 	public ResponseEntity<Integer> categoryItemNameCheck(@ModelAttribute Category categoryModel) {
-		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(adminService.categoryItemNameCheck(categoryModel),
+		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(
+			categoryService.categoryItemNameCheck(categoryModel),
 			HttpStatus.OK);
 
 		return entity;
@@ -120,7 +129,7 @@ public class AdminController {
 	 */
 	@RequestMapping("user")
 	public String userSelectList(Model model) {
-		model.addAttribute("userList", adminService.userSelectList());
+		model.addAttribute("userList", userService.userSelectList());
 		return "admin/user/user-manage";
 	}
 
@@ -131,7 +140,7 @@ public class AdminController {
 	 */
 	@RequestMapping("userModify")
 	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute UserModel userModel) {
-		adminService.userAuthorityUpdate(userModel);
+		userService.userAuthorityUpdate(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
@@ -142,7 +151,7 @@ public class AdminController {
 	 */
 	@RequestMapping("userDelete")
 	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute UserModel userModel) {
-		adminService.userWithBoardDelete(userModel);
+		userService.userWithBoardDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
@@ -153,7 +162,7 @@ public class AdminController {
 	 */
 	@RequestMapping("onlyUserDelete")
 	public ResponseEntity<String> onlyUserDelete(@ModelAttribute UserModel userModel) {
-		adminService.onlyUserDelete(userModel);
+		userService.onlyUserDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 

@@ -2,7 +2,6 @@ package com.hyunhye.board.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
-import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.Home;
@@ -23,8 +21,8 @@ import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
 import com.hyunhye.board.repository.FileRepository;
-import com.hyunhye.common.BadWordFilteringUtils;
-import com.hyunhye.common.UserSessionUtils;
+import com.hyunhye.utils.BadWordFilteringUtils;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Service
 public class BoardService {
@@ -43,7 +41,7 @@ public class BoardService {
 	private FileRepository fileRepository;
 
 	@Autowired
-	private UploadService uploadService;
+	private FileService uploadService;
 
 	/** 게시글  Top10 리스트 **/
 	public List<Board> boardTop10SelectList(Home homeModel) {
@@ -173,18 +171,6 @@ public class BoardService {
 	/* 게시글 작성자 가져오기 */
 	public int checkUser(int boardNo) {
 		return boardRepository.checkUser(boardNo);
-	}
-
-	/* 3. 카테고리 목록 가져오기 */
-	public List<Category> categoryListAll() {
-		List<Category> category = categoryRepository.categorySelectList();
-
-		List<Category> list = category.stream()
-			.parallel()
-			.filter(s -> s.getCategoryEnabled() != 0)
-			.collect(Collectors.toList());
-
-		return list;
 	}
 
 	/** 내 질문 모아 보기  **/

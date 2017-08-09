@@ -22,12 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.repository.FileRepository;
-import com.hyunhye.common.MediaUtils;
-import com.hyunhye.common.UploadFileUtils;
+import com.hyunhye.utils.MediaUtils;
+import com.hyunhye.utils.UploadFileUtils;
 
 @Service
-public class UploadService {
-	Logger logger = LoggerFactory.getLogger(UploadService.class);
+public class FileService {
+	Logger logger = LoggerFactory.getLogger(FileService.class);
 
 	@Autowired
 	private FileRepository fileRepository;

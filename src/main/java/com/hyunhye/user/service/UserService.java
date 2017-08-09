@@ -1,5 +1,6 @@
 package com.hyunhye.user.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -11,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hyunhye.common.UserSessionUtils;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.repository.UserRepository;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Service
 public class UserService {
@@ -91,5 +92,25 @@ public class UserService {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		model.setUserNo(UserSessionUtils.currentUserNo());
 		userRepository.passwordUpdate(model);
+	}
+
+	/** 관리자 -회원 관리 **/
+	/* 회원 정보 리스트 */
+	public List<UserModel> userSelectList() {
+		return userRepository.userSelectList();
+	}
+
+	/* 회원 정보 변경 */
+	public void userAuthorityUpdate(UserModel userModel) {
+		userRepository.userAuthorityUpdate(userModel);
+	}
+
+	/* 회원 삭제 */
+	public void userWithBoardDelete(UserModel userModel) {
+		userRepository.userWithBoardDelete(userModel);
+	}
+
+	public void onlyUserDelete(UserModel userModel) {
+		userRepository.onlyUserDelete(userModel);
 	}
 }

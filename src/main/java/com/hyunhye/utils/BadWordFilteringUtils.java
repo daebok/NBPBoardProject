@@ -1,4 +1,4 @@
-package com.hyunhye.common;
+package com.hyunhye.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
