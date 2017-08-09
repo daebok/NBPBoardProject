@@ -10,7 +10,7 @@
 <link href="<c:url value="/resources/common/css/answer-css.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/common/js/answer.js" />"></script>
 
-<script>
+<script type="text/javascript">
 /* 1. 댓글 달기 textarea 생성 */
 $(document).on("click",".comment-comment",function() {
 	var commentNo = $(this).attr('comment-no');
@@ -65,6 +65,25 @@ $(document).on('click','#delete',function() {
 			location.replace('/board/delete?boardNo=${model.boardNo}');
 		}
 	} 
+});
+
+/*리스트 목록 이동*/
+$(document).on('click','#listButton',function() {
+	var form = document.forms['list'];
+	var section = ${section};
+	
+	 if (section == 2) {
+		form.action = "/board/myquestions";
+		
+	} else if (section == 3) {
+		form.action = "/board/myanswers";
+		
+	} else if (section == 4) {
+		form.action = "/board/answers/liked";
+	} else {
+		form.action = "/board/list";
+	}
+	 form.submit();
 });
 
 /* 섬머노트 */
@@ -131,8 +150,7 @@ $(document).ready(
 					</c:if>
 				</div>
 				<div class="pull-left">
-				<c:if test="${section eq 1}">
-					<form:form name="form" action="list" method="get">
+					<form:form name="list" id="list-form"  method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
@@ -140,33 +158,8 @@ $(document).ready(
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
 						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
 						<input type="hidden" name="keyword" value="${cri.keyword}" />
-						<button type="submit" id="list" class="btn btn-primary">List</button>
+						<input type="button" name="listButton" id="listButton" class="btn btn-primary" value="List"/>
 					</form:form>
-				</c:if>
-				<c:if test="${section eq 2}">
-					<form:form name="form" action="myquestions" method="get">
-						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
-						<input type="hidden" name="tab" value="${cri.tab}" /> 
-						<input type="hidden" name="page" value="${cri.page}" /> 
-						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
-						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
-						<input type="hidden" name="keyword" value="${cri.keyword}" />
-						<button type="submit" id="list" class="btn btn-primary">List</button>
-					</form:form>
-				</c:if>
-				<c:if test="${section eq 3}">
-					<form:form name="form" action="myanswers" method="get">
-						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
-						<input type="hidden" name="tab" value="${cri.tab}" /> 
-						<input type="hidden" name="page" value="${cri.page}" /> 
-						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
-						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
-						<input type="hidden" name="keyword" value="${cri.keyword}" />
-						<button type="submit" id="list" class="btn btn-primary">List</button>
-					</form:form>
-				</c:if>
 				</div>
 			</div>
 		</div>

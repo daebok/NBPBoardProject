@@ -12,7 +12,15 @@
 	<div class="container">
 		<div class="container-fluid">
 			<div class="row">
-				<b>My Answers</b>&nbsp;
+				<c:choose>
+					<c:when test="${like eq 0 || like eq null}">
+						<b>My Answers</b>
+					</c:when>
+					<c:otherwise>
+						<b>Liked Answers</b>
+					</c:otherwise>
+				</c:choose>
+				&nbsp;
 				<c:choose>
 					<c:when test="${check eq 0 || check eq null}">
 						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
@@ -39,7 +47,14 @@
 					<div>
 						<form:form name="form" action="/board/question" method="get">
 							<input type="hidden" name="boardNo" value="${comment.boardNo}" /> 
-							<input type="hidden" name="section" value="3" /> 
+							<c:choose>
+								<c:when test="${like eq 0 || like eq null}">
+									<input type="hidden" name="section" value="3" /> 
+								</c:when>
+								<c:otherwise>
+									<input type="hidden" name="section" value="4" /> 
+								</c:otherwise>
+							</c:choose>
 							<button type="submit" class="btn btn-primary btn-sm">View Question </button>
 						</form:form>
 					</div>

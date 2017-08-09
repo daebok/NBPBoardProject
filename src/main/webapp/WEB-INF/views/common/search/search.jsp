@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <div style="line-height:20px;">
 	<label for="categoryType"> Category </label>
 	<select name="categoryType" id="categoryType" style="padding:2px;">

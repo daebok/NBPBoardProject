@@ -78,23 +78,6 @@
 		});
 	});
 </script>
-<style>
-	.category-list-title {
-		text-align: center;
-	}
-	.list-group-item {
-		overflow:hidden;
-		width:50%;
-	}
-	.list-1{
-		float:left;
-		width:50%;
-		text-align: center;
-	}
-	.list-2{
-		float:left;
-	}
-</style>
 </head>
 <body>
 	<!-- header -->
@@ -108,8 +91,7 @@
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>Add</b></label>
 						<div class="col-sm-10">
-							<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" 
-																			class="form-control" style="width:70%; float:left;"/>
+							<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" class="form-control" style="width:70%; float:left;"/>
 							<button type="button" class="category-add-button btn btn-default" style="float:left;">Add</button>
 						</div>
 					</div>
@@ -122,12 +104,12 @@
 					</div>
 				</div>
 				<c:forEach var="category" items="${categoryList}">
-					<div class="list-group-item">
+					<div class="category-list-group-item">
 						<form:form name="${category.categoryNo}" method="get" action="/admin/categoryDelete" class="form-horizontal" id="form-${category.categoryNo}">
-							<div class="list-1">
+							<div class="category-list-1">
 								<span>${category.categoryItem}</span>
 							</div>
-							<div class="list-2">
+							<div class="category-list-2">
 								<button type="button" class="category-delete btn btn-success"  value="${category.categoryNo}">Delete</button>
 							</div>
 							<input type="hidden" name="categoryNo" value="${category.categoryNo}"/>

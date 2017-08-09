@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div class="container-fluid">
-			<div class="col-md-12">
+			<div class="col-md-12" style="margin-top:20px;">
 				<c:forEach var="board" items="${list}">
 					<h4>
 						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=2" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false"></c:out></a>

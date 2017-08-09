@@ -40,3 +40,18 @@
 	border: 3px solid #337ab7; 
 	padding:10px;
 }
+.category-list-title {
+	text-align: center;
+}
+.category-list-group-item {
+	overflow:hidden;
+	width:50%;
+}
+.category-list-1{
+	float:left;
+	width:50%;
+	text-align: center;
+}
+.category-list-2{
+	float:left;
+}
