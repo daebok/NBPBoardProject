@@ -25,7 +25,7 @@ public class CategoryListTag extends RequestContextAwareTag {
 		List<Category> category = categoryRepository.categorySelectList();
 
 		List<Category> list = category.stream()
-			.filter(s -> s.getCategoryEnabled() == 1)
+			.filter(s -> s.getCategoryEnabled() != 0)
 			.collect(Collectors.toList());
 
 		if (Objects.isNull(category)) {

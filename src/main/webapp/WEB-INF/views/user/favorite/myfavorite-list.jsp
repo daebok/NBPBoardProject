@@ -4,22 +4,25 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<style type="text/css">
-	#content{ 
-		display: -webkit-box; 
-		display: -ms-flexbox; 
-		display: box; 
-		margin-top:1px; 
-		max-height:80px; 
-		overflow:hidden; 
-		vertical-align:top; 
-		text-overflow: ellipsis; 
-		word-break:break-all; 
-		-webkit-box-orient:vertical; 
-		-webkit-line-clamp:3
-
-	}
-</style>
+<script >
+/* 즐겨찾기 해제 */
+ function bookMarkCheck(boardNo){
+	 var result = confirm('즐겨찾기를  해제 하시겠습니까? \n기존에 저장한 메모도 삭제 됩니다.');
+	if (result) {
+		var data = "boardNo=" + boardNo;
+		$("#bookmark-list-"+boardNo).remove();
+		$(this).css('color','#888');
+		$.ajax({
+			type : 'GET',
+			url : '/board/bookmark/uncheck',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data
+		});
+	} 
+}
+</script>
 </head>
 <body>
 	<!-- header -->
@@ -34,19 +37,22 @@
 		<div class="container-fluid">
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
-					<h4>
-						<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false"></c:out></a>
-					</h4>
-					<div>
-						<span class="badge">Posted By ${board.userName}</span>
-						<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
-						<div class="pull-right">
-							<span class="label label-success">answer: ${board.commentCount}</span>
-							<span class="label label-primary">views: ${board.boardViewCount}</span>
-							<span class="label label-warning">${board.categoryItem}</span>
+					<div id="bookmark-list-${board.boardNo}">
+						<div id="book-mark" class="pull-right glyphicon glyphicon-check" style="font-size:25px; color:#FF3636;" onclick="bookMarkCheck('${board.boardNo}')"></div>
+						<h4>
+							<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false"></c:out></a>
+						</h4>
+						<div>
+							<span class="badge">Posted By ${board.userName}</span>
+							<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
+							<div class="pull-right">
+								<span class="label label-success">answer: ${board.commentCount}</span>
+								<span class="label label-primary">views: ${board.boardViewCount}</span>
+								<span class="label label-warning">${board.categoryItem}</span>
+							</div>
 						</div>
+						<hr>
 					</div>
-					<hr>
 				</c:forEach>
 			</div>
 

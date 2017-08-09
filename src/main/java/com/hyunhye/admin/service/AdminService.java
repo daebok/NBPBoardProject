@@ -1,6 +1,7 @@
 package com.hyunhye.admin.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,14 @@ public class AdminService {
 
 	/* 카테고리 목록 가져오기 */
 	public List<Category> categorySelectList() {
-		return categoryRepository.categorySelectList();
+		List<Category> category = categoryRepository.categorySelectList();
+
+		List<Category> list = category.stream()
+			.parallel()
+			.filter(s -> s.getCategoryEnabled() != 0)
+			.collect(Collectors.toList());
+
+		return list;
 	}
 
 	/* 카테고리를 가진 게시물 개수 구하기 */

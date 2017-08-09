@@ -25,7 +25,7 @@
 	<!-- article -->
 	<div class="container">
 		<!-- search section -->
-		<%@include file="common/search.jsp"%>
+		<%@include file="common/search/board-search.jsp"%>
 		<h5><b>Top Questions</b></h5>
 		<div role="tabpanel">
 			<ul class="nav nav-tabs" role="tablist">

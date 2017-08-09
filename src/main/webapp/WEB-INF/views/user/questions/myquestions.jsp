@@ -11,7 +11,7 @@
 	<%@include file="../../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid">
-			<%@include file="../../common/myquestions-search.jsp"%>
+			<%@include file="../../common/search/myquestions-search.jsp"%>
 			<div class="row">
 				<b>My Questions</b>&nbsp;
 				<c:choose>

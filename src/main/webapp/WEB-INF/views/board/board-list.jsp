@@ -27,7 +27,7 @@
 			</div>
 			
 			<!-- Search-->
-			<%@include file="../common/search.jsp"%>
+			<%@include file="../common/search/board-search.jsp"%>
 			
 			<!-- 게시글 리스트 -->
 			<div class="col-md-9" style="margin:20px 0;">
