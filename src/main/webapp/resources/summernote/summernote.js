@@ -4716,6 +4716,13 @@
       }
 
       var value = dom.value($codable, options.prettifyHtml) || dom.emptyPara;
+      /**
+       * hyunhye: script, stlye 공격 방어
+       */
+      value = value.replace("<script>", "&lt;script&gt;");
+      value = value.replace("</script>", "&lt;/script&gt;"); 
+      value = value.replace("<style>", "&lt;style&gt;");
+      value = value.replace("</style>", "&lt;/style&gt;");
       var isChange = $editable.html() !== value;
 
       $editable.html(value);
