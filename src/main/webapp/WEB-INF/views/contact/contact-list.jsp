@@ -47,7 +47,8 @@
 								<span class="label label-danger" id="secret-label">비밀글</span>
 							</c:when>
 							<c:otherwise>
-								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
+							
+							<a href="${path}/contact/view${pageMaker.makeQuery(pageMaker.cri.page)}&contactNo=${contact.contactNo}"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
 							</c:otherwise>
 						</c:choose>
 						<c:if test="${contact.contactCommentCount > 0}">

@@ -81,6 +81,14 @@ $(document).on("click",".contact-comment-delete-button", function(event) {
 				<h3><html:unescape>${model.contactTitle}</html:unescape></h3>
 				<p><html:unescape>${model.contactContent}</html:unescape></p>
 				<hr>
+				<div class="pull-left">
+					<form:form name="list" action="/contact/list"  method="get">
+						<input type="hidden" name="contactNo" value="${model.contactNo}" /> 
+						<input type="hidden" name="page" value="${cri.page}" /> 
+						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+						<input type="submit" class="btn btn-primary" value="List"/>
+					</form:form>
+				</div>
 				<div class="pull-right">
 					<c:if test="${user.userNo == model.userNo}">
 						<button id="delete" class="btn btn-primary">Delete</button>

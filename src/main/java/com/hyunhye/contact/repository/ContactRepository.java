@@ -15,7 +15,7 @@ public interface ContactRepository {
 
 	public List<Contact> contactSelectListAll(Criteria cri);
 
-	public Contact contactUsSelectOne(Contact contactMoodel);
+	public Contact contactUsSelectOne(int contactNo);
 
 	public Integer contactUsPasswordSelectCount(Contact contactMoodel);
 
@@ -29,7 +29,7 @@ public interface ContactRepository {
 
 	public ContactComment contactCommentLastSelect();
 
-	public List<ContactComment> contactCommentSelectListAll(Contact contactModel);
+	public List<ContactComment> contactCommentSelectListAll(int contactNo);
 
 	public void contactCommentDelete(int contactCommentNo);
 

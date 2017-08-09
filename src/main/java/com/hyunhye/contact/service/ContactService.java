@@ -30,8 +30,8 @@ public class ContactService {
 		return contactRepository.contactSelectListAll(cri);
 	}
 
-	public Contact contactUsSelectOne(Contact contactMoodel) {
-		return contactRepository.contactUsSelectOne(contactMoodel);
+	public Contact contactUsSelectOne(int contactNo) {
+		return contactRepository.contactUsSelectOne(contactNo);
 	}
 
 	public Integer contactUsPasswordSelectCount(Contact contactMoodel) {
@@ -55,8 +55,8 @@ public class ContactService {
 		return contactRepository.contactCommentLastSelect();
 	}
 
-	public List<ContactComment> contactCommentSelectListAll(Contact contactModel) {
-		return contactRepository.contactCommentSelectListAll(contactModel);
+	public List<ContactComment> contactCommentSelectListAll(int contactNo) {
+		return contactRepository.contactCommentSelectListAll(contactNo);
 	}
 
 	public void contactCommentDelete(int contactCommentNo) {

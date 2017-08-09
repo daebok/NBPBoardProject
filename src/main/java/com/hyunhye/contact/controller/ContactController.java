@@ -1,5 +1,7 @@
 package com.hyunhye.contact.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import com.hyunhye.utils.UserSessionUtils;
 @RequestMapping("contact")
 @Controller
 public class ContactController {
+	Logger logger = LoggerFactory.getLogger(ContactController.class);
 
 	@Autowired
 	private ContactService contactService;
@@ -31,7 +34,7 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String goContactUsPage(@ModelAttribute Criteria cri, Model model) {
+	public String goContactUsPage(@ModelAttribute("cri") Criteria cri, Model model) {
 		model.addAttribute("contact", contactService.contactSelectListAll(cri));
 
 		/* 페이징 계산하기 */
@@ -70,10 +73,11 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping("view")
-	public String contactUsSelectOne(@ModelAttribute Contact contactModel, Model model) {
+	public String contactUsSelectOne(@RequestParam("contactNo") int contactNo,
+		@ModelAttribute("cri") Criteria cri, Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("model", contactService.contactUsSelectOne(contactModel));
-		model.addAttribute("contactComment", contactService.contactCommentSelectListAll(contactModel));
+		model.addAttribute("model", contactService.contactUsSelectOne(contactNo));
+		model.addAttribute("contactComment", contactService.contactCommentSelectListAll(contactNo));
 
 		return "contact/contact-view";
 	}
