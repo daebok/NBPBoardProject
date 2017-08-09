@@ -9,7 +9,7 @@
 	function passwordCheck(contactNo){
 		$.ajax({
 			type : "GET",
-			url : "/board/contactus/password/is",
+			url : "/contact/password/is",
 			data: "contactNo="+contactNo,
 			success : function(result) {
 				$("#contact-password-dialog").html(result);
@@ -26,11 +26,11 @@
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../../common/header.jsp"%>
+	<%@include file="../common/header.jsp"%>
 
 	<div class="container" style="height:100%;">
 		<div style="margin-bottom:20px; ">
-			<a href="<c:url value='/board/contactUsRegist'/>" class="btn btn-default">문의하기</a>
+			<a href="<c:url value='/contact/regist'/>" class="btn btn-default">문의하기</a>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">문의사항</div>
@@ -43,14 +43,16 @@
 					<div class="list-group-item">
 						<c:choose>
 							<c:when test="${contact.contactPassword ne null}">
-								<a href="javascript:passwordCheck('${contact.contactNo}')">${contact.contactTitle}</a>
+								<a href="javascript:passwordCheck('${contact.contactNo}')"><html:unescape>${contact.contactTitle}</html:unescape></a>
 								<span class="label label-danger" id="secret-label">비밀글</span>
 							</c:when>
 							<c:otherwise>
-								<a href="<c:url value='/board/contactus/view?contactNo=${contact.contactNo}'/>">${contact.contactTitle}</a>
+								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>">${contact.contactTitle}</a>
 							</c:otherwise>
 						</c:choose>
-
+						<div class="pull-right">
+							작성자 <span class="label label-default"> ${contact.userName} </span>
+						</div>
 					</div>
 				</c:forEach>
 			</div>
@@ -58,21 +60,21 @@
 		<div class="page-nation">
 			<ul class="pagination pagination-large">
 				<c:if test="${pageMaker.prev}">
-					<li class="disabled"><span><a href="/board/contactUs${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+					<li class="disabled"><span><a href="/contact${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-						<a href="/board/contactUs${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+						<a href="/contact${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>
 				<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-					<li class="disabled"><span><a href="/board/contactUs${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+					<li class="disabled"><span><a href="/contact${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 				</c:if>
 			</ul>
 		</div>
 	</div>
 	<!-- footer -->
-	<%@include file="../../common/footer.jsp"%>
+	<%@include file="../common/footer.jsp"%>
 	<div id="contact-password-dialog"></div>
 </body>
 </html>

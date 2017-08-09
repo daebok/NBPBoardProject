@@ -16,7 +16,7 @@ $(document).on('click','#contactPasswordCheckButton', function() {
 	console.log(contactNo);
 	$.ajax({
 		type : 'POST',
-		url : '/board/contactus/password/check',
+		url : '/contact/password/check',
 		dataType : 'text',
 		beforeSend: function(xhr){
 			xhr.setRequestHeader(header, token);
@@ -26,7 +26,7 @@ $(document).on('click','#contactPasswordCheckButton', function() {
 			var list = $.parseJSON(result);
 			console.log(list);
 			if(Number(list) >= 1) {
-				location.href = "/board/contactus/view?contactNo="+contactNo;
+				location.href = "/contact/view?contactNo="+contactNo;
 			} else {
 				$('#password').val('');
 				alert('비밀번호가 틀립니다!');

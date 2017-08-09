@@ -10,8 +10,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#noticeButton").click(function() {
-		var special_pattern = /[\\<>]/gi;
-		
 		var title = $("#title").val();
 		var content = $("#content").val();
 		
@@ -19,12 +17,6 @@ $(document).ready(function() {
 			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
-		}
-		
-		if (special_pattern.test(title) == true) {
-			alert('제목에 \<>는 사용할 수 없습니다.');
-			$('#title').focus();
-			return false;
 		}
 
 		var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
@@ -35,7 +27,7 @@ $(document).ready(function() {
 			return;
 		}
 
-		document.form.action = "/board/contactus/regist"
+		document.form.action = "/contact/regist/insert"
 		document.form.submit();
 	});
 	
@@ -55,7 +47,7 @@ $(document).on("change","#password-check",function(){
 </head>
 <body>
 	<!-- header -->
-	<%@include file="../../common/header.jsp"%>
+	<%@include file="../common/header.jsp"%>
 
 	<div class="container">
 		<form:form name="form" method="post" class="form-horizontal">
@@ -78,6 +70,6 @@ $(document).on("change","#password-check",function(){
 	</div>
 	
 	<!-- footer -->
-	<%@include file="../../common/footer.jsp"%>
+	<%@include file="../common/footer.jsp"%>
 </body>
 </html> 

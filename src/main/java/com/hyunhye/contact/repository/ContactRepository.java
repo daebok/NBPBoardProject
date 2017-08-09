@@ -1,11 +1,11 @@
-package com.hyunhye.board.repository;
+package com.hyunhye.contact.repository;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.hyunhye.board.model.Contact;
 import com.hyunhye.board.model.Criteria;
+import com.hyunhye.contact.model.Contact;
 
 @Repository
 public interface ContactRepository {
