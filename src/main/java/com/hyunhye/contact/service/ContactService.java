@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.contact.model.Contact;
+import com.hyunhye.contact.model.ContactComment;
 import com.hyunhye.contact.repository.ContactRepository;
 import com.hyunhye.utils.UserSessionUtils;
 
@@ -43,6 +44,23 @@ public class ContactService {
 
 	public void contactUsDelete(Contact contactMoodel) {
 		contactRepository.contactUsDelete(contactMoodel);
+	}
+
+	public void contactCommentInsert(ContactComment contactCommentModel) {
+		contactCommentModel.setUserNo(UserSessionUtils.currentUserNo());
+		contactRepository.contactCommentInsert(contactCommentModel);
+	}
+
+	public ContactComment contactCommentLastSelect() {
+		return contactRepository.contactCommentLastSelect();
+	}
+
+	public List<ContactComment> contactCommentSelectListAll(Contact contactModel) {
+		return contactRepository.contactCommentSelectListAll(contactModel);
+	}
+
+	public void contactCommentDelete(int contactCommentNo) {
+		contactRepository.contactCommentDelete(contactCommentNo);
 	}
 
 }

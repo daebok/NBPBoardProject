@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <sec:csrfMetaTags/>
@@ -20,8 +19,8 @@ $(document).on("click",".answer-tab",function(){
 				<li role="presentation"class="answer-tab" ><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
 			</ul>
 			<div class="tab-content" style="margin:20px;">
-				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/comment/list/tab?tab=1" /></div>
-				<div role="tabpanel" class="tab-pane" id="likes"><c:import url="/comment/list/tab?tab=2" /></div>
+				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/comment/list?tab=1" /></div>
+				<div role="tabpanel" class="tab-pane" id="likes"><c:import url="/comment/list?tab=2" /></div>
 			</div>
 		</div>
 	</div>

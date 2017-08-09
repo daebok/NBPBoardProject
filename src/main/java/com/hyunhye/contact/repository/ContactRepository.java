@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.contact.model.Contact;
+import com.hyunhye.contact.model.ContactComment;
 
 @Repository
 public interface ContactRepository {
@@ -23,5 +24,13 @@ public interface ContactRepository {
 	public void contactUsDelete(Contact contactMoodel);
 
 	public int contactSelectListCount(Criteria cri);
+
+	public void contactCommentInsert(ContactComment contactCommentModel);
+
+	public ContactComment contactCommentLastSelect();
+
+	public List<ContactComment> contactCommentSelectListAll(Contact contactModel);
+
+	public void contactCommentDelete(int contactCommentNo);
 
 }

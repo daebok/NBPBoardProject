@@ -215,8 +215,8 @@
 		FROM COMMENT
 		JOIN  USER
 		ON COMMENT.user_no = USER.user_no
-		WHERE 
-			comment_no = (SELECT comment_no FROM COMMENT ORDER BY comment_no desc LIMIT 1)
+		ORDER BY comment_no desc 
+		LIMIT 1
 	</select>
 	
 	<select id="checkUser" resultType="int">

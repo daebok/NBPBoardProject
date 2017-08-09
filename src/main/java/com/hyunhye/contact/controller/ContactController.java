@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.contact.model.Contact;
+import com.hyunhye.contact.model.ContactComment;
 import com.hyunhye.contact.service.ContactService;
 import com.hyunhye.utils.UserSessionUtils;
 
@@ -67,9 +70,11 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping("view")
-	public String contactUsSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
+	public String contactUsSelectOne(@ModelAttribute Contact contactModel, Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("model", contactService.contactUsSelectOne(contactMoodel));
+		model.addAttribute("model", contactService.contactUsSelectOne(contactModel));
+		model.addAttribute("contactComment", contactService.contactCommentSelectListAll(contactModel));
+
 		return "contact/contact-view";
 	}
 
@@ -112,4 +117,22 @@ public class ContactController {
 		contactService.contactUsDelete(contactMoodel);
 		return "redirect:/contact/list";
 	}
+
+	@RequestMapping("comment/regist")
+	public String contactCommentInsert(@ModelAttribute ContactComment contactCommentModel, Model model) {
+		contactService.contactCommentInsert(contactCommentModel);
+
+		/* 세션에 저장된 사용자 정보 */
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("comment", contactService.contactCommentLastSelect());
+
+		return "contact/contact-comment-form";
+	}
+
+	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
+	public ResponseEntity<String> contactCommentDelete(@RequestParam("contactCommentNo") int contactCommentNo) {
+		contactService.contactCommentDelete(contactCommentNo);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
 }

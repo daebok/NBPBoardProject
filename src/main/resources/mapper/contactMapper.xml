@@ -12,6 +12,16 @@
 		<result property="contactTitle" column="contact_title" />
 		<result property="contactContent" column="contact_content" />
 		<result property="contactPassword" column="contact_password" />
+		<result property="contactDate" column="contact_date" />
+		<result property="contactCommentCount" column="contact_comment_count" />
+	</resultMap>
+	
+	<resultMap id="contactCommentList" type="contactComment">
+		<result property="contactCommentNo" column="contact_comment_no" />
+		<result property="contactNo" column="contact_no" />
+		<result property="userNo" column="user_no" />
+		<result property="contactCommentContent" column="contact_comment_content" />
+		<result property="contactCommentDate" column="contact_comment_date" />
 	</resultMap>
 
 	<insert id="contactUsInsert">
@@ -31,11 +41,14 @@
 	<select id="contactSelectListAll" resultMap="contactList">
 		SELECT 
 			contact_no,
+			contact_no as no,
 			CONTACT.user_no,
 			USER.user_name,
 			contact_title,
 			contact_content,
-			contact_password
+			contact_password,
+			contact_date,
+			(select count(1) from CONTACT_COMMENT where CONTACT_COMMENT.contact_no = no) as contact_comment_count
 		FROM CONTACT
 		JOIN USER
 			ON USER.user_no = CONTACT.user_no
@@ -55,7 +68,8 @@
 			user_no,
 			contact_title,
 			contact_content,
-			contact_password
+			contact_password,
+			contact_date
 		FROM CONTACT
 		WHERE
 			contact_no = #{contactNo}	
@@ -80,5 +94,45 @@
 		DELETE FROM CONTACT
 		WHERE
 			contact_no = #{contactNo}
+	</delete>
+	
+	<insert id="contactCommentInsert">
+		INSERT INTO CONTACT_COMMENT (
+			user_no,
+			contact_no,
+			contact_comment_content
+		) VALUES (
+			#{userNo},
+			#{contactNo},
+			#{contactCommentContent}
+		)
+			
+	</insert>
+	
+	<select id="contactCommentLastSelect" resultMap="contactCommentList">
+		SELECT
+			contact_no,
+			contact_comment_no,
+			contact_comment_content,
+			contact_comment_date
+		FROM CONTACT_COMMENT
+		ORDER BY contact_comment_no desc 
+		LIMIT 1
+	</select>
+	
+	<select id="contactCommentSelectListAll" resultMap="contactCommentList">
+		SELECT
+			contact_no,
+			contact_comment_no,
+			contact_comment_content,
+			contact_comment_date
+		FROM CONTACT_COMMENT
+		WHERE
+		 	contact_no = #{contactNo}	
+	</select>
+	
+	<delete id="contactCommentDelete">
+		DELETE FROM CONTACT_COMMENT
+		WHERE contact_comment_no = #{contactCommentNo}	
 	</delete>
 </mapper>

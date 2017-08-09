@@ -47,11 +47,16 @@
 								<span class="label label-danger" id="secret-label">비밀글</span>
 							</c:when>
 							<c:otherwise>
-								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><c:out value="${contact.contactTitle} escapeXml="false"></c:out></a>
+								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
 							</c:otherwise>
 						</c:choose>
+						<c:if test="${contact.contactCommentCount > 0}">
+							<span class="label label-warning" id="secret-label">답변: ${contact.contactCommentCount}</span>
+						</c:if>
 						<div class="pull-right">
 							작성자 <span class="label label-default"> ${contact.userName} </span>
+							&nbsp;&nbsp;
+							<fmt:formatDate value="${contact.contactDate}" pattern="yyyy/MM/dd"/>
 						</div>
 					</div>
 				</c:forEach>
@@ -60,15 +65,15 @@
 		<div class="page-nation">
 			<ul class="pagination pagination-large">
 				<c:if test="${pageMaker.prev}">
-					<li class="disabled"><span><a href="/contact${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+					<li class="disabled"><span><a href="/contact/list${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-						<a href="/contact${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+						<a href="/contact/list${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>
 				<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-					<li class="disabled"><span><a href="/contact${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+					<li class="disabled"><span><a href="/contact/list${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 				</c:if>
 			</ul>
 		</div>

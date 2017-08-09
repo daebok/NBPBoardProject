@@ -59,7 +59,7 @@
 							</a>
 						</h4>
 						<p id="content-summary">
-							<c:out value="${board.boardContentSummary}" escapeXml="false"/>
+							<c:out value="${board.boardContentSummary}" escapeXml="false" />
 						</p>
 						<div>
 							<span class="badge">Posted By ${board.userName}</span> 

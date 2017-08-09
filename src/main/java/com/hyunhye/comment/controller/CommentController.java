@@ -53,7 +53,7 @@ public class CommentController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("list/tab")
+	@RequestMapping("list")
 	public String answerTabSelectListAll(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());

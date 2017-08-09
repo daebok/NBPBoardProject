@@ -13,7 +13,7 @@
 				<div class="emptyContent">답변이 없습니다.</div>
 			</c:if>
 			<c:forEach var="comment" items="${comment}">
-				<%@ include file="answer-form.jsp"%>
+				<%@ include file="answer-form.jsp" %>
 			</c:forEach>
 		</div>
 	</div>

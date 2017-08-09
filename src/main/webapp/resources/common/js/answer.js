@@ -20,7 +20,7 @@ $(document).on("click","#comment-button", function(event) {
 				$(".emptyContent").remove();
 				$('#answer-tab a[href="#newest"]').tab('show');
 				$('#answer-tab a:first').tab('show');
-				$("#listComment").append(result);
+				$("#listComment").append(result).fadeIn("slow");
 				$('.summernote').summernote('code', '');
 			}
 		});
@@ -145,7 +145,7 @@ $(document).on("click",".comment-comment-selct",function() {
 			contentType : false,
 			data : data,
 			success : function(result) {
-				$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result);
+				$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result).hide().slideDown("fast");
 			}
 		});
 	} else if($(this).val() == 'open'){

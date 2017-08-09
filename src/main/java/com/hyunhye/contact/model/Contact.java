@@ -1,5 +1,7 @@
 package com.hyunhye.contact.model;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -19,4 +21,8 @@ public class Contact {
 	private String contactContent;
 	/** 문의사항 비밀번호 **/
 	private String contactPassword;
+	/** 문의사항 날짜 **/
+	private Date contactDate;
+	/** 문의사항 답변 개수 **/
+	private int contactCommentCount;
 }

@@ -1,9 +1,9 @@
 package com.hyunhye.taglib;
 
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.jsp.JspWriter;
 
@@ -24,26 +24,26 @@ public class CategoryListTag extends RequestContextAwareTag {
 		CategoryRepository categoryRepository = SpringBeanFactory.getBean(CategoryRepository.class);
 		List<Category> category = categoryRepository.categorySelectList();
 
-		List<Category> list = category.stream()
-			.filter(s -> s.getCategoryEnabled() != 0)
-			.collect(Collectors.toList());
-
 		if (Objects.isNull(category)) {
 			return SKIP_BODY;
 		}
 
+		Stream<Category> stream = category.stream().filter(s -> s.getCategoryEnabled() != 0);
+
 		JspWriter writer = this.pageContext.getOut();
-
-		Iterator<Category> it = list.iterator();
-
 		writer.write("<select name='categoryNo' id='category'>");
-		while (it.hasNext()) {
-			Category cat = it.next();
-			writer.write("<option value='" + cat.getCategoryNo() + "'>");
-			writer.write(cat.getCategoryItem());
-			writer.write("</option>");
-		}
+		stream.forEach(c -> {
+			try {
+				writer.write("<option value='" + c.getCategoryNo() + "'>");
+				writer.write(c.getCategoryItem());
+				writer.write("</option>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 		writer.write("</select>");
+
+
 		return SKIP_BODY;
 	}
 }

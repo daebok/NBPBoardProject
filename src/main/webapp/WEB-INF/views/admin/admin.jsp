@@ -28,6 +28,8 @@
 						</c:if>
 						<div class="pull-right">
 							작성자  <span class="label label-default"> ${contact.userName} </span>
+							&nbsp;&nbsp;
+							<fmt:formatDate value="${contact.contactDate}" pattern="yyyy/MM/dd"/>
 						</div>
 					</div>
 				</c:forEach>
