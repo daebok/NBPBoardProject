@@ -41,8 +41,6 @@
 		}
 	});
 	$("#modifyButton").click(function() {
-		var special_pattern = /[\\<>]/gi;
-		
 		var title = $("#title").val();
 		var content = $("#content").val();
 		
@@ -50,12 +48,6 @@
 			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
-		}
-		
-		if (special_pattern.test(title) == true) {
-			alert('제목에 \<>는 사용할 수 없습니다.');
-			$('#title').focus();
-			return false;
 		}
 		
 		var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");

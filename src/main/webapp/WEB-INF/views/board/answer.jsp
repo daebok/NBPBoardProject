@@ -4,19 +4,24 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-
 <sec:csrfMetaTags/>
+<script>
+$(document).on("click",".answer-tab",function(){
+	$('.comment-comment-wrapper').children().remove();
+});
+</script>
 </head>
 <body>
-	<div class="container-fluid" style="margin-bottom: 50px" >
+	<div class="container-fluid" style="margin: 30px 0" >
+		<span class="commentTitle">${answerCount.commentCount} Answer</span>
 		<div role="tabpanel">
 			<ul class="nav nav-tabs" role="tablist" id="answer-tab">
-				<li role="presentation" class="active"><a href="#newest" aria-controls="newest" role="tab" data-toggle="tab">Newest</a></li>
-				<li role="presentation"><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
+				<li role="presentation" class="answer-tab active"><a href="#newest" aria-controls="newest" role="tab" data-toggle="tab">Newest</a></li>
+				<li role="presentation"class="answer-tab" ><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
 			</ul>
 			<div class="tab-content" style="margin:20px;">
-				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/comment/list/tab?tab=1" ></c:import></div>
-				<div role="tabpanel" class="tab-pane" id="likes"><c:import url="/comment/list/tab?tab=2" ></c:import></div>
+				<div role="tabpanel" class="tab-pane active" id="newest"><c:import url="/comment/list/tab?tab=1" /></div>
+				<div role="tabpanel" class="tab-pane" id="likes"><c:import url="/comment/list/tab?tab=2" /></div>
 			</div>
 		</div>
 	</div>

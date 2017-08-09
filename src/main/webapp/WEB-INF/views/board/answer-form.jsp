@@ -13,7 +13,7 @@
 	<span  id="answer-like-count-${comment.commentNo}" style="font-size:12px; color:#888;"> ${comment.commentLikeCount} </span>
 	<div id="comment-${comment.commentNo}" class="comment-wrapper-wrapper">
 		<div class="comment-wrapper" id="${comment.commentNo}" style="margin-bottom:10px;">
-			<div class="comment" id="content-${comment.commentNo}"><c:out value="${comment.commentContent}" escapeXml="false"/></div>
+			<div class="comment" id="content-${comment.commentNo}"><html:unescape>${comment.commentContent}</html:unescape> </div>
 			<c:choose>
 				<c:when test="${model.userName == comment.userName}">
 					<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>

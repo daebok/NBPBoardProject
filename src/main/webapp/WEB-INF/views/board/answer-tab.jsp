@@ -7,17 +7,14 @@
 <sec:csrfMetaTags/>
 </head>
 <body>
-	<div class="container-fluid" style="margin-bottom: 50px" >
-		<div class="col-lg-9">
-			<span class="commentTitle">${answerCount.commentCount} Answer</span>
-			<div id="listComment" class="col-lg-12">
-				<c:if test='${empty comment}'>
-					<div class="emptyContent">답변이 없습니다.</div>
-				</c:if>
-				<c:forEach var="comment" items="${comment}">
-					<%@ include file="answer-form.jsp"%>
-				</c:forEach>
-			</div>
+	<div class="col-lg-9">
+		<div id="listComment">
+			<c:if test='${empty comment}'>
+				<div class="emptyContent">답변이 없습니다.</div>
+			</c:if>
+			<c:forEach var="comment" items="${comment}">
+				<%@ include file="answer-form.jsp"%>
+			</c:forEach>
 		</div>
 	</div>
 </body>

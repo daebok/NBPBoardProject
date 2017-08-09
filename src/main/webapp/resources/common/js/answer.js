@@ -1,7 +1,5 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-var socket = new SockJS('/stomp');
-var stompClient = Stomp.over(socket);
 
 /* 답변 달기 */
 $(document).on("click","#comment-button", function(event) {
@@ -24,8 +22,6 @@ $(document).on("click","#comment-button", function(event) {
 				$('#answer-tab a:first').tab('show');
 				$("#listComment").append(result);
 				$('.summernote').summernote('code', '');
-				
-				
 			}
 		});
 	} else if ($(this).html() == 'Modify') {
@@ -98,16 +94,16 @@ $(document).on("click",".comment-modify",function() {
 });
 
 /* 댓글  */
-
-/* 2. 댓글 취소 */
+/* 1. 댓글 취소 */
 $(document).on("click",".comment-comment-cancel-button",function() {
 	var commentNo = $(this).attr('comment-no');
 	$('.comment-comment').attr("disabled",false);
 	$('.comment-comment-write').remove();
 });
-/* 3. 댓글 달기 */
+/* 2. 댓글 달기 */
 $(document).on("click",".comment-comment-button",function() {
 	var result = confirm('답변에 댓글을 달겠습니까?');
+	var data = $('.comment-form').serialize();
 	if (result) {
 		var commentNo = $(this).attr('comment-no');
 		$.ajax({
@@ -117,13 +113,13 @@ $(document).on("click",".comment-comment-button",function() {
 			beforeSend: function(xhr){
 				xhr.setRequestHeader(header, token);
 			},
-			data : $('.comment-form').serialize(),
+			data : data,
 			success : function(result) {
+				var count = parseInt($('#comment-view-'+commentNo).html());
 				$('.comment-comment-write').remove();
 				$('.comment-comment').attr("disabled",false);
 				$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 				$('#comment-view-'+commentNo).val('closed');
-				var count = parseInt($('#comment-view-'+commentNo).html());
 				$('#comment-view-'+commentNo).html((count+1) + " Comment ▲");
 				$('#comment-view-'+commentNo).click();
 			}
@@ -131,7 +127,7 @@ $(document).on("click",".comment-comment-button",function() {
 	}
 });
 
-/* 4. 댓글 리스트 보기 */
+/* 3. 댓글 리스트 보기 */
 $(document).on("click",".comment-comment-selct",function() {
 	$('.comment-comment-write').remove();
 	$('.comment-comment').attr("disabled",false);
@@ -158,7 +154,7 @@ $(document).on("click",".comment-comment-selct",function() {
 		$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 	}
 });
-/* 5. 댓글 수정 버튼 클릭 이벤트 */
+/* 4. 댓글 수정 버튼 클릭 이벤트 */
 $(document).on("click",".comment-comment-modify",function() {
 	var commentNo = $(this).attr('comment-no');
 	var data = "commentNo=" + commentNo;
