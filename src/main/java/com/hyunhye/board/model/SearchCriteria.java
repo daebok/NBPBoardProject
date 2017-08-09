@@ -18,5 +18,6 @@ public class SearchCriteria extends Criteria {
 	private String date;
 	/** 리스트 번호 (전체리스트인지, 내 질문 리스트인지, 즐겨찾기 리스트인지) **/
 	private int option;
+	/**최신순인지, 답변순인지, 조회순인지 **/
 	private int tab;
 }

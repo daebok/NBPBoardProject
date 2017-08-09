@@ -2,8 +2,6 @@ package com.hyunhye.board.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import org.springframework.web.util.HtmlUtils;
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Category;
-import com.hyunhye.board.model.Contact;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.Home;
@@ -25,16 +22,14 @@ import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
-import com.hyunhye.board.repository.ContactRepository;
 import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.common.BadWordFilteringUtils;
 import com.hyunhye.common.UserSessionUtils;
+import com.hyunhye.contact.repository.ContactRepository;
 
 @Service
 public class BoardService {
 	Logger logger = LoggerFactory.getLogger(BoardService.class);
-	public static final Pattern SCRIPTS = Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>", Pattern.DOTALL);
-	public static final Pattern STYLE = Pattern.compile("<style[^>]*>.*</style>", Pattern.DOTALL);
 
 	@Autowired
 	public BoardRepository boardRepository;
@@ -66,14 +61,6 @@ public class BoardService {
 	public void boardInsert(int userNo, Board boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
 
-		/* style, script 태그 제거 */
-		Matcher matcher;
-		matcher = SCRIPTS.matcher(boardModel.getBoardContent());
-		boardModel.setBoardContent(matcher.replaceAll(""));
-
-		matcher = STYLE.matcher(boardModel.getBoardContent());
-		boardModel.setBoardContent(matcher.replaceAll(""));
-
 		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(boardModel.getBoardContent());
 		boardModel.setBoardContentSummary(summary);
@@ -87,16 +74,23 @@ public class BoardService {
 
 	/* HTML 태그 제거 */
 	public String createSummary(String originalContent) {
-		String boardSummary = originalContent
-			.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-		boardSummary = HtmlUtils.htmlUnescape(boardSummary);
-		return boardSummary;
+		/* escape 문자 처리 */
+		String boardSummary = HtmlUtils.htmlUnescape(originalContent);
 
+		/* HTML 태그 제거  */
+		boardSummary = boardSummary.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+
+		/* 일부 문자열만 저장 되도록 */
+		if (boardSummary.length() > 300) {
+			boardSummary = boardSummary.substring(0, 300);
+		}
+
+		return boardSummary;
 	}
 
 	/* 비속어 체크 */
 	public List<String> badWordsCheck(Board model) {
-		String boardSummary = createSummary(model.getBoardContent());
+		String boardSummary = HtmlUtils.htmlUnescape(model.getBoardContent());
 		boardSummary += model.getBoardTitle();
 		List<String> badWords = BadWordFilteringUtils.badWordFilteringContainsStream(boardSummary);
 		return badWords;
@@ -135,14 +129,6 @@ public class BoardService {
 	public void boardUpdate(Board boardModel, MultipartFile[] files) throws IOException, Exception {
 		boardModel.setUserNo(UserSessionUtils.currentUserNo());
 
-		/* style, script 태그, 제거 */
-		Matcher matcher;
-		matcher = SCRIPTS.matcher(boardModel.getBoardContent());
-		boardModel.setBoardContent(matcher.replaceAll(""));
-
-		matcher = STYLE.matcher(boardModel.getBoardContent());
-		boardModel.setBoardContent(matcher.replaceAll(""));
-
 		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(boardModel.getBoardContent());
 		boardModel.setBoardContentSummary(summary);
@@ -172,12 +158,14 @@ public class BoardService {
 	public List<Board> boardSelectList(SearchCriteria cri, int tab) {
 		cri.setOption(1);
 		cri.setTab(tab);
+
 		return boardRepository.boardSelectList(cri);
 	}
 
 	/* 게시글 개수 구하기 */
 	public int boardSelectListCount(SearchCriteria cri) {
 		cri.setOption(1);
+
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -208,6 +196,8 @@ public class BoardService {
 	public List<Board> myQuestionsSelectList(SearchCriteria cri) {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
+
+
 		return boardRepository.boardSelectList(cri);
 	}
 
@@ -215,6 +205,8 @@ public class BoardService {
 	public int myQuestionsSelectListCount(SearchCriteria cri) {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
+		;
+
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -222,12 +214,14 @@ public class BoardService {
 	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri) {
 		cri.setOption(3);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
+
 		return boardRepository.myQuestionsAnsweredSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
 	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
+
 		return boardRepository.myQuestionsAnsweredSelectListCount(cri);
 	}
 
@@ -271,35 +265,6 @@ public class BoardService {
 	public void bookmarkDelete(Board model) {
 		model.setUserNo(UserSessionUtils.currentUserNo());
 		bookmarkRepository.bookmarkDelete(model);
-	}
-
-	public void contactUsInsert(Contact model) {
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		contactRepository.contactUsInsert(model);
-	}
-
-	public int contactSelectListCount(Criteria cri) {
-		return contactRepository.contactSelectListCount(cri);
-	}
-
-	public List<Contact> contactSelectListAll(Criteria cri) {
-		return contactRepository.contactSelectListAll(cri);
-	}
-
-	public Contact contactUsSelectOne(Contact contactMoodel) {
-		return contactRepository.contactUsSelectOne(contactMoodel);
-	}
-
-	public Integer contactUsPasswordSelectCount(Contact contactMoodel) {
-		return contactRepository.contactUsPasswordSelectCount(contactMoodel);
-	}
-
-	public Integer contactUsPasswordCheck(Contact contactMoodel) {
-		return contactRepository.contactUsPasswordCheck(contactMoodel);
-	}
-
-	public void contactUsDelete(Contact contactMoodel) {
-		contactRepository.contactUsDelete(contactMoodel);
 	}
 
 }

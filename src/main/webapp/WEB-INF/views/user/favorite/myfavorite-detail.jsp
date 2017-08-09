@@ -187,7 +187,7 @@ $(document).ready(
 				<form:form name="form" class="memo-form">
 					<input type="hidden" name="boardNo" value='${model.boardNo}'>
 					<label for="content">Memo</label>
-					<textarea class="summernote memo-content" name="bookmarkMemo" >${memo.bookmarkMemo}</textarea>
+					<textarea class="summernote memo-content" name="bookmarkMemo" ><html:unescape>${memo.bookmarkMemo} </html:unescape></textarea>
 					<br />
 					<div class="pull-right">
 						<button class="memo-ok-button btn btn-default">Save</button>
@@ -197,8 +197,8 @@ $(document).ready(
 			<div class="col-md-12">
 				<hr>
 				<span class="label label-warning">${model.categoryItem}</span>
-				<h1>${model.boardTitle}</h1>
-				<p>${model.boardContent}</p>
+				<h1> <html:unescape>${model.boardTitle} </html:unescape></h1>
+				<p> <html:unescape>${model.boardContent} </html:unescape></p>
 				<div>
 					<c:forEach var="attach" items="${attach}">
 						<a href='/board/downloadFile?fileName=${attach.fileName}'> ${attach.fileOriginName} </a>

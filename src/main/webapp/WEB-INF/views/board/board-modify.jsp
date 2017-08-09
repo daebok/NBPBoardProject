@@ -133,7 +133,9 @@
 					<label for="category">Category</label>
 					<category:category />
 				</div>
-				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">${model.boardContent}</textarea>
+				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">
+					${model.boardContent}
+				</textarea>
 				<div class="form-group">
 					<div class="filebox"> 
 						<input class="upload-name" value="파일선택" disabled="disabled" > 

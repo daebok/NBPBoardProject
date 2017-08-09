@@ -35,7 +35,7 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">${board.boardTitle}</a>
+						<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo"> <html:unescape>${board.boardTitle}</html:unescape></a>
 					</h4>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span>

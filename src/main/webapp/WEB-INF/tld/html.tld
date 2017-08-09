@@ -6,14 +6,13 @@
 	<description>Category List</description>
 	<display-name>CommonUtil functions</display-name>
 	<tlib-version>1</tlib-version>
-	<short-name>category</short-name>
+	<short-name>html</short-name>
 
 	<tag>
-		<description>Category List</description>
-		<name>category</name>
-		<tag-class>com.hyunhye.taglib.CategoryListTag</tag-class>
+		<description>Html 특수기호를 Unescape 처리한다.</description>
+		<name>unescape</name>
+		<tag-class>com.hyunhye.taglib.HtmlUnescapeTag</tag-class>
 	</tag>
-	
 	
 	
 	

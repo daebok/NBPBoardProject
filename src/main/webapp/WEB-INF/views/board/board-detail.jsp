@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
 <sec:csrfMetaTags/>
@@ -101,16 +98,15 @@ $(document).ready(
 			</div>
 			<div class="col-md-12">
 				<span class="label label-warning">${model.categoryItem} </span>
-				<h1>${model.boardTitle}</h1>
-				<p>${model.boardContent}</p>
+				<h2><html:unescape>${model.boardTitle}</html:unescape></h2>
+				<p><html:unescape>${model.boardContent}</html:unescape></p>
 				<c:if test="${not empty attach}">
 					<div class="panel panel-default">
 						<div class="list-group">
-								<div class="list-group-item">
-									<div class="list-1"><b>파일명</b></div>
-									<div class="list-2"><b>크기</b></div>
-								</div>
-							
+							<div class="list-group-item">
+								<div class="list-1"><b>파일명</b></div>
+								<div class="list-2"><b>크기</b></div>
+							</div>
 							<c:forEach var="attach" items="${attach}">
 								<div class="uploadedList">
 									<div class="list-group-item">
@@ -138,6 +134,7 @@ $(document).ready(
 				<c:if test="${section eq 1}">
 					<form:form name="form" action="list" method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
+						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
@@ -149,6 +146,7 @@ $(document).ready(
 				<c:if test="${section eq 2}">
 					<form:form name="form" action="myquestions" method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
+						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
@@ -160,6 +158,7 @@ $(document).ready(
 				<c:if test="${section eq 3}">
 					<form:form name="form" action="myanswers" method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
+						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
@@ -178,8 +177,7 @@ $(document).ready(
 			<form:form name="form" method="get" class="answer-form">
 				<input type="hidden" name="boardNo" value="${model.boardNo}">
 				<label for="content">Your Answer</label>
-				<textarea class="summernote" name="commentContent" id="comment-content"></textarea>
-				<br />
+				<textarea class="summernote" name="commentContent" id="comment-content"></textarea><br>
 				<div class="pull-right">
 					<button id="comment-button" class="btn btn-default">Answer</button>
 				</div>

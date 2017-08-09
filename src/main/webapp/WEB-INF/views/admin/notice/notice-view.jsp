@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-<title>Notice</title>
+<title>Contact Us</title>
 <script type="text/javascript">
 $(document).on('click','#delete',function() {
 	var result = confirm('공지사항을 삭제하시겠습니까?');
@@ -20,11 +18,11 @@ $(document).on('click','#delete',function() {
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
 	
-	<div class="container">
-		<div class="container-fluid">
+	<div class="container" style="height:100%;">
+		<div class="container-fluid" >
 			<div class="col-md-12">
-				<h3>${model.noticeTitle}</h3>
-				<p>${model.noticeContent}</p>
+				<h3><html:unescape>${model.noticeTitle}</html:unescape></h3>
+				<p><html:unescape>${model.noticeContent}</html:unescape></p>
 				<hr>
 				<div class="pull-right">
 					<sec:authorize access="hasRole('ROLE_ADMIN')">

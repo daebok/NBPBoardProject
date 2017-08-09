@@ -382,10 +382,10 @@
 				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
+				BOARD.board_content like CONCAT('%',#{keyword},'%')
 			</when>
 			<when test="searchType == 'title'">
-				BOARD.board_content_summary like CONCAT('%',#{keyword},'%') 
+				BOARD.board_content like CONCAT('%',#{keyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
 				USER.user_id = #{keyword}
@@ -394,7 +394,7 @@
 	</sql>
 	
 	<sql id="date_search">
-		DATE(B.board_date) = #{date}
+		DATE(BOARD.board_date) = #{date}
 	</sql>
 
 </mapper>

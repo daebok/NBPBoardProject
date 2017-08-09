@@ -11,7 +11,7 @@
 			<div class="col-md-12">
 				<c:forEach var="board" items="${model}">
 					<h3>
-						<a href="<c:url value='/board/question?boardNo=${board.boardNo}'/>" id="boardNo">${board.boardTitle}</a>
+						<a href="<c:url value='/board/question?boardNo=${board.boardNo}'/>" id="boardNo"><html:unescape>${board.boardTitle}</html:unescape></a>
 					</h3>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span>

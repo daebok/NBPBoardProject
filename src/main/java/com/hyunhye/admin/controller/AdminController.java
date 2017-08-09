@@ -16,8 +16,8 @@ import com.hyunhye.admin.service.AdminService;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
-import com.hyunhye.board.service.BoardService;
 import com.hyunhye.common.BadWordFilteringUtils;
+import com.hyunhye.contact.service.ContactService;
 import com.hyunhye.user.model.UserModel;
 
 @Controller
@@ -28,7 +28,7 @@ public class AdminController {
 	public AdminService adminService;
 
 	@Autowired
-	private BoardService boardService;
+	private ContactService contactService;
 
 	/**
 	 * 관리자 페이지로 이동
@@ -37,14 +37,14 @@ public class AdminController {
 	 */
 	@RequestMapping("admin")
 	public String goAdminPage(@ModelAttribute Criteria cri, Model model) {
-		model.addAttribute("contact", boardService.contactSelectListAll(cri));
 
-		/* 페이징 계산하기 */
+		/** 문의사항 리스트 보기 **/
+		model.addAttribute("contact", contactService.contactSelectListAll(cri));
+
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(boardService.contactSelectListCount(cri));
+		pageMaker.setTotalCount(contactService.contactSelectListCount(cri));
 
-		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/admin";

@@ -1,34 +1,25 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
 <title>Notice</title>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#noticeButton").click(function() {
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-		var blank_pattern = /[\s]/g;
-		
 		var title = $("#title").val();
 		var content = $("#content").val();
 		
-		if (blank_pattern.test(title) == true) {
+		if (title.replace(/\s|　/gi, '') == '') {
 			alert("제목를 입력하세요.");
 			$("#title").focus();
 			return;
 		}
-		
-		if (special_pattern.test(title) == true) {
-			alert('제목에 특수문자는 사용할 수 없습니다.');
-			$('#title').focus();
-			return false;
-		}
 
-		if (blank_pattern.test(content) == true) {
+		var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
+		htmlRemoveContent.replace(/&nbsp;/g, "");
+		if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
 			alert("내용를 입력하세요.");
 			$("#content").focus();
 			return;

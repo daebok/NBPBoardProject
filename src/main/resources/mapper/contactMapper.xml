@@ -3,11 +3,12 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hyunhye.board.repository.ContactRepository">
+<mapper namespace="com.hyunhye.contact.repository.ContactRepository">
 
 	<resultMap id="contactList" type="contact">
 		<result property="contactNo" column="contact_no" />
 		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
 		<result property="contactTitle" column="contact_title" />
 		<result property="contactContent" column="contact_content" />
 		<result property="contactPassword" column="contact_password" />
@@ -30,13 +31,17 @@
 	<select id="contactSelectListAll" resultMap="contactList">
 		SELECT 
 			contact_no,
-			user_no,
+			CONTACT.user_no,
+			USER.user_name,
 			contact_title,
 			contact_content,
 			contact_password
 		FROM CONTACT
+		JOIN USER
+			ON USER.user_no = CONTACT.user_no
 		ORDER BY
-			contact_no desc
+			CONTACT.contact_no desc
+		LIMIT #{startBoardNo}, #{perPageNum}
 	</select>
 	
 	<select id="contactSelectListCount" resultType="int">

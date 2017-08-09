@@ -27,7 +27,7 @@
 				<c:out value="${cri.searchType eq 'writer'?'selected':''}"/>>작성자</option>
 		</select> 
 	</div>
-	<input name="keyword" id="keyword" value="<c:out value='${cri.keyword}'/>">
+	<input name="keyword" id="keyword" value='<html:unescape>${cri.keyword}</html:unescape>'>
 	<input type="date" name="date" value="${cri.date}">
 	<input type="submit" id="searchButton" class="btn btn-default btn-sm" value="검색">
 	<a href="<c:url value='/board/myquestions'/>" id="list" class="btn btn-default btn-sm">Clear</a>

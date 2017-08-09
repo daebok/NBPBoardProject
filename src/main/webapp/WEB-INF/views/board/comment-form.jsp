@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <c:forEach var="commentComment" items="${commentComment}">
 	<div class='comment-wrapper comment-comment-list' id='answer-comment-${ commentComment.commentNo}'>
-		<div class='comment' id='comment-comment-text-${ commentComment.commentNo}'> ${ commentComment.commentContent}
+		<div class='comment' id='comment-comment-text-${ commentComment.commentNo}'> <html:unescape>${ commentComment.commentContent}</html:unescape>
 		</div>
 		<span class='badge'>Commented By ${ commentComment.userName}</span>
 		<div class='pull-right comment-list-list'>

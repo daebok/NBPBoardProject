@@ -1,7 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
 <title>Home</title>
@@ -22,10 +22,13 @@
 			<div class="list-group">
 				<c:forEach var="contact" items="${contact}">
 					<div class="list-group-item">
-						<a href="<c:url value='/board/contactus/view?contactNo=${contact.contactNo}'/>">${contact.contactTitle}</a>
+						<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><html:unescape>${contact.contactTitle}</html:unescape></a>
 						<c:if test="${contact.contactPassword ne null}">
 							<span class="label label-danger">비밀글</span>
 						</c:if>
+						<div class="pull-right">
+							작성자  <span class="label label-default"> ${contact.userName} </span>
+						</div>
 					</div>
 				</c:forEach>
 			</div>
@@ -33,15 +36,15 @@
 		<div class="page-nation">
 			<ul class="pagination pagination-large">
 				<c:if test="${pageMaker.prev}">
-					<li class="disabled"><span><a href="/board/contactUs${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+					<li class="disabled"><span><a href="/admin/admin${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-						<a href="/board/contactUs${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+						<a href="/admin/admin${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>
 				<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-					<li class="disabled"><span><a href="/board/contactUs${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+					<li class="disabled"><span><a href="/admin/admin${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
 				</c:if>
 			</ul>
 		</div>

@@ -25,6 +25,12 @@
 .notice-content {
 	color: #337ab7;
 }
+.notice-wrapper {
+	height:100%; 
+	width:250px;
+	position: absolute;
+	right: 120px;
+}
 </style>
 </head>
 <body>
@@ -32,22 +38,21 @@
 	<%@include file="../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid" >
-			<div class="pull-right" style="height:100%; width:20%">
+			<div class="notice-wrapper pull-right">
 				<div class="notice-title">Notice</div>
 				<div style="border: 3px solid #337ab7; padding:10px;">
 					<c:forEach var="notice" items="${notice}">
 					<h6>
 						<span class="glyphicon glyphicon-bullhorn" style="color:#777;"></span>
-						<a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content"><c:out value="${notice.noticeTitle}"/></a>
+						<a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content"><html:unescape>${notice.noticeTitle}</html:unescape></a>
 					</h6>
 					</c:forEach>
 				</div>
 			</div>
-			
 			<!-- Search-->
 			<%@include file="../common/search.jsp"%>
 			<!-- Body -->
-			<div class="col-md-9">
+			<div class="col-md-9" style="margin-top:20px;">
 				<b>All Questions</b>
 					<c:if test="${pageMaker.cri.tab == 1 }">
 						<a href="<c:url value='/board/list?tab=1'/>" class="tab-newest btn btn-warning btn-sm">Newest</a>
@@ -69,9 +74,14 @@
 				</c:if>
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false" /></a>
+						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo">
+							<html:unescape>${board.boardTitle}</html:unescape>
+						</a>
 					</h4>
-					<p id="content-summary"><c:out value="${board.boardContentSummary}" escapeXml="false" /></p>
+					<p id="content-summary">
+						<c:out value="${board.boardContentSummary}" escapeXml="false"></c:out>
+						
+					</p>
 					<div>
 						<span class="badge">Posted By ${board.userName}</span> 
 						<span class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
