@@ -15,12 +15,13 @@ import com.hyunhye.board.model.Category;
 import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.service.CategoryService;
+import com.hyunhye.contact.model.ContactComment;
 import com.hyunhye.contact.service.ContactService;
 import com.hyunhye.notice.model.Notice;
 import com.hyunhye.notice.service.NoticeService;
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
-import com.hyunhye.utils.BadWordFilteringUtils;
+import com.hyunhye.utils.UserSessionUtils;
 
 @Controller
 @RequestMapping("admin")
@@ -44,7 +45,9 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("admin")
-	public String goAdminPage(@ModelAttribute Criteria cri, Model model) {
+	public String goAdminPage(@ModelAttribute Criteria cri, Model model,
+		@RequestParam(value = "option", defaultValue = "1") int option) {
+		cri.setOption(option);
 
 		/** 문의사항 리스트 보기 **/
 		model.addAttribute("contact", contactService.contactSelectListAll(cri));
@@ -53,6 +56,7 @@ public class AdminController {
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(contactService.contactSelectListCount(cri));
 
+		model.addAttribute("cri", cri);
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/admin";
@@ -232,10 +236,36 @@ public class AdminController {
 		return "redirect:/admin/notice";
 	}
 
-	@RequestMapping(value = "add/badword", method = RequestMethod.POST)
-	public String addBadWord(@RequestParam String badWord) {
-		BadWordFilteringUtils.badWordInsert(badWord);
-		return "redirect:/admin/admin";
+	/**
+	 * 문의사항에 댓글 달기
+	 * @param contactCommentModel
+	 * @param model
+	 */
+	@RequestMapping("comment/regist")
+	public String contactCommentInsert(@ModelAttribute ContactComment contactCommentModel, Model model) {
+		contactService.contactCommentInsert(contactCommentModel);
+
+		/* 세션에 저장된 사용자 정보 */
+		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("comment", contactService.contactCommentLastSelect());
+
+		return "contact/contact-comment-form";
 	}
+
+	/**
+	 * 문의사항 삭제하기
+	 * @param contactCommentNo
+	 */
+	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
+	public ResponseEntity<String> contactCommentDelete(@RequestParam("contactCommentNo") int contactCommentNo) {
+		contactService.contactCommentDelete(contactCommentNo);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	/*	@RequestMapping(value = "add/badword", method = RequestMethod.POST)
+		public String addBadWord(@RequestParam String badWord) {
+			BadWordFilteringUtils.badWordInsert(badWord);
+			return "redirect:/admin/admin";
+		}*/
 
 }

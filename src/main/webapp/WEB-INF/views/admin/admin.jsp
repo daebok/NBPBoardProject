@@ -17,14 +17,34 @@
 			<a href="<c:url value='/admin/notice'/>" id="login" class="notice btn btn-default">Notice Management</a>
 		</div>
 		<br><br>
-		<div class="panel panel-default">
+		<div class="pull-right" style="margin-bottom:10px;">
+			<c:choose>
+				<c:when test="${cri.option == 2 }">
+					<a href="<c:url value='/admin/admin?option=1'/>" class="notice btn btn-default btn-sm">all</a>
+				</c:when>
+				<c:otherwise>
+					<a href="<c:url value='/admin/admin?option=2'/>" class="notice btn btn-default btn-sm">unanswered</a>
+				</c:otherwise>
+			</c:choose>
+		</div>
+		<div class="panel panel-default" style="margin-top:40px;">
 			<div class="panel-heading">문의사항</div>
 			<div class="list-group">
 				<c:forEach var="contact" items="${contact}">
 					<div class="list-group-item">
-						<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}'/>"><html:unescape>${contact.contactTitle}</html:unescape></a>
+						<c:choose>
+							<c:when test="${cri.option == 2 }">
+								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}&option=2'/>"><html:unescape>${contact.contactTitle}</html:unescape></a>
+							</c:when>
+							<c:otherwise>
+								<a href="<c:url value='/contact/view?contactNo=${contact.contactNo}&option=1'/>"><html:unescape>${contact.contactTitle}</html:unescape></a>
+							</c:otherwise>
+						</c:choose>
 						<c:if test="${contact.contactPassword ne null}">
 							<span class="label label-danger">비밀글</span>
+						</c:if>
+						<c:if test="${contact.contactCommentCount > 0}">
+							<span class="label label-warning" id="secret-label">답변: ${contact.contactCommentCount}</span>
 						</c:if>
 						<div class="pull-right">
 							작성자  <span class="label label-default"> ${contact.userName} </span>

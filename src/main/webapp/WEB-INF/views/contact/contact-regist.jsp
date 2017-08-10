@@ -62,7 +62,7 @@ $(document).on("change","#password-check",function(){
 			</div>
 			<label for="password">비밀번호</label>
 			<input type="checkbox" id="password-check">
-			<input type="password" name="contactPassword" maxlength="4" id="password" size="4" disabled />
+			<input type="password" name="contactPassword" maxlength="4" id="password" size="4" disabled placeHolder="****"/>
 			<div class="pull-right">
 				<button type="button" id="noticeButton" class="category-add-button btn btn-default" style="float:left;">문의하기</button>
 			</div>

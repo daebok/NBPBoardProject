@@ -7,6 +7,7 @@
 <sec:csrfMetaTags/>
 <title>ContactUs</title>
 <script type="text/javascript">
+/* 문의사항 삭제하기 */
 $(document).on('click','#delete',function() {
 	var result = confirm('문의사항을 삭제하시겠습니까?');
 	if (result) {
@@ -25,6 +26,8 @@ $(document).ready(
 		});
 });
 
+/* 관리자 권한 */
+/* 문의사항 댓글 달기*/
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 $(document).on("click","#contact-comment-button", function(event) {
@@ -32,7 +35,7 @@ $(document).on("click","#contact-comment-button", function(event) {
 	var data = $('.contact-comment-form').serialize()
 	$.ajax({
 		type : 'POST',
-		url : '/contact/comment/regist',
+		url : '/admin/comment/regist',
 		dataType : 'text',
 		beforeSend: function(xhr){
 			xhr.setRequestHeader(header, token);
@@ -45,6 +48,7 @@ $(document).on("click","#contact-comment-button", function(event) {
 		}
 	});
 });
+/* 문의사항 댓글 삭제 */
 $(document).on("click",".contact-comment-delete-button", function(event) {
 	var contactCommentNo = $(this).attr("comment-no");
 	var data = "contactCommentNo=" + contactCommentNo;
@@ -52,7 +56,7 @@ $(document).on("click",".contact-comment-delete-button", function(event) {
 	if (result) {
 		$.ajax({
 			type : 'GET',
-			url : '/contact/comment/delete',
+			url : '/admin/comment/delete',
 			dataType : 'text',
 			processData : false,
 			contentType : false,
@@ -63,6 +67,22 @@ $(document).on("click",".contact-comment-delete-button", function(event) {
 		});
 	}
 });
+
+/*리스트 목록 이동*/
+$(document).on('click','#listButton',function() {
+	var form = document.forms['list'];
+	var option = ${option};
+	
+	if (option == 1) {
+		form.action = "/admin/admin?option=1";
+	} else if (option == 2) {
+		form.action = "/admin/admin?option=2";
+	} else {
+		form.action = "/contact/list";
+	}
+	 form.submit();
+});
+
 </script>
 <style>
 	.contact-comment-whole-wrapper{
@@ -82,11 +102,11 @@ $(document).on("click",".contact-comment-delete-button", function(event) {
 				<p><html:unescape>${model.contactContent}</html:unescape></p>
 				<hr>
 				<div class="pull-left">
-					<form:form name="list" action="/contact/list"  method="get">
+					<form:form name="list"  method="get">
 						<input type="hidden" name="contactNo" value="${model.contactNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="submit" class="btn btn-primary" value="List"/>
+						<input type="button" id="listButton" class="btn btn-primary" value="List"/>
 					</form:form>
 				</div>
 				<div class="pull-right">

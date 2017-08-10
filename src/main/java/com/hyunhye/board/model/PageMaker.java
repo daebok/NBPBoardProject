@@ -54,6 +54,7 @@ public class PageMaker {
 
 	public String makeQuery(int page) {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+			.queryParam("option", ((Criteria)cri).getOption())
 			.queryParam("page", page)
 			.queryParam("perPageNum", cri.getPerPageNum())
 			.build();

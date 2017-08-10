@@ -40,26 +40,59 @@
 	
 	<select id="contactSelectListAll" resultMap="contactList">
 		SELECT 
-			contact_no,
-			contact_no as no,
-			CONTACT.user_no,
-			USER.user_name,
-			contact_title,
-			contact_content,
-			contact_password,
-			contact_date,
-			(select count(1) from CONTACT_COMMENT where CONTACT_COMMENT.contact_no = no) as contact_comment_count
-		FROM CONTACT
-		JOIN USER
-			ON USER.user_no = CONTACT.user_no
-		ORDER BY
-			CONTACT.contact_no desc
-		LIMIT #{startBoardNo}, #{perPageNum}
+			C.contact_no,
+			C.contact_no as no,
+			C.user_no,
+			C.user_name,
+			C.contact_title,
+			C.contact_content,
+			C.contact_password,
+			C.contact_date,
+			C.contact_comment_count
+		FROM (
+				SELECT 
+					contact_no,
+					contact_no as no,
+					CONTACT.user_no,
+					USER.user_name,
+					contact_title,
+					contact_content,
+					contact_password,
+					contact_date,
+					(select count(1) from CONTACT_COMMENT where CONTACT_COMMENT.contact_no = no) as contact_comment_count
+				FROM CONTACT
+				JOIN USER
+					ON USER.user_no = CONTACT.user_no
+				ORDER BY
+					CONTACT.contact_no desc
+				<if test="option != 2">
+					LIMIT #{startBoardNo}, #{perPageNum}
+				</if>
+			) C
+			<if test="option == 2">
+				WHERE contact_comment_count = 0
+				LIMIT #{startBoardNo}, #{perPageNum}
+			</if>
+			
 	</select>
 	
 	<select id="contactSelectListCount" resultType="int">
-		SELECT COUNT(contact_no) 
-		FROM CONTACT
+		SELECT COUNT(C.contact_no) 
+		<choose>
+			<when test="option == 2">
+				FROM (
+					SELECT 
+						contact_no,
+						contact_no as no,
+						(SELECT count(1) FROM CONTACT_COMMENT WHERE CONTACT_COMMENT.contact_no = no) as contact_comment_count
+					FROM CONTACT 
+				) C
+			WHERE C.contact_comment_count = 0;
+			</when>
+			<otherwise>
+				FROM CONTACT as C
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="contactUsSelectOne" resultMap="contactList">
