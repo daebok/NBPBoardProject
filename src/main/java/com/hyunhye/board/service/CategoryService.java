@@ -25,7 +25,6 @@ public class CategoryService {
 		List<Category> category = categoryRepository.categorySelectList();
 
 		List<Category> list = category.stream()
-			.parallel()
 			.filter(s -> s.getCategoryEnabled() != 0)
 			.collect(Collectors.toList());
 

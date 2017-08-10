@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
 import com.hyunhye.board.model.Category;
-import com.hyunhye.board.repository.CategoryRepository;
+import com.hyunhye.board.service.CategoryService;
 
 @SuppressWarnings("serial")
 public class CategoryListTag extends RequestContextAwareTag {
@@ -21,14 +21,14 @@ public class CategoryListTag extends RequestContextAwareTag {
 	@Override
 	protected int doStartTagInternal() throws Exception {
 
-		CategoryRepository categoryRepository = SpringBeanFactory.getBean(CategoryRepository.class);
-		List<Category> category = categoryRepository.categorySelectList();
+		CategoryService categoryService = SpringBeanFactory.getBean(CategoryService.class);
+		List<Category> category = categoryService.categorySelectList();
 
 		if (Objects.isNull(category)) {
 			return SKIP_BODY;
 		}
 
-		Stream<Category> stream = category.stream().filter(s -> s.getCategoryEnabled() != 0);
+		Stream<Category> stream = category.stream();
 
 		JspWriter writer = this.pageContext.getOut();
 		writer.write("<select name='categoryNo' id='category'>");
@@ -42,7 +42,6 @@ public class CategoryListTag extends RequestContextAwareTag {
 			}
 		});
 		writer.write("</select>");
-
 
 		return SKIP_BODY;
 	}
