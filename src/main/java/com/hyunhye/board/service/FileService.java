@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -79,39 +81,38 @@ public class FileService {
 	public void fileDelete(Board boardModel) {
 		/* 삭제된 첨부파일  가져오기 */
 		String[] filesDelete = boardModel.getBoardFilesDelete();
-		if (filesDelete != null) {
-			String fileDelete;
-			for (int i = 0; i < filesDelete.length; i++) {
-				fileDelete = filesDelete[i];
 
-				/* 1. 서버에서 삭제 */
-				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-
-				new File(homePath + uploadPath + fileDelete.replace('/', File.separatorChar)).delete();
-
-				/* 2. 데이버베이스에서 삭제*/
-				fileRepository.fileDelete(fileDelete);
-			}
+		if (Objects.isNull(filesDelete)) {
+			return;
 		}
+
+		List<String> filesDeletList = Arrays.asList(filesDelete);
+		filesDeletList.stream().forEach(f -> {
+			/* 1. 서버에서 삭제 */
+			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+			new File(homePath + uploadPath + f.replace('/', File.separatorChar)).delete();
+
+			/* 2. 데이버베이스에서 삭제*/
+			fileRepository.fileDelete(f);
+		});
+
 	}
 
-	/* 파일 삭제 (게시물에 첨부된 file 모두 삭제) */
+	/* 파일 삭제 (게시물에 첨부된 file 모두 삭제) - 게시글 삭제 시 */
 	public void fileDeletFromDatabase(int boardNo) {
 		/* 삭제된 첨부파일  가져오기 */
 		List<FileModel> filesDelete = fileRepository.fileSelect(boardNo);
 
-		/* 파일 삭제하기 */
-		if (filesDelete != null) {
-			FileModel fileDelete;
-			for (int i = 0; i < filesDelete.size(); i++) {
-				fileDelete = filesDelete.get(i);
-				String fileName = fileDelete.getFileName();
-
-				/* 서버에서 삭제 */
-				String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-				new File(homePath + uploadPath + fileName.replace('/', File.separatorChar)).delete();
-			}
+		if (Objects.isNull(filesDelete)) {
+			return;
 		}
+
+		filesDelete.stream().forEach(f -> {
+			/* 서버에서 삭제 */
+			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
+			new File(homePath + uploadPath + f.getFileName().replace('/', File.separatorChar)).delete();
+		});
+
 	}
 
 	/* 파일 다운로드 */

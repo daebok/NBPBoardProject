@@ -3,6 +3,7 @@ package com.hyunhye.board.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class BoardService {
 		String boardSummary = HtmlUtils.htmlUnescape(originalContent);
 
 		/* HTML 태그 제거  */
-		boardSummary = boardSummary.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		boardSummary = boardSummary.replaceAll("<(/)?([a-zA-Z]*)([0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
 		/* 일부 문자열만 저장 되도록 */
 		if (boardSummary.length() > 300) {
@@ -152,15 +153,31 @@ public class BoardService {
 	public List<Board> boardSelectList(SearchCriteria cri, int tab) {
 		cri.setOption(1);
 		cri.setTab(tab);
-
+		cri = isSearchTypeNull(cri);
+		logger.info("cri: {}", cri);
 		return boardRepository.boardSelectList(cri);
 	}
 
 	/* 게시글 개수 구하기 */
 	public int boardSelectListCount(SearchCriteria cri) {
 		cri.setOption(1);
-
+		cri = isSearchTypeNull(cri);
 		return boardRepository.boardSelectListCount(cri);
+	}
+
+	/* 검색 타입 null 체크*/
+	public SearchCriteria isSearchTypeNull(SearchCriteria cri) {
+		if (TextUtils.isEmpty(cri.getCategoryType())) {
+			cri.setCategoryType("all");
+		}
+		if (TextUtils.isEmpty(cri.getSearchType())) {
+			cri.setSearchType(null);
+		}
+		if (TextUtils.isEmpty(cri.getDate())) {
+			cri.setDate(null);
+		}
+
+		return cri;
 	}
 
 	/* 조회수 */
@@ -178,8 +195,7 @@ public class BoardService {
 	public List<Board> myQuestionsSelectList(SearchCriteria cri) {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-
-
+		cri = isSearchTypeNull(cri);
 		return boardRepository.boardSelectList(cri);
 	}
 
@@ -187,8 +203,7 @@ public class BoardService {
 	public int myQuestionsSelectListCount(SearchCriteria cri) {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-		;
-
+		cri = isSearchTypeNull(cri);
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -196,14 +211,14 @@ public class BoardService {
 	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri) {
 		cri.setOption(3);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-
+		cri = isSearchTypeNull(cri);
 		return boardRepository.myQuestionsAnsweredSelectList(cri);
 	}
 
 	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
 	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
-
+		cri = isSearchTypeNull(cri);
 		return boardRepository.myQuestionsAnsweredSelectListCount(cri);
 	}
 

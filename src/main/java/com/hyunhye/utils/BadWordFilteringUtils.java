@@ -65,8 +65,7 @@ public class BadWordFilteringUtils {
 	 * @return 게시글에 포함된 비속어 리스트
 	 */
 	public static List<String> badWordFilteringContainsStream(String content) {
-		List<String> list = badWordsArray.stream()
-			.parallel()
+		List<String> list = badWordsArray.parallelStream()
 			.filter(s -> content.contains(s))
 			.collect(Collectors.toList());
 

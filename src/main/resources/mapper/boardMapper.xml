@@ -165,53 +165,48 @@
 	<!-- 게시글 리스트 -->	
 	<select id="boardSelectList" resultMap="boardList">
 		SELECT 
-			B.board_no, 
-			B.board_no as number,
-			USER.user_name, 
-			B.category_item, 
-			B.category_no,
-			B.board_title, 
-			B.board_content_summary, 
-			B.board_date, 
-			B.board_view_cnt,
-			B.comment_count,
+			BOARD.board_no, 
+			BOARD.board_no as number, 
+			BOARD.user_no, 
+			BOARD.category_no, 
+			BOARD.board_title, 
+			BOARD.board_content_summary, 
+			BOARD.board_date, 
+			BOARD.board_view_cnt, 
+			BOARD.board_content,
+			CATEGORY.category_item,
+			USER.user_name,
+			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
-		FROM (
-				SELECT 
-					BOARD.board_no, BOARD.board_no as number, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
-					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,CATEGORY.category_item,
-					(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count
-				FROM BOARD
-				JOIN CATEGORY
-					ON BOARD.category_no = CATEGORY.category_no
-				<if test="option == 1"> <!-- 전체 리스트 -->
-					<include refid="search"></include>
-				</if>
-				<if test="option == 2"> <!-- 내 질문 리스트 -->
-					WHERE BOARD.user_no = #{userNo} 
-					<include refid="search2"></include>
-				</if>
-				<if test="option == 4"> <!-- 즐겨찾기 리스트 -->
-					JOIN BOOKMARK
-						ON BOARD.board_no = BOOKMARK.board_no
-					WHERE BOOKMARK.user_no = #{userNo} 
-				</if>
-				<choose>
-					<when test="tab == 2"> <!-- 조회수 순 -->
-						ORDER BY BOARD.board_view_cnt desc 
-					</when>
-					<when test="tab == 3"> <!-- 답변 순 -->
-						ORDER BY comment_count desc 
-					</when>
-					<otherwise> <!-- 최신 순 -->
-						ORDER BY BOARD.board_no desc
-					</otherwise>
-				</choose>
-				LIMIT #{startBoardNo}, #{perPageNum}
-		) B
+		FROM BOARD
+		JOIN CATEGORY
+			ON BOARD.category_no = CATEGORY.category_no
 		JOIN  USER
-			ON B.user_no = USER.user_no
-		
+			ON BOARD.user_no = USER.user_no
+		<if test="option == 1"> <!-- 전체 리스트 -->
+			<include refid="search"></include>
+		</if>
+		<if test="option == 2"> <!-- 내 질문 리스트 -->
+			WHERE BOARD.user_no = #{userNo} 
+			<include refid="search2"></include>
+		</if>
+		<if test="option == 4"> <!-- 즐겨찾기 리스트 -->
+			JOIN BOOKMARK
+				ON BOARD.board_no = BOOKMARK.board_no
+			WHERE BOOKMARK.user_no = #{userNo} 
+		</if>
+		<choose>
+			<when test="tab == 2"> <!-- 조회수 순 -->
+				ORDER BY BOARD.board_view_cnt desc 
+			</when>
+			<when test="tab == 3"> <!-- 답변 순 -->
+				ORDER BY comment_count desc 
+			</when>
+			<otherwise> <!-- 최신 순 -->
+				ORDER BY BOARD.board_no desc
+			</otherwise>
+		</choose>
+		LIMIT #{startBoardNo}, #{perPageNum}
 	</select>
 	
 	<select id="myQuestionsAnsweredSelectList" resultMap="boardList">
@@ -248,6 +243,8 @@
 		FROM BOARD
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
+		JOIN  USER
+			ON BOARD.user_no = USER.user_no
 		<if test="option == 1">
 			<include refid="search"></include>
 		</if>
@@ -314,20 +311,20 @@
 
 	<!-- 검색 조건 -->
 	<sql id="search">
-		<if test="categoryType != 'all' and categoryType != null and categoryType != '' " >
+		<if test="categoryType != 'all' " >
 			WHERE
 			<include refid="categoryType_search"></include>
 		</if>
-		<if test="searchType != null and searchType != '' ">
+		<if test="searchType != null ">
 			<choose>
-				<when test="categoryType != 'all' and categoryType != null and categoryType != ''">AND</when>
+				<when test="categoryType != 'all'">AND</when>
 				<otherwise>WHERE</otherwise>
 			</choose>
 			<include refid="searchType_search"></include>
 		</if> 
-		<if test="date != '' and date != null">
+		<if test="date != null">
 			<choose>
-				<when test="(categoryType != 'all' and categoryType != null and categoryType != '') || (searchType != null and searchType != '')"> AND</when>
+				<when test="categoryType != 'all'|| searchType != null"> AND</when>
 				<otherwise>WHERE</otherwise>
 			</choose>
 			<include refid="date_search"></include>
@@ -335,15 +332,15 @@
 	</sql>
 	
 	<sql id="search2">
-		<if test="categoryType != 'all' and categoryType != null and categoryType != '' ">
+		<if test="categoryType != 'all' ">
 			AND
 			<include refid="categoryType_search"></include>
 		</if>
-		<if test="searchType != null and searchType != ''">
+		<if test="searchType != null">
 			AND
 			<include refid="searchType_search"></include>
 		</if> 
-		<if test="date != '' and date != null">
+		<if test="date != null">
 			AND
 			<include refid="date_search"></include>
 		</if> 

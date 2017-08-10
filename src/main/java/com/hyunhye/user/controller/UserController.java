@@ -77,8 +77,6 @@ public class UserController {
 		/* 네아로 인증이 성공적으로 완료되면 code 파라미터가 전달되며 이를 통해 access token을 발급 */
 		oauthToken = naverLoginService.getAccessToken(session, code, state);
 
-		logger.info("oauthToken:{}", oauthToken);
-
 		NaverUser naverUser = naverLoginService.getUserProfile(oauthToken);
 		service.naverUserInsert(naverUser);
 

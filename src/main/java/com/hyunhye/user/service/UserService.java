@@ -31,23 +31,28 @@ public class UserService {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
-	/* 회원 등록 */
+	/***
+	 * 회원 가입
+	 * @param model
+	 */
 	public void userInsert(UserModel model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		userRepository.userInsert(model);
 	}
 
-	/* 해당 아이디를 가진 사용자가 있으면, 1 리턴 */
+	/**
+	 * 해당 아이디를 가진 사용자가 있으면
+	 * @param userId
+	 * @return 중복된 아이디 가 있으면 1
+	 */
 	public int checkIdDuplication(String userId) {
 		return userRepository.checkIdDuplication(userId);
 	}
 
-	/* 비밀번호 변경 */
-	public void userPasswordChange(UserModel model) {
-		userRepository.userPasswordChange(model);
-	}
-
-	/* 네이버 아이디로 로그인 시, 회원가입 별도 처리 */
+	/**
+	 * 네이버 아이디로 로그인 시, 회원가입 별도 처리
+	 * @param naverUser
+	 */
 	public void naverUserInsert(NaverUser naverUser) {
 
 		int check = userRepository.naverUserselect(naverUser.getEmail());
@@ -75,6 +80,10 @@ public class UserService {
 		setAuthentication(naverUser);
 	}
 
+	/**
+	 * UserDetailsService를 이용해서 시큐리티 로그인
+	 * @param naverUser
+	 */
 	public void setAuthentication(NaverUser naverUser) {
 		UserDetails userDetails = userAuthenticationService.loadUserByUsername(naverUser.getEmail());
 
@@ -82,34 +91,56 @@ public class UserService {
 			new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
 	}
 
-	/* 현재 비밀번호 확인 */
+	/**
+	 * 현재 비밀번호 확인
+	 * @param model
+	 * @return 일치하면 1
+	 */
 	public boolean passwordCheck(UserModel model) {
 		return encoder.matches(model.getUserPassword(), UserSessionUtils.currentUserPassword());
 	}
 
-	/* 비밀번호 변경 */
+	/**
+	 * 비밀번호 변경
+	 * @param model
+	 */
 	public void passwordUpdate(UserModel model) {
 		model.setUserPassword(encoder.encode(model.getUserPassword()));
 		model.setUserNo(UserSessionUtils.currentUserNo());
 		userRepository.passwordUpdate(model);
 	}
 
-	/** 관리자 -회원 관리 **/
-	/* 회원 정보 리스트 */
+	/** 관리자  **/
+	/**
+	 * 사용자 리스트 가져오기
+	 * @return
+	 */
 	public List<UserModel> userSelectList() {
 		return userRepository.userSelectList();
 	}
 
-	/* 회원 정보 변경 */
+	/**
+	 * 회원 정보 변경
+	 * @param userModel
+	 */
 	public void userAuthorityUpdate(UserModel userModel) {
 		userRepository.userAuthorityUpdate(userModel);
 	}
 
-	/* 회원 삭제 */
+	/**
+	 * 회원 삭제
+	 * 1. 회원과 회원이 작성한 게시물 모두 삭제
+	 * @param userModel
+	 */
 	public void userWithBoardDelete(UserModel userModel) {
 		userRepository.userWithBoardDelete(userModel);
 	}
 
+	/**
+	 * 회원 삭제
+	 * 2. 회원만 삭제
+	 * @param userModel
+	 */
 	public void onlyUserDelete(UserModel userModel) {
 		userRepository.onlyUserDelete(userModel);
 	}

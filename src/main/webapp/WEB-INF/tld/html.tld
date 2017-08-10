@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 	version="2.0">
 
-	<description>Category List</description>
+	<description>HTML Unescape 처리</description>
 	<display-name>CommonUtil functions</display-name>
 	<tlib-version>1</tlib-version>
 	<short-name>html</short-name>
