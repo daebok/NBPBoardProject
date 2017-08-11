@@ -20,8 +20,8 @@
 	
 	
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg>
-		<!-- <beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg> -->
+		<!-- <beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg> -->
+		<beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg>
 	</beans:bean>
 	
 	<context:property-placeholder location="classpath:/config/database.properties" />
