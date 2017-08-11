@@ -62,7 +62,7 @@
 							<c:out value="${board.boardContentSummary}" escapeXml="false" />
 						</p>
 						<div>
-							<span class="badge">Posted By ${board.userName}</span> 
+							<span class="badge">Posted By ${board.userId}</span> 
 							<span class="badge" style="background-color: #ffffff; color: #8c8c8c">Posted <fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
 							<div class="pull-right">
 								<span class="label label-success">answer:<c:out value="${board.commentCount}"/></span> 

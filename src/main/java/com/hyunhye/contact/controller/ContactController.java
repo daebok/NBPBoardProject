@@ -88,8 +88,9 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping("password/is")
-	public String contactUsPasswordSelectOne(@ModelAttribute Contact contactMoodel, Model model) {
-		model.addAttribute("contact", contactMoodel.getContactNo());
+	public String contactUsPasswordSelectOne(@ModelAttribute Contact contactModel, Model model) {
+		logger.info("contactMoodel.getContactNo(): {}", contactModel.getContactNo());
+		model.addAttribute("contact", contactModel.getContactNo());
 		return "contact/contact-password";
 	}
 

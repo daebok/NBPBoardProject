@@ -1,31 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<script type="text/javascript">
-	$('#myTab a[href="#newest"]').tab('show'); // Select tab by name
-	$('#myTab a:first').tab('show'); // Select first tab
-	$('#myTab a:last').tab('show'); // Select last tab
-	$('#myTab li:eq(2) a').tab('show'); // Select third tab (0-indexed)
-
-	/* error message */
-	var error = '${requestScope["errorMessage"]}';
-	if(error != "") {
-		alert(error);
-	}
-
-</script>
 </head>
-<body>
+<script type="text/javascript">
+var error = '${requestScope["errorMessage"]}';
+if(error != "") {
+	alert(error);
+}
+</script>
+<body >
 	<!-- header -->
 	<%@include file="common/header.jsp"%>
 	
 	<!-- article -->
 	<div class="container">
+	
 		<!-- search section -->
 		<%@include file="common/search/board-search.jsp"%>
+		
+		<!-- body -->
 		<h5><b>Top Questions</b></h5>
 		<div role="tabpanel">
 			<ul class="nav nav-tabs" role="tablist">
@@ -45,3 +40,4 @@
 	<%@include file="common/footer.jsp"%>
 </body>
 </html>
+<script src="<c:url value="/resources/common/js/home.js" />"></script>

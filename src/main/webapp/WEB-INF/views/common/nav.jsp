@@ -1,52 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<style>
-.wrapper {
-	height: 40px;
-}
-.welcome-wrapper {
-	margin-left:20px;
-	line-height: 35px;
-	font-size: 0.9em;
-}
-.nav-wrapper {
-	position:fixed;
-	height:50px;
-	width:100%;
-	top:0;
-	background-color: #fff;
-	padding:10px 40px;
-	z-index:100;
-	box-shadow: 5px 0px 20px lightgray;
-}
-.nav-title {
-	text-decoration: none; 
-	color:#000000;
-	font-size: 1.3em;
-	margin: 0 15px;
-	line-height: 30px;
-}
-</style>
-<script>
-function userInfo() {
-	$.ajax({
-		type : "GET",
-		url : "/user/info",
-		success : function(result) {
-			$("#user-info-dialog").html(result);
-		}
-	});
-	$("#user-info-dialog").dialog({
-			autoOpen: true,
-			modal: true,
-			resizable:false,
-			position: { my: "top", at: "bottom", of: "#user-info-button" },
-			title: "회원 정보"
-	});
-}
-</script>
-
 <div class="nav">
 	<div class="nav-wrapper">
 		<div class="pull-left">		
@@ -59,7 +12,7 @@ function userInfo() {
 				</form:form>
 			</div>
 			<div class="pull-left welcome-wrapper">
-				<sec:authentication property="name"/>님 환영합니다.
+				<sec:authentication property="name"/> 님 환영합니다.
 				<a href='javascript:userInfo()'  class="glyphicon glyphicon-user" id="user-info-button" style="color:black"></a>
 				<div id="user-info-dialog"></div>
 			</div>

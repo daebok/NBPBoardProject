@@ -6,6 +6,8 @@
 	<span class="badge" style="background-color:#ffffff; color:#8c8c8c">
 	<fmt:formatDate value="${contactComment.contactCommentDate}" pattern="yyyy/MM/dd"/></span>
 	<sec:authorize access="hasRole('ROLE_ADMIN')"> <!-- 관리자 권한 -->
-		<button type="button" class="contact-comment-delete-button btn btn-default  btn-sm" comment-no="${contactComment.contactCommentNo}">Delete</button>
+		<button type="button" class="btn btn-default  btn-sm" onclick="contactCommentDelete(${contactComment.contactCommentNo})">Delete</button>
 	</sec:authorize>
 </div>
+<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/contact.css'/>">
+<script src="<c:url value="/resources/common/js/contact.js" />"></script>

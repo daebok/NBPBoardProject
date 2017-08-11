@@ -3,27 +3,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
-<head>
-	<title>Home</title>
-	<script type="text/javascript">
-	function passwordCheck(contactNo){
-		$.ajax({
-			type : "GET",
-			url : "/contact/password/is",
-			data: "contactNo="+contactNo,
-			success : function(result) {
-				$("#contact-password-dialog").html(result);
-			}
-		});
-		$("#contact-password-dialog").dialog({
-			autoOpen: true,
-			modal: true,
-			position: { my: "left", at: "right", of: "#secret-label" },
-			title: "비밀번호"
-		});
-	}
-	</script>
-</head>
+<sec:csrfMetaTags/>
 <body>
 	<!-- header -->
 	<%@include file="../common/header.jsp"%>
@@ -43,7 +23,7 @@
 					<div class="list-group-item">
 						<c:choose>
 							<c:when test="${contact.contactPassword ne null}">
-								<a href="javascript:passwordCheck('${contact.contactNo}')"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
+								<a href="javascript:passwordIsCheck(${contact.contactNo})"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
 								<span class="label label-danger" id="secret-label">비밀글</span>
 							</c:when>
 							<c:otherwise>
@@ -83,4 +63,8 @@
 	<div id="contact-password-dialog"></div>
 </body>
 </html>
+
+<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/contact.css'/>">
+<script src="<c:url value="/resources/common/js/contact.js" />"></script>
+
 					 

@@ -4,92 +4,10 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
+
+<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/contact.css'/>">
+<script src="<c:url value="/resources/common/js/contact.js" />"></script>
 <sec:csrfMetaTags/>
-<title>ContactUs</title>
-<script type="text/javascript">
-/* 문의사항 삭제하기 */
-$(document).on('click','#delete',function() {
-	var result = confirm('문의사항을 삭제하시겠습니까?');
-	if (result) {
-		location.replace('/contact/delete?contactNo=${model.contactNo}');
-	} 
-});
-
-/* 섬머노트 */
-$(document).ready(
-	function() {
-		$('.summernote').summernote({
-			height : 200,
-			onImageUpload : function(files,editor, welEditable) {
-					sendFile(files[0], editor,welEditable);
-			}
-		});
-});
-
-/* 관리자 권한 */
-/* 문의사항 댓글 달기*/
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
-$(document).on("click","#contact-comment-button", function(event) {
-	event.preventDefault();
-	var data = $('.contact-comment-form').serialize()
-	$.ajax({
-		type : 'POST',
-		url : '/admin/comment/regist',
-		dataType : 'text',
-		beforeSend: function(xhr){
-			xhr.setRequestHeader(header, token);
-		},
-		data : data,
-		success : function(result) {
-			alert('답변이 달렸습니다.');
-			$("#listComment").append(result);
-			$('.summernote').summernote('code', '');
-		}
-	});
-});
-/* 문의사항 댓글 삭제 */
-$(document).on("click",".contact-comment-delete-button", function(event) {
-	var contactCommentNo = $(this).attr("comment-no");
-	var data = "contactCommentNo=" + contactCommentNo;
-	var result = confirm('답변을 삭제하시겠습니까?');
-	if (result) {
-		$.ajax({
-			type : 'GET',
-			url : '/admin/comment/delete',
-			dataType : 'text',
-			processData : false,
-			contentType : false,
-			data : data,
-			success : function(result) {
-				$("#contact-comment-whole-wrapper-"+contactCommentNo).remove();
-			}
-		});
-	}
-});
-
-/*리스트 목록 이동*/
-$(document).on('click','#listButton',function() {
-	var form = document.forms['list'];
-	var option = ${option};
-	
-	if (option == 1) {
-		form.action = "/admin/admin?option=1";
-	} else if (option == 2) {
-		form.action = "/admin/admin?option=2";
-	} else {
-		form.action = "/contact/list";
-	}
-	 form.submit();
-});
-
-</script>
-<style>
-	.contact-comment-whole-wrapper{
-		border: 1px solid #aaa;
-		padding:10px;
-	}
-</style>
 </head>
 <body>
 	<!-- header -->
@@ -106,12 +24,12 @@ $(document).on('click','#listButton',function() {
 						<input type="hidden" name="contactNo" value="${model.contactNo}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
 						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="button" id="listButton" class="btn btn-primary" value="List"/>
+						<input type="button" id="listButton" class="btn btn-primary" value="List" onclick="goToList('${option}');"/>
 					</form:form>
 				</div>
 				<div class="pull-right">
 					<c:if test="${user.userNo == model.userNo}">
-						<button id="delete" class="btn btn-primary">Delete</button>
+						<button id="delete" class="btn btn-primary" onclick="contactDelete(${model.contactNo})">Delete</button>
 					</c:if>
 				</div>
 			</div>
@@ -127,9 +45,9 @@ $(document).on('click','#listButton',function() {
 			<div class="col-lg-9" style="margin-top: 50px;">
 				<form:form name="form" method="get" class="contact-comment-form">
 					<input type="hidden" name="contactNo" value="${model.contactNo}">
-					<textarea class="summernote" name="contactCommentContent" id="contact-comment-content"></textarea><br>
+					<textarea class="summernote" name="contactCommentContent"></textarea><br>
 					<div class="pull-right">
-						<button id="contact-comment-button" class="btn btn-default">OK</button>
+						<button class="btn btn-default" onclick="contactCommentRegist()">OK</button>
 					</div>
 				</form:form>
 			</div>
@@ -140,3 +58,5 @@ $(document).on('click','#listButton',function() {
 	<%@include file="../common/footer.jsp"%>
 </body>
 </html>
+
+
