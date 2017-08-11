@@ -137,7 +137,7 @@ public class BoardController {
 		Model model, HttpServletRequest request, HttpServletResponse response) {
 
 		/* 조회수 */
-		boardService.setViewCookies(boardNo);
+		boardService.increaseViewCount(boardNo);
 
 		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());

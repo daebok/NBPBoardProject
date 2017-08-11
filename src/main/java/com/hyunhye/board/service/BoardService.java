@@ -100,7 +100,7 @@ public class BoardService {
 	}
 
 	/* 조회수 */
-	public void setViewCookies(int boardNo) {
+	public void increaseViewCount(int boardNo) {
 		Board boardModel = new Board();
 		boardModel.setBoardNo(boardNo);
 		boardModel.setUserNo(UserSessionUtils.currentUserNo());
@@ -178,11 +178,6 @@ public class BoardService {
 		}
 
 		return cri;
-	}
-
-	/* 조회수 */
-	public void increaseViewCount(int boardNo) {
-		boardRepository.increaseViewCount(boardNo);
 	}
 
 	/* 게시글 작성자 가져오기 */
