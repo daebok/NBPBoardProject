@@ -1,6 +1,8 @@
 package com.hyunhye.board.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.http.util.TextUtils;
@@ -70,8 +72,8 @@ public class BoardService {
 	/* HTML 태그 제거 */
 	public String createSummary(String originalContent) {
 		/* escape 문자 처리 */
-		String boardSummary = HtmlUtils.htmlUnescape(originalContent);
-
+		// String boardSummary = HtmlUtils.htmlUnescape(originalContent);
+		String boardSummary = originalContent;
 		/* HTML 태그 제거  */
 		boardSummary = boardSummary.replaceAll("<(/)?([a-zA-Z]*)([0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
@@ -154,7 +156,7 @@ public class BoardService {
 		cri.setOption(1);
 		cri.setTab(tab);
 		cri = isSearchTypeNull(cri);
-		logger.info("cri: {}", cri);
+		cri = dateCheck(cri);
 		return boardRepository.boardSelectList(cri);
 	}
 
@@ -162,6 +164,7 @@ public class BoardService {
 	public int boardSelectListCount(SearchCriteria cri) {
 		cri.setOption(1);
 		cri = isSearchTypeNull(cri);
+		cri = dateCheck(cri);
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -173,8 +176,24 @@ public class BoardService {
 		if (TextUtils.isEmpty(cri.getSearchType())) {
 			cri.setSearchType(null);
 		}
-		if (TextUtils.isEmpty(cri.getDate())) {
-			cri.setDate(null);
+		return cri;
+	}
+
+	public SearchCriteria dateCheck(SearchCriteria cri) {
+		if (TextUtils.isEmpty(cri.getFromDate()) && TextUtils.isEmpty(cri.getToDate())) {
+			cri.setFromDate(null);
+			cri.setToDate(null);
+		} else if (TextUtils.isEmpty(cri.getFromDate())) {
+			LocalDate theDate = LocalDateTime.now().toLocalDate();
+			cri.setFromDate(cri.getToDate());
+			cri.setToDate(theDate.toString());
+		} else if (TextUtils.isEmpty(cri.getToDate())) {
+			LocalDate theDate = LocalDateTime.now().toLocalDate();
+			cri.setToDate(theDate.toString());
+		} else if (cri.getFromDate().compareTo(cri.getToDate()) > 0) {
+			String tmpDate = cri.getFromDate();
+			cri.setFromDate(cri.getToDate());
+			cri.setToDate(tmpDate);
 		}
 
 		return cri;
@@ -191,6 +210,7 @@ public class BoardService {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		cri = isSearchTypeNull(cri);
+		cri = dateCheck(cri);
 		return boardRepository.boardSelectList(cri);
 	}
 
@@ -199,6 +219,7 @@ public class BoardService {
 		cri.setOption(2);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		cri = isSearchTypeNull(cri);
+		cri = dateCheck(cri);
 		return boardRepository.boardSelectListCount(cri);
 	}
 
@@ -207,6 +228,7 @@ public class BoardService {
 		cri.setOption(3);
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		cri = isSearchTypeNull(cri);
+		cri = dateCheck(cri);
 		return boardRepository.myQuestionsAnsweredSelectList(cri);
 	}
 
@@ -214,6 +236,7 @@ public class BoardService {
 	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri) {
 		cri.setUserNo(UserSessionUtils.currentUserNo());
 		cri = isSearchTypeNull(cri);
+		cri = dateCheck(cri);
 		return boardRepository.myQuestionsAnsweredSelectListCount(cri);
 	}
 

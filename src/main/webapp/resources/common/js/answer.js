@@ -8,26 +8,25 @@ $(document).ajaxStop(function() {
 	$('html').css("cursor", "auto");
 });
 
-$(document).ready(
-	function() {
-		$('.memo-summernote').summernote({
-			height : 500
-		});
+$('.answer-summernote').summernote({
+	height : 200,
+	onImageUpload : function(files,editor, welEditable) {
+			sendFile(files[0], editor,welEditable);
 	}
-);
+});
 
 function createCommentTextArea(commentNo, boardNo, commentViewButton){
 	$(commentViewButton).attr("disabled",true);
 	var str="";
-	str += '<div class="comment-comment-write">';
+	str += '<div class="comment-write">';
 	str += '<form name="form" class="comment-form">';
 	str += '<input type="hidden" name="boardNo" value="'+boardNo+'">';
 	str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
-	str += '<textarea cols="60" size="8" class="comment-comment-textarea" id="comment-comment-textarea" name="commentContent"></textarea>';
-	str += '<div><button type="button" class="btn btn-default btn-sm" onclick="commentRegist('+commentNo+')">Ok</button>';
+	str += '<textarea cols="60" size="8" class="comment-textarea" id="comment-textarea" name="commentContent"></textarea><br>';
+	str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentRegist('+commentNo+')">Ok</button>';
 	str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
 	str += '</form></div>';
-	$('#comment-'+commentNo+' > .comment-comment-wrapper').append(str);
+	$('#answer-'+commentNo+' > .comment-wrapper').append(str);
 }
 
 
@@ -46,11 +45,12 @@ function answerRegist(answerButton, event){
 			data : data,
 			success : function(result) {
 				alert('답변이 달렸습니다.');
-				$(".emptyContent").remove();
-				$('#answer-tab a[href="#newest"]').tab('show');
-				$('#answer-tab a:first').tab('show');
+				$(".empty-answer").remove();
+				$("#listComment *").remove();
 				$("#listComment").append(result);
-				$('.answer-summernote').summernote('code', '');
+				$('.note-editable').html('');
+				
+				$('#answer-tab a[href="#newest"]').tab('show');
 			}
 		});
 	} else if ($(answerButton).html() == 'Modify') {
@@ -64,12 +64,15 @@ function answerRegist(answerButton, event){
 			},
 			data : $('.answer-form').serialize(),
 			success : function(result) {
-				alert('답글이 수정되었습니다.');
+				alert('답변이 수정되었습니다.');
 				$("#content-"+commentNo).html(commentContent);
-				$('.answer-summernote').summernote('code', '');
-				$('#comment-button').html('Comment');
-				$('#'+commentNo).css('background-color','#ffffff');
-				$('#comment-list > *').attr("disabled",false);
+				$('.note-editable').html('');
+				$(answerButton).html('Answer')
+				$('#answer-content-'+commentNo).css('background-color','#ffffff');
+				$('.answer-button').attr("disabled",false);
+				
+				$('#answer-tab a[href="#newest"]').tab('show');
+				$('#answer-tab a:first').tab('show');
 			}
 	});
 	}
@@ -91,7 +94,7 @@ function answerDelete(commentNo){
 			success : function(result) {
 				$('#answer-tab a[href="#newest"]').tab('show');
 				$('#answer-tab a:first').tab('show');
-				$("#whole-wrapper-"+commentNo).remove();
+				$("#answer-wrapper-"+commentNo).remove();
 			}
 		});
 	}
@@ -112,20 +115,21 @@ function answerModify(commentNo){
 				var list = $.parseJSON(result);
 				$('#answer-tab a[href="#newest"]').tab('show');
 				$('#answer-tab a:first').tab('show');
-				$('#'+commentNo).css('background-color','#ededed');
-				$('#comment-button').html('Modify');
-				$('#comment-button').attr('comment-no',commentNo);
-				$('#comment-list > *').attr("disabled",true);
+				$('#answer-content-'+commentNo).css('background-color','#ededed');
+				$('#answer-regist-button').html('Modify');
+				$('#answer-regist-button').attr('comment-no',commentNo);
+				$('#answer-no').val(commentNo);
+				$('.answer-button*').attr("disabled",true);
+				$('.note-editable').html(list.comment);
 				$('.answer-summernote').focus();
-				$('.answer-summernote').summernote('code', list.commentContent);
 			}
 		});
 	}
 }
 
 function commentCancel(commentNo){
-	$('.comment-comment').attr("disabled",false);
-	$('.comment-comment-write').remove();
+	$('.comment-add').attr("disabled",false);
+	$('.comment-write').remove();
 }
 
 function commentRegist(commentNo){
@@ -142,9 +146,9 @@ function commentRegist(commentNo){
 			data : data,
 			success : function(result) {
 				var count = parseInt($('#comment-view-'+commentNo).html());
-				$('.comment-comment-write').remove();
-				$('.comment-comment').attr("disabled",false);
-				$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
+				$('#answer-'+commentNo+' > .comment-wrapper').children().remove();
+				$('.comment-write').remove();
+				$('.comment-add').attr("disabled",false);
 				$('#comment-view-'+commentNo).val('closed');
 				$('#comment-view-'+commentNo).html((count+1) + " Comment ▲");
 				$('#comment-view-'+commentNo).click();
@@ -154,8 +158,9 @@ function commentRegist(commentNo){
 }
 
 function commentListView(commentNo, commentListButton){
-	$('.comment-comment-write').remove();
-	$('.comment-comment').attr("disabled",false);
+	$('.comment-write').remove();
+	$('.comment').attr("disabled",false);
+	$('.comment-add').attr("disabled",false);
 	var count = parseInt($(commentListButton).html());
 	if($(commentListButton).val() == 'closed'){
 		$(commentListButton).html(count + " Comment ▲");
@@ -169,13 +174,13 @@ function commentListView(commentNo, commentListButton){
 			contentType : false,
 			data : data,
 			success : function(result) {
-				$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result).hide().slideDown("fast");
+				$('#answer-'+commentNo+' > .comment-wrapper').append(result).hide().slideDown("fast");
 			}
 		});
 	} else if($(commentListButton).val() == 'open'){
 		$(commentListButton).html(count + " Comment ▼");
 		$(commentListButton).val('closed');
-		$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
+		$('#answer-'+commentNo+' > .comment-wrapper').children().remove();
 	}
 }
 
@@ -190,38 +195,42 @@ function goToCommentModify(commentNo){
 		data : data,
 		success : function(result) {
 			var list = $.parseJSON(result);
-			$('#'+commentNo).css('background-color','#ededed');
-			$('#comment-button').attr('comment-no',commentNo);
-			$('#comment-list > *').attr("disabled",true);
-			$('.comment-list-list > *').attr("disabled",true);
+			$('#answer-content-'+commentNo).css('background-color','#ededed');
+			$('#answer-button > *').attr("disabled",true);
+			$('.comment-list-button > *').attr("disabled",true);
 			$(this).attr("disabled",true);
-			$('#answer-comment-' + commentNo ).after('<div class="comment-comment-write">'
-				+ '<textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea">'+list.commentContent+'</textarea>'
-				+ '<button type="button" class="btn btn-default" onclick="commentModify('+commentNo+')">Ok</button></div>');
+			
+			var str = "";
+			str += '<div class="comment-write">';
+			str += '<form name="form" class="comment-form">';
+			str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
+			str += '<textarea cols="50" size="5" class="comment-textarea" id="comment-textarea" name="commentContent">'+list.comment+'</textarea><br>';
+			str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentModify('+commentNo+')">Ok</button>';
+			str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
+			str += '</form></div>';
+			
+			$('#answer-comment-' + commentNo ).after(str);
 		}
 	});
 }
 
 function commentModify(commentNo){
-	var commentContent = $('#comment-comment-textarea').val();
+	var commentContent = $('#comment-textarea').val();
 	$.ajax({
 		type : 'POST',
 		url : '/comment/modify',
 		dataType : 'text',
-		processData : false,
-		contentType : false,
 		beforeSend: function(xhr){
 			xhr.setRequestHeader(header, token);
 		},
 		data : $('.comment-form').serialize(),
 		success : function(result) {
 			alert('답글이 수정되었습니다.');
-			$("#comment-comment-text-"+commentNo).html(commentContent);
-			$('#comment-button').html('Comment');
-			$('#'+commentNo).css('background-color','#ffffff');
-			$('#comment-list > *').attr("disabled",false);
-			$('.comment-list-list > *').attr("disabled",false);
-			$('.comment-comment-write').remove();
+			$("#comment-text-"+commentNo).html(commentContent);
+			$('#answer-content-'+commentNo).css('background-color','#ffffff');
+			$('#answer-button > *').attr("disabled",false);
+			$('.comment-list-button > *').attr("disabled",false);
+			$('.comment-write').remove();
 		}
 	});
 }

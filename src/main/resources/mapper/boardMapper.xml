@@ -34,6 +34,7 @@
 		SELECT 
 			B.board_no,
 			USER.user_name, 
+			USER.user_id, 
 			CATEGORY.category_item, 
 			B.category_no,
 			B.board_title, 
@@ -175,7 +176,8 @@
 			BOARD.board_view_cnt, 
 			BOARD.board_content,
 			CATEGORY.category_item,
-			USER.user_name,
+			USER.user_name, 
+			USER.user_id,
 			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
 			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
 		FROM BOARD
@@ -322,7 +324,7 @@
 			</choose>
 			<include refid="searchType_search"></include>
 		</if> 
-		<if test="date != null">
+		<if test="fromDate != null and toDate != null">
 			<choose>
 				<when test="categoryType != 'all'|| searchType != null"> AND</when>
 				<otherwise>WHERE</otherwise>
@@ -340,7 +342,7 @@
 			AND
 			<include refid="searchType_search"></include>
 		</if> 
-		<if test="date != null">
+		<if test="fromDate != null and toDate != null">
 			AND
 			<include refid="date_search"></include>
 		</if> 
@@ -369,7 +371,7 @@
 	</sql>
 	
 	<sql id="date_search">
-		DATE(BOARD.board_date) = #{date}
+		DATE(BOARD.board_date) BETWEEN #{fromDate} AND #{toDate}
 	</sql>
 
 </mapper>

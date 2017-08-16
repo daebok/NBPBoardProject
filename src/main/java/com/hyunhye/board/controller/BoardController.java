@@ -128,7 +128,7 @@ public class BoardController {
 	 * @param model
 	 * @param request
 	 * @param response
-	 * @return
+	 * @return 게시글 상세보기 페이지
 	 */
 	@RequestMapping("question")
 	public String boardSelectOne(@RequestParam("boardNo") int boardNo,
@@ -153,7 +153,7 @@ public class BoardController {
 
 		model.addAttribute("section", section);
 
-		return "board/board-detail";
+		return "board/board-view";
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class BoardController {
 
 		/* 즐겨찾기 된 해당 게시글의 메모 */
 		model.addAttribute("memo", boardService.bookmarkMemoSelect(boardNo));
-		return "user/favorite/myfavorite-detail";
+		return "user/favorite/myfavorite-view";
 	}
 
 	/**

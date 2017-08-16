@@ -6,13 +6,13 @@
 <sec:csrfMetaTags/>
 <script>
 $(document).on("click",".answer-tab",function(){
-	$('.comment-comment-wrapper').children().remove();
+	$('.comment-wrapper').children().remove();
 });
 </script>
 </head>
 <body>
 	<div class="container-fluid" style="margin: 30px 0" >
-		<span class="commentTitle">${answerCount.commentCount} Answer</span>
+		<span class="answer-title">${answerCount.commentCount} Answer</span>
 		<div role="tabpanel">
 			<ul class="nav nav-tabs" role="tablist" id="answer-tab">
 				<li role="presentation" class="answer-tab active"><a href="#newest" aria-controls="newest" role="tab" data-toggle="tab">Newest</a></li>

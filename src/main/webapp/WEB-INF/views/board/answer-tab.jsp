@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
@@ -8,14 +7,10 @@
 </head>
 <body>
 	<div class="col-lg-9">
-		<div id="listComment">
-			<c:if test='${empty comment}'>
-				<div class="emptyContent">답변이 없습니다.</div>
-			</c:if>
-			<c:forEach var="comment" items="${comment}">
-				<%@ include file="answer-form.jsp" %>
-			</c:forEach>
-		</div>
+		<c:if test='${empty answer}'>
+			<div class="empty-answer">답변이 없습니다.</div>
+		</c:if>
+		<%@ include file="answer-form.jsp" %>
 	</div>
 </body>
 </html>

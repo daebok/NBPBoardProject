@@ -25,7 +25,7 @@
 				<span class="label label-warning">${model.categoryItem} </span>
 				<h2><c:out value="${model.boardTitle}" escapeXml="true"/></h2>
 				<p><c:out value="${model.boardContent}" escapeXml="false"/></p>
-				<%-- <p><html:unescape>${model.boardContent}</html:unescape></p> --%>
+				<div align="right">작성자: ${model.userId} </div>
 				<c:if test="${not empty attach}">
 					<div class="panel panel-default">
 						<div class="list-group">
@@ -71,15 +71,19 @@
 			</div>
 		</div>
 		<!-- answer -->
-		<%@include file="answer.jsp"%>
+		<div id="listComment">
+			<%@include file="answer.jsp"%>
+		</div>
 		
-		<div class="col-lg-9" style="margin-top: 50px;">
+		<!-- answer editor -->
+		<div class="col-lg-8" style="margin-top: 50px;">
 			<form:form name="form" method="get" class="answer-form">
-				<input type="hidden" name="boardNo" value="${model.boardNo}">
 				<label for="content">Your Answer</label>
 				<textarea class="answer-summernote" name="commentContent" id="comment-content"></textarea><br>
+				<input type="hidden" name="boardNo" value="${model.boardNo}">
+				<input type="hidden" name="commentNo" id="answer-no" value="0">
 				<div class="pull-right">
-					<button id="answerRegistButton" onclick="answerRegist(this, event)" class="btn btn-default">Answer</button>
+					<button id="answer-regist-button" onclick="answerRegist(this, event)" class="btn btn-default">Answer</button>
 				</div>
 			</form:form>
 		</div>

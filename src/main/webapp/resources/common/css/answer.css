@@ -2,44 +2,38 @@
 .whole-wrapper{
 	margin:15px;
 }
-.comment-wrapper {
+.answer-title {
+	font-weight: bold;
+}
+.answer-content-wrapper {
 	padding: 10px;
 	margin-bottom:10px;
 	border: 1px dotted #c9302c;
 	border-radius: 10px;
 }
 
-.commentTitle {
-	font-weight: bolder;
-}
-
-.commentName {
+.answer-time {
 	background-color: #000000;
 }
-.comment-comment-write {
+.comment-write {
 	overflow: hidden;
 }
-.comment-comment-textarea {
+.comment-textarea {
 	float: left;
 	margin-left: 140px;
+	margin-top:15px;
 	margin-bottom: 20px;
 }
-.comment-comment-button {
+.comment-button {
 	margin:10px;
 	float: left;
 }
-.comment-comment-modify-button {
-	margin:10px;
-	float: left;
-}
-.comment-comment-cancel-button {
-	margin-top:10px;
-	float: left;
-}
-.comment-comment-list {
+
+.comment-list {
+	
 	width: 500px;
 	margin-left: 120px;
-	margin-top: -10px;
+	margin-top: 10px;
 	border-top: none;
 	border-left: none;
 	border-right: none;

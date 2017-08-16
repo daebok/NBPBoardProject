@@ -5,11 +5,13 @@
 <head>
 </head>
 <body>
+	<!-- loading -->
+	<%@include file="../common/loading.jsp"%>
+	
 	<!-- header -->
 	<%@include file="../common/header.jsp"%>
-	<!-- 본문 -->
+	
 	<div class="container">
-			
 		<!-- Notice-->
 		<%@include file="board-notice.jsp"%>
 		
