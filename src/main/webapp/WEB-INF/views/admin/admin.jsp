@@ -3,9 +3,6 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
-<head>
-<title>Home</title>
-</head>
 <body>
 	<!-- header -->
 	<%@include file="../common/header.jsp"%>

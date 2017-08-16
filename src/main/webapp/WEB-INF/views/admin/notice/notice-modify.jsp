@@ -3,58 +3,12 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
-<head>
-<title>Notice</title>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#noticeButton").click(function() {
-		var title = $("#title").val();
-		var content = $("#content").val();
-		if (title == "") {
-			alert("제목을 입력하세요.");
-			$("#title").focus();
-			return;
-		}
-		if (content == "") {
-			alert("내용를 입력하세요.");
-			$("#content").focus();
-			return;
-		}
-
-		document.form.action = "/admin/notice/modify"
-		document.form.submit();
-	});
-	
-	$('.summernote').summernote({
-		height : 200,
-		width: 100,
-		callbacks: {
-			onImageUpload: function(files, editor, welEditable) {
-				var form = $('.file')[0];
-				var formData = new FormData(form);
-				for (var index = files.length - 1; index >= 0; index--) {
-					formData.append('files', files[index]);
-
-					var str = "<div class='list-group-item' id='file-list-"+index+"'>";
-					str += "<div class='list-1'>" + files[index].name +"</div>";
-					str += "<div class='list-2'>" + files[index].size + " bytes </div>";
-					str += "<div class='list-3'> <a class='file-delete-button' id='"+index+"'>[삭제]</a></div></div>";
-					$(".newUploadedList").append(str);
-				}
-			}
-		}
-	});
-
-	
-});
-</script>
-</head>
 <body>
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
 
 	<div class="container">
-		<form:form name="form" method="post" class="form-horizontal" id="category-add-form">
+		<form:form name="form" action="/admin/notice/modify" method="post" class="form-horizontal" id="category-add-form">
 			<input type="hidden" name="noticeNo" value="${model.noticeNo }"/>
 			<div class="form-group">
 				<label for="title">Title</label>
@@ -74,4 +28,6 @@ $(document).ready(function() {
 	<!-- footer -->
 	<%@include file="../../common/footer.jsp"%>
 </body>
-</html> 
+</html>
+
+<script src="<c:url value="/resources/common/js/notice.js" />"></script>

@@ -3,17 +3,6 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
-<head>
-<title>Contact Us</title>
-<script type="text/javascript">
-$(document).on('click','#delete',function() {
-	var result = confirm('공지사항을 삭제하시겠습니까?');
-	if (result) {
-		location.replace('/admin/notice/delete?noticeNo=${model.noticeNo}');
-	} 
-});
-</script>
-</head>
 <body>
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
@@ -27,7 +16,7 @@ $(document).on('click','#delete',function() {
 				<div class="pull-right">
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a href="<c:url value='/admin/notice/modifyPage?noticeNo=${model.noticeNo}'/>" id="modify" class="btn btn-primary">Modify</a>
-						<button id="delete" class="btn btn-primary">Delete</button>
+						<button onclick="noticeDelete(${model.noticeNo})" class="btn btn-primary">Delete</button>
 					</sec:authorize>
 				</div>
 			</div>
@@ -38,3 +27,5 @@ $(document).on('click','#delete',function() {
 	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>
+
+<script src="<c:url value="/resources/common/js/notice.js" />"></script>

@@ -1,0 +1,23 @@
+.user-info {
+	width:250px;
+	height:100px;
+}
+.list-group-item{
+	overflow:hidden;
+}
+.list-1{
+	float:left;
+	width:25%;
+}
+.list-2{
+	float:left;
+	width:25%;
+}
+.list-3{
+	float:left;
+	width:25%;
+}
+.list-4{
+	float:left;
+	width:25%;
+}

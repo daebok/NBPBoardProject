@@ -3,83 +3,6 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
-<head>
-<title>Home</title>
-<script>
-	$(document).ready(function() {
-		$(".user-authority").click(function() {
-			var userNo = $(this).attr('user-no');
-			var userAuthority = $("select[name=userAuthority] option:selected").val();
-			var result = confirm('권한을 수정하시겠습니까?');
-			if (result) {
-				var data = "userNo=" + userNo +"&userAuthority="+userAuthority;
-				$.ajax({
-					type : 'GET',
-					url : '/admin/userModify',
-					dataType : 'text',
-					processData : false,
-					contentType : false,
-					data : data
-				});
-			}
-		});
-		$(".user-delete").click(function() {
-			var userNo = $(this).attr('user-no');
-			var result = confirm('회원을 삭제하시겠습니까?');
-			if (result) {
-				var result2 = confirm('회원이 작성한 게시물을 모두 삭제하시겠습니까?\n(취소를 누르면 게시글은 남고 회원만 삭제됩니다.)');
-				var data = "userNo=" + userNo;
-				if(result2){
-					$.ajax({
-						type : 'GET',
-						url : '/admin/userDelete',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success:function(result){
-							$("#"+userNo).remove();
-						}
-					});
-				} else {
-					$.ajax({
-						type : 'GET',
-						url : '/admin/onlyUserDelete',
-						dataType : 'text',
-						processData : false,
-						contentType : false,
-						data : data,
-						success:function(result){
-							$("#"+userNo).remove();
-						}
-					});
-				}
-			}
-		});
-	});
-</script>
-<style>
-	.list-group-item{
-		overflow:hidden;
-	}
-	.list-1{
-		float:left;
-		width:25%;
-	}
-	.list-2{
-		float:left;
-		width:25%;
-	}
-	.list-3{
-		float:left;
-		width:25%;
-	}
-	.list-4{
-		float:left;
-		width:25%;
-	}
-</style>
-</head>
 <body>
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
@@ -115,10 +38,10 @@
 										</c:otherwise>
 									</c:choose>
 								</select>
-								<button type="button" class="user-authority btn btn-default" user-no="${user.userNo}">ok</button>
+								<button type="button" class="btn btn-default" onclick="userAuthorityModify(${user.userNo})">OK</button>
 							</div>
 							<div class="list-4">
-								<button type="button" class="user-delete btn btn-success" user-no="${user.userNo}">Delete</button>
+								<button type="button" class="btn btn-success" onclick="userDelete(${user.userNo})">Delete</button>
 							</div>
 						</div>
 					</form>
@@ -131,3 +54,6 @@
 	<%@include file="../../common/footer.jsp"%>
 </body>
 </html> 
+
+<script src="<c:url value="/resources/common/js/user.js" />"></script>
+<link href="<c:url value="/resources/common/css/user.css" />" rel="stylesheet">

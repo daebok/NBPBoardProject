@@ -5,9 +5,6 @@
 <html>
 <head>
 <sec:csrfMetaTags/>
-<script src="<c:url value="/resources/common/js/upload.js" />"></script>
-<link href="<c:url value="/resources/common/css/file-css.css" />" rel="stylesheet">
-
 </head>
 <body>
 	<!-- header -->
@@ -58,6 +55,9 @@
 </body>
 </html>
 
-<script src="<c:url value="/resources/common/js/board.js" />"></script>
+<script src="<c:url value="/resources/common/js/board.js" />">
+</script><script src="<c:url value="/resources/common/js/file.js" />"></script>
+<link href="<c:url value="/resources/common/css/file.css" />" rel="stylesheet">
+
 
 					 

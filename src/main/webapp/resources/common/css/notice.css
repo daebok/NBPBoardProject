@@ -1,0 +1,17 @@
+.notice-title {
+	background-color: #337ab7;
+	color: white;
+	padding: 10px;
+}
+
+.notice-content {
+	color: #337ab7;
+}
+.notice-wrapper {
+	width:220px;
+	max-width: none !important;
+}
+.notice-body {
+	border: 3px solid #337ab7; 
+	padding:10px;
+}

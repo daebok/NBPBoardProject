@@ -1,0 +1,13 @@
+#content-summary {
+	line-height: 20px;
+	width: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+	word-wrap: break-word;
+}
+.col-md-8 {
+	max-width: none !important;
+}

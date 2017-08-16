@@ -1,12 +1,41 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
-/* 답변 달기 */
-$(document).on("click","#comment-button", function(event) {
+$(document).ajaxStart(function() {
+	$('html').css("cursor", "wait");
+});
+$(document).ajaxStop(function() {
+	$('html').css("cursor", "auto");
+});
+
+$(document).ready(
+	function() {
+		$('.memo-summernote').summernote({
+			height : 500
+		});
+	}
+);
+
+function createCommentTextArea(commentNo, boardNo, commentViewButton){
+	$(commentViewButton).attr("disabled",true);
+	var str="";
+	str += '<div class="comment-comment-write">';
+	str += '<form name="form" class="comment-form">';
+	str += '<input type="hidden" name="boardNo" value="'+boardNo+'">';
+	str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
+	str += '<textarea cols="60" size="8" class="comment-comment-textarea" id="comment-comment-textarea" name="commentContent"></textarea>';
+	str += '<div><button type="button" class="btn btn-default btn-sm" onclick="commentRegist('+commentNo+')">Ok</button>';
+	str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
+	str += '</form></div>';
+	$('#comment-'+commentNo+' > .comment-comment-wrapper').append(str);
+}
+
+
+function answerRegist(answerButton, event){
 	event.preventDefault();
 	var commentContent = $('#comment-content').val();
 	var data = $('.answer-form').serialize()
-	if($(this).html() == 'Answer'){
+	if($(answerButton).html() == 'Answer'){
 		$.ajax({
 			type : 'POST',
 			url : '/comment/regist',
@@ -20,12 +49,12 @@ $(document).on("click","#comment-button", function(event) {
 				$(".emptyContent").remove();
 				$('#answer-tab a[href="#newest"]').tab('show');
 				$('#answer-tab a:first').tab('show');
-				$("#listComment").append(result).fadeIn("slow");
-				$('.summernote').summernote('code', '');
+				$("#listComment").append(result);
+				$('.answer-summernote').summernote('code', '');
 			}
 		});
-	} else if ($(this).html() == 'Modify') {
-		var commentNo = $(this).attr('comment-no');
+	} else if ($(answerButton).html() == 'Modify') {
+		var commentNo = $(answerButton).attr('comment-no');
 		$.ajax({
 			type : 'POST',
 			url : '/comment/modify',
@@ -37,17 +66,18 @@ $(document).on("click","#comment-button", function(event) {
 			success : function(result) {
 				alert('답글이 수정되었습니다.');
 				$("#content-"+commentNo).html(commentContent);
-				$('.summernote').summernote('code', '');
+				$('.answer-summernote').summernote('code', '');
 				$('#comment-button').html('Comment');
 				$('#'+commentNo).css('background-color','#ffffff');
 				$('#comment-list > *').attr("disabled",false);
 			}
 	});
+	}
+	
+	return false;
 }
-});
-/* 답변 삭제 버튼 클릭 이벤트 */
-$(document).on("click",".comment-delete", function() {
-	var commentNo = $(this).attr("comment-no");
+
+function answerDelete(commentNo){
 	var data = "commentNo=" + commentNo;
 	var result = confirm('답변을 삭제하시겠습니까?');
 	if (result) {
@@ -65,10 +95,9 @@ $(document).on("click",".comment-delete", function() {
 			}
 		});
 	}
-});
-/* 답변 수정 버튼 클릭 이벤트 */
-$(document).on("click",".comment-modify",function() {
-	var commentNo = $(this).attr('comment-no');
+}
+
+function answerModify(commentNo){
 	var result = confirm('답변을 수정하시겠습니까?');
 	var data = "commentNo=" + commentNo;
 	if (result) {
@@ -86,26 +115,23 @@ $(document).on("click",".comment-modify",function() {
 				$('#'+commentNo).css('background-color','#ededed');
 				$('#comment-button').html('Modify');
 				$('#comment-button').attr('comment-no',commentNo);
-				$('.summernote').summernote('code', list.commentContent);
 				$('#comment-list > *').attr("disabled",true);
+				$('.answer-summernote').focus();
+				$('.answer-summernote').summernote('code', list.commentContent);
 			}
 		});
 	}
-});
+}
 
-/* 댓글  */
-/* 1. 댓글 취소 */
-$(document).on("click",".comment-comment-cancel-button",function() {
-	var commentNo = $(this).attr('comment-no');
+function commentCancel(commentNo){
 	$('.comment-comment').attr("disabled",false);
 	$('.comment-comment-write').remove();
-});
-/* 2. 댓글 달기 */
-$(document).on("click",".comment-comment-button",function() {
+}
+
+function commentRegist(commentNo){
 	var result = confirm('답변에 댓글을 달겠습니까?');
 	var data = $('.comment-form').serialize();
 	if (result) {
-		var commentNo = $(this).attr('comment-no');
 		$.ajax({
 			type : 'POST',
 			url : '/comment/regist',
@@ -125,17 +151,15 @@ $(document).on("click",".comment-comment-button",function() {
 			}
 		});
 	}
-});
+}
 
-/* 3. 댓글 리스트 보기 */
-$(document).on("click",".comment-comment-selct",function() {
+function commentListView(commentNo, commentListButton){
 	$('.comment-comment-write').remove();
 	$('.comment-comment').attr("disabled",false);
-	var commentNo = $(this).attr('comment-no');
-	var count = parseInt($(this).html());
-	if($(this).val() == 'closed'){
-		$(this).html(count + " Comment ▲");
-		$(this).val('open');
+	var count = parseInt($(commentListButton).html());
+	if($(commentListButton).val() == 'closed'){
+		$(commentListButton).html(count + " Comment ▲");
+		$(commentListButton).val('open');
 		var data = "commentNo=" + commentNo;
 		$.ajax({
 			type : 'GET',
@@ -148,15 +172,14 @@ $(document).on("click",".comment-comment-selct",function() {
 				$('#comment-'+commentNo+' > .comment-comment-wrapper').append(result).hide().slideDown("fast");
 			}
 		});
-	} else if($(this).val() == 'open'){
-		$(this).html(count + " Comment ▼");
-		$(this).val('closed');
+	} else if($(commentListButton).val() == 'open'){
+		$(commentListButton).html(count + " Comment ▼");
+		$(commentListButton).val('closed');
 		$('#comment-'+commentNo+' > .comment-comment-wrapper').children().remove();
 	}
-});
-/* 4. 댓글 수정 버튼 클릭 이벤트 */
-$(document).on("click",".comment-comment-modify",function() {
-	var commentNo = $(this).attr('comment-no');
+}
+
+function goToCommentModify(commentNo){
 	var data = "commentNo=" + commentNo;
 	$.ajax({
 		type : 'GET',
@@ -174,15 +197,13 @@ $(document).on("click",".comment-comment-modify",function() {
 			$(this).attr("disabled",true);
 			$('#answer-comment-' + commentNo ).after('<div class="comment-comment-write">'
 				+ '<textarea cols="50" class="comment-comment-textarea" id="comment-comment-textarea">'+list.commentContent+'</textarea>'
-				+ '<button type="button" class="comment-comment-modify-button btn btn-default" comment-no="'+commentNo+'">Ok</button></div>');
+				+ '<button type="button" class="btn btn-default" onclick="commentModify('+commentNo+')">Ok</button></div>');
 		}
 	});
-	
-});
-/* 5. 댓글 수정  */
-$(document).on("click",".comment-comment-modify-button",function() {
+}
+
+function commentModify(commentNo){
 	var commentContent = $('#comment-comment-textarea').val();
-	var commentNo = $(this).attr('comment-no');
 	$.ajax({
 		type : 'POST',
 		url : '/comment/modify',
@@ -203,11 +224,9 @@ $(document).on("click",".comment-comment-modify-button",function() {
 			$('.comment-comment-write').remove();
 		}
 	});
-});
+}
 
-/* 댓글 삭제 버튼 클릭 이벤트 */
-$(document).on("click",".answer-comment-delete", function() {
-	var commentNo = $(this).attr("comment-no");
+function commentDelete(commentNo) {
 	var data = "commentNo=" + commentNo;
 	var result = confirm('댓글을 삭제하시겠습니까?');
 	if (result) {
@@ -223,44 +242,41 @@ $(document).on("click",".answer-comment-delete", function() {
 			}
 		});
 	}
-});
+}
 
-/* 답변 좋아요 */
-$(document).on('click', '.answer-hate', function(){
-	var commentNo = $(this).attr('comment-no');
+function anwserLike(commentNo, answerLikeButton) {
 	var data = "commentNo=" + commentNo;
-	$(this).attr('class','answer-like glyphicon glyphicon-heart');
-	$(this).css('color','#FF3636');
-	$.ajax({
-		type : 'GET',
-		url : '/comment/like',
-		dataType : 'text',
-		processData : false,
-		contentType : false,
-		data : data,
-		success : function(result) {
-			var count = $('#answer-like-count-'+commentNo).html();
-			$('#answer-like-count-'+commentNo).html(Number(count)+1);
-		}
-	});
-});
-
-/* 답변 좋아요 해제 */
-$(document).on('click', '.answer-like', function(){
-	var commentNo = $(this).attr('comment-no');
-	var data = "commentNo=" + commentNo;
-	$(this).attr('class','answer-hate glyphicon glyphicon-heart');
-	$(this).css('color','#eee');
-	$.ajax({
-		type : 'GET',
-		url : '/comment/hate',
-		dataType : 'text',
-		processData : false,
-		contentType : false,
-		data : data,
-		success : function(result) {
-			var count = $('#answer-like-count-'+commentNo).html();
-			$('#answer-like-count-'+commentNo).html(Number(count)-1);
-		}
-	});
-});
+	var check = $(answerLikeButton).attr('id');
+	
+	if(check=="answer-like-uncheck") {
+		$(answerLikeButton).attr('id','answer-like-check');
+		$(answerLikeButton).css('color','#FF3636');
+		$.ajax({
+			type : 'GET',
+			url : '/comment/like',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				var count = $('#answer-like-count-'+commentNo).html();
+				$('#answer-like-count-'+commentNo).html(Number(count)+1);
+			}
+		});
+	} else {
+		$(answerLikeButton).attr('id','answer-like-uncheck');
+		$(answerLikeButton).css('color','#eee');
+		$.ajax({
+			type : 'GET',
+			url : '/comment/hate',
+			dataType : 'text',
+			processData : false,
+			contentType : false,
+			data : data,
+			success : function(result) {
+				var count = $('#answer-like-count-'+commentNo).html();
+				$('#answer-like-count-'+commentNo).html(Number(count)-1);
+			}
+		});
+	}
+}

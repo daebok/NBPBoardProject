@@ -4,30 +4,6 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-<title>Home</title>
-<script>
-	$(document).ready(function() {
-		$("#loginButton").click(function() {
-			var userId = $("#userId").val();
-			var userPassword = $("#userPassword").val();
-			if (userId == "") {
-				alert("아이디를 입력하세요.");
-				$("#userId").focus();
-				return;
-			}
-			if (userPassword == "") {
-				alert("비밀번호를 입력하세요.");
-				$("#userPassword").focus();
-				return;
-			}
-			document.form.action = "/loginProcess"
-			document.form.submit();
-		});
-	});
-	function do_login(){
-		document.loginForm.submit();
-	}
-</script>
 </head>
 <body>
 	<!-- header -->
@@ -56,7 +32,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="button" id="loginButton" class="btn btn-default">Log In</button>
+						<button type="button" onclick="login()" class="btn btn-default">Log In</button>
 					</div>
 				</div>			
 			</form:form>
@@ -73,3 +49,5 @@
 	<%@include file="../../common/footer.jsp"%>
 </body>
 </html>
+
+<script src="<c:url value="/resources/common/js/user.js" />"></script>

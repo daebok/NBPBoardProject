@@ -7,8 +7,8 @@
 		</div>
 		<span class='badge'>Commented By ${commentComment.userName}</span>
 		<div class='pull-right comment-list-list'>
-			<button type="button" class="comment-comment-modify btn btn-default" comment-no="${ commentComment.commentNo}">Modify</button> &nbsp;
-			<button type="button" class="answer-comment-delete btn btn-default" comment-no="${ commentComment.commentNo}">Delete</button>
+			<button type="button" class="btn btn-default" onclick="goToCommentModify(${ commentComment.commentNo})">Modify</button> &nbsp;
+			<button type="button" class="btn btn-default" onclick="commentDelete(${ commentComment.commentNo})">Delete</button>
 		</div>
 	</div>
 </c:forEach>

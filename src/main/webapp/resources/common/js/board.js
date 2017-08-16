@@ -26,7 +26,15 @@ $(document).ready(function() {
 		}
 	}
 	});	
+	
+	$('.answer-summernote').summernote({
+		height : 200,
+		onImageUpload : function(files,editor, welEditable) {
+				sendFile(files[0], editor,welEditable);
+		}
+	});
 });
+
 
 
 function questionRegist(){
@@ -64,11 +72,37 @@ function questionRegist(){
 				alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
 				$("#content").focus();
 			} else {
-				document.form.action = "/board/question/ask"
 				document.form.submit();
 			}
 		}
 	});
+}
+
+function questionDelete(boardNo){
+	if (confirm('게시물을 삭제하시겠습니까?')) {
+		if('${answerCount.commentCount}' > 0) {
+			alert("게시글에 답변이 있으므로 삭제 할 수 없습니다.\n삭제를 원하시면 관리자에게 문의하세요.");
+			return;
+		} else {
+			location.replace('/board/delete?boardNo='+boardNo);
+		}
+	} 
+}
+
+function goToList(section){
+	var form = document.forms['list'];	
+	 if (section == 2) {
+		form.action = "/board/myquestions";
+		
+	} else if (section == 3) {
+		form.action = "/board/myanswers";
+		
+	} else if (section == 4) {
+		form.action = "/board/answers/liked";
+	} else {
+		form.action = "/board/list";
+	}
+	 form.submit();
 }
 
 function fileUpload(){
@@ -94,3 +128,11 @@ function fileDelete(fileId){
 	$('#file-list-'+fileId).remove();
 	$(".newUploadedList").append( "<input type='hidden' name='boardFilesNo' value='"+fileId+"'/>");
 }
+
+function uploadedFileDetet(fileName, fileItem){
+	$(fileItem).parent('div').parent('div').remove();
+	$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+fileName+">");
+}
+
+
+

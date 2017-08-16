@@ -1,16 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>사용자정보</title>
-	<style type="text/css">
-		.user-info{
-			width:250px;
-			height:100px;
-		}
-	</style>
-</head>
 <body>
 	<div class="user-info container">
 		<h6><b>아이디 :</b> ${user.username }</h6>
@@ -19,3 +8,4 @@
 	</div>
 </body>
 </html>
+<link href="<c:url value='/resources/common/css/user.css' />">

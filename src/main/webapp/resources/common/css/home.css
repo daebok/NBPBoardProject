@@ -1,5 +1,9 @@
-body {
+html {
 	position: relative;
+	min-height: 100%;
+}
+body {
+	margin-bottom: 150px;
 }
 .wrapper {
 	height: 40px;
@@ -8,11 +12,13 @@ body {
 	margin-left:20px;
 	line-height: 35px;
 	font-size: 0.9em;
+	text-decoration: none;
 }
 .nav-wrapper {
 	position:fixed;
 	height:50px;
 	width:100%;
+	max-width: none !important;
 	top:0;
 	background-color: #fff;
 	padding:10px 40px;
@@ -27,11 +33,16 @@ body {
 	line-height: 30px;
 }
 .footer {
-	position: relative;
+	position: absolute;
 	bottom: 0;
 	width: 100%;
 	height: 100px;
-	margin-top: 100px;
 	padding:30px;
 	background: #222;
+}
+.footer-content {
+	color:#aaa;
+}
+.footer-contact {
+	text-decoration: none  !important;
 }
