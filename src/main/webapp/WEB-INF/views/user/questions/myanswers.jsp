@@ -47,14 +47,6 @@
 					<div>
 						<form:form name="form" action="/board/question" method="get">
 							<input type="hidden" name="boardNo" value="${comment.boardNo}" /> 
-							<c:choose>
-								<c:when test="${like eq 0 || like eq null}">
-									<input type="hidden" name="section" value="3" /> 
-								</c:when>
-								<c:otherwise>
-									<input type="hidden" name="section" value="4" /> 
-								</c:otherwise>
-							</c:choose>
 							<button type="submit" class="btn btn-primary btn-sm">View Question </button>
 						</form:form>
 					</div>

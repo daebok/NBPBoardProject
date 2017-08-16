@@ -63,11 +63,6 @@ public class CommentService {
 		return repository.commentSelectOne(commentModel);
 	}
 
-	/* 마지막에 달린 답변 가져오기 */
-	public Comment commentLastSelect(Comment commentModel) {
-		return repository.commentLastSelect(commentModel);
-	}
-
 	/* 댓글 리스트 */
 	public List<Comment> answerCommentSelect(Comment model) {
 		return repository.answerCommentSelect(model);

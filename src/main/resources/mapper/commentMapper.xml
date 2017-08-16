@@ -53,6 +53,8 @@
 		SELECT 
 			USER.user_name, 
 			USER.user_id, 
+			USER.user_no, 
+			COMMENT.board_no, 
 			COMMENT.comment_no, 
 			COMMENT.comment_no as number, 
 			COMMENT.comment_content, 
@@ -202,21 +204,6 @@
 		ON COMMENT.user_no = USER.user_no
 		WHERE 
 			comment_no = #{commentNo}
-	</select>
-	
-	<select id="commentLastSelect" resultMap="commentList">
-		SELECT 
-			USER.user_name, 
-			USER.user_id, 
-			COMMENT.comment_no, 
-			COMMENT.comment_content, 
-			COMMENT.comment_date, 
-			USER.user_name
-		FROM COMMENT
-		JOIN  USER
-		ON COMMENT.user_no = USER.user_no
-		ORDER BY comment_no desc 
-		LIMIT 1
 	</select>
 	
 	<select id="checkUser" resultType="int">

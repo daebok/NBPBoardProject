@@ -3,9 +3,15 @@ package com.hyunhye.board.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
+
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
@@ -16,8 +22,19 @@ public class CategoryService {
 	@Autowired
 	public CategoryRepository categoryRepository;
 
+	@Resource(name = "cacheManager")
+	EhCacheCacheManager cacheManager;
+
 	/* 카테고리 추가 */
 	public void categoryInsert(Category categoryModel) {
+		// URL url = getClass().getResource("classpath:ehcache.xml");
+		// CacheManager cacheManager = new CacheManager(url);
+
+		Ehcache cache = cacheManager.getCacheManager().getCache("category");
+
+		Element newElement = new Element(categoryModel.getCategoryNo(), categoryModel);
+		cache.put(newElement);
+
 		categoryRepository.categoryInsert(categoryModel);
 	}
 

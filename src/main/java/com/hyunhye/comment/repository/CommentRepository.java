@@ -25,9 +25,6 @@ public interface CommentRepository {
 	/** 답변 삭제하기 **/
 	public void answerDelete(int boardNo);
 
-	/** 마지막 댓글 가져오기 (작성한 댓글) **/
-	public Comment commentLastSelect(Comment commentModel);
-
 	/** 댓글 개수 **/
 	public Comment commentCount();
 

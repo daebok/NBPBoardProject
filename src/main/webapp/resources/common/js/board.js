@@ -1,6 +1,37 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
+function otherQuestion(userId){
+	location.href="/board/list?searchType=writer&keyword="+userId;
+}
+
+
+$(document).ready(function() {
+	$('.board-summernote').summernote({
+	height : 300,
+	callbacks: {
+		onImageUpload: function(files, editor, welEditable) {
+			var form = $('.file')[0];
+			var formData = new FormData(form);
+			for (var index = files.length - 1; index >= 0; index--) {
+				if(  files[index].size > 10485760 ) {
+					alert('10MB가 넘는 파일은 업로드 할 수 없습니다!!');
+					$('.file').val('');
+					break;
+				}
+				formData.append('files', files[index]);
+	
+				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
+				str += "<div class='list-1'>" + files[index].name +"</div>";
+				str += "<div class='list-2'>" + files[index].size + " bytes </div>";
+				str += "<div class='list-3'> <a href='javascript:fileDelete("+index+")' id='"+index+"'>[삭제]</a></div></div>";
+				$(".summernoteUploadedList").append(str);
+			}
+		}
+	}
+	});	
+});
+
 
 function questionRegist(){
 	var title = $("#title").val();
@@ -17,7 +48,7 @@ function questionRegist(){
 	
 	if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
 		alert("내용를 입력하세요.");
-		$("#content").focus();
+		$('.note-editable').trigger('focus');
 		return;
 	}
 
@@ -35,7 +66,7 @@ function questionRegist(){
 			console.log(list);
 			if(list.length != 0) {
 				alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
-				$("#content").focus();
+				$(".note-editable").focus();
 			} else {
 				document.form.submit();
 			}
@@ -52,22 +83,6 @@ function questionDelete(boardNo){
 			location.replace('/board/delete?boardNo='+boardNo);
 		}
 	} 
-}
-
-function goToList(section){
-	var form = document.forms['list'];	
-	 if (section == 2) {
-		form.action = "/board/myquestions";
-		
-	} else if (section == 3) {
-		form.action = "/board/myanswers";
-		
-	} else if (section == 4) {
-		form.action = "/board/answers/liked";
-	} else {
-		form.action = "/board/list";
-	}
-	 form.submit();
 }
 
 function fileUpload(){
@@ -99,5 +114,8 @@ function uploadedFileDetet(fileName, fileItem){
 	$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+fileName+">");
 }
 
-
-
+function perPageNumSelect(){
+	var form = document.forms['perPageNum-list'];	
+	form.action = "/board/list";
+	form.submit();
+}

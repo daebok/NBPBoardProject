@@ -19,11 +19,11 @@ function createCommentTextArea(commentNo, boardNo, commentViewButton){
 	$(commentViewButton).attr("disabled",true);
 	var str="";
 	str += '<div class="comment-write">';
-	str += '<form name="form" class="comment-form">';
+	str += '<form name="form" id="comment-form">';
 	str += '<input type="hidden" name="boardNo" value="'+boardNo+'">';
 	str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
-	str += '<textarea cols="60" size="8" class="comment-textarea" id="comment-textarea" name="commentContent"></textarea><br>';
-	str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentRegist('+commentNo+')">Ok</button>';
+	str += '<textarea cols="40" size="5" class="comment-textarea" id="comment-textarea" name="commentContent"></textarea><br>';
+	str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentRegist('+commentNo+', event)">Ok</button>';
 	str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
 	str += '</form></div>';
 	$('#answer-'+commentNo+' > .comment-wrapper').append(str);
@@ -121,7 +121,7 @@ function answerModify(commentNo){
 				$('#answer-no').val(commentNo);
 				$('.answer-button*').attr("disabled",true);
 				$('.note-editable').html(list.comment);
-				$('.answer-summernote').focus();
+				$('.note-editable').trigger('focus');
 			}
 		});
 	}
@@ -129,12 +129,16 @@ function answerModify(commentNo){
 
 function commentCancel(commentNo){
 	$('.comment-add').attr("disabled",false);
+	$('#answer-button').attr("disabled",false);
+	$('.comment-list-button > *').attr("disabled",false);
 	$('.comment-write').remove();
 }
 
-function commentRegist(commentNo){
+function commentRegist(commentNo, event){
+	event.preventDefault();
 	var result = confirm('답변에 댓글을 달겠습니까?');
-	var data = $('.comment-form').serialize();
+	var data = $('#comment-form').serialize();
+	console.log(data)
 	if (result) {
 		$.ajax({
 			type : 'POST',
@@ -195,16 +199,15 @@ function goToCommentModify(commentNo){
 		data : data,
 		success : function(result) {
 			var list = $.parseJSON(result);
-			$('#answer-content-'+commentNo).css('background-color','#ededed');
-			$('#answer-button > *').attr("disabled",true);
+			$('#answer-button').attr("disabled",true);
 			$('.comment-list-button > *').attr("disabled",true);
 			$(this).attr("disabled",true);
 			
 			var str = "";
 			str += '<div class="comment-write">';
-			str += '<form name="form" class="comment-form">';
+			str += '<form name="form" id="comment-form">';
 			str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
-			str += '<textarea cols="50" size="5" class="comment-textarea" id="comment-textarea" name="commentContent">'+list.comment+'</textarea><br>';
+			str += '<textarea cols="40" size="5" class="comment-textarea" id="comment-textarea" name="commentContent">'+list.comment+'</textarea><br>';
 			str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentModify('+commentNo+')">Ok</button>';
 			str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
 			str += '</form></div>';
@@ -223,7 +226,7 @@ function commentModify(commentNo){
 		beforeSend: function(xhr){
 			xhr.setRequestHeader(header, token);
 		},
-		data : $('.comment-form').serialize(),
+		data : $('#comment-form').serialize(),
 		success : function(result) {
 			alert('답글이 수정되었습니다.');
 			$("#comment-text-"+commentNo).html(commentContent);

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +31,14 @@ import com.hyunhye.board.service.FileService;
 import com.hyunhye.comment.service.CommentService;
 import com.hyunhye.notice.model.Notice;
 import com.hyunhye.notice.service.NoticeService;
+import com.hyunhye.utils.UriUtils;
 import com.hyunhye.utils.UserSessionUtils;
 
 @RequestMapping("board")
 @Controller
 public class BoardController {
+	Logger logger = LoggerFactory.getLogger(BoardController.class);
+
 	@Autowired
 	private BoardService boardService;
 
@@ -70,7 +75,12 @@ public class BoardController {
 	@RequestMapping("list")
 	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri,
 		@RequestParam(value = "tab", defaultValue = "1") int tab,
+		HttpServletRequest request,
 		Model model) {
+
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+
 		/* 한 페이지에 보여줄 게시글 */
 		model.addAttribute("list", boardService.boardSelectList(cri, tab));
 
@@ -151,7 +161,8 @@ public class BoardController {
 		/* 해당 게시글의 답변 수 */
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
 
-		model.addAttribute("section", section);
+		/* 이전 uri 정보 꺼내오기 */
+		model.addAttribute("section", request.getSession().getAttribute("uri"));
 
 		return "board/board-view";
 	}
@@ -223,7 +234,11 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions")
-	public String myQuestionsSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myQuestionsSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
+		Model model) {
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+
 		/* 내 질문 전체 리스트 */
 		model.addAttribute("list", boardService.myQuestionsSelectList(cri));
 
@@ -251,7 +266,11 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions/answered")
-	public String myQuestionsAnsweredSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myQuestionsAnsweredSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
+		Model model) {
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+
 		/* 답변 달린 내 질문 리스트 */
 		model.addAttribute("list", boardService.myQuestionsAnsweredSelectList(cri));
 
@@ -279,7 +298,10 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myanswers")
-	public String myAnswersSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String myAnswersSelectList(@ModelAttribute("cri") Criteria cri, HttpServletRequest request, Model model) {
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+
 		/* 답변 달린 내 질문 리스트 */
 		model.addAttribute("list", commentService.myAnswersSelect(cri));
 
@@ -307,7 +329,10 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("answers/liked")
-	public String answersLikedSelectList(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String answersLikedSelectList(@ModelAttribute("cri") Criteria cri, HttpServletRequest request, Model model) {
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+
 		/* 내가 좋아요한 답변 리스트 */
 		model.addAttribute("list", commentService.answersLikedSelectList(cri));
 

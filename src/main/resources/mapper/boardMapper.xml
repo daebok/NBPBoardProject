@@ -87,6 +87,7 @@
 			BOARD.user_no, 
 			USER.user_name, 
 			USER.user_id,
+			USER.user_no,
 			CATEGORY.category_item,
 			BOARD.category_no,  
 			BOARD.board_title, 

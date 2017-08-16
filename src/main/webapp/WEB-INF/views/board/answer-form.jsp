@@ -18,11 +18,11 @@
 					<c:out value="${answer.commentContent}" escapeXml="false"/>
 				</div>
 				<c:choose>
-					<c:when test="${model.userName == answer.userName}">
+					<c:when test="${model.userNo == answer.userNo || writer == answer.userNo}">
 						<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
 					</c:when>
 					<c:otherwise>
-						<span class="badge commentName">Answered By ${answer.userName} </span>
+						<span class="badge commentName">Answered By ${answer.userId} </span>
 					</c:otherwise>
 				</c:choose>
 				<span class="badge answer-time" style="background-color:#ffffff; color:#8c8c8c">
@@ -42,7 +42,7 @@
 					<button type="button" class="btn btn-default" onclick="commentListView(${answer.commentNo}, this)" id = "comment-view-${answer.commentNo}" value='closed'>${answer.commentCommentCount} Comment ▼</button>
 				</div>
 			</div>
-			<button type="button" class="comment-add btn btn-default btn-sm" onclick="createCommentTextArea(${answer.commentNo}, ${model.boardNo}, this)" style="margin-bottom:10px;">add a Comment</button>
+			<button type="button" class="comment-add btn btn-default btn-sm" onclick="createCommentTextArea(${answer.commentNo}, ${answer.boardNo}, this)" style="margin-bottom:10px;">add a Comment</button>
 			<div class='comment-wrapper'  style="margin-bottom:45px; margin-top:-40px;"></div>
 		</div>
 	</div>

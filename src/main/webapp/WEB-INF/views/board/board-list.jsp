@@ -36,6 +36,19 @@
 				<a href="<c:url value='/board/list?tab=2'/>" class="btn btn-default btn-sm">Views</a>
 				<a href="<c:url value='/board/list?tab=3'/>" class="btn btn-warning btn-sm">Answers</a>
 			</c:if>
+			<div class="pull-right">
+				<form name="perPageNum-list">
+					<select name="perPageNum" class="form-control" style="width:100px;" onchange="perPageNumSelect()">
+						<option value="5" 	<c:out value="${cri.perPageNum eq 5 ?'selected':''}"/>>5개</option>
+						<option value="10" 	<c:out value="${cri.perPageNum eq 10 ?'selected':''}"/>>10개</option>
+						<option value="15"	<c:out value="${cri.perPageNum eq 15 ?'selected':''}"/>>15개</option>
+						<option value="20"	<c:out value="${cri.perPageNum eq 20 ?'selected':''}"/>>20개</option>
+						<option value="30"	<c:out value="${cri.perPageNum eq 30 ?'selected':''}"/>>30개</option>
+						<option value="40"	<c:out value="${cri.perPageNum eq 40 ?'selected':''}"/>>40개</option>
+						<option value="50"	<c:out value="${cri.perPageNum eq 50 ?'selected':''}"/>>50개</option>
+					</select>
+				</form>
+			</div>
 			<div class="board-list-wrapper">
 				<hr>
 				<c:if test="${empty list}">
@@ -43,7 +56,7 @@
 				</c:if>
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}&section=1" id="boardNo">
+						<a href="${path}/board/question${pageMaker.makeSearch(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">
 							<c:out value="${board.boardTitle}" escapeXml="true"/>
 						</a>
 					</h4>
@@ -77,4 +90,6 @@
 	<%@include file="../common/footer.jsp"%>
 </body>
 </html>
-<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/board.css'/>">
+
+<link href="<c:url value='/resources/common/css/board.css'/>"  		type="text/css" rel="stylesheet" >
+<script src="<c:url value="/resources/common/js/board.js" />">		</script>

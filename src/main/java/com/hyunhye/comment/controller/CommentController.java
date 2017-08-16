@@ -37,7 +37,10 @@ public class CommentController {
 	public String answerInsert(@ModelAttribute Comment commentModel, Model model) {
 		service.answerInsert(commentModel);
 
+		logger.info("commentModel.getUserNo():{}", commentModel.getUserNo());
+		/* 해당 게시글 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("writer", commentModel.getUserNo());
 		model.addAttribute("answer", service.answerTabSelectListAll(commentModel.getBoardNo(), 1));
 
 		return "board/answer";

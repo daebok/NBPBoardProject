@@ -16,13 +16,15 @@
 	background-color: #000000;
 }
 .comment-write {
-	overflow: hidden;
+	overflow:hidden;
+	z-index:1000;
 }
 .comment-textarea {
 	float: left;
 	margin-left: 140px;
 	margin-top:15px;
 	margin-bottom: 20px;
+	z-index:1000;
 }
 .comment-button {
 	margin:10px;

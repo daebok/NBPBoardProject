@@ -25,7 +25,7 @@
 				<span class="label label-warning">${model.categoryItem} </span>
 				<h2><c:out value="${model.boardTitle}" escapeXml="true"/></h2>
 				<p><c:out value="${model.boardContent}" escapeXml="false"/></p>
-				<div align="right">작성자: ${model.userId} </div>
+				<div align="right" ><b><a class="board-writer"  href="javascript:otherQuestion('${model.userId}')">${model.userId}</a></b></div>
 				<c:if test="${not empty attach}">
 					<div class="panel panel-default">
 						<div class="list-group">
@@ -57,7 +57,7 @@
 					</c:if>
 				</div>
 				<div class="pull-left">
-					<form:form name="list" id="list-form"  method="get">
+					<form:form name="list" action="${section}" id="list-form"  method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
@@ -65,7 +65,7 @@
 						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
 						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
 						<input type="hidden" name="keyword" value="${cri.keyword}" />
-						<input type="button" name="listButton" onclick="goToList(${section})" class="btn btn-primary" value="List"/>
+						<input type="submit" name="listButton" class="btn btn-primary" value="List"/>
 					</form:form>
 				</div>
 			</div>
@@ -81,6 +81,7 @@
 				<label for="content">Your Answer</label>
 				<textarea class="answer-summernote" name="commentContent" id="comment-content"></textarea><br>
 				<input type="hidden" name="boardNo" value="${model.boardNo}">
+				<input type="hidden" name="userNo" value="${model.userNo}">
 				<input type="hidden" name="commentNo" id="answer-no" value="0">
 				<div class="pull-right">
 					<button id="answer-regist-button" onclick="answerRegist(this, event)" class="btn btn-default">Answer</button>
@@ -94,8 +95,9 @@
 </body>
 </html>
 
-<link href="<c:url value="/resources/common/css/file.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/common/css/answer.css" />" rel="stylesheet">
-<script src="<c:url value="/resources/common/js/answer.js" />"></script>
-<script src="<c:url value="/resources/common/js/board.js" />"></script>
-<script src="<c:url value="/resources/common/js/bookmark.js" />"></script>
+<link href="<c:url value="/resources/common/css/file.css" />"		 rel="stylesheet">
+<link href="<c:url value="/resources/common/css/answer.css" />" 	rel="stylesheet">
+<link href="<c:url value="/resources/common/css/board.css" />" 		rel="stylesheet">
+<script src="<c:url value="/resources/common/js/answer.js" />">		</script>
+<script src="<c:url value="/resources/common/js/board.js" />">		</script>
+<script src="<c:url value="/resources/common/js/bookmark.js" />">	</script>

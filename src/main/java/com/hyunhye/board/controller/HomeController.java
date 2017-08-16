@@ -1,5 +1,7 @@
 package com.hyunhye.board.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hyunhye.board.model.Home;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.board.service.CategoryService;
+import com.hyunhye.utils.UriUtils;
 
 @Controller
 public class HomeController {
@@ -25,7 +28,9 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping("board")
-	public String home(Model model) {
+	public String home(HttpServletRequest request, Model model) {
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
 		model.addAttribute("categoryList", categoryService.categorySelectList());
 		return "home";
 	}

@@ -21,7 +21,7 @@
 					<label for="category">Category</label>
 					<category:category />
 				</div>
-				<textarea class="summernote" name="boardContent" id="content"></textarea>
+				<textarea class="board-summernote" name="boardContent" id="content"></textarea>
 				<br /> 
 				<div class="form-group">
 					<div class="filebox"> 
