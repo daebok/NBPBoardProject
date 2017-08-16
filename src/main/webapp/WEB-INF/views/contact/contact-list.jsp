@@ -8,7 +8,7 @@
 	<!-- header -->
 	<%@include file="../common/header.jsp"%>
 
-	<div class="container" style="height:100%;">
+	<div class="container">
 		<div style="margin-bottom:20px; ">
 			<a href="<c:url value='/contact/regist'/>" class="btn btn-default">문의하기</a>
 		</div>
@@ -18,33 +18,9 @@
 				<p> 신고 및 문의 사항은 아래 주소로 연락 바랍니다. </p>
 				<a href="mailto:wikiki413@gmail.com" class="glyphicon glyphicon-send">&nbsp; wikiki413@gmail.com</a>
 			</div>
-			<div class="list-group">
-				<div class="list-group-item">
-					<div class="list-1"><b>제목</b></div>
-					<div class="list-2"><b>작성자</b></div>
-					<div class="list-3"><b>날짜</b></div>
-				</div>
-				<c:forEach var="contact" items="${contact}">
-					<div class="list-group-item">
-						<div  class="list-1">
-							<c:choose>
-								<c:when test="${contact.contactPassword ne null}">
-									<a href="javascript:passwordIsCheck(${contact.contactNo})"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
-									<span class="label label-danger" id="secret-label">비밀글</span>
-								</c:when>
-								<c:otherwise>
-									<a href="${path}/contact/view${pageMaker.makeQuery(pageMaker.cri.page)}&contactNo=${contact.contactNo}&option=0"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
-								</c:otherwise>
-							</c:choose>
-							<c:if test="${contact.contactCommentCount > 0}">
-								<span class="label label-warning" id="secret-label">답변: ${contact.contactCommentCount}</span>
-							</c:if>
-						</div>
-						<div class="list-2"> ${contact.userId} </div>
-						<div class="list-3"> <fmt:formatDate value="${contact.contactDate}" pattern="yyyy/MM/dd"/></div>
-					</div>
-				</c:forEach>
-			</div>
+			<!-- contact-list -->
+			<%@include file="contact-list-form.jsp"%>
+			
 		</div>
 		<div class="page-nation">
 			<ul class="pagination pagination-large">

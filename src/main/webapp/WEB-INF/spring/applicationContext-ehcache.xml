@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	<!-- 캐시애노테이션 자동스캔설정 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+
+	<!-- 캐시매니저 선언 -->
+	
+
+	<!-- 캐시설정을위한별도설정파일 선언 
+		<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" />
+		<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" 
+		p:config-location="/WEB-INF/cache/ehcache.xml" p:shared="true"/> -->
+	<!-- Cache Manager 설정 -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager">
+			<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+				<property name="configLocation" value="classpath:ehcache.xml" />
+				<property name="shared" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+
+</beans>
+
+

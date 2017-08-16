@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.hyunhye.board.model.Category;
@@ -21,8 +22,11 @@ public class CategoryService {
 	}
 
 	/* 카테고리 목록 가져오기 */
+	@Cacheable("category")
 	public List<Category> categorySelectList() {
 		List<Category> category = categoryRepository.categorySelectList();
+
+		System.out.println("categorySelectList");
 
 		List<Category> list = category.stream()
 			.filter(s -> s.getCategoryEnabled() != 0)

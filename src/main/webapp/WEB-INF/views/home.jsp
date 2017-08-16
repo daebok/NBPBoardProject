@@ -9,6 +9,9 @@
 	}
 </script>
 <body>
+	<!-- loading -->
+	<%@include file="common/loading.jsp"%>
+	
 	<!-- header -->
 	<%@include file="common/header.jsp"%>
 	
@@ -37,7 +40,6 @@
 	
 	<!-- footer -->
 	<%@include file="common/footer.jsp"%>
-	
 </body>
 </html>
 <script src="<c:url value="/resources/common/js/home.js" />"></script>

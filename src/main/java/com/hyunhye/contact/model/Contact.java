@@ -14,7 +14,7 @@ public class Contact {
 	/** 사용자 번호 **/
 	private int userNo;
 	/**  사용자 이름 **/
-	private String userName;
+	private String userId;
 	/** 문의사항 제목 **/
 	private String contactTitle;
 	/** 문의사항 내용 **/

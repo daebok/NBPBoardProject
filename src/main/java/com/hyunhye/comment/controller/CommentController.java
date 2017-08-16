@@ -37,12 +37,10 @@ public class CommentController {
 	public String answerInsert(@ModelAttribute Comment commentModel, Model model) {
 		service.answerInsert(commentModel);
 
-		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("answer", service.answerTabSelectListAll(commentModel.getBoardNo(), 1));
 
-		model.addAttribute("comment", service.commentLastSelect());
-
-		return "board/answer-form";
+		return "board/answer";
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class CommentController {
 	public String answerTabSelectListAll(@RequestParam("boardNo") int boardNo, @RequestParam("tab") int tab,
 		Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("comment", service.answerTabSelectListAll(boardNo, tab));
+		model.addAttribute("answer", service.answerTabSelectListAll(boardNo, tab));
 
 		return "board/answer-tab";
 	}
@@ -82,7 +80,7 @@ public class CommentController {
 	@RequestMapping(value = "select", method = RequestMethod.GET)
 	public HashMap<String, Object> commentSelectOne(@ModelAttribute Comment model) {
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
-		hashmap.put("commentContent", service.commentSelectOne(model).getCommentContent());
+		hashmap.put("comment", service.commentSelectOne(model).getCommentContent());
 
 		return hashmap;
 	}
@@ -106,7 +104,7 @@ public class CommentController {
 	 */
 	@RequestMapping(value = "comment/select", method = RequestMethod.GET)
 	public String answerCommentSelect(@ModelAttribute Comment commentModel, Model model) {
-		model.addAttribute("commentComment", service.answerCommentSelect(commentModel));
+		model.addAttribute("comment", service.answerCommentSelect(commentModel));
 		return "board/comment-form";
 	}
 

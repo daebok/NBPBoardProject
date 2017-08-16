@@ -2,3 +2,18 @@
 		border: 1px solid #aaa;
 		padding:10px;
 }
+.list-group-item{
+	overflow:hidden;
+}
+.list-1{
+	float:left;
+	width:70%;
+}
+.list-2{
+	float:left;
+	width:20%;
+}
+.list-3{
+	float:left;
+	width:10%;
+}

@@ -14,6 +14,3 @@
 <script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js'/>">			</script>
 <script src="<c:url value="/resources/summernote/summernote.js" />">				</script>
 <script src="<c:url value="/resources/common/js/loading.js" />">					</script>
-
-<!-- loading -->
-<%@include file="../common/loading.jsp"%>

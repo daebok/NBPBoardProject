@@ -64,8 +64,8 @@ public class CommentService {
 	}
 
 	/* 마지막에 달린 답변 가져오기 */
-	public Comment commentLastSelect() {
-		return repository.commentLastSelect();
+	public Comment commentLastSelect(Comment commentModel) {
+		return repository.commentLastSelect(commentModel);
 	}
 
 	/* 댓글 리스트 */
