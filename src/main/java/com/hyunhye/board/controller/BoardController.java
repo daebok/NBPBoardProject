@@ -104,7 +104,7 @@ public class BoardController {
 	 * 게시글 작성하기
 	 * @param model
 	 * @param file
-	 * @return
+	 * @return 게시글 리스트 페이지
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
