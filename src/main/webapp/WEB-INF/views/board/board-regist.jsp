@@ -12,8 +12,8 @@
 
 	<div class="container">
 		<div class="container-fluid" style="margin-bottom: 30px">
-			<form:form action="/board/question/ask?${_csrf.parameterName}=${_csrf.token}" method="post" name="form" id="register-form" class="form-horizontal" enctype="multipart/form-data">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+			<form:form action="/board/question/ask" method="post" name="form" id="register-form" class="form-horizontal" enctype="multipart/form-data">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<div class="form-group">
 					<label for="title">Title</label>
 					<input type="text" name="boardTitle" maxlength="100" id="title" size="20" class="form-control" />
