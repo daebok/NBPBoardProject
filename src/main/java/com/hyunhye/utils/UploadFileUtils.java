@@ -21,11 +21,11 @@ public class UploadFileUtils {
 		File target = new File(uploadPath + savedPath, savedName); // 파일 객체 생성
 
 		/* permission denied 해결 */
-		Runtime.getRuntime().exec("chmod 777 " + uploadPath + savedPath + savedName);
+		/*Runtime.getRuntime().exec("chmod 777 " + uploadPath + savedPath + savedName);
 		target.setExecutable(true, false);
 		target.setReadable(true, false);
 		target.setWritable(true, false);
-		target.createNewFile();
+		target.createNewFile();*/
 
 		FileCopyUtils.copy(fileData, target); // 폴더에 디렉토리 복사
 		String uploadedFileName = null;
