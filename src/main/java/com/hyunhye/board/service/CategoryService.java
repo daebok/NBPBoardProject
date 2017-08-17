@@ -8,12 +8,10 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
-
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
@@ -29,16 +27,8 @@ public class CategoryService {
 	EhCacheCacheManager cacheManager;
 
 	/* 카테고리 추가 */
+	@CacheEvict(value = "category", allEntries = true)
 	public void categoryInsert(Category categoryModel) {
-		// URL url = getClass().getResource("classpath:ehcache.xml");
-		// CacheManager cacheManager = new CacheManager(url);
-
-		Ehcache cache = cacheManager.getCacheManager().getCache("category");
-
-		Element newElement = new Element(categoryModel.getCategoryNo(), categoryModel);
-		logger.info("newElement:{}", newElement);
-		cache.put(newElement);
-
 		categoryRepository.categoryInsert(categoryModel);
 	}
 
@@ -46,8 +36,6 @@ public class CategoryService {
 	@Cacheable("category")
 	public List<Category> categorySelectList() {
 		List<Category> category = categoryRepository.categorySelectList();
-
-		System.out.println("categorySelectList");
 
 		List<Category> list = category.stream()
 			.filter(s -> s.getCategoryEnabled() != 0)
