@@ -96,9 +96,9 @@ public class AdminController {
 	/**
 	 * 카테고리 추가하기
 	 * @param categoryModel
-	 * @return
+	 * @return 카테고리 리스트 페이지
 	 */
-	@RequestMapping(value = "categoryAdd", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "categoryAdd", method = RequestMethod.POST)
 	public String categoryInsert(@ModelAttribute Category categoryModel) {
 		categoryService.categoryInsert(categoryModel);
 		return "redirect:/admin/category";
@@ -137,8 +137,17 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("user")
-	public String userSelectList(Model model) {
-		model.addAttribute("userList", userService.userSelectList());
+	public String userSelectList(@ModelAttribute Criteria cri, Model model) {
+		model.addAttribute("userList", userService.userSelectList(cri));
+
+		/* 페이징 계산하기 */
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(userService.userSelectListCount(cri));
+
+		/* 페이징 정보 */
+		model.addAttribute("pageMaker", pageMaker);
+
 		return "admin/user/user-manage";
 	}
 
@@ -162,6 +171,12 @@ public class AdminController {
 	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute UserModel userModel) {
 		userService.userWithBoardDelete(userModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@RequestMapping("userSearch")
+	public String userSearch(@ModelAttribute UserModel userModel, Model model) {
+		model.addAttribute("user", userService.selectUserInfoSearch(userModel));
+		return "admin/user/user-info-search";
 	}
 
 	/**
@@ -266,11 +281,4 @@ public class AdminController {
 		contactService.contactCommentDelete(contactCommentNo);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
-
-	/*	@RequestMapping(value = "add/badword", method = RequestMethod.POST)
-		public String addBadWord(@RequestParam String badWord) {
-			BadWordFilteringUtils.badWordInsert(badWord);
-			return "redirect:/admin/admin";
-		}*/
-
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.user.model.UserModel;
 
 @Repository
@@ -19,7 +20,7 @@ public interface UserRepository {
 
 	public void userPasswordChange(UserModel model);
 
-	public List<UserModel> userSelectList();
+	public List<UserModel> userSelectList(Criteria cri);
 
 	public void userAuthorityUpdate(UserModel userModel);
 
@@ -30,5 +31,9 @@ public interface UserRepository {
 	public int naverUserselect(String email);
 
 	public void passwordUpdate(UserModel model);
+
+	public int userSelectListCount(Criteria cri);
+
+	public UserModel selectUserInfoSearch(UserModel userModel);
 
 }

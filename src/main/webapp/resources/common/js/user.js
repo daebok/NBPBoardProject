@@ -189,3 +189,22 @@ function userDelete(userNo){
 		}
 	}
 }
+
+function userInfoSearch() {
+	$.ajax({
+		type : "GET",
+		url : "/admin/userSearch",
+		data : $('.user-search-form').serialize(),
+		success : function(result) {
+			$("#user-info-dialog").html(result);
+		}
+	});
+	$("#user-info-dialog").dialog({
+			autoOpen: true,
+			modal: true,
+			resizable:false,
+			height:220,
+			position: { my: "top", at: "bottom", of: "#user-info-button" },
+			title: "회원 정보"
+	});
+}

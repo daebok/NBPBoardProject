@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hyunhye.board.model.Criteria;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
 import com.hyunhye.user.model.UserModel;
@@ -110,13 +111,12 @@ public class UserService {
 		userRepository.passwordUpdate(model);
 	}
 
-	/** 관리자  **/
 	/**
 	 * 사용자 리스트 가져오기
 	 * @return
 	 */
-	public List<UserModel> userSelectList() {
-		return userRepository.userSelectList();
+	public List<UserModel> userSelectList(Criteria cri) {
+		return userRepository.userSelectList(cri);
 	}
 
 	/**
@@ -143,5 +143,13 @@ public class UserService {
 	 */
 	public void onlyUserDelete(UserModel userModel) {
 		userRepository.onlyUserDelete(userModel);
+	}
+
+	public int userSelectListCount(Criteria cri) {
+		return userRepository.userSelectListCount(cri);
+	}
+
+	public UserModel selectUserInfoSearch(UserModel userModel) {
+		return userRepository.selectUserInfoSearch(userModel);
 	}
 }

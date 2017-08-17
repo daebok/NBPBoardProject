@@ -22,6 +22,15 @@
 			user_authority
 		FROM USER
 		WHERE user_enabled = 1
+		ORDER BY user_no
+		LIMIT #{startBoardNo}, #{perPageNum}
+	</select>
+	
+	<select id="userSelectListCount" resultType="int">
+		SELECT
+			COUNT(user_no)
+		FROM USER
+		WHERE user_enabled = 1
 	</select>
 	
 	<update id="userAuthorityUpdate">
@@ -96,5 +105,17 @@
 		WHERE
 			user_no = #{userNo}
 	</update>
+	
+	<select id="selectUserInfoSearch" resultMap="userList">
+		SELECT
+			user_no,
+			user_id, 
+			user_name,
+			user_authority
+		FROM USER
+		WHERE 
+			user_enabled = 1 AND
+			user_id = #{userId}	
+	</select>
 	
 </mapper>

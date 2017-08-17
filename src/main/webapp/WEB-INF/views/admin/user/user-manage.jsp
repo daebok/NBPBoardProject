@@ -12,6 +12,12 @@
 			<div class="panel-heading">회원 정보</div>
 			<div class="panel-body">
 				<p>회원 정보를 볼 수 있고, 회원을 관리할 수 있습니다.</p>
+				<form class="user-search-form" method="get">
+					<label>아이디</label>
+					<input type="text" name="userId" size="20">
+					<input type="button" onclick="userInfoSearch()" class="btn btn-default btn-sm" value="검색">
+				</form>
+				<div id="user-info-search-dialog"></div>
 			</div>
 			<div class="list-group">
 				<div class="list-group-item">
@@ -21,7 +27,7 @@
 					<div class="list-4">삭제</div>
 				</div>
 				<c:forEach var="user" items="${userList}">
-					<form name="form" method="get" action="/admin/categoryDelete" class="form-horizontal" id="${user.userNo}">
+					<form name="form" method="get" class="form-horizontal" id="${user.userNo}">
 						<div class="list-group-item">
 							<div class="list-1">${user.userId}</div>
 							<div class="list-2">${user.userName}</div>
@@ -47,6 +53,21 @@
 					</form>
 				</c:forEach>
 			</div>
+		</div>
+		<div class="page-nation">					
+			<ul class="pagination pagination-large">
+				<c:if test="${pageMaker.prev}">
+					<li class="disabled"><span><a href="/admin/user${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+				</c:if>
+				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+						<a href="/admin/user${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+					</li>
+				</c:forEach>
+				<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+					<li class="disabled"><span><a href="/admin/user${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+				</c:if>
+			</ul>
 		</div>
 	</div>
 	
