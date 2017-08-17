@@ -1,3 +1,6 @@
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
 function categoryRegist() {
 	var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
 	var blank_pattern = /[\s]/g;
@@ -15,8 +18,6 @@ function categoryRegist() {
 	}
 	var result = confirm('카테고리를 추가하시겠습니까?');
 	if (result) {
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
 		$.ajax({
 			type: 'POST', 
 			url: '/admin/categoryCheck', 
@@ -42,6 +43,7 @@ function categoryRegist() {
 
 function categoryDelete(categoryNo){
 	var data = "categoryNo=" + categoryNo;
+	var form = $('#form-'+categoryNo);
 	$.ajax({
 		type : 'GET',
 		url : '/admin/categoryCount',
@@ -55,14 +57,14 @@ function categoryDelete(categoryNo){
 			if(list > 0) {
 				var result = confirm(list+ '개의 게시글이 있습니다. 그래도 카테고리를 삭제 하시겠습니까? \n(카테고리를 삭제해도 기존의 글은 남게 됩니다.)');
 				if (result) {
-					$('#form-'+categoryNo).action = "/admin/categoryDelete"
-					$('#form-'+categoryNo).submit();
+					form.action = "/admin/categoryDelete"
+					form.submit();
 				} 
 			} else {
 				var result = confirm('카테고리를 삭제 하시겠습니까?');
 				if (result) {
-					$('#form-'+categoryNo).action = "/admin/categoryDelete"
-					$('#form-'+categoryNo).submit();
+					form.action = "/admin/categoryDelete"
+					form.submit();
 				} 
 			}
 		}

@@ -117,17 +117,14 @@ public class FileService {
 
 	/* 파일 다운로드 */
 	public ResponseEntity<byte[]> fileDownload(String fileName) throws IOException {
-		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
-		try {
-			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
 
-			MediaType mediaType = MediaUtils.getMediaType(formatName); // MediaUtils에서 이미지 파일 여부 검사
+		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
+		MediaType mediaType = MediaUtils.getMediaType(formatName); // MediaUtils에서 이미지 파일 여부 검사
+		HttpHeaders headers = new HttpHeaders(); // 헤더 구성 객체
+		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 
-			HttpHeaders headers = new HttpHeaders(); // 헤더 구성 객체
-
-			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
-			in = new FileInputStream(homePath + uploadPath + fileName);
+		try (InputStream in = new FileInputStream(homePath + uploadPath + fileName);) {
 
 			if (mediaType != null) { // 이미지 파일이면...
 				headers.setContentType(mediaType);
@@ -138,12 +135,14 @@ public class FileService {
 					"attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "iso-8859-1") + "\"");
 			}
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
+
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
-		} finally {
-			in.close();
+
 		}
+
 		return entity;
 	}
 }

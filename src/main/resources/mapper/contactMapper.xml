@@ -65,11 +65,11 @@
 					ON USER.user_no = CONTACT.user_no
 				ORDER BY
 					CONTACT.contact_no desc
-				<if test="option != 2">
+				<if test="option != 2"> <!-- 전체 문의사항 -->
 					LIMIT #{startBoardNo}, #{perPageNum}
 				</if>
 			) C
-			<if test="option == 2">
+			<if test="option == 2"> <!-- 답변 안달린 것만 -->
 				WHERE contact_comment_count = 0
 				LIMIT #{startBoardNo}, #{perPageNum}
 			</if>

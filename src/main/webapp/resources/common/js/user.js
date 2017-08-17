@@ -31,11 +31,11 @@ function presentPasswordCheck(passwordCheckButton){
 		success : function(result) {
 			var list = $.parseJSON(result);
 			if(list) {
-				$(passwordCheckButton).attr("disabled",true);
-				$('#userPassword').attr("disabled",true);
-				$('#newUserPassword').attr("disabled",false);
-				$('#newReUserPassword').attr("disabled",false);
-				$('#password-change-button').attr("disabled",false);
+				$(passwordCheckButton).prop("disabled",true);
+				$('#userPassword').prop("disabled",true);
+				$('#newUserPassword').prop("disabled",false);
+				$('#newReUserPassword').prop("disabled",false);
+				$('#password-change-button').prop("disabled",false);
 			} else {
 				alert('비밀번호가 맞지 않습니다!')
 				$('#userPassword').val('');
@@ -95,8 +95,6 @@ function rePasswordCheck2() {
 function idDuplicationCheck() {
 	var userId = $('#userId').val();
 	var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
 	if (special_pattern.test(userId) == true || userId == " ") {
 		alert('특수문자 및 공백은 사용할 수 없습니다.');
 		$('#userId').val(userId.substring(0, userId.length - 1));

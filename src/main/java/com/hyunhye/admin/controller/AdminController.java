@@ -1,5 +1,7 @@
 package com.hyunhye.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import com.hyunhye.notice.model.Notice;
 import com.hyunhye.notice.service.NoticeService;
 import com.hyunhye.user.model.UserModel;
 import com.hyunhye.user.service.UserService;
+import com.hyunhye.utils.UriUtils;
 import com.hyunhye.utils.UserSessionUtils;
 
 @Controller
@@ -45,9 +48,11 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("admin")
-	public String goAdminPage(@ModelAttribute Criteria cri, Model model,
-		@RequestParam(value = "option", defaultValue = "1") int option) {
-		cri.setOption(option);
+	public String goAdminPage(@ModelAttribute Criteria cri, Model model, HttpServletRequest request) {
+
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
+		System.out.println("test" + request.getSession().getAttribute("uri"));
 
 		/** 문의사항 리스트 보기 **/
 		model.addAttribute("contact", contactService.contactSelectListAll(cri));

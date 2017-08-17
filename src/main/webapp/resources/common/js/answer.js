@@ -16,7 +16,7 @@ $('.answer-summernote').summernote({
 });
 
 function createCommentTextArea(commentNo, boardNo, commentViewButton){
-	$(commentViewButton).attr("disabled",true);
+	$(commentViewButton).prop("disabled",true);
 	var str="";
 	str += '<div class="comment-write">';
 	str += '<form name="form" id="comment-form">';
@@ -29,12 +29,13 @@ function createCommentTextArea(commentNo, boardNo, commentViewButton){
 	$('#answer-'+commentNo+' > .comment-wrapper').append(str);
 }
 
-
 function answerRegist(answerButton, event){
+
 	event.preventDefault();
 	var commentContent = $('#comment-content').val();
 	var data = $('.answer-form').serialize()
-	if($(answerButton).html() == 'Answer'){
+	var answerButton = $(answerButton);
+	if(answerButton.html() == 'Answer'){
 		$.ajax({
 			type : 'POST',
 			url : '/comment/regist',
@@ -48,13 +49,13 @@ function answerRegist(answerButton, event){
 				$(".empty-answer").remove();
 				$("#listComment *").remove();
 				$("#listComment").append(result);
-				$('.note-editable').html('');
+				$('.note-editable').empty();
 				
 				$('#answer-tab a[href="#newest"]').tab('show');
 			}
 		});
-	} else if ($(answerButton).html() == 'Modify') {
-		var commentNo = $(answerButton).attr('comment-no');
+	} else if (answerButton.html() == 'Modify') {
+		var commentNo = answerButton.prop('comment-no');
 		$.ajax({
 			type : 'POST',
 			url : '/comment/modify',
@@ -65,14 +66,13 @@ function answerRegist(answerButton, event){
 			data : $('.answer-form').serialize(),
 			success : function(result) {
 				alert('답변이 수정되었습니다.');
-				$("#content-"+commentNo).html(commentContent);
-				$('.note-editable').html('');
-				$(answerButton).html('Answer')
+				$("#content-"+commentNo).empty().html(commentContent);
+				$('.note-editable').empty();
+				answerButton.html('Answer')
 				$('#answer-content-'+commentNo).css('background-color','#ffffff');
-				$('.answer-button').attr("disabled",false);
+				$('.answer-button').prop("disabled",false);
 				
 				$('#answer-tab a[href="#newest"]').tab('show');
-				$('#answer-tab a:first').tab('show');
 			}
 	});
 	}
@@ -93,7 +93,6 @@ function answerDelete(commentNo){
 			data : data,
 			success : function(result) {
 				$('#answer-tab a[href="#newest"]').tab('show');
-				$('#answer-tab a:first').tab('show');
 				$("#answer-wrapper-"+commentNo).remove();
 			}
 		});
@@ -113,24 +112,25 @@ function answerModify(commentNo){
 			data : data,
 			success : function(result) {
 				var list = $.parseJSON(result);
+				var answerRegistButton = $('#answer-regist-button');
+				var summernoteEditor = $('.note-editable');
 				$('#answer-tab a[href="#newest"]').tab('show');
-				$('#answer-tab a:first').tab('show');
 				$('#answer-content-'+commentNo).css('background-color','#ededed');
-				$('#answer-regist-button').html('Modify');
-				$('#answer-regist-button').attr('comment-no',commentNo);
 				$('#answer-no').val(commentNo);
-				$('.answer-button*').attr("disabled",true);
-				$('.note-editable').html(list.comment);
-				$('.note-editable').trigger('focus');
+				$('.answer-button').prop("disabled",true);
+				answerRegistButton.empty().html('Modify');
+				answerRegistButton.prop('comment-no',commentNo);
+				summernoteEditor.empty().html(list.comment);
+				summernoteEditor.trigger('focus');
 			}
 		});
 	}
 }
 
 function commentCancel(commentNo){
-	$('.comment-add').attr("disabled",false);
-	$('#answer-button').attr("disabled",false);
-	$('.comment-list-button > *').attr("disabled",false);
+	$('.comment-add').prop("disabled",false);
+	$('#answer-button').prop("disabled",false);
+	$('.comment-list-button > *').prop("disabled",false);
 	$('.comment-write').remove();
 }
 
@@ -150,25 +150,28 @@ function commentRegist(commentNo, event){
 			data : data,
 			success : function(result) {
 				var count = parseInt($('#comment-view-'+commentNo).html());
+				var commentViewButton = $('#comment-view-'+commentNo);
 				$('#answer-'+commentNo+' > .comment-wrapper').children().remove();
 				$('.comment-write').remove();
-				$('.comment-add').attr("disabled",false);
-				$('#comment-view-'+commentNo).val('closed');
-				$('#comment-view-'+commentNo).html((count+1) + " Comment ▲");
-				$('#comment-view-'+commentNo).click();
+				$('.comment-add').prop("disabled",false);
+				commentViewButton.val('closed');
+				commentViewButton.empty().html((count+1) + " Comment ▲");
+				commentViewButton.click();
 			}
 		});
 	}
 }
 
 function commentListView(commentNo, commentListButton){
+	var commentListButton = $(commentListButton);
 	$('.comment-write').remove();
-	$('.comment').attr("disabled",false);
-	$('.comment-add').attr("disabled",false);
+	$('.comment').prop("disabled",false);
+	$('.comment-add').prop("disabled",false);
 	var count = parseInt($(commentListButton).html());
-	if($(commentListButton).val() == 'closed'){
-		$(commentListButton).html(count + " Comment ▲");
-		$(commentListButton).val('open');
+	
+	if(commentListButton.val() == 'closed'){
+		commentListButton.empty().html(count + " Comment ▲");
+		commentListButton.val('open');
 		var data = "commentNo=" + commentNo;
 		$.ajax({
 			type : 'GET',
@@ -181,9 +184,9 @@ function commentListView(commentNo, commentListButton){
 				$('#answer-'+commentNo+' > .comment-wrapper').append(result).hide().slideDown("fast");
 			}
 		});
-	} else if($(commentListButton).val() == 'open'){
-		$(commentListButton).html(count + " Comment ▼");
-		$(commentListButton).val('closed');
+	} else if(commentListButton.val() == 'open'){
+		commentListButton.empty().html(count + " Comment ▼");
+		commentListButton.val('closed');
 		$('#answer-'+commentNo+' > .comment-wrapper').children().remove();
 	}
 }
@@ -199,9 +202,9 @@ function goToCommentModify(commentNo){
 		data : data,
 		success : function(result) {
 			var list = $.parseJSON(result);
-			$('#answer-button').attr("disabled",true);
-			$('.comment-list-button > *').attr("disabled",true);
-			$(this).attr("disabled",true);
+			$('#answer-button').prop("disabled",true);
+			$('.comment-list-button > *').prop("disabled",true);
+			$(this).prop("disabled",true);
 			
 			var str = "";
 			str += '<div class="comment-write">';
@@ -229,10 +232,10 @@ function commentModify(commentNo){
 		data : $('#comment-form').serialize(),
 		success : function(result) {
 			alert('답글이 수정되었습니다.');
-			$("#comment-text-"+commentNo).html(commentContent);
+			$("#comment-text-"+commentNo).empty().html(commentContent);
 			$('#answer-content-'+commentNo).css('background-color','#ffffff');
-			$('#answer-button > *').attr("disabled",false);
-			$('.comment-list-button > *').attr("disabled",false);
+			$('#answer-button > *').prop("disabled",false);
+			$('.comment-list-button > *').prop("disabled",false);
 			$('.comment-write').remove();
 		}
 	});
@@ -258,11 +261,14 @@ function commentDelete(commentNo) {
 
 function anwserLike(commentNo, answerLikeButton) {
 	var data = "commentNo=" + commentNo;
-	var check = $(answerLikeButton).attr('id');
+	var check = $(answerLikeButton).prop('id');
+	
+	var answerLikeButton = $(answerLikeButton);
+	var answerLikeCount = $('#answer-like-count-'+commentNo);
 	
 	if(check=="answer-like-uncheck") {
-		$(answerLikeButton).attr('id','answer-like-check');
-		$(answerLikeButton).css('color','#FF3636');
+		answerLikeButton.prop('id','answer-like-check');
+		answerLikeButton.css('color','#FF3636');
 		$.ajax({
 			type : 'GET',
 			url : '/comment/like',
@@ -271,13 +277,13 @@ function anwserLike(commentNo, answerLikeButton) {
 			contentType : false,
 			data : data,
 			success : function(result) {
-				var count = $('#answer-like-count-'+commentNo).html();
-				$('#answer-like-count-'+commentNo).html(Number(count)+1);
+				var count = answerLikeCount.html();
+				answerLikeCount.empty().html(Number(count)+1);
 			}
 		});
 	} else {
-		$(answerLikeButton).attr('id','answer-like-uncheck');
-		$(answerLikeButton).css('color','#eee');
+		answerLikeButton.prop('id','answer-like-uncheck');
+		answerLikeButton.css('color','#eee');
 		$.ajax({
 			type : 'GET',
 			url : '/comment/hate',
@@ -286,8 +292,8 @@ function anwserLike(commentNo, answerLikeButton) {
 			contentType : false,
 			data : data,
 			success : function(result) {
-				var count = $('#answer-like-count-'+commentNo).html();
-				$('#answer-like-count-'+commentNo).html(Number(count)-1);
+				var count = answerLikeCount.html();
+				answerLikeCount.empty().html(Number(count)-1);
 			}
 		});
 	}

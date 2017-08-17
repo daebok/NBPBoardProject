@@ -23,7 +23,7 @@
 					<label for="category">Category</label>
 					<category:category />
 				</div>
-				<textarea class="summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">
+				<textarea class="board-summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">
 					${model.boardContent}
 				</textarea>
 				<div class="form-group">

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false"
 	monitoring="autodetect" dynamicConfig="true">
 
 	<!-- 캐시 정의 -->
@@ -15,9 +14,9 @@
 	<cache 
 		name="category" 
 		maxElementsInMemory="300"
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="0"
 		eternal="false"
-		timeToIdleSeconds="0" 
-		timeToLiveSeconds="500" 
 		overflowToDisk="true" 
 	/>
 

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,24 +171,24 @@ public class BoardService {
 
 	/* 검색 타입 null 체크*/
 	public SearchCriteria isSearchTypeNull(SearchCriteria cri) {
-		if (TextUtils.isEmpty(cri.getCategoryType())) {
+		if (StringUtils.isBlank(cri.getCategoryType())) {
 			cri.setCategoryType("all");
 		}
-		if (TextUtils.isEmpty(cri.getSearchType())) {
+		if (StringUtils.isBlank(cri.getSearchType())) {
 			cri.setSearchType(null);
 		}
 		return cri;
 	}
 
 	public SearchCriteria dateCheck(SearchCriteria cri) {
-		if (TextUtils.isEmpty(cri.getFromDate()) && TextUtils.isEmpty(cri.getToDate())) {
+		if (StringUtils.isBlank(cri.getFromDate()) && TextUtils.isEmpty(cri.getToDate())) {
 			cri.setFromDate(null);
 			cri.setToDate(null);
-		} else if (TextUtils.isEmpty(cri.getFromDate())) {
+		} else if (StringUtils.isBlank(cri.getFromDate())) {
 			LocalDate theDate = LocalDateTime.now().toLocalDate();
 			cri.setFromDate(cri.getToDate());
 			cri.setToDate(theDate.toString());
-		} else if (TextUtils.isEmpty(cri.getToDate())) {
+		} else if (StringUtils.isBlank(cri.getToDate())) {
 			LocalDate theDate = LocalDateTime.now().toLocalDate();
 			cri.setToDate(theDate.toString());
 		} else if (cri.getFromDate().compareTo(cri.getToDate()) > 0) {

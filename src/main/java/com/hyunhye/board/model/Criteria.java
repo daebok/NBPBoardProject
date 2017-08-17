@@ -12,8 +12,11 @@ public class Criteria {
 	private int startBoardNo;
 	/** 사용자 번호 **/
 	private int userNo;
-	/** option **/
+	/** 최신순인지, 답변순인지, 조회순인지 **/
+	private int tab;
+	/** 리스트 번호 (전체리스트인지, 내 질문 리스트인지, 즐겨찾기 리스트인지) or 문의사항 답변달린 것인지 전체리스트인지 **/
 	private int option;
+
 	/*
 	 * 디폴트: 시작 페이지=1, 페이지 당 데이터 개수=10
 	 */

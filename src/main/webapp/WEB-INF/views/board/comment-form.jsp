@@ -4,7 +4,7 @@
 <c:forEach var="comment" items="${comment}">
 	<div class='comment-list' id='answer-comment-${ comment.commentNo}'>
 		<div class='comment' id='comment-text-${ comment.commentNo}'>
-			<c:out value=" ${comment.commentContent}" escapeXml="false"></c:out>
+			<c:out value=" ${comment.commentContent}" escapeXml="true"></c:out>
 		</div>
 		<span class='badge'>Commented By ${comment.userName}</span>
 		<div class='pull-right comment-list-button'>

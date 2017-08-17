@@ -1,5 +1,7 @@
 package com.hyunhye.contact.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.hyunhye.board.model.Criteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.contact.model.Contact;
 import com.hyunhye.contact.service.ContactService;
+import com.hyunhye.utils.UriUtils;
 import com.hyunhye.utils.UserSessionUtils;
 
 @RequestMapping("contact")
@@ -32,8 +35,11 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String goContactUsPage(@ModelAttribute("cri") Criteria cri, Model model) {
+	public String goContactUsPage(@ModelAttribute("cri") Criteria cri, Model model, HttpServletRequest request) {
 		model.addAttribute("contact", contactService.contactSelectListAll(cri));
+
+		/* 이전 uri에 대한 정보 저장 */
+		UriUtils.getUri(request);
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
@@ -73,11 +79,16 @@ public class ContactController {
 	@RequestMapping("view")
 	public String contactUsSelectOne(@RequestParam("contactNo") int contactNo,
 		@RequestParam(value = "option", defaultValue = "0") int option,
-		@ModelAttribute("cri") Criteria cri, Model model) {
+		@ModelAttribute("cri") Criteria cri, Model model,
+		HttpServletRequest request) {
+
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 		model.addAttribute("model", contactService.contactUsSelectOne(contactNo));
 		model.addAttribute("contactComment", contactService.contactCommentSelectListAll(contactNo));
-		model.addAttribute("option", option);
+
+		/* 이전 uri 정보 꺼내오기 */
+		model.addAttribute("uri", request.getSession().getAttribute("uri"));
+
 		return "contact/contact-view";
 	}
 

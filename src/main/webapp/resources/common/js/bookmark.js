@@ -3,11 +3,12 @@ var header = $("meta[name='_csrf_header']").attr("content");
 	
 function bookmarkCheck(boardNo, bookmarkCheck) {
 	var data = "boardNo=" + boardNo;
-	var check = $(bookmarkCheck).attr('id');
+	var check = $(bookmarkCheck).prop('id');
 	
+	var bookmarkCheck = $(bookmarkCheck);
 	if(check == "book-mark-uncheck"){
-		$(bookmarkCheck).attr('id','book-mark-check');
-		$(bookmarkCheck).css('color','#FF3636');
+		bookmarkCheck.prop('id','book-mark-check');
+		bookmarkCheck.css('color','#FF3636');
 		$.ajax({
 			type : 'GET',
 			url : '/board/bookmark',
@@ -19,8 +20,8 @@ function bookmarkCheck(boardNo, bookmarkCheck) {
 	} else {
 		var result = confirm('즐겨찾기를  해제 하시겠습니까? \n기존에 저장한 메모도 삭제 됩니다.');
 		if (result) {
-			$(bookmarkCheck).attr('id','book-mark-uncheck');
-			$(bookmarkCheck).css('color','#888');
+			bookmarkCheck.prop('id','book-mark-uncheck');
+			bookmarkCheck.css('color','#888');
 			$.ajax({
 				type : 'GET',
 				url : '/board/bookmark/uncheck',

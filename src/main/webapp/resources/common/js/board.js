@@ -45,10 +45,8 @@ function questionRegist(){
 	
 	if($('.btn-codeview').hasClass('active')){
 		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
+		
 		$('.board-summernote').deactivate();
-		$('.btn-codeview').deactivate();
-		$('.note-codable').deactivate();
-		$('.note-editable').deactivate();
 		$('.note-editable').trigger('focus');
 		return;
 	}
@@ -81,7 +79,6 @@ function questionRegist(){
 				alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
 				$(".note-editable").focus();
 			} else {
-				document.form.append('<input type="hidden" name="_csrf" value="'+token+'">');
 				document.form.submit();
 			}
 		}

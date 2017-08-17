@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label for="id" class="col-sm-2 control-label"><b>Add</b></label>
 						<div class="col-sm-10">
-							<input type="text" name="categoryItem" id="category-item" placeholder="Category Item" class="form-control" style="width:70%; float:left;"/>
+							<input type="text" class="form-control"  name="categoryItem" id="category-item" placeholder="Category Item" style="width:70%; float:left;"/>
 							<button type="button" class="btn btn-default" onclick="categoryRegist()" style="float:left;">Add</button>
 						</div>
 					</div>

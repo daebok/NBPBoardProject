@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,10 +140,11 @@ public class BoardController {
 	 * @return 게시글 상세보기 페이지
 	 */
 	@RequestMapping("question")
-	public String boardSelectOne(@RequestParam("boardNo") int boardNo,
+	public String boardSelectOne(
+		@RequestParam("boardNo") int boardNo,
 		@RequestParam(value = "section", defaultValue = "1") int section,
 		@ModelAttribute("cri") SearchCriteria cri,
-		Model model, HttpServletRequest request, HttpServletResponse response) {
+		Model model, HttpServletRequest request) {
 
 		/* 조회수 */
 		boardService.increaseViewCount(boardNo);
@@ -162,7 +162,7 @@ public class BoardController {
 		model.addAttribute("answerCount", commentService.answerCount(boardNo));
 
 		/* 이전 uri 정보 꺼내오기 */
-		model.addAttribute("section", request.getSession().getAttribute("uri"));
+		model.addAttribute("uri", request.getSession().getAttribute("uri"));
 
 		return "board/board-view";
 	}

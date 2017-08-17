@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <script>
-	var error = '${requestScope["errorMessage"]}';
+	var error = ${requestScope["errorMessage"]};
 	if (error != "") {
 		alert(error);
 	}

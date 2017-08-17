@@ -52,12 +52,12 @@
 					</c:if>
 					<c:if test="${user.username != model.userId}"> <!-- 관리자 권한 -->
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<button id="delete" class="btn btn-primary">Delete</button>
+							<button class="btn btn-primary" onclick="questionDelete(${model.boardNo})">Delete</button>
 						</sec:authorize>
 					</c:if>
 				</div>
 				<div class="pull-left">
-					<form:form name="list" action="${section}" id="list-form"  method="get">
+					<form:form name="list" action="${uri}" id="list-form"  method="get">
 						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
 						<input type="hidden" name="tab" value="${cri.tab}" /> 
 						<input type="hidden" name="page" value="${cri.page}" /> 
@@ -95,7 +95,7 @@
 </body>
 </html>
 
-<link href="<c:url value="/resources/common/css/file.css" />"		 rel="stylesheet">
+<link href="<c:url value="/resources/common/css/file.css" />"		rel="stylesheet">
 <link href="<c:url value="/resources/common/css/answer.css" />" 	rel="stylesheet">
 <link href="<c:url value="/resources/common/css/board.css" />" 		rel="stylesheet">
 <script src="<c:url value="/resources/common/js/answer.js" />">		</script>

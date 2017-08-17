@@ -77,26 +77,13 @@ function contactCommentDelete(contactCommentNo) {
 	}
 }
 
-function goToList(option) {
-	var form = document.forms['list'];
-	
-	if (option == 1) {
-		form.action = "/admin/admin?option=1";
-	} else if (option == 2) {
-		form.action = "/admin/admin?option=2";
-	} else {
-		form.action = "/contact/list";
-	}
-	 form.submit();
-}
-
 function passwordCheck(checkbox){
 	console.log(checkbox);
 	var check = $(checkbox).prop("checked");
 	if(check) {
-		$('#password').attr('disabled', false);
+		$('#password').prop('disabled', false);
 	} else {
-		$('#password').attr('disabled', true);
+		$('#password').prop('disabled', true);
 	}
 }
 

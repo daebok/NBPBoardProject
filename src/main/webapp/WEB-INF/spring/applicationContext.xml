@@ -28,5 +28,4 @@
 	<beans:import resource="applicationContext-security.xml" />
 	<beans:import resource="applicationContext-ehcache.xml" />
 
-
 </beans:beans>

@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -18,6 +20,7 @@ import com.hyunhye.board.repository.CategoryRepository;
 
 @Service
 public class CategoryService {
+	Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
 	@Autowired
 	public CategoryRepository categoryRepository;
@@ -33,6 +36,7 @@ public class CategoryService {
 		Ehcache cache = cacheManager.getCacheManager().getCache("category");
 
 		Element newElement = new Element(categoryModel.getCategoryNo(), categoryModel);
+		logger.info("newElement:{}", newElement);
 		cache.put(newElement);
 
 		categoryRepository.categoryInsert(categoryModel);
