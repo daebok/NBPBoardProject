@@ -5,7 +5,6 @@ function otherQuestion(userId){
 	location.href="/board/list?searchType=writer&keyword="+userId;
 }
 
-
 $(document).ready(function() {
 	$('.board-summernote').summernote({
 	height : 300,
@@ -33,6 +32,7 @@ $(document).ready(function() {
 });
 
 
+
 function questionRegist(){
 	var title = $("#title").val();
 	var content = $("#content").val();
@@ -43,14 +43,27 @@ function questionRegist(){
 		return;
 	}
 	
-	var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
-	htmlRemoveContent.replace(/&nbsp;/g, "");
-	
-	if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
+	if($('.btn-codeview').hasClass('active')){
+		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
+		$('.board-summernote').deactivate();
+		$('.btn-codeview').deactivate();
+		$('.note-codable').deactivate();
+		$('.note-editable').deactivate();
+		$('.note-editable').trigger('focus');
+		return;
+	}
+
+	var htmlRemoveContent = content.replace(/<(\/?)p>/gi,"");
+	htmlRemoveContent = htmlRemoveContent.replace(/<br[^>]*>/gi, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/&nbsp;/g, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/(\s*)/g, "");
+	if (htmlRemoveContent == "") {
 		alert("내용를 입력하세요.");
 		$('.note-editable').trigger('focus');
 		return;
 	}
+	
+	
 
 	/* 비속어 처리 */
 	$.ajax({
@@ -68,6 +81,7 @@ function questionRegist(){
 				alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
 				$(".note-editable").focus();
 			} else {
+				document.form.append('<input type="hidden" name="_csrf" value="'+token+'">');
 				document.form.submit();
 			}
 		}
