@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
-</head>
+</head>	
 <body>
 	<!-- loading -->
 	<%@include file="../common/loading.jsp"%>

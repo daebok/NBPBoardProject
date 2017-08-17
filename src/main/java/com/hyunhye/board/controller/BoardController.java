@@ -108,7 +108,8 @@ public class BoardController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
-	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file)
+	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file,
+		@RequestParam(value = "_csrf", required = false) String csrf)
 		throws Exception {
 		boardService.boardInsert(UserSessionUtils.currentUserNo(), model, file);
 		return "redirect:/board/list";

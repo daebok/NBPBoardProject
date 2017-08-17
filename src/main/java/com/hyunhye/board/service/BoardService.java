@@ -10,6 +10,7 @@ import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +49,7 @@ public class BoardService {
 	private FileService uploadService;
 
 	/** 게시글  Top10 리스트 **/
+	@Cacheable("top-list")
 	public List<Board> boardTop10SelectList(Home homeModel) {
 		return boardRepository.boardTop10SelectList(homeModel);
 	}
