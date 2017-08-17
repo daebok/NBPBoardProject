@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<script>
+	$(function() {
+		$('input[type=date]').datepicker({
+			dateFormat : 'yy-mm-dd'
+		});
+	});
+</script>
 <label for="categoryType"> Category </label>
 <select name="categoryType" id="categoryType" style="padding: 2px;">
 	<option value='all'
