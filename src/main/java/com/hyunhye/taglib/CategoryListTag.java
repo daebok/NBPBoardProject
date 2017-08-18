@@ -11,6 +11,7 @@ import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.service.CategoryService;
+import com.hyunhye.common.SpringBeanFactory;
 
 @SuppressWarnings("serial")
 public class CategoryListTag extends RequestContextAwareTag {

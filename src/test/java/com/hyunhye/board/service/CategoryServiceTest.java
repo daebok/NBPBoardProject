@@ -10,7 +10,7 @@ import org.springframework.cache.ehcache.EhCacheCacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 
-import com.hyunhye.taglib.SpringBeanFactory;
+import com.hyunhye.common.SpringBeanFactory;
 import com.hyunhye.test.AbstractTestCaseRunWithSpring;
 
 public class CategoryServiceTest extends AbstractTestCaseRunWithSpring {

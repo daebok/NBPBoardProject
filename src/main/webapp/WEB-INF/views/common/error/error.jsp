@@ -7,7 +7,8 @@
 <body>
 	<div id="wrapper">
 		<div align="center">
-			<c:out value='${msg}'/>
+			<c:out value='${msg}'/> <br>
+			<a href="<c:url value='/board'/>">Home으로 가기</a>
 		</div>
 	</div>
 </body>

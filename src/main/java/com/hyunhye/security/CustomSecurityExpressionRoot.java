@@ -8,9 +8,9 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionR
 
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
+import com.hyunhye.common.SpringBeanFactory;
 import com.hyunhye.contact.service.ContactService;
 import com.hyunhye.notice.service.NoticeService;
-import com.hyunhye.taglib.SpringBeanFactory;
 import com.hyunhye.utils.UserSessionUtils;
 
 public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
@@ -111,6 +111,7 @@ public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 		}
 		return true;
 	}
+
 
 	public boolean hasNoticeAuthority() {
 		NoticeService noticeService = SpringBeanFactory.getBean(NoticeService.class);

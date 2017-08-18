@@ -14,8 +14,7 @@
 .board-writer {
 	display: inline;
 	text-align:right;
-	padding: 10px;
-	background-color:#eee;
-	color:black;
+	color:#0080c0;
+	font-size: 0.9em;
 	
 }

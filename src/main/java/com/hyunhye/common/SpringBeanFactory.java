@@ -1,4 +1,4 @@
-package com.hyunhye.taglib;
+package com.hyunhye.common;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

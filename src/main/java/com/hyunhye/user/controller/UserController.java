@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.hyunhye.board.service.BoardService;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
 import com.hyunhye.user.model.UserModel;
@@ -35,6 +36,9 @@ public class UserController {
 
 	@Autowired
 	public UserService service;
+
+	@Autowired
+	public BoardService boardService;
 
 	@Autowired
 	private NaverLoginService naverLoginService;
@@ -109,6 +113,7 @@ public class UserController {
 	@RequestMapping("info")
 	public String userinfo(Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
+		model.addAttribute("myBoardCount", boardService.selectMyBoardCount(UserSessionUtils.currentUserNo()));
 		return "user/user/user-info";
 	}
 

@@ -20,7 +20,7 @@
 
 		<!-- 게시글 리스트 -->
 		<div class="col-md-8" style="margin:20px 0;">
-			<b>All Questions</b>
+			<b>All Questions (${boardCount} 개)</b>
 			<c:if test="${pageMaker.cri.tab == 1 }">
 				<a href="<c:url value='/board/list?tab=1'/>" class="btn btn-warning btn-sm">Newest</a>
 				<a href="<c:url value='/board/list?tab=2'/>" class="btn btn-default btn-sm">Views</a>

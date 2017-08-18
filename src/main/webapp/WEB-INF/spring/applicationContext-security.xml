@@ -27,7 +27,6 @@
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		
 
-		<!-- 사용자이름과 비밀번호를 가지고있는 폼기반 인증방법 -->
 		<form-login 
 			username-parameter="userId" 
 			password-parameter="userPassword"
@@ -36,14 +35,12 @@
 			authentication-failure-url="/user/loginPage?error"
 			login-processing-url="/loginProcess" />
 
-		<!-- 중복 로그인 설정 -->
 		<session-management>
 			<concurrency-control 
 				max-sessions="1"
 				expired-url="/user/login/duplicate" />
 		</session-management>
 
-		<!-- 로그아웃되면 세션 초기화 -->
 		<logout 
 			delete-cookies="true" 
 			invalidate-session="true"
@@ -52,7 +49,6 @@
 
 		<access-denied-handler ref="userDeniedHandler"/>
 		
-		<!-- 해킹을 막는다. -->
 		<csrf />
 	</http>
 	

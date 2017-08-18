@@ -25,7 +25,6 @@
 				<span class="label label-warning">${model.categoryItem} </span>
 				<h2><c:out value="${model.boardTitle}" escapeXml="true"/></h2>
 				<p><c:out value="${model.boardContent}" escapeXml="false"/></p>
-				<div align="right" ><b><a class="board-writer"  href="javascript:otherQuestion('${model.userId}')">${model.userId}</a></b></div>
 				<c:if test="${not empty attach}">
 					<div class="panel panel-default">
 						<div class="list-group">
@@ -44,6 +43,10 @@
 						</div>
 					</div>
 				</c:if>
+				<div align="right" ><b>
+					<a class="board-writer"  href="javascript:otherQuestion('${model.userId}')">${model.userId}의 다른 게시물 보기
+					<span class="glyphicon glyphicon-hand-right"></span></a>
+				</b></div>
 				<hr>
 				<div class="pull-right">
 					<c:if test="${user.username == model.userId}">
