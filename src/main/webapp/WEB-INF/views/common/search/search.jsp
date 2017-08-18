@@ -3,10 +3,11 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <script>
 	$(function() {
-		$('input[type=date]').datepicker({
+		$('#fromDate, #toDate').datepicker({
 			dateFormat : 'yy-mm-dd'
 		});
-	});
+
+	}); 
 </script>
 <label for="categoryType"> Category </label>
 <select name="categoryType" id="categoryType" style="padding: 2px;">
@@ -19,8 +20,8 @@
 </select>
 <br>
 <label for="date"> Date </label>
-<input type="date" name="fromDate" id="date" value="${cri.fromDate}"> ~
-<input type="date" name="toDate" id="date" value="${cri.toDate}">
+<input type="text" name="fromDate" id="fromDate" value="${cri.fromDate}"> ~
+<input type="text" name="toDate" id="toDate" value="${cri.toDate}">
 <br>
 <label for="searchType"> SearchType </label>
 <select name="searchType" id="searchType" style="padding: 2px;">

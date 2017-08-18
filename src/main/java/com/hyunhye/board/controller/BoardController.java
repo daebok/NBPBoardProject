@@ -72,7 +72,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String boardSelectList(@ModelAttribute SearchCriteria cri,
+	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri,
 		@RequestParam(defaultValue = "1") int tab,
 		HttpServletRequest request,
 		Model model) {
@@ -144,7 +144,7 @@ public class BoardController {
 	public String boardSelectOne(
 		@RequestParam int boardNo,
 		@RequestParam(defaultValue = "1") int section,
-		@ModelAttribute SearchCriteria cri,
+		@ModelAttribute("cri") SearchCriteria cri,
 		Model model, HttpServletRequest request) {
 
 		/* 세션에 저장된 사용자 정보 */
@@ -235,7 +235,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions")
-	public String myQuestionsSelectList(@ModelAttribute SearchCriteria cri, HttpServletRequest request,
+	public String myQuestionsSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
 		Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
@@ -267,7 +267,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions/answered")
-	public String myQuestionsAnsweredSelectList(@ModelAttribute SearchCriteria cri, HttpServletRequest request,
+	public String myQuestionsAnsweredSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
 		Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
@@ -383,7 +383,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myfavorite")
-	public String myFavoriteSelectList(@ModelAttribute SearchCriteria cri, Model model) {
+	public String myFavoriteSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
 		/* 즐겨찾기 전체 목록 */
 		model.addAttribute("list", boardService.myFavoriteSelectList(cri));
 
@@ -409,7 +409,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myfavorite/memo")
-	public String bookmarkSelectOne(@RequestParam int boardNo, @ModelAttribute SearchCriteria cri,
+	public String bookmarkSelectOne(@RequestParam int boardNo, @ModelAttribute("cri") SearchCriteria cri,
 		Model model) {
 
 		/* 현재 사용자 정보 */

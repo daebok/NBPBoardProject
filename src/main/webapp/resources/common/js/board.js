@@ -36,7 +36,8 @@ $(document).ready(function() {
 function questionRegist(){
 	var title = $("#title").val();
 	var content = $("#content").val();
-
+	var form = $('#register-form');
+	
 	if (title.replace(/\s|　/gi, '') == '') {
 		alert("제목를 입력하세요.");
 		$("#title").focus();
@@ -71,15 +72,14 @@ function questionRegist(){
 		beforeSend : function(xhr){
 			xhr.setRequestHeader(header, token);
 		},
-		data: $('#register-form').serialize(),
+		data: form.serialize(),
 		success: function (result) {
 			var list = $.parseJSON(result);
-			console.log(list);
 			if(list.length != 0) {
 				alert("[ "+ list+ " ] 이(가) 포함 된 단어는 작성 할 수 없습니다!");
 				$(".note-editable").focus();
 			} else {
-				document.form.submit();
+				form.submit();
 			}
 		}
 	});

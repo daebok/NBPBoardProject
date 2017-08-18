@@ -10,8 +10,9 @@
 	<div class="container" style="height:100%;">
 		<div class="container-fluid" >
 			<div class="col-md-12">
-				<h3><html:unescape>${model.noticeTitle}</html:unescape></h3>
-				<p><html:unescape>${model.noticeContent}</html:unescape></p>
+				<h2><c:out value="${model.noticeTitle}" escapeXml="true"/></h2>
+				<p><c:out value="${model.noticeContent}" escapeXml="false"/></p>
+				
 				<hr>
 				<div class="pull-right">
 					<sec:authorize access="hasRole('ROLE_ADMIN')">

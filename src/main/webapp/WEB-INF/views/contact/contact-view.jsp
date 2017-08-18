@@ -13,8 +13,8 @@
 	<div class="container">
 		<div class="container-fluid">
 			<div class="col-md-12">
-				<h3><html:unescape>${model.contactTitle}</html:unescape></h3>
-				<p><html:unescape>${model.contactContent}</html:unescape></p>
+				<h2><c:out value="${model.contactTitle}" escapeXml="true"/></h2>
+				<p><c:out value="${model.contactContent}" escapeXml="false"/></p>
 				<hr>
 				<div class="pull-left">
 					<form:form name="list"  action="${uri}" method="get">

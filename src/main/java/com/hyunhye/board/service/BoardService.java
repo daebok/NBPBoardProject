@@ -2,7 +2,6 @@ package com.hyunhye.board.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -185,20 +184,28 @@ public class BoardService {
 	}
 
 	public SearchCriteria dateCheck(SearchCriteria cri) {
-		if (StringUtils.isBlank(cri.getFromDate()) && TextUtils.isEmpty(cri.getToDate())) {
+		LocalDate theDate = LocalDate.now();
+		String today = theDate.toString();
+
+		String from = cri.getFromDate();
+		String to = cri.getToDate();
+
+		if (StringUtils.isBlank(from) && TextUtils.isEmpty(to)) {
 			cri.setFromDate(null);
 			cri.setToDate(null);
-		} else if (StringUtils.isBlank(cri.getFromDate())) {
-			LocalDate theDate = LocalDateTime.now().toLocalDate();
-			cri.setFromDate(cri.getToDate());
-			cri.setToDate(theDate.toString());
-		} else if (StringUtils.isBlank(cri.getToDate())) {
-			LocalDate theDate = LocalDateTime.now().toLocalDate();
-			cri.setToDate(theDate.toString());
-		} else if (cri.getFromDate().compareTo(cri.getToDate()) > 0) {
-			String tmpDate = cri.getFromDate();
-			cri.setFromDate(cri.getToDate());
+		} else if (StringUtils.isBlank(from)) {
+			cri.setFromDate(to);
+			cri.setToDate(today);
+		} else if (StringUtils.isBlank(to)) {
+			cri.setToDate(today);
+		} else if (from.compareTo(cri.getToDate()) > 0) {
+			String tmpDate = from;
+			cri.setFromDate(to);
 			cri.setToDate(tmpDate);
+		} else if (cri.getToDate().compareTo(today) > 0) {
+			cri.setToDate(today);
+		} else if (from.compareTo(today) > 0) {
+			cri.setFromDate(today);
 		}
 
 		return cri;
