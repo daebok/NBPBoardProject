@@ -21,7 +21,7 @@ $(document).ready(function() {
 				formData.append('files', files[index]);
 				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 				str += "<div class='list-1'>" + files[index].name +"</div>";
-				str += "<div class='list-2'><file:size value='" + files[index].size + "'/> </div>";
+				str += "<div class='list-2'><file:size value=" + files[index].size + "/> </div>";
 				str += "<div class='list-3'> <a href='javascript:fileDelete("+index+")' id='"+index+"'>[삭제]</a></div></div>";
 				$(".summernoteUploadedList").append(str);
 			}
@@ -107,7 +107,7 @@ function fileUpload(){
 		}
 		var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 		str += "<div class='list-1'>" + form.files[index].name +"</div>";
-		str += "<div class='list-2'><file:size value='" + form.files[index].size + "'/></div>";
+		str += "<div class='list-2'><file:size value=" + form.files[index].size + "/></div>";
 		str += "<div class='list-3'> <a href='javascript:fileDelete("+index+")' id='"+index+"'>[삭제]</a></div></div>";
 		$(".newUploadedList").append(str);
 	}
