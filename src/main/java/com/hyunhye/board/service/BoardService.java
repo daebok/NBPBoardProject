@@ -58,20 +58,20 @@ public class BoardService {
 	/* 1. 게시글 작성하기 */
 	/* 파일을 동시에 저장하기 위해 트랜잭션 사용 */
 	@Transactional
-	public void boardInsert(int userNo, Board boardModel, MultipartFile[] files) throws Exception {
-		boardModel.setUserNo(userNo);
+	public void boardInsert(int userNo, Board board, MultipartFile[] files) throws Exception {
+		board.setUserNo(userNo);
 
-		logger.info("Board Insert: {}", boardModel);
+		logger.info("Board Insert: {}", board);
 
 		/* 제거된 태그를 boardContentSummary에 담는다. */
-		String summary = createSummary(boardModel.getBoardContent());
-		boardModel.setBoardContentSummary(summary);
+		String summary = createSummary(board.getBoardContent());
+		board.setBoardContentSummary(summary);
 
 		/* 1) 작성 된 게시글 저장 */
-		boardRepository.boardInsert(boardModel);
+		boardRepository.boardInsert(board);
 
 		/* 2) 업로드 된 파일 저장 */
-		uploadService.fileRegist(boardModel, files);
+		uploadService.fileRegist(board, files);
 	}
 
 	/* HTML 태그 제거 */

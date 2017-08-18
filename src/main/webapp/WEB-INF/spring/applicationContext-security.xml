@@ -12,10 +12,11 @@
 	
 		<expression-handler ref="expressionHandler"/>
 		
-		<intercept-url pattern="/board/modify**" access="hasBoardRole()" /> <!-- 게시글 수정  권한 -->
-		<intercept-url pattern="/board/delete**" access="hasBoardRole()" /> <!-- 게시글 삭제 권한 -->
-		<intercept-url pattern="/comment/modify**" access="hasAnswerRole()" /> <!-- 답변 수정 권한 -->
-		<intercept-url pattern="/comment/delete**" access="hasAnswerRole()" /> <!-- 답변 삭제 권한 -->
+		<!-- 수정/삭제  권한 -->
+		<intercept-url pattern="/board/modify**" access="hasBoardRole()" /> 
+		<intercept-url pattern="/board/delete**" access="hasBoardRole()" /> 
+		<intercept-url pattern="/comment/modify**" access="hasAnswerRole()" />
+		<intercept-url pattern="/comment/delete**" access="hasAnswerRole()" /> 
 		
 		<!-- 모든 사람 -->
 		<intercept-url pattern="/user/**" access="permitAll" /> 

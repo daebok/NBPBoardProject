@@ -104,16 +104,16 @@ public class BoardController {
 	 * 게시글 작성하기
 	 * @param model
 	 * @param file
-	 * @return 게시글 리스트 페이지
+	 * @return 게시글 리스트 페이지 리다이렉트
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "question/ask", method = {RequestMethod.POST, RequestMethod.GET})
-	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file,
-		@RequestParam(value = "_csrf", required = false) String csrf)
+	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
+	public String boardInsert(@ModelAttribute Board board, @RequestParam("files") MultipartFile[] file)
 		throws Exception {
-		boardService.boardInsert(UserSessionUtils.currentUserNo(), model, file);
+		boardService.boardInsert(UserSessionUtils.currentUserNo(), board, file);
 		return "redirect:/board/list";
 	}
+
 
 	/**
 	 * 비속어 체크

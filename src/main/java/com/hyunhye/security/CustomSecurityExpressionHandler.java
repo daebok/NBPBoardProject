@@ -1,7 +1,5 @@
 package com.hyunhye.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.expression.SecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
@@ -12,7 +10,6 @@ import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.service.CommentService;
 
 public class CustomSecurityExpressionHandler extends DefaultWebSecurityExpressionHandler {
-	Logger logger = LoggerFactory.getLogger(CustomSecurityExpressionHandler.class);
 
 	@Autowired
 	BoardService boardService;
