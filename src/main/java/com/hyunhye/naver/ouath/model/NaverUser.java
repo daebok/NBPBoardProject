@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties
 @Getter
 @Setter
-@JsonIgnoreProperties
 public class NaverUser {
 
 	@JsonProperty("email")
@@ -36,4 +36,7 @@ public class NaverUser {
 
 	@JsonProperty("birthday")
 	private String birthday;
+
+	@JsonProperty("profile_image")
+	private String profileImage;
 }
