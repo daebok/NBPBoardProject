@@ -110,13 +110,7 @@ public class BoardService {
 		Board boardModel = new Board();
 		boardModel.setBoardNo(boardNo);
 		boardModel.setUserNo(UserSessionUtils.currentUserNo());
-		int check = boardRepository.boardViewSelect(boardModel);
-
-		/* 조회 한 적 없으면 증가 */
-		if (check <= 0) {
-			boardRepository.increaseViewCount(boardNo);
-			boardRepository.baordViewInsert(boardModel);
-		}
+		boardRepository.baordViewInsert(boardModel);
 	}
 
 	/* 등록 된 첨부파일 가져오기  */

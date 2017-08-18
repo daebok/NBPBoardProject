@@ -50,9 +50,6 @@ public interface BoardRepository {
 	/** 즐겨찾기 전체 리스트 **/
 	public int myFavoriteSelectListCount(Criteria cri);
 
-	/** 게시굴 조회수  **/
-	public void increaseViewCount(int boardNo);
-
 	/** 조회 확인 **/
 	public int boardViewSelect(Board boardModel);
 
