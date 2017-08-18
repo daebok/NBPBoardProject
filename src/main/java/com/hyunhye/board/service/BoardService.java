@@ -61,6 +61,8 @@ public class BoardService {
 	public void boardInsert(int userNo, Board boardModel, MultipartFile[] files) throws Exception {
 		boardModel.setUserNo(userNo);
 
+		logger.info("Board Insert: {}", boardModel);
+
 		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(boardModel.getBoardContent());
 		boardModel.setBoardContentSummary(summary);
@@ -98,10 +100,10 @@ public class BoardService {
 
 	/* 2. 해당 게시글 상세 보기 */
 	public Board boardSelectOne(int boardNo) {
-		Board boardModel = new Board();
-		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.boardSelectOne(boardModel);
+		Board board = new Board();
+		board.setBoardNo(boardNo);
+		board.setUserNo(UserSessionUtils.currentUserNo());
+		return boardRepository.boardSelectOne(board);
 	}
 
 	/* 조회수 */

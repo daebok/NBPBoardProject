@@ -72,8 +72,8 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String boardSelectList(@ModelAttribute("cri") SearchCriteria cri,
-		@RequestParam(value = "tab", defaultValue = "1") int tab,
+	public String boardSelectList(@ModelAttribute SearchCriteria cri,
+		@RequestParam(defaultValue = "1") int tab,
 		HttpServletRequest request,
 		Model model) {
 
@@ -107,7 +107,7 @@ public class BoardController {
 	 * @return 게시글 리스트 페이지
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "question/ask", method = RequestMethod.POST)
+	@RequestMapping(value = "question/ask", method = {RequestMethod.POST, RequestMethod.GET})
 	public String boardInsert(@ModelAttribute Board model, @RequestParam("files") MultipartFile[] file,
 		@RequestParam(value = "_csrf", required = false) String csrf)
 		throws Exception {
@@ -142,19 +142,19 @@ public class BoardController {
 	 */
 	@RequestMapping("question")
 	public String boardSelectOne(
-		@RequestParam("boardNo") int boardNo,
-		@RequestParam(value = "section", defaultValue = "1") int section,
-		@ModelAttribute("cri") SearchCriteria cri,
+		@RequestParam int boardNo,
+		@RequestParam(defaultValue = "1") int section,
+		@ModelAttribute SearchCriteria cri,
 		Model model, HttpServletRequest request) {
-
-		/* 조회수 */
-		boardService.increaseViewCount(boardNo);
 
 		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 
 		/* 해당 게시글 */
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
+
+		/* 조회수 */
+		boardService.increaseViewCount(boardNo);
 
 		/* 해당 게시글에 포함된 첨부 파일 */
 		model.addAttribute("attach", boardService.fileSelect(boardNo));
@@ -187,7 +187,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("modify")
-	public String goBoardUpdatePage(@RequestParam("boardNo") int boardNo, Model model) {
+	public String goBoardUpdatePage(@RequestParam int boardNo, Model model) {
 		/* 해당 게시글 */
 		model.addAttribute("model", boardService.boardSelectOne(boardNo));
 
@@ -222,7 +222,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("delete")
-	public String boardDelete(@RequestParam("boardNo") int boardNo) {
+	public String boardDelete(@RequestParam int boardNo) {
 		/* 게시글 삭제하기 */
 		boardService.boardDelete(boardNo);
 		return "redirect:/board/list";
@@ -235,7 +235,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions")
-	public String myQuestionsSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
+	public String myQuestionsSelectList(@ModelAttribute SearchCriteria cri, HttpServletRequest request,
 		Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
@@ -267,7 +267,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myquestions/answered")
-	public String myQuestionsAnsweredSelectList(@ModelAttribute("cri") SearchCriteria cri, HttpServletRequest request,
+	public String myQuestionsAnsweredSelectList(@ModelAttribute SearchCriteria cri, HttpServletRequest request,
 		Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
@@ -299,7 +299,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myanswers")
-	public String myAnswersSelectList(@ModelAttribute("cri") Criteria cri, HttpServletRequest request, Model model) {
+	public String myAnswersSelectList(@ModelAttribute Criteria cri, HttpServletRequest request, Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
 
@@ -330,7 +330,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("answers/liked")
-	public String answersLikedSelectList(@ModelAttribute("cri") Criteria cri, HttpServletRequest request, Model model) {
+	public String answersLikedSelectList(@ModelAttribute Criteria cri, HttpServletRequest request, Model model) {
 		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
 
@@ -383,7 +383,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myfavorite")
-	public String myFavoriteSelectList(@ModelAttribute("cri") SearchCriteria cri, Model model) {
+	public String myFavoriteSelectList(@ModelAttribute SearchCriteria cri, Model model) {
 		/* 즐겨찾기 전체 목록 */
 		model.addAttribute("list", boardService.myFavoriteSelectList(cri));
 
@@ -409,7 +409,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping("myfavorite/memo")
-	public String bookmarkSelectOne(@RequestParam("boardNo") int boardNo, @ModelAttribute("cri") SearchCriteria cri,
+	public String bookmarkSelectOne(@RequestParam int boardNo, @ModelAttribute SearchCriteria cri,
 		Model model) {
 
 		/* 현재 사용자 정보 */
