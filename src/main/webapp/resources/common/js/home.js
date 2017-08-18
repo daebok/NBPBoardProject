@@ -11,6 +11,7 @@ function userInfo() {
 			autoOpen: true,
 			modal: true,
 			resizable:false,
+			width:300,
 			position: { my: "top", at: "bottom", of: "#user-info-button" },
 			title: "회원 정보"
 	});
