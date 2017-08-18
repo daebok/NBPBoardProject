@@ -115,5 +115,8 @@ public class CommentService {
 		return repository.checkUser(commentNo);
 	}
 
+	public int isExistedComment(int commentNo) {
+		return repository.isExistedComment(commentNo);
+	}
 
 }

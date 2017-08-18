@@ -28,7 +28,6 @@ import com.hyunhye.board.service.BoardService;
 import com.hyunhye.board.service.CategoryService;
 import com.hyunhye.board.service.FileService;
 import com.hyunhye.comment.service.CommentService;
-import com.hyunhye.notice.model.Notice;
 import com.hyunhye.notice.service.NoticeService;
 import com.hyunhye.utils.UriUtils;
 import com.hyunhye.utils.UserSessionUtils;
@@ -438,17 +437,5 @@ public class BoardController {
 	public ResponseEntity<String> bookmarkMemoUpdate(@ModelAttribute BookMark bookMarkModel) {
 		boardService.bookmarkMemoUpdate(bookMarkModel);
 		return new ResponseEntity<String>(HttpStatus.OK);
-	}
-
-	/**
-	 * 공지사항 상세보기
-	 * @param noticeModel
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("notice")
-	public String noticeSelectOne(Notice noticeModel, Model model) {
-		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
-		return "admin/notice/notice-view";
 	}
 }

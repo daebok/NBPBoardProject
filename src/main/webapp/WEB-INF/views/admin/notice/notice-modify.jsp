@@ -16,7 +16,9 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-10">
-					<textarea class="summernote" name="noticeContent" id="content">${model.noticeContent }</textarea>
+					<textarea class="notice-summernote" name="noticeContent" id="content">
+						<c:out value="${model.noticeContent }" escapeXml="false" />
+					</textarea>
 				</div>
 			</div>
 			<div class="pull-right">

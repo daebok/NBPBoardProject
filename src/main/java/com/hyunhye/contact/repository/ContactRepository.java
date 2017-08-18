@@ -33,4 +33,5 @@ public interface ContactRepository {
 
 	public void contactCommentDelete(int contactCommentNo);
 
+	public int checkUser(int contactNo);
 }

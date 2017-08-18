@@ -7,8 +7,6 @@ import java.util.stream.Stream;
 
 import javax.servlet.jsp.JspWriter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
 import com.hyunhye.board.model.Category;
@@ -16,7 +14,6 @@ import com.hyunhye.board.service.CategoryService;
 
 @SuppressWarnings("serial")
 public class CategoryListTag extends RequestContextAwareTag {
-	Logger logger = LoggerFactory.getLogger(CategoryListTag.class);
 
 	@Override
 	protected int doStartTagInternal() throws Exception {

@@ -168,4 +168,13 @@
 		DELETE FROM CONTACT_COMMENT
 		WHERE contact_comment_no = #{contactCommentNo}	
 	</delete>
+	
+	<select id="checkUser" resultType="int">
+		SELECT 
+			IF(COUNT(user_no) = 0, 0, user_no) as user_no
+		FROM CONTACT
+		WHERE 
+			contact_no = #{contactNo}
+	</select>
+
 </mapper>

@@ -61,4 +61,10 @@
 		WHERE
 			notice_no = #{noticeNo}
 	</update>
+	
+	<select id="isExistedNotice" resultType="int">
+		SELECT count(1)
+		FROM NOTICE
+		WHERE notice_no = #{noticeNo}
+	</select>
 </mapper>

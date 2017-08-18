@@ -56,4 +56,6 @@ public interface CommentRepository {
 
 	public int answersLikedSelectListCount(Criteria cri);
 
+	public int isExistedComment(int commentNo);
+
 }

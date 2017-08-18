@@ -47,4 +47,8 @@ public class NoticeService {
 		noticeRepository.noticeUpdate(noticeModel);
 	}
 
+	public int isExistedNotice(int noticeNo) {
+		return noticeRepository.isExistedNotice(noticeNo);
+	}
+
 }

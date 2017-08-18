@@ -208,9 +208,10 @@
 	
 	<select id="checkUser" resultType="int">
 		SELECT 
-			user_no
+			IF(COUNT(user_no) = 0, 0, user_no) as user_no
 		FROM COMMENT
 		WHERE 
 			comment_no = #{commentNo}
 	</select>
+	
 </mapper>

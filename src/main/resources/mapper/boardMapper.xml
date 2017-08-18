@@ -280,7 +280,7 @@
 	<!-- 게시글의 해당 작성자 확인 -->
 	<select id="checkUser" resultType="int">
 		SELECT 
-			user_no 
+			IF(COUNT(user_no) = 0, 0, user_no) as user_no
 		FROM BOARD
 		WHERE 
 			board_no = #{boardNo}

@@ -195,10 +195,22 @@ public class AdminController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("notice")
+	@RequestMapping("notice/list")
 	public String notice(Model model) {
 		model.addAttribute("noticeList", adminService.noticeListAll());
-		return "admin/notice/notice";
+		return "admin/notice/notice-list";
+	}
+
+	/**
+	 * 공지사항 상세보기
+	 * @param noticeModel
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("notice")
+	public String noticeSelectOne(Notice noticeModel, Model model) {
+		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
+		return "admin/notice/notice-view";
 	}
 
 	/**
@@ -218,7 +230,7 @@ public class AdminController {
 	@RequestMapping("notice/regist")
 	public String noticeInsert(Notice noticeModel) {
 		adminService.noticeInsert(noticeModel);
-		return "redirect:/admin/notice";
+		return "redirect:/admin/notice/list";
 	}
 
 	/**
@@ -229,7 +241,7 @@ public class AdminController {
 	@RequestMapping("notice/delete")
 	public String noticeDelete(Notice noticeModel) {
 		adminService.noticeDelete(noticeModel);
-		return "redirect:/admin/notice";
+		return "redirect:/admin/notice/list";
 	}
 
 	/**
@@ -253,7 +265,7 @@ public class AdminController {
 	@RequestMapping("notice/modify")
 	public String noticeUpdate(Notice noticeModel, Model model) {
 		adminService.noticeUpdate(noticeModel);
-		return "redirect:/admin/notice";
+		return "redirect:/admin/notice/list";
 	}
 
 	/**

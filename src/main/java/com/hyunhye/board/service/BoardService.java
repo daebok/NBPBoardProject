@@ -294,4 +294,8 @@ public class BoardService {
 		bookmarkRepository.bookmarkDelete(model);
 	}
 
+	public int isExistedBoard(int boardNo) {
+		return boardRepository.isExistedBoard(boardNo);
+	}
+
 }

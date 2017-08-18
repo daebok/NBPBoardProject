@@ -23,4 +23,6 @@ public interface NoticeRepository {
 	/** 공지사항  수정하기 **/
 	public void noticeUpdate(Notice noticeModel);
 
+	public int isExistedNotice(int noticeNo);
+
 }

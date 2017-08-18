@@ -63,4 +63,8 @@ public class ContactService {
 		contactRepository.contactCommentDelete(contactCommentNo);
 	}
 
+	public int checkUser(int contactNo) {
+		return contactRepository.checkUser(contactNo);
+	}
+
 }

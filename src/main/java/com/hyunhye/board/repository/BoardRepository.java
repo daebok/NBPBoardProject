@@ -59,4 +59,6 @@ public interface BoardRepository {
 	/** 조회수 추가 **/
 	public void baordViewInsert(Board boardModel);
 
+	public int isExistedBoard(int boardNo);
+
 }
