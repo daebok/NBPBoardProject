@@ -61,4 +61,8 @@ public interface BoardRepository {
 
 	public int isExistedBoard(int boardNo);
 
+	public int selectBoardCount(SearchCriteria cri);
+
+	public int selectMyBoardCount(int userNo);
+
 }

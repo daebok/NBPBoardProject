@@ -17,6 +17,7 @@
 		<result property="boardDate" column="board_date"/>
 		<result property="boardViewCount" column="board_view_cnt" />
 		<result property="boardContentSummary" column="board_content_summary" />
+		<result property="boardCount" column="board_count" />
 		<result property="commentCount" column="comment_count" />
 		<result property="fileCount" column="file_count" />
 		<result property="bookmarkCheck" column="bookmark_check" />
@@ -41,12 +42,18 @@
 			B.board_date, 
 			B.board_view_cnt,
 			B.comment_count,
-			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
+			<include refid="fileCount"></include> 
 		FROM (
 				SELECT 
-					BOARD.board_no, BOARD.board_no as number, BOARD.user_no, BOARD.category_no, 
-					BOARD.board_title, BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content,
-					(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count
+					BOARD.board_no, 
+					BOARD.board_no as number, 
+					BOARD.user_no, 
+					BOARD.category_no, 
+					BOARD.board_title, 
+					BOARD.board_date, 
+					BOARD.board_view_cnt, 
+					BOARD.board_content,
+					<include refid="commentCount"></include> 
 				FROM BOARD 
 				<!-- 1. 최신 순 -->
 				<if test="tab == 1"> ORDER BY BOARD.board_no desc </if>
@@ -179,8 +186,8 @@
 			CATEGORY.category_item,
 			USER.user_name, 
 			USER.user_id,
-			(SELECT count(comment_no) FROM COMMENT WHERE COMMENT.comment_parent_no = 0 AND COMMENT.board_no = number) as comment_count,
-			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
+			<include refid="commentCount"></include>,
+			<include refid="fileCount"></include>
 		FROM BOARD
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
@@ -212,6 +219,22 @@
 		LIMIT #{startBoardNo}, #{perPageNum}
 	</select>
 	
+	<select id="selectBoardCount" resultType="int">
+		SELECT count(board_no)
+		FROM BOARD
+		JOIN CATEGORY
+			ON BOARD.category_no = CATEGORY.category_no
+		JOIN  USER
+			ON BOARD.user_no = USER.user_no
+		<include refid="search"></include>
+	</select>
+	
+	<select id="selectMyBoardCount" resultType="int">
+		SELECT count(board_no)
+		FROM BOARD
+		WHERE user_no = #{userNo}
+	</select>
+	
 	<select id="myQuestionsAnsweredSelectList" resultMap="boardList">
 		SELECT 
 			B.board_no,
@@ -223,11 +246,18 @@
 			B.board_date, 
 			B.board_view_cnt,
 			B.comment_count,
-			(SELECT count(file_no) FROM BOARD.FILE WHERE FILE.board_no = number) as file_count
+			<include refid="fileCount"></include>
 		FROM (
 				SELECT 
-					BOARD.board_no, BOARD.user_no, BOARD.category_no, BOARD.board_title, BOARD.board_content_summary, 
-					BOARD.board_date, BOARD.board_view_cnt, BOARD.board_content, count(COMMENT.comment_no) as comment_count
+					BOARD.board_no, 
+					BOARD.user_no, 
+					BOARD.category_no, 
+					BOARD.board_title, 
+					BOARD.board_content_summary, 
+					BOARD.board_date, 
+					BOARD.board_view_cnt, 
+					BOARD.board_content, 
+					count(COMMENT.comment_no) as comment_count
 				FROM BOARD
 				JOIN COMMENT
 					ON BOARD.board_no = COMMENT.board_no
@@ -375,4 +405,18 @@
 		DATE(BOARD.board_date) BETWEEN #{fromDate} AND #{toDate}
 	</sql>
 
+	<sql id="fileCount">
+		(SELECT count(file_no) 
+		FROM FILE
+		WHERE FILE.board_no = number)  as file_count
+	</sql>
+	
+	<sql id="commentCount">
+		(SELECT count(comment_no) 
+		FROM COMMENT 
+		WHERE 
+			COMMENT.comment_parent_no = 0 AND 
+			COMMENT.board_no = number
+		) as comment_count
+	</sql>
 </mapper>

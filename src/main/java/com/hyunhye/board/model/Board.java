@@ -29,6 +29,8 @@ public class Board {
 	private int fileCount;
 	/** 조회수 **/
 	private int boardViewCount;
+	/** 게시글 개수 */
+	private int boardCount;
 	/** 카테고리 번호 **/
 	private int categoryNo;
 	/** 카테고리 목록이름 **/

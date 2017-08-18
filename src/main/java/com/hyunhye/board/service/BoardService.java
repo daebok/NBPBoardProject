@@ -298,4 +298,12 @@ public class BoardService {
 		return boardRepository.isExistedBoard(boardNo);
 	}
 
+	public int selectBoardCount(SearchCriteria cri) {
+		return boardRepository.selectBoardCount(cri);
+	}
+
+	public int selectMyBoardCount(int userNo) {
+		return boardRepository.selectMyBoardCount(userNo);
+	}
+
 }

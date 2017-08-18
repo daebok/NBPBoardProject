@@ -81,19 +81,15 @@ public class BoardController {
 
 		/* 한 페이지에 보여줄 게시글 */
 		model.addAttribute("list", boardService.boardSelectList(cri, tab));
+		model.addAttribute("boardCount", boardService.selectBoardCount(cri));
 
 		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(boardService.boardSelectListCount(cri));
 
-		/* 카테고리 리스트 */
 		model.addAttribute("categoryList", categoryService.categorySelectList());
-
-		/* 페이징에 사용될 변수 */
 		model.addAttribute("pageMaker", pageMaker);
-
-		/* 공지사항 */
 		model.addAttribute("notice", adminService.noticeListAll());
 
 		return "board/board-list";
