@@ -10,21 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("common/error")
-public class CommonErrorController {
-	private static final Logger logger = LoggerFactory.getLogger(CommonErrorController.class);
+public class CommonHttpStatusErrorController {
+	private static final Logger logger = LoggerFactory.getLogger(CommonHttpStatusErrorController.class);
 
 	@RequestMapping("throwable")
 	public String throwableError(HttpServletRequest request, Model model) {
 		logger.info("throwable");
-
-		pageErrorLog(request);
-		model.addAttribute("msg", "예외가 발생하였습니다.");
-		return "common/error/error";
-	}
-
-	@RequestMapping("exception")
-	public String exceptionError(HttpServletRequest request, Model model) {
-		logger.info("exception");
 
 		pageErrorLog(request);
 		model.addAttribute("msg", "예외가 발생하였습니다.");

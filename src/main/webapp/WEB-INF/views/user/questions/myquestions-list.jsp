@@ -6,7 +6,9 @@
 	<%@include file="../../common/header.jsp"%>
 	<div class="container">
 		<div class="container-fluid">
-			<%@include file="../../common/search/myquestions-search.jsp"%>
+			<c:if test="${check eq 0 || check eq null}">
+				<%@include file="../../common/search/myquestions-search.jsp"%>
+			</c:if>
 			<div class="row">
 				<c:choose>
 					<c:when test="${check eq 0 || check eq null}">
