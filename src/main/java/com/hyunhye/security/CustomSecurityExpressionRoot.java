@@ -23,14 +23,12 @@ public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 	}
 
 	public boolean hasBoardAuthority() {
-		BoardService boardService = SpringBeanFactory.getBean(BoardService.class);
-
-		String boardNoS = this.filterInvocation.getHttpRequest().getParameter("boardNo");
-
 		if (!isAuthenticated()) {
 			return false;
 		}
 
+		BoardService boardService = SpringBeanFactory.getBean(BoardService.class);
+		String boardNoS = this.filterInvocation.getHttpRequest().getParameter("boardNo");
 		if (StringUtils.isBlank(boardNoS)) {
 			return true;
 		}
@@ -53,15 +51,13 @@ public class CustomSecurityExpressionRoot extends WebSecurityExpressionRoot {
 	}
 
 	public boolean hasCommentAuthority() {
-		CommentService commentService = SpringBeanFactory.getBean(CommentService.class);
-
-		String commentNoS = this.filterInvocation.getHttpRequest().getParameter("commentNo");
-
 		if (!isAuthenticated()) {
 			return false;
 		}
 
-		if (StringUtils.isBlank(commentNoS)) {
+		CommentService commentService = SpringBeanFactory.getBean(CommentService.class);
+		String commentNoS = this.filterInvocation.getHttpRequest().getParameter("commentNo");
+		if (StringUtils.isBlank(commentNoS) || commentNoS.equals("0")) {
 			return true;
 		}
 
