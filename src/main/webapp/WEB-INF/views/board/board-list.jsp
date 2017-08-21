@@ -67,21 +67,7 @@
 					<hr>
 				</c:forEach>
 			</div>
-			<div class="page-nation">					
-				<ul class="pagination pagination-large">
-					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></span></li>
-					</c:if>
-					<c:forEach var="page" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-						<li <c:out value="${pageMaker.criteria.page == page? 'class=active' : '' }" />>
-							<a href="/board/list${pageMaker.makeSearch(page)}"><span>${page}</span></a>
-						</li>
-					</c:forEach>
-					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/list${pageMaker.makeSearch(pageMaker.endPage + 1)}">&raquo;</a></span></li>
-					</c:if>
-				</ul>
-			</div>
+			<custom:search-paging uri="/board/list" />
 		</div>
 	</div>
 			

@@ -8,3 +8,4 @@
 <%@ taglib prefix ="html"			uri = "/WEB-INF/tld/html.tld" %>
 <%@ taglib prefix ="file"			uri = "/WEB-INF/tld/file.tld" %>
 <%@ taglib prefix ="user"			uri = "/WEB-INF/tld/user.tld" %>
+<%@ taglib prefix="custom" 			tagdir="/WEB-INF/tags/"%>

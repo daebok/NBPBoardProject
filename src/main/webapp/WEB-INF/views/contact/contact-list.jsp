@@ -20,21 +20,7 @@
 			<%@include file="contact-list-form.jsp"%>
 			
 		</div>
-		<div class="page-nation">
-			<ul class="pagination pagination-large">
-				<c:if test="${pageMaker.prev}">
-					<li class="disabled"><span><a href="/contact/list${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
-				</c:if>
-				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-					<li <c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
-						<a href="/contact/list${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
-					</li>
-				</c:forEach>
-				<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-					<li class="disabled"><span><a href="/contact/list${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
-				</c:if>
-			</ul>
-		</div>
+		<custom:paging uri="/contact/list" />
 	</div>
 	<!-- footer -->
 	<%@include file="../common/footer.jsp"%>
