@@ -7,7 +7,7 @@ function categoryRegist(categoryListLength) {
 	
 	var categoryItem = $("#category-item").val();
 	if (blank_pattern.test(categoryItem) == true) {
-		alert("카테고리 항목을 입력하세요.");
+		alert("카테고리에 공백을 입력할 수 없습니다.");
 		$("#category-item").focus();
 		return;
 	}

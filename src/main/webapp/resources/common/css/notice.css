@@ -13,4 +13,5 @@
 .notice-body {
 	border: 3px solid #337ab7; 
 	padding:10px;
+	word-break:break-all
 }
