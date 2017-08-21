@@ -12,6 +12,7 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,11 @@ public class FileService {
 
 		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 		for (int index = 0; index < files.length; index++) {
-			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
-				index2++;
-				continue;
+			if (index2 <= index) {
+				if (!Objects.isNull(filesNo) && (index - 1) == filesNo[index2]) {
+					index2++;
+					continue;
+				}
 			}
 			MultipartFile file = files[index];
 
@@ -61,7 +64,7 @@ public class FileService {
 			long fileSize = file.getSize();
 			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
 
-			if (fileContentType.equals("")) {
+			if (StringUtils.isBlank(fileContentType)) {
 				continue;
 			}
 

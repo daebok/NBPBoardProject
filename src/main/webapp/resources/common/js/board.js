@@ -120,7 +120,8 @@ function fileDelete(fileId){
 	$(".newUploadedList").append( "<input type='hidden' name='boardFilesNo' value='"+fileId+"'/>");
 }
 
-function uploadedFileDetet(fileName, fileItem){
+function uploadedFileDelete(fileName, fileItem){
+	console.log('ak');
 	$(fileItem).parent('div').parent('div').remove();
 	$('.modify-form').append("<input type='hidden' name='boardFilesDelete' value="+fileName+">");
 }

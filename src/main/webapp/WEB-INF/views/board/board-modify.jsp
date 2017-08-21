@@ -44,7 +44,7 @@
 										<div class="list-group-item">
 											<div class="list-1">${attach.fileOriginName}</div>
 											<div class="list-2"><file:size value = "${attach.fileSize}" /> </div>
-											<div class="list-3"><a  onclick="uploadedFileDetet(${attach.fileName}, this)" >[삭제]</a></div>
+											<div class="list-3"><a onclick="uploadedFileDelete('${attach.fileName}', this)" >[삭제]</a></div>
 										</div>
 									</div>
 								</c:forEach>
