@@ -2,6 +2,7 @@ package com.hyunhye.board.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -80,7 +81,7 @@ public class FileService {
 	 * {@link BoardFile} 삭제
 	 * @param board 번호
 	 */
-	public void deleteFile(Board board) {
+	public void deleteFile(Board board) throws IOException, FileNotFoundException {
 		String[] filesDelete = board.getBoardFilesDelete();
 
 		if (Objects.isNull(filesDelete)) {
@@ -101,7 +102,7 @@ public class FileService {
 	 * 삭제된 {@link Board}의 {@link BoardFile} 모두 삭제
 	 * @param board
 	 */
-	public void deleteFileFromDatabase(Board board) {
+	public void deleteFileFromDatabase(Board board) throws IOException, FileNotFoundException {
 		List<BoardFile> filesDelete = boardRepository.selectFileListByBoardId(board);
 
 		if (Objects.isNull(filesDelete)) {
@@ -140,8 +141,11 @@ public class FileService {
 			}
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
 
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 
+		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 

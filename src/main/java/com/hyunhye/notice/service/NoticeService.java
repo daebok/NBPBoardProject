@@ -48,6 +48,7 @@ public class NoticeService {
 	 * {@link Notice} 삭제하기
 	 * @param notice 공지사항 번호
 	 */
+	@CacheEvict(value = "notice", allEntries = true)
 	public void deleteNotice(Notice notice) {
 		noticeRepository.deleteNotice(notice);
 	}
@@ -56,6 +57,7 @@ public class NoticeService {
 	 * {@link Notice} 수정하기
 	 * @param notice 공지사항 번호
 	 */
+	@CacheEvict(value = "notice", allEntries = true)
 	public void updateNotice(Notice notice) {
 		noticeRepository.updateNotice(notice);
 	}

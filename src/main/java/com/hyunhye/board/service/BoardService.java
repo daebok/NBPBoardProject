@@ -1,5 +1,6 @@
 package com.hyunhye.board.service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -148,8 +149,10 @@ public class BoardService {
 	 * {@link Board} 삭제하기.
 	 * 게시글에 해당하는 파일도 함께 삭제.
 	 * @param board {@link Board} 번호
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
-	public void deleteBoardDetail(Board board) {
+	public void deleteBoardDetail(Board board) throws FileNotFoundException, IOException {
 
 		fileService.deleteFileFromDatabase(board);
 		boardRepository.deleteBoardDetail(board);

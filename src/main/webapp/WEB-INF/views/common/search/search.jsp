@@ -18,8 +18,8 @@
 </select>
 <br>
 <label class="search-label" for="date"> Date </label>
-<input type="text" name="fromDate" id="fromDate" size="10" value="${pageMaker.criteria.fromDate}"> ~
-<input type="text" name="toDate" id="toDate" size="10" value="${pageMaker.criteria.toDate}">
+<input type="text" name="fromDate" id="fromDate" size="10" placeholder="시작일" value="${pageMaker.criteria.fromDate}"> ~
+<input type="text" name="toDate" id="toDate" size="10" placeholder="종료일" value="${pageMaker.criteria.toDate}">
 <br>
 <label class="search-label" for="searchType"> SearchType </label>
 <select name="searchType" id="searchType" style="padding: 2px;">

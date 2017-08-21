@@ -1,5 +1,6 @@
 package com.hyunhye.board.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -146,7 +147,7 @@ public class BoardController {
 	 */
 	@ResponseBody
 	@RequestMapping("downloadFile")
-	public ResponseEntity<byte[]> downloadFile(String fileName) throws Exception {
+	public ResponseEntity<byte[]> downloadFile(String fileName) throws IOException {
 		return uploadService.downloadFile(fileName);
 	}
 
@@ -182,9 +183,11 @@ public class BoardController {
 	 * {@link Board} 삭제
 	 * @param board 게시글 번호
 	 * @return 게시물 리스트 Redirect
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
-	public String deleteBoardDetail(@ModelAttribute Board board) {
+	public String deleteBoardDetail(@ModelAttribute Board board) throws FileNotFoundException, IOException {
 		boardService.deleteBoardDetail(board);
 		return "redirect:/board/list";
 	}
