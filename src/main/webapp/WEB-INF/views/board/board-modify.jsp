@@ -3,9 +3,6 @@
 <html>
 <head>
 <sec:csrfMetaTags/>
-<script>
-	$("#category").val('${board.categoryNo}').prop("selected", true);
-</script>
 </head>
 <body>
 	<!-- header -->
@@ -70,3 +67,8 @@
 <link href="<c:url value="/resources/common/css/file.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/common/js/file.js" />"></script>
 <script src="<c:url value="/resources/common/js/board.js" />"></script>
+<script>
+	(function (){
+		$("#category").val('${board.categoryNo}').prop("selected", true);
+	}());
+</script>
