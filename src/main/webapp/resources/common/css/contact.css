@@ -1,5 +1,6 @@
 .contact-comment-whole-wrapper {
-		border: 1px solid #aaa;
+		border: 1px dotted #aaa;
+		border-radius: 10px;
 		padding:10px;
 }
 .list-group-item{

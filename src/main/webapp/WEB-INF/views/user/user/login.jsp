@@ -9,10 +9,12 @@
 		<div class="container-fluid" style="height:100%;">
 			<div align="center">
 				<c:if test="${param.error != null}">
-					<h6>아이디와 비밀번호가 잘못되었습니다.</h6>
+					<c:set var="alert" value="<script type='text/javascript'>alert('아이디와 비밀번호가 잘못되었습니다.');</script>" />
+					${alert}
 				</c:if>
 				<c:if test="${param.logout != null}">
-					<h6>로그아웃 하였습니다.</h6>
+					<c:set var="alert" value="<script type='text/javascript'>alert('로그아웃 하였습니다.');</script>" />
+					${alert}
 				</c:if>
 			</div>
 			<br><br>
@@ -33,14 +35,14 @@
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="button" onclick="login()" class="btn btn-default">Log In</button>
 					</div>
-				</div>			
+				</div>	
+				<!-- 네이버 아이디로 로그인 -->
+				<div align="left" class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="${url}"><img src="<c:url value="/resources/common/img/naverid_login_button.png" />" height=34 /></a>
+					</div>
+				</div>		
 			</form:form>
-			<!-- 네이버 아이디로 로그인 -->
-			<div align="left" style="margin-top: 10px; margin-bottom:30px;" class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<a href="${url}"><img src="<c:url value="/resources/common/img/naverid_login_button.png" />" height=34 /></a>
-				</div>
-			</div>
 		</div>
 	</div>
 	

@@ -18,7 +18,7 @@
 		<result property="fileCount" column="file_count" />
 		<result property="userNo" column="user_no" />
 		<result property="userId" column="user_id" />
-		<collection property="boardFileList" column="board_no" javaType="java.util.List" ofType="file" select="selectFileListByBoardId"/>
+		<collection property="boardFileList" column="board_no" ofType="file" select="selectFileListByBoardId"/>
 	</resultMap>
 	
 	<resultMap id="fileList" type="file">
@@ -324,7 +324,7 @@
 				BOARD.board_content like CONCAT('%',#{keyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
-				USER.user_id = #{keyword}
+				USER.user_id = #{keyword} OR USER.user_id like CONCAT(#{keyword}, '@naver.com')
 			</when>
 		</choose>
 	</sql>
