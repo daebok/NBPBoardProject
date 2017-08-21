@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -12,11 +11,11 @@
 		<form:form name="form" method="post" class="form-horizontal">
 			<div class="form-group">
 				<label for="title">Title</label>
-				<input type="text" name="contactTitle" maxlength="100" id="title" size="20" class="form-control" />
+				<input type="text" name="contactTitle" class="form-control" id="title"  placeholder="문의사항 제목을 입력하세요"/>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-10">
-					<textarea class="summernote" name="contactContent" id="content"></textarea>
+					<textarea class="contact-summernote" name="contactContent" id="content" placeHolder="문의사항을 작성해 주세요"></textarea>
 				</div>
 			</div>
 			<label for="password">비밀번호</label>

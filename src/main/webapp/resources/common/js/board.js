@@ -19,9 +19,11 @@ $(document).ready(function() {
 					break;
 				}
 				formData.append('files', files[index]);
+				
+				var fileSize =  Math.ceil(Math.log(files[index].size)/Math.log(1024));
 				var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 				str += "<div class='list-1'>" + files[index].name +"</div>";
-				str += "<div class='list-2'><file:size value=" + files[index].size + "/> </div>";
+				str += "<div class='list-2'>" + fileSize + " KB </div>";
 				str += "<div class='list-3'> <a href='javascript:fileDelete("+index+")' id='"+index+"'>[삭제]</a></div></div>";
 				$(".summernoteUploadedList").append(str);
 			}
@@ -45,8 +47,6 @@ function questionRegist(){
 	
 	if($('.btn-codeview').hasClass('active')){
 		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
-		
-		$('.board-summernote').deactivate();
 		$('.note-editable').trigger('focus');
 		return;
 	}
@@ -105,9 +105,10 @@ function fileUpload(){
 			$(this).val('');
 			break;
 		}
+		var fileSize =  Math.ceil(Math.log(form.files[index].size)/Math.log(1024));
 		var str = "<div class='list-group-item' id='file-list-"+index+"'>";
 		str += "<div class='list-1'>" + form.files[index].name +"</div>";
-		str += "<div class='list-2'><file:size value=" + form.files[index].size + "/></div>";
+		str += "<div class='list-2'>" + fileSize + " KB </div>";
 		str += "<div class='list-3'> <a href='javascript:fileDelete("+index+")' id='"+index+"'>[삭제]</a></div></div>";
 		$(".newUploadedList").append(str);
 	}

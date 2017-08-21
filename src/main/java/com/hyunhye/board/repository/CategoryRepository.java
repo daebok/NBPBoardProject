@@ -4,24 +4,42 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.Category;
 
 @Repository
 public interface CategoryRepository {
 
-	/** 카테고리 전체 리스트 **/
-	public List<Category> categorySelectList();
+	/**
+	 * {@link Category} 전체 리스트 가져오기
+	 * @return {@link Category} 전체 리스트 (List<Category>)
+	 */
+	public List<Category> selectAllCategoryList();
 
-	/** 카테고리 추가 **/
-	public void categoryInsert(Category categoryModel);
+	/**
+	 * {@link Category} 추가하기
+	 * @param category 추가하는 카테고리 항목
+	 */
+	public void insertCategoryItem(Category category);
 
-	/** 해당 카테고리의 게시글 개수  **/
-	public int boardSelectCountOfCategory(Category categoryModel);
+	/**
+	 * {@link Category}의 해당하는 {@link Board} 개수 가져오기
+	 * @param category
+	 * @return {@link Board} 개수 (int)
+	 */
+	public int selectBoardCountOfCategory(Category category);
 
-	/** 카테고리 삭제 **/
-	public void categoryDelete(Category categoryModel);
+	/**
+	 * {@link Category} 삭제하기
+	 * @param category 카테고리 번호
+	 */
+	public void deleteCategoryItem(Category category);
 
-	/** 카테고리  같은 이름 있는지 확인 **/
-	public Integer categoryItemNameCheck(Category categoryModel);
+	/**
+	 * 해당하는 {@link Category} 이름이 있는지 확인
+	 * @param category 카테고리 항목 이름
+	 * @return 있으면 1, 없으면 0 (int)
+	 */
+	public int checkCategoryItemNameDuplication(Category category);
 
 }

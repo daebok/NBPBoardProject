@@ -132,15 +132,6 @@ function idDuplicationCheck() {
 	});
 }
 
-function cancel() {
-	$(".cancelbtn").click(function() {
-		$(".userId").val('');
-		$(".userPassword").val('');
-		$("#user-button").prop("disabled", true);
-		$("#user-button").css("background-color", "#aaaaaa");
-	});
-}
-
 function userAuthorityModify(userNo) {
 	var userAuthority = $("select[name=userAuthority] option:selected").val();
 	var result = confirm('권한을 수정하시겠습니까?');
@@ -196,15 +187,15 @@ function userInfoSearch() {
 		url : "/admin/userSearch",
 		data : $('.user-search-form').serialize(),
 		success : function(result) {
-			$("#user-info-dialog").html(result);
+			$("#user-info-search-dialog").html(result);
 		}
 	});
-	$("#user-info-dialog").dialog({
+	$("#user-info-search-dialog").dialog({
 			autoOpen: true,
 			modal: true,
 			resizable:false,
 			height:220,
-			position: { my: "top", at: "bottom", of: "#user-info-button" },
+			position: { my: "top", at: "bottom", of: "#user-search-button" },
 			title: "회원 정보"
 	});
 }

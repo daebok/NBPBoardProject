@@ -6,31 +6,31 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.TextUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.HtmlUtils;
 
 import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.BookMark;
-import com.hyunhye.board.model.Criteria;
-import com.hyunhye.board.model.FileModel;
 import com.hyunhye.board.model.Home;
+import com.hyunhye.board.model.PageCriteria;
 import com.hyunhye.board.model.SearchCriteria;
 import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.board.repository.BookMarkRepository;
 import com.hyunhye.board.repository.CategoryRepository;
-import com.hyunhye.board.repository.FileRepository;
 import com.hyunhye.utils.BadWordFilteringUtils;
 import com.hyunhye.utils.UserSessionUtils;
 
+/**
+ * 게시판의 게시글 Service
+ * @author NAVER
+ *
+ */
 @Service
 public class BoardService {
-	Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
 	public BoardRepository boardRepository;
@@ -42,262 +42,311 @@ public class BoardService {
 	private BookMarkRepository bookmarkRepository;
 
 	@Autowired
-	private FileRepository fileRepository;
+	private FileService fileService;
 
-	@Autowired
-	private FileService uploadService;
-
-	/** 게시글  Top10 리스트 **/
+	/**
+	 * @param home 탭 번호
+	 * @return 게시글  Top10 리스트 (List<Board>)
+	 */
 	@Cacheable("top-list")
-	public List<Board> boardTop10SelectList(Home homeModel) {
-		return boardRepository.boardTop10SelectList(homeModel);
+	public List<Board> boardTop10SelectList(Home home) {
+		return boardRepository.boardTop10SelectList(home);
 	}
 
-	/** 게시글 **/
-	/* 1. 게시글 작성하기 */
-	/* 파일을 동시에 저장하기 위해 트랜잭션 사용 */
-	@Transactional
-	public void boardInsert(int userNo, Board board, MultipartFile[] files) throws Exception {
+	/**
+	 * 홈화면 업데이트.
+	 * top-list 캐시 삭제.
+	 */
+	@CacheEvict(value = "top-list", allEntries = true)
+	public void boardTop10Update() {
+		return;
+	}
+
+	/**
+	 * {@link Board} 작성하기
+	 * @param userNo 현재 로그인 한 사용자 번호
+	 * @param board 게시글 정보
+	 * @param files 파일 정보
+	 * @throws Exception
+	 */
+	public void insertBoard(int userNo, Board board, MultipartFile[] files) throws Exception {
 		board.setUserNo(userNo);
 
-		logger.info("Board Insert: {}", board);
-
-		/* 제거된 태그를 boardContentSummary에 담는다. */
 		String summary = createSummary(board.getBoardContent());
 		board.setBoardContentSummary(summary);
 
-		/* 1) 작성 된 게시글 저장 */
-		boardRepository.boardInsert(board);
-
-		/* 2) 업로드 된 파일 저장 */
-		uploadService.fileRegist(board, files);
+		boardRepository.insertBoard(board);
+		fileService.insertFile(board, files);
 	}
 
-	/* HTML 태그 제거 */
+	/**
+	 * {@link Board#getBoardContent()}의 태그를 제거하여, 일부만 저장
+	 * @param originalContent
+	 * @return {@link Board} BoardContent 요약
+	 */
 	public String createSummary(String originalContent) {
-		/* escape 문자 처리 */
-		// String boardSummary = HtmlUtils.htmlUnescape(originalContent);
-		String boardSummary = originalContent;
-		/* HTML 태그 제거  */
-		boardSummary = boardSummary.replaceAll("<(/)?([a-zA-Z]*)([0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		originalContent = originalContent.replaceAll("<(/)?([a-zA-Z]*)([0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
-		/* 일부 문자열만 저장 되도록 */
-		if (boardSummary.length() > 300) {
-			boardSummary = boardSummary.substring(0, 300);
+		if (originalContent.length() > 300) {
+			originalContent = originalContent.substring(0, 300);
 		}
 
-		return boardSummary;
+		return originalContent;
 	}
 
-	/* 비속어 체크 */
-	public List<String> badWordsCheck(Board model) {
-		String boardSummary = HtmlUtils.htmlUnescape(model.getBoardContent());
-		boardSummary += model.getBoardTitle();
+	/**
+	 * {@link Board}의 비속어 체크
+	 * @param board 게시글 제목 및 내용
+	 * @return {@link Board}에 포함된 비속어 리스트
+	 */
+	public List<String> checkBadWords(Board board) {
+		String boardSummary = HtmlUtils.htmlUnescape(board.getBoardContent());
+		boardSummary += board.getBoardTitle();
 		List<String> badWords = BadWordFilteringUtils.badWordFilteringContainsStream(boardSummary);
 		return badWords;
 	}
 
-	/* 2. 해당 게시글 상세 보기 */
-	public Board boardSelectOne(int boardNo) {
-		Board board = new Board();
-		board.setBoardNo(boardNo);
+	/**
+	 * @param board 게시글 번호
+	 * @return {@link Board} 상세보기
+	 */
+	public Board selectBoardDetail(Board board) {
 		board.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.boardSelectOne(board);
+		return boardRepository.selectBoardDetail(board);
 	}
 
-	/* 조회수 */
-	public void increaseViewCount(int boardNo) {
-		Board boardModel = new Board();
-		boardModel.setBoardNo(boardNo);
-		boardModel.setUserNo(UserSessionUtils.currentUserNo());
-		boardRepository.baordViewInsert(boardModel);
+	/**
+	 * {@link Board} 조회수 증가.
+	 * 현재 사용자가 한번 방문한 적이 있으면, 증가하지 않는다.
+	 * @param board 게시글 번호
+	 */
+	public void increaseViewCount(Board board) {
+		board.setUserNo(UserSessionUtils.currentUserNo());
+		boardRepository.baordViewInsert(board);
 	}
 
-	/* 등록 된 첨부파일 가져오기  */
-	public List<FileModel> fileSelect(int boardNo) {
-		return fileRepository.fileSelect(boardNo);
+	/**
+	 * {@link Board} 수정하기.
+	 * 수정 된 파일의 삭제 및 추가도 함께 진행한다.
+	 * @param board 게시글 정보
+	 * @param files 파일 정보
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void updateBoardDetail(Board board, MultipartFile[] files) throws IOException, Exception {
+		board.setUserNo(UserSessionUtils.currentUserNo());
+
+		String summary = createSummary(board.getBoardContent());
+		board.setBoardContentSummary(summary);
+
+		fileService.deleteFile(board);
+		fileService.insertFile(board, files);
+		boardRepository.updateBoardDetail(board);
 	}
 
-	/* 3. 게시글 수정하기*/
-	/* 파일을 동시에 저장하기 위해 트랜잭션 사용*/
-	@Transactional
-	public void boardUpdate(Board boardModel, MultipartFile[] files) throws IOException, Exception {
-		boardModel.setUserNo(UserSessionUtils.currentUserNo());
+	/**
+	 * {@link Board} 삭제하기.
+	 * 게시글에 해당하는 파일도 함께 삭제.
+	 * @param board {@link Board} 번호
+	 */
+	public void deleteBoardDetail(Board board) {
 
-		/* 제거된 태그를 boardContentSummary에 담는다. */
-		String summary = createSummary(boardModel.getBoardContent());
-		boardModel.setBoardContentSummary(summary);
-
-		/* 1) 업로드 된 파일 중에서 삭제버튼 누른 파일 삭제하기 */
-		uploadService.fileDelete(boardModel);
-
-		/* 2) 새로 업로드 된 파일 저장 */
-		uploadService.fileRegist(boardModel, files);
-
-		/* 3) 기존 게시글 수정하기 */
-		boardRepository.boardUpdate(boardModel);
+		fileService.deleteFileFromDatabase(board);
+		boardRepository.deleteBoardDetail(board);
 	}
 
-	/* 4. 게시글 삭제하기 */
-	@Transactional
-	public void boardDelete(int boardNo) {
-
-		/* 1) 해당 게시물에 첨부된 파일 서버에서 삭제 */
-		uploadService.fileDeletFromDatabase(boardNo);
-
-		/* 2) 기존 게시물 삭제하기 */
-		boardRepository.boardDelete(boardNo);
+	/**
+	 * option = 1
+	 * @param criteria 검색 및 페이징 조건
+	 * @param tab 최신순(1), 조회순(2), 답변순(3)
+	 * @return {@link Board} 리스트 (List<Board>)
+	 */
+	public List<Board> selectAllBoardList(SearchCriteria criteria, int tab) {
+		criteria.setOption(1);
+		criteria.setTab(tab);
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectBoardList(criteria);
 	}
 
-	/* 5. 게시글 리스트 (페이징) */
-	public List<Board> boardSelectList(SearchCriteria cri, int tab) {
-		cri.setOption(1);
-		cri.setTab(tab);
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.boardSelectList(cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return {@link Board} 전체 개수 (int)
+	 */
+	public int selectBoardCount(SearchCriteria criteria) {
+		criteria.setOption(1);
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectBoardCount(criteria);
 	}
 
-	/* 게시글 개수 구하기 */
-	public int boardSelectListCount(SearchCriteria cri) {
-		cri.setOption(1);
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.boardSelectListCount(cri);
-	}
-
-	/* 검색 타입 null 체크*/
-	public SearchCriteria isSearchTypeNull(SearchCriteria cri) {
-		if (StringUtils.isBlank(cri.getCategoryType())) {
-			cri.setCategoryType("all");
+	/**
+	 * {@link SearchCriteria}의 categoryType과 searchType의 null 체크
+	 * @param criteria 검색 조건
+	 */
+	public SearchCriteria isSearchTypeNull(SearchCriteria criteria) {
+		if (StringUtils.isBlank(criteria.getCategoryType())) {
+			criteria.setCategoryType("all");
 		}
-		if (StringUtils.isBlank(cri.getSearchType())) {
-			cri.setSearchType(null);
+		if (StringUtils.isBlank(criteria.getSearchType())) {
+			criteria.setSearchType(null);
 		}
-		return cri;
+		return criteria;
 	}
 
-	public SearchCriteria dateCheck(SearchCriteria cri) {
+	/**
+	 * {@link SearchCriteria}의 date 체크
+	 * @param criteria
+	 */
+	public SearchCriteria dateCheck(SearchCriteria criteria) {
 		LocalDate theDate = LocalDate.now();
 		String today = theDate.toString();
 
-		String from = cri.getFromDate();
-		String to = cri.getToDate();
+		String from = criteria.getFromDate();
+		String to = criteria.getToDate();
 
 		if (StringUtils.isBlank(from) && TextUtils.isEmpty(to)) {
-			cri.setFromDate(null);
-			cri.setToDate(null);
+			criteria.setFromDate(null);
+			criteria.setToDate(null);
 		} else if (StringUtils.isBlank(from)) {
-			cri.setFromDate(to);
-			cri.setToDate(today);
+			criteria.setFromDate(to);
+			criteria.setToDate(today);
 		} else if (StringUtils.isBlank(to)) {
-			cri.setToDate(today);
-		} else if (from.compareTo(cri.getToDate()) > 0) {
+			criteria.setToDate(today);
+		} else if (from.compareTo(criteria.getToDate()) > 0) {
 			String tmpDate = from;
-			cri.setFromDate(to);
-			cri.setToDate(tmpDate);
-		} else if (cri.getToDate().compareTo(today) > 0) {
-			cri.setToDate(today);
+			criteria.setFromDate(to);
+			criteria.setToDate(tmpDate);
+		} else if (criteria.getToDate().compareTo(today) > 0) {
+			criteria.setToDate(today);
 		} else if (from.compareTo(today) > 0) {
-			cri.setFromDate(today);
+			criteria.setFromDate(today);
 		}
 
-		return cri;
+		return criteria;
 	}
 
-	/* 게시글 작성자 가져오기 */
-	public int checkUser(int boardNo) {
-		return boardRepository.checkUser(boardNo);
+
+	/**
+	 * option = 2
+	 * @param criteria 검색 및 페이징 조건
+	 * @return 내가 작성한 {@link Board} 리스트 (List<Board>)
+	 */
+	public List<Board> selectAllMyBoardList(SearchCriteria criteria) {
+		criteria.setOption(2);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectBoardList(criteria);
 	}
 
-	/** 내 질문 모아 보기  **/
-	/* 1. 내 질문 모아 보기 (전체) */
-	public List<Board> myQuestionsSelectList(SearchCriteria cri) {
-		cri.setOption(2);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.boardSelectList(cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return 내가 작성한 {@link Board} 리스트 개수
+	 */
+	public int selectAllMyBoardCount(SearchCriteria criteria) {
+		criteria.setOption(2);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectBoardCount(criteria);
 	}
 
-	/* 내 질문 모아 보기 (전체) -> 게시물 전체 개수 구하기 */
-	public int myQuestionsSelectListCount(SearchCriteria cri) {
-		cri.setOption(2);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.boardSelectListCount(cri);
+	/**
+	 * option = 3
+	 * @param criteria 검색 및 페이징 조건
+	 * @return 내가 작성한 {@link Board} 중에서 {@link Comment} 리스트 (List<Board>)
+	 */
+	public List<Board> selectAnsweredMyBoardList(SearchCriteria criteria) {
+		criteria.setOption(3);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectBoardList(criteria);
 	}
 
-	/* 2. 내 질문 모아 보기 (답변한 것만) */
-	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri) {
-		cri.setOption(3);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.myQuestionsAnsweredSelectList(cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return 내가 작성한 {@link Board} 중에서 {@link Comment}  리스트 개수
+	 */
+	public int selectAnsweredMyBoardCount(SearchCriteria criteria) {
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		criteria = isSearchTypeNull(criteria);
+		criteria = dateCheck(criteria);
+		return boardRepository.selectAnsweredMyBoardCount(criteria);
 	}
 
-	/* 내 질문 모아 보기 (답변한 것만) -> 게시물 전체 개수 구하기 */
-	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri) {
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		cri = isSearchTypeNull(cri);
-		cri = dateCheck(cri);
-		return boardRepository.myQuestionsAnsweredSelectListCount(cri);
-	}
-
-	/** 즐겨찾기 **/
-	/* 즐겨찾기 리스트 */
-	public List<Board> myFavoriteSelectList(SearchCriteria cri) {
-		cri.setOption(4);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.boardSelectList(cri);
+	/**
+	 * option = 4
+	 * @param criteria 검색 및 페이징 조건
+	 * @return {@link BookMark} 전체 리스트
+	 */
+	public List<Board> selectMyBookMarkList(SearchCriteria criteria) {
+		criteria.setOption(4);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return boardRepository.selectBoardList(criteria);
 
 	}
 
-	/* 즐겨 찾기 리스트 전체 개수 구하기 */
-	public int myFavoriteSelectListCount(Criteria cri) {
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return boardRepository.myFavoriteSelectListCount(cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return {@link BookMark} 전체 리스트 개수 (int)
+	 */
+	public int selectMyBookMarkCount(PageCriteria criteria) {
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return boardRepository.selectMyBookMarkCount(criteria);
 	}
 
-	/* 즐겨찾기 저장하기 */
-	public void bookmarkInsert(Board model) {
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		bookmarkRepository.bookmarkInsert(model);
+	/**
+	 * {@link BookMark} 추가하기
+	 * @param board 게시글 번호
+	 */
+	public void insertBookMark(Board board) {
+		board.setUserNo(UserSessionUtils.currentUserNo());
+		bookmarkRepository.insertBookMark(board);
 	}
 
-	/* 즐겨찾기 메모 저장 하기  */
-	public void bookmarkMemoUpdate(BookMark bookMarkModel) {
-		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
-		bookmarkRepository.bookmarkMemoUpdate(bookMarkModel);
+	/**
+	 * {@link BookMark} 메모 추가하기
+	 * @param bookMark 즐겨찾기 정보
+	 */
+	public void updateBookMarkMemo(BookMark bookMark) {
+		bookMark.setUserNo(UserSessionUtils.currentUserNo());
+		bookmarkRepository.updateBookMarkMemo(bookMark);
 	}
 
-	/* 즐겨찾기 메모 불러오기  */
-	public BookMark bookmarkMemoSelect(int boardNo) {
-		BookMark bookMarkModel = new BookMark();
-		bookMarkModel.setUserNo(UserSessionUtils.currentUserNo());
-		bookMarkModel.setBoardNo(boardNo);
-
-		return bookmarkRepository.bookmarkMemoSelect(bookMarkModel);
+	/**
+	 * @param board 게시글 번호
+	 * @return {@link BookMark} 상세 보기
+	 */
+	public BookMark selectBookMarkMemo(Board board) {
+		board.setUserNo(UserSessionUtils.currentUserNo());
+		return bookmarkRepository.selectBookMarkMemo(board);
 	}
 
-	/* 즐겨찾기 해제  */
-	public void bookmarkDelete(Board model) {
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		bookmarkRepository.bookmarkDelete(model);
+	/**
+	 * {@link BookMark} 해제
+	 * @param board 게시글 번호
+	 */
+	public void deleteBookMark(Board board) {
+		board.setUserNo(UserSessionUtils.currentUserNo());
+		bookmarkRepository.deleteBookMark(board);
 	}
 
-	public int isExistedBoard(int boardNo) {
-		return boardRepository.isExistedBoard(boardNo);
-	}
-
-	public int selectBoardCount(SearchCriteria cri) {
-		return boardRepository.selectBoardCount(cri);
-	}
-
+	/**
+	 * @param userNo 해당 사용자 번호
+	 * @return 내가 작성한 {@link Board} 리스트 개수
+	 */
 	public int selectMyBoardCount(int userNo) {
 		return boardRepository.selectMyBoardCount(userNo);
+	}
+
+	/**
+	 * @param boardNo 게시글 번호
+	 * @return 해당 게시글이 존재하면, 해당 게시글의 사용자 번호. 그렇지 않으면, 0.
+	 */
+	public int checkUser(int boardNo) {
+		return boardRepository.checkUser(boardNo);
 	}
 
 }

@@ -12,6 +12,3 @@
 	</div>
 	<hr>
 </div>
-
-<script src="<c:url value="/resources/common/js/home.js" />"></script>
-<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/home.css'/>">

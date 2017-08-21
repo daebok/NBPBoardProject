@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyunhye.board.repository.BookMarkRepository">
 
@@ -12,8 +10,8 @@
 		<result property="bookmarkMemo" column="bookmark_memo" />
 	</resultMap>
 
-	<!-- 즐겨찾기 -->
-	<update id="bookmarkMemoUpdate">
+	<!-- 즐겨찾기 메모 수정 -->
+	<update id="updateBookMarkMemo">
 		UPDATE BOOKMARK
 		SET 
 			bookmark_memo = #{bookmarkMemo}
@@ -22,7 +20,8 @@
 			user_no = #{userNo}
 	</update>
 	
-	<insert id="bookmarkInsert">
+	<!-- 즐겨찾기 추가 -->
+	<insert id="insertBookMark">
 		INSERT INTO BOOKMARK (
 			user_no,
 			board_no
@@ -32,14 +31,16 @@
 		)
 	</insert>
 	
-	<delete id="bookmarkDelete">
+	<!-- 즐겨찾기 삭제 -->
+	<delete id="deleteBookMark">
 		DELETE FROM BOOKMARK 
 		WHERE
 			user_no = #{userNo} AND
 			board_no =#{boardNo}
 	</delete>
 
-	<select id="bookmarkMemoSelect" resultMap="bookmarkList">
+	<!-- 즐겨찾기 상세 보기 -->
+	<select id="selectBookMarkMemo" resultMap="bookmarkList">
 		SELECT
 			bookmark_memo
 		FROM

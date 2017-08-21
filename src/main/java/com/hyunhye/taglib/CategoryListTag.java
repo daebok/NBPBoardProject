@@ -20,7 +20,7 @@ public class CategoryListTag extends RequestContextAwareTag {
 	protected int doStartTagInternal() throws Exception {
 
 		CategoryService categoryService = SpringBeanFactory.getBean(CategoryService.class);
-		List<Category> category = categoryService.categorySelectList();
+		List<Category> category = categoryService.selectAllCategoryList();
 
 		if (Objects.isNull(category)) {
 			return SKIP_BODY;

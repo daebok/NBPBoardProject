@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <body>
@@ -15,7 +14,7 @@
 		<br><br>
 		<div class="pull-right" style="margin-bottom:10px;">
 			<c:choose>
-				<c:when test="${cri.option == 2 }">
+				<c:when test="${criteria.option == 2 }">
 					<a href="<c:url value='/admin/admin?option=1'/>" class="notice btn btn-default btn-sm">all</a>
 				</c:when>
 				<c:otherwise>
@@ -34,7 +33,7 @@
 					<li class="disabled"><span><a href="/admin/admin${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+					<li <c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
 						<a href="/admin/admin${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>

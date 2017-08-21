@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hyunhye.board.model.Criteria;
+import com.hyunhye.board.model.Board;
+import com.hyunhye.board.model.PageCriteria;
 import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.repository.CommentRepository;
 import com.hyunhye.utils.UserSessionUtils;
@@ -16,107 +17,139 @@ public class CommentService {
 	@Autowired
 	CommentRepository repository;
 
-	/* 답변 전체 리스트 */
-	public List<Comment> answerTabSelectListAll(int boardNo, int tab) {
-		Comment commentModel = new Comment();
-		commentModel.setUserNo(UserSessionUtils.currentUserNo());
-		commentModel.setBoardNo(boardNo);
-		commentModel.setTab(tab);
+	/**
+	 * @param comment 사용자 번호
+	 * @param tab 탭 번호 (최신순(1), 좋아요 순(2))
+	 * @return {@link Comment} 전체 리스트
+	 */
+	public List<Comment> selectAllAnswerList(Comment comment, int tab) {
+		comment.setUserNo(UserSessionUtils.currentUserNo());
+		comment.setTab(tab);
 
-		return repository.answerTabSelectListAll(commentModel);
+		return repository.selectAllAnswerList(comment);
 	}
 
-	/* 답변 등록 */
-	public void answerInsert(Comment commentModel) {
-		commentModel.setUserNo(UserSessionUtils.currentUserNo());
+	/**
+	 * {@link Comment} 작성하기.
+	 * 답변일 경우, {@link Comment#setCommentParentNo(int)} = 0.
+	 * 댓글일 경우, {@link Comment#setCommentParentNo(int)} = 해당 답변 번호.
+	 * @param comment
+	 */
+	public void insertAnswer(Comment comment) {
+		comment.setUserNo(UserSessionUtils.currentUserNo());
 
-		if (commentModel.getCommentNo() != 0) {
-			commentModel.setCommentParentNo(commentModel.getCommentNo());
+		if (comment.getCommentNo() != 0) {
+			comment.setCommentParentNo(comment.getCommentNo());
 		} else {
-			commentModel.setCommentParentNo(0);
+			comment.setCommentParentNo(0);
 		}
-		repository.answerInsert(commentModel);
+		repository.insertAnswer(comment);
 	}
 
-	/* 답변 수정 */
-	public void answerUpdate(Comment commentModel) {
-		repository.answerUpdate(commentModel);
+	/**
+	 * {@link Comment} 수정하기
+	 * @param comment 수정하는 {@link Comment} 정보
+	 */
+	public void updateAnswer(Comment comment) {
+		repository.updateAnswer(comment);
 	}
 
-	/* 답변 삭제 */
-	public void answerDelete(int commentNo) {
-		repository.answerDelete(commentNo);
+	/**
+	 * {@link Comment} 삭제
+	 * @param comment 삭제하는 {@link Comment} 정보
+	 */
+	public void deleteAnswer(Comment comment) {
+		repository.deleteAnswer(comment);
 	}
 
-	/* 댓글 삭제 */
-	public void commentDelete(int commentNo) {
-		repository.commentDelete(commentNo);
+	/**
+	 * @param board 게시글 번호
+	 * @return {@link Board}에 해당하는 {@link Comment} 개수
+	 */
+	public Comment selectAnswerCountOfBoard(int boardNo) {
+		return repository.selectAnswerCountOfBoard(boardNo);
 	}
 
-	/* 답변 개수 구하기 */
-	public Comment answerCount(int boardNo) {
-		return repository.answerCount(boardNo);
+	/**
+	 * @param comment 답변 번호
+	 * @return {@link Comment} 상세 보기
+	 */
+	public Comment selectAnswerDetail(Comment comment) {
+		return repository.selectAnswerDetail(comment);
 	}
 
-	/* 답변 가져오기 */
-	public Comment commentSelectOne(Comment commentModel) {
-		return repository.commentSelectOne(commentModel);
+	/**
+	 * @param comment 답변 번호
+	 * @return {@link Comment} 댓글 리스트 (List<Comment>)
+	 */
+	public List<Comment> selectAnswerComment(Comment comment) {
+		return repository.selectAnswerComment(comment);
 	}
 
-	/* 댓글 리스트 */
-	public List<Comment> answerCommentSelect(Comment model) {
-		return repository.answerCommentSelect(model);
+	/**
+	 * {@link Comment} 좋아요 추가
+	 * @param comment 답변 번호
+	 */
+	public void insertAnswerLike(Comment comment) {
+		comment.setUserNo(UserSessionUtils.currentUserNo());
+		repository.insertAnswerLike(comment);
 	}
 
-	/* 댓글 개수 구하기 */
-	public Comment commentCount() {
-		return repository.commentCount();
+	/**
+	 * {@link Comment} 좋아요 해제
+	 * @param comment 답변 번호
+	 */
+	public void deleteAnswerLike(Comment comment) {
+		comment.setUserNo(UserSessionUtils.currentUserNo());
+		repository.deleteAnswerLike(comment);
 	}
 
-	/* 답변 좋아요 */
-	public void answerLikeInsert(Comment model) {
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		repository.answerLikeInsert(model);
+	/**
+	 * option = 1
+	 * @param criteria 페이징 정보
+	 * @return 내가 작성한 {@link Comment} 리스트 (List<Comment>)
+	 */
+	public List<Comment> selectMyAnswersList(PageCriteria criteria) {
+		criteria.setOption(1);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return repository.selectMyAnswersList(criteria);
 	}
 
-	/* 답변 좋아요 취소 */
-	public void answerLikeDelete(Comment model) {
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		repository.answerLikeDelete(model);
+	/**
+	 * @param criteria 페이징 정보
+	 * @return 내가 작성한 {@link Comment} 리스트 개수 (int)
+	 */
+	public int selectMyAnswersCount(PageCriteria criteria) {
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return repository.selectMyAnswersCount(criteria);
 	}
 
-	/* 내가 작성한 답변 리스트 */
-	public List<Comment> myAnswersSelect(Criteria cri) {
-		cri.setOption(1);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.myAnswersSelect(cri);
+	/**
+	 * @param criteria 페이징 정보
+	 * @return 내가 좋아요한 {@link Comment} 리스트 (List<Comment>)
+	 */
+	public List<Comment> selectMyLikedAnswersList(PageCriteria criteria) {
+		criteria.setOption(2);
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return repository.selectMyAnswersList(criteria);
 	}
 
-	/* 내가 작성한 답변 개수 */
-	public int myAnswersListCount(Criteria cri) {
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.myAnswersListCount(cri);
+	/**
+	 * @param criteria 페이징 정보
+	 * @return 내가 좋아요 한  {@link Comment} 리스트 개수 (int)
+	 */
+	public int selectMyLikedAnswersCount(PageCriteria criteria) {
+		criteria.setUserNo(UserSessionUtils.currentUserNo());
+		return repository.selectMyLikedAnswersCount(criteria);
 	}
 
-	/* 내가 좋아요한 답변 리스트 */
-	public List<Comment> answersLikedSelectList(Criteria cri) {
-		cri.setOption(2);
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.myAnswersSelect(cri);
-	}
-
-	public int answersLikedSelectListCount(Criteria cri) {
-		cri.setUserNo(UserSessionUtils.currentUserNo());
-		return repository.answersLikedSelectListCount(cri);
-	}
-
-	/* 답변 작성자 번호 가져오기 */
+	/**
+	 * {@link Comment}의 작성자 확인
+	 * @param commentNo 답변 번호
+	 * @return {@link Comment}가 존재하면, 작성자 번호 / 없으면 0 (int)
+	 */
 	public int checkUser(int commentNo) {
 		return repository.checkUser(commentNo);
-	}
-
-	public int isExistedComment(int commentNo) {
-		return repository.isExistedComment(commentNo);
 	}
 
 }

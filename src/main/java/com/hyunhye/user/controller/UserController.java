@@ -5,8 +5,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +21,13 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.hyunhye.board.service.BoardService;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.naver.ouath.service.NaverLoginService;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.BoardUser;
 import com.hyunhye.user.service.UserService;
 import com.hyunhye.utils.UserSessionUtils;
 
 @Controller
 @RequestMapping("user")
 public class UserController {
-	Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private static OAuth2AccessToken oauthToken;
 
@@ -44,7 +41,7 @@ public class UserController {
 	private NaverLoginService naverLoginService;
 
 	/**
-	 * 회원가입 페이지 이동
+	 * @return {@link BoardUser} 회원가입 페이지 이동
 	 */
 	@RequestMapping("signup")
 	public String goSignupPage() {
@@ -52,75 +49,64 @@ public class UserController {
 	}
 
 	/**
-	 * 로그인 페이지 이동
-	 * @param session
-	 * @param model
+	 * @return {@link BoardUser} 로그인 페이지 이동
 	 */
 	@RequestMapping("loginPage")
 	public String goLoginPage(HttpSession session, Model model) {
 
-		/* 네아로 인증 URL을 생성하기 위하여 getAuthorizationUrl을 호출 */
 		String naverAuthUrl = naverLoginService.getAuthorizationUrl(session);
-
-		/* 생성한 인증 URL을 View로 전달 */
 		model.addAttribute("url", naverAuthUrl);
 		return "user/user/login";
 	}
 
 	/**
 	 * 네이버 아이디로 로그인
-	 * @param code
-	 * @param state
-	 * @param session
-	 * @param model
 	 */
 	@RequestMapping("callback")
-	public String callback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model)
+	public String callbackNaverLogin(@RequestParam String code, @RequestParam String state, HttpSession session,
+		Model model)
 		throws IOException, InterruptedException, ExecutionException {
 
-		/* 네아로 인증이 성공적으로 완료되면 code 파라미터가 전달되며 이를 통해 access token을 발급 */
 		oauthToken = naverLoginService.getAccessToken(session, code, state);
 
 		NaverUser naverUser = naverLoginService.getUserProfile(oauthToken);
-		service.naverUserInsert(naverUser);
+		service.insertNaverUser(naverUser);
 
 		return "redirect:/board";
 	}
 
 	/**
-	 * 회원 등록
-	 * @param model
+	 * {@link BoardUser} 추가하기 (회원가입)
+	 * @param user
+	 * @return 로그인 페이지로 Redirect
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
-	public String userInsert(@ModelAttribute UserModel model) {
-		service.userInsert(model);
+	public String insertUser(@ModelAttribute BoardUser user) {
+		service.insertUser(user);
 		return "redirect:/user/loginPage";
 	}
 
 	/**
-	 * 아이디 중복 확인
-	 * @param userId
+	 * {@link BoardUser} 아이디 중복 확인
+	 * @param userId 사용자 아이디
 	 */
-	@RequestMapping(value = "duplicationId", method = {RequestMethod.POST, RequestMethod.GET})
-	public @ResponseBody int checkIdDuplication(@RequestBody String userId) {
-		return service.checkIdDuplication(userId);
+	@RequestMapping(value = "duplicationId", method = RequestMethod.POST)
+	public @ResponseBody int checkUserIdDuplication(@RequestBody String userId) {
+		return service.checkUserIdDuplication(userId);
 	}
 
 	/**
-	 * 내 정보보기
-	 * @param model
+	 * {@link BoardUser} 내 정보보기
 	 */
 	@RequestMapping("info")
-	public String userinfo(Model model) {
+	public String selectUserInfo(Model model) {
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
 		model.addAttribute("myBoardCount", boardService.selectMyBoardCount(UserSessionUtils.currentUserNo()));
 		return "user/user/user-info";
 	}
 
 	/**
-	 * 비밀번호 변경 페이지로 이동
-	 * @param model
-	 * @return
+	 * @return {@link BoardUser} 비밀번호 변경 페이지로 이동
 	 */
 	@RequestMapping("password")
 	public String goPasswordChangePage(Model model) {
@@ -128,18 +114,22 @@ public class UserController {
 	}
 
 	/**
-	 * 비밀번호 변경 페이지에서, 현재 비밀번호와 일치하는지 확인
-	 * @param model
-	 * @return
+	 * {@link BoardUser} 비밀번호 변경 페이지에서, 현재 비밀번호와 일치하는지 확인
+	 * @param user 사용자 비밀번호
+	 * @return 일치하면 1, 그렇지 않으면 0
 	 */
 	@RequestMapping(value = "password/check", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> passwordCheck(@ModelAttribute UserModel model) {
-		return new ResponseEntity<Boolean>(service.passwordCheck(model), HttpStatus.OK);
+	public ResponseEntity<Boolean> checkUserPassword(@ModelAttribute BoardUser user) {
+		return new ResponseEntity<Boolean>(service.checkUserPassword(user), HttpStatus.OK);
 	}
 
+	/**
+	 * {@link BoardUser} 비밀번호 업데이트
+	 * @param user 새로운 비밀번호
+	 */
 	@RequestMapping(value = "password/change", method = RequestMethod.POST)
-	public String passwordUpdate(@ModelAttribute UserModel model) {
-		service.passwordUpdate(model);
+	public String updatePassword(@ModelAttribute BoardUser user) {
+		service.updatePassword(user);
 		return "redirect:/board";
 	}
 }

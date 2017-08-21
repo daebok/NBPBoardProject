@@ -5,9 +5,6 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 
-/*
- * 이미지인지 아닌지 확인 하는 클래스
- */
 public class MediaUtils {
 	private static Map<String, MediaType> mediaMap;
 

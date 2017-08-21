@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -19,9 +17,9 @@
 				<div class="pull-left">
 					<form:form name="list"  action="${uri}" method="get">
 						<input type="hidden" name="contactNo" value="${model.contactNo}" /> 
-						<input type="hidden" name="page" value="${cri.page}" /> 
-						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="hidden" name="option" value="${cri.option}" />
+						<input type="hidden" name="page" value="${criteria.page}" /> 
+						<input type="hidden" name="perPageNum" value="${criteria.perPageNum}" />
+						<input type="hidden" name="option" value="${criteria.option}" />
 						<input type="submit" class="btn btn-primary" value="List"/>
 					</form:form>
 				</div>
@@ -34,16 +32,14 @@
 		</div>
 		<div class="col-md-8">
 			<div id="listComment">
-				<c:forEach var="contactComment" items="${contactComment}">
-					<%@ include file="contact-comment-form.jsp" %>
-				</c:forEach>
+				<%@ include file="contact-comment-form.jsp" %>
 			</div>
 		</div>
 		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<div class="col-lg-9" style="margin-top: 50px;">
 				<form:form name="form" method="get" class="contact-comment-form">
 					<input type="hidden" name="contactNo" value="${model.contactNo}">
-					<textarea class="summernote" name="contactCommentContent"></textarea><br>
+					<textarea class="contact-summernote" id="content" name="contactCommentContent"></textarea><br>
 					<div class="pull-right">
 						<button class="btn btn-default" onclick="contactCommentRegist()">OK</button>
 					</div>

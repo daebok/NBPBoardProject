@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyunhye.comment.repository.CommentRepository">
 
 	<resultMap id="commentList" type="comment">
-		<result property="userNo" column="user_no" />
-		<result property="userId" column="user_id" />
-		<result property="userName" column="user_name" />
-		<result property="boardNo" column="board_no"/>
 		<result property="commentNo" column="comment_no" />
 		<result property="commentContent" column="comment_content" />
 		<result property="commentDate" column="comment_date" />
@@ -17,25 +11,27 @@
 		<result property="commentLikeCount" column="comment_like_count" />
 		<result property="commentParentNo" column="comment_parent_no" />
 		<result property="commentCommentCount" column="comment_comment_count" />
+		<result property="commentLike" column="comment_like" />
+		<result property="userNo" column="user_no" />
+		<result property="boardNo" column="board_no"/>
 	</resultMap>
 	
-	<select id="answerCommentSelect" resultMap="commentList">
+	<!-- 댓글 가져오기 -->
+	<select id="selectAnswerComment" resultMap="commentList">
 		SELECT 
-			USER.user_name, 
-			USER.user_id, 
+			COMMENT.user_no, 
 			COMMENT.comment_no, 
 			COMMENT.comment_content, 
 			COMMENT.comment_date, 
 			COMMENT.comment_parent_no
 		FROM COMMENT
-		JOIN  USER
-		ON COMMENT.user_no = USER.user_no
 		WHERE
 			comment_parent_no = #{commentNo}
 		ORDER BY comment_no
 	</select>
 	
-	<insert id="answerInsert">
+	<!-- 답변 추가 -->
+	<insert id="insertAnswer">
 		INSERT INTO COMMENT (
 			board_no, 
 			user_no, 
@@ -49,28 +45,23 @@
 		)
 	</insert>
 	
-	<select id="answerTabSelectListAll" resultMap="commentList">
+	<!-- 답변 리스트 가져오기 -->
+	<select id="selectAllAnswerList" resultMap="commentList">
 		SELECT 
-			USER.user_name, 
-			USER.user_id, 
-			USER.user_no, 
 			COMMENT.board_no, 
+			COMMENT.user_no, 
 			COMMENT.comment_no, 
 			COMMENT.comment_no as number, 
 			COMMENT.comment_content, 
 			COMMENT.comment_date, 
-			USER.user_name,
 			count(COMMENT_LIKE.comment_no) as comment_like_count,
-			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as user_no,
+			IF((SELECT COMMENT_LIKE.user_no FROM BOARD.COMMENT_LIKE WHERE COMMENT_LIKE.user_no = #{userNo} AND COMMENT_LIKE.comment_no = number), 1, 0) as comment_like,
 			(SELECT count(comment_no) FROM BOARD.COMMENT WHERE COMMENT.comment_parent_no = number) as comment_comment_count
 		FROM COMMENT
-		JOIN  USER
-		ON COMMENT.user_no = USER.user_no
 		LEFT JOIN COMMENT_LIKE
-		ON  COMMENT.comment_no = COMMENT_LIKE.comment_no
+			ON  COMMENT.comment_no = COMMENT_LIKE.comment_no
 		WHERE 
-			board_no = #{boardNo}
-			AND
+			board_no = #{boardNo} AND
 			comment_parent_no = 0
 		group by COMMENT.comment_no
 		<if test="tab == 1"> <!-- 최신순 -->
@@ -81,7 +72,8 @@
 		</if>
 	</select>
 	
-	<select id="myAnswersSelect" resultMap="commentList">
+	<!-- 내가 답변한 리스트 -->
+	<select id="selectMyAnswersList" resultMap="commentList">
 		SELECT
 			C.comment_no, 
 			C.comment_content, 
@@ -112,7 +104,8 @@
 		ORDER BY C.comment_no
 	</select>
 	
-	<select id="myAnswersListCount" resultType="int">
+	<!-- 내 답변 개수 -->
+	<select id="selectMyAnswersCount" resultType="int">
 		SELECT COUNT(comment_no) 
 		FROM COMMENT
 		WHERE
@@ -120,7 +113,8 @@
 			comment_parent_no = 0
 	</select>
 	
-	<select id="answersLikedSelectListCount" resultType="int">
+	<!-- 내가 좋아요한 답변 개수 -->
+	<select id="selectMyLikedAnswersCount" resultType="int">
 		SELECT COUNT(COMMENT.comment_no) 
 		FROM COMMENT
 		JOIN COMMENT_LIKE
@@ -129,7 +123,8 @@
 			COMMENT_LIKE.user_no = #{userNo}
 	</select>
 	
-	<insert id="answerLikeInsert">
+	<!-- 답변 좋아요 -->
+	<insert id="insertAnswerLike">
 		INSERT INTO COMMENT_LIKE (
 			user_no, 
 			comment_no
@@ -139,50 +134,32 @@
 		)
 	</insert>
 	
-	<delete id="answerLikeDelete">
+	<!-- 답변 좋아요 삭제 -->
+	<delete id="deleteAnswerLike">
 		DELETE FROM COMMENT_LIKE 
 		WHERE
 			user_no = #{userNo} AND
 			comment_no = #{commentNo}
 	</delete>
 
-	<select id="answerUpdate" resultMap="commentList">
+	<!-- 답변 수정 -->
+	<select id="updateAnswer" resultMap="commentList">
 		UPDATE COMMENT SET
 			comment_content = #{commentContent}
 		WHERE 
 			comment_no = #{commentNo}
 	</select>
 	
-	<delete id="answerDelete" parameterType="int"> 
+	<!-- 답변 삭제 -->
+	<delete id="deleteAnswer" parameterType="int"> 
 		DELETE FROM COMMENT
 		WHERE 
 			comment_no = #{commentNo} OR
 			comment_parent_no = #{commentNo}
 	</delete>
-
-	<delete id="commentDelete" parameterType="int"> 
-		DELETE FROM COMMENT
-		WHERE 
-			comment_no = #{commentNo} 
-	</delete>
 	
-	<select id="answerHasComment" resultType="int">
-		SELECT 
-			COUNT(comment_no) 
-		FROM COMMENT 
-		WHERE 
-			comment_parent_no = #{commentNo}
-	</select>
-	
-	<select id="commentCount" resultMap="commentList">
-		SELECT 
-			board_no, 
-			count(comment_no) as comment_count
-		FROM COMMENT 
-		group by board_no
-	</select>
-	
-	<select id="answerCount" resultMap="commentList">
+	<!-- 해당 게시물의 답변 개수 -->
+	<select id="selectAnswerCountOfBoard" resultMap="commentList">
 		SELECT 
 			count(comment_no) as comment_count
 		FROM COMMENT 
@@ -191,21 +168,18 @@
 			comment_parent_no = 0
 	</select>
 	
-	<select id="commentSelectOne" resultMap="commentList">
+	<!-- 답변 상세 보기(수정시)-->
+	<select id="selectAnswerDetail" resultMap="commentList">
 		SELECT 
-			USER.user_name, 
-			USER.user_id, 
 			COMMENT.comment_no, 
 			COMMENT.comment_content, 
-			COMMENT.comment_date, 
-			USER.user_name
+			COMMENT.comment_date
 		FROM COMMENT
-		JOIN  USER
-		ON COMMENT.user_no = USER.user_no
 		WHERE 
 			comment_no = #{commentNo}
 	</select>
 	
+	<!-- 해당 답변의 작성자 (업으면 0반환) -->
 	<select id="checkUser" resultType="int">
 		SELECT 
 			IF(COUNT(user_no) = 0, 0, user_no) as user_no

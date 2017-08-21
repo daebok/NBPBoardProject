@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/include/include.jsp"%>
+
 <div class="nav">
 	<div class="nav-wrapper">
 		<div class="pull-left">		
@@ -30,3 +32,6 @@
 		</sec:authorize>
 	</div>
 </div>
+
+<link type="text/css" rel="stylesheet" 	href="<c:url value='/resources/common/css/home.css'/>">
+<script src="<c:url value="/resources/common/js/home.js" />"></script>

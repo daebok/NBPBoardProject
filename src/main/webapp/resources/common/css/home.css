@@ -46,3 +46,8 @@ body {
 .footer-contact {
 	text-decoration: none  !important;
 }
+.top10-update {
+	font-size:0.8em;
+	color:black;
+	margin-bottom:-10px;
+}

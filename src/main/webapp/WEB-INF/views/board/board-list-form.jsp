@@ -1,7 +1,6 @@
-<%@ taglib prefix="fmt"				uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c"				uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <div>
-	<span class="badge">Posted By ${board.userId}</span>
+	<span class="badge">Posted By <user:id no="${board.userNo}"/></span>
 	<span class="badge" style="background-color:#ffffff; color:#8c8c8c"><fmt:formatDate value="${board.boardDate}" pattern="yyyy/MM/dd"/></span>
 	<div class="pull-right">
 		<span class="label label-success">answer: ${board.commentCount}</span>

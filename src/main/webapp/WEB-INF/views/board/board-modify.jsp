@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <sec:csrfMetaTags/>
 <script>
-	$("#category").val('${model.categoryNo}').prop("selected", true);
+	$("#category").val('${board.categoryNo}').prop("selected", true);
 </script>
 </head>
 <body>
@@ -17,14 +16,14 @@
 			<form:form action="/board/question/modify" method="post" name="form" class="modify-form form-horizontal" id="register-form" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="boardTitle" id="title" value="${model.boardTitle}" maxlength="100" size="20" class="form-control"  /> 
+					<input type="text" name="boardTitle" id="title" value="${board.boardTitle}" maxlength="100" size="20" class="form-control"  /> 
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
 					<category:category />
 				</div>
 				<textarea class="board-summernote" cols="100" rows="30" name="boardContent" maxlength="500" id="content">
-					${model.boardContent}
+					<c:out value="${board.boardContent}" escapeXml="true"/>
 				</textarea>
 				<div class="form-group">
 					<div class="filebox"> 
@@ -32,28 +31,30 @@
 						<label for="input-file">업로드</label> 
 						<input type="file" name="files" multiple="multiple" class="file upload-hidden" id="input-file" onchange="fileUpload()" maxlength="5">
 					</div>
-					<div class="panel panel-default">
-						<div class="list-group">
-							<div class="list-group-item">
-								<div class="list-1"><b>파일명</b></div>
-								<div class="list-2"><b>크기</b></div>
-								<div class="list-3"><b>삭제</b></div>
-							</div>
-							<c:forEach var="attach" items="${attach}">
-								<div class="uploadedList">
-									<div class="list-group-item">
-										<div class="list-1">${attach.fileOriginName}</div>
-										<div class="list-2">${attach.fileSize} bytes</div>
-										<div class="list-3"><a  onclick="uploadedFileDetet(${attach.fileName}, this)" >[삭제]</a></div>
-									</div>
+					<c:if test="${not empty board.boardFileList}">
+						<div class="panel panel-default">
+							<div class="list-group">
+								<div class="list-group-item">
+									<div class="list-1"><b>파일명</b></div>
+									<div class="list-2"><b>크기</b></div>
+									<div class="list-3"><b>삭제</b></div>
 								</div>
-							</c:forEach>
-							<div class="newUploadedList"></div>
-							<div class="summernoteUploadedList"></div>
+								<c:forEach var="attach" items="${board.boardFileList}">
+									<div class="uploadedList">
+										<div class="list-group-item">
+											<div class="list-1">${attach.fileOriginName}</div>
+											<div class="list-2"><file:size value = "${attach.fileSize}" /> </div>
+											<div class="list-3"><a  onclick="uploadedFileDetet(${attach.fileName}, this)" >[삭제]</a></div>
+										</div>
+									</div>
+								</c:forEach>
+								<div class="newUploadedList"></div>
+								<div class="summernoteUploadedList"></div>
+							</div>
 						</div>
-					</div>
+					</c:if>
 				</div>
-				<input type="hidden" name="boardNo" value="${model.boardNo}">
+				<input type="hidden" name="boardNo" value="${board.boardNo}">
 				<div class="pull-right">
 					<button type="button" onclick="questionRegist()" class="btn btn-default">Modify</button>
 				</div>

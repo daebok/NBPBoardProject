@@ -3,7 +3,11 @@ package com.hyunhye.notice.model;
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
-
+/**
+ * 공지사항 정보
+ * @author NAVER
+ *
+ */
 @Data
 @Alias("notice")
 public class Notice {

@@ -5,20 +5,18 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
 
+import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.Category;
 import com.hyunhye.board.repository.CategoryRepository;
 
 @Service
 public class CategoryService {
-	Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
 	@Autowired
 	public CategoryRepository categoryRepository;
@@ -26,16 +24,21 @@ public class CategoryService {
 	@Resource(name = "cacheManager")
 	EhCacheCacheManager cacheManager;
 
-	/* 카테고리 추가 */
+	/**
+	 * {@link Category} 추가
+	 * @param category 추가하는 category 항목
+	 */
 	@CacheEvict(value = "category", allEntries = true)
-	public void categoryInsert(Category categoryModel) {
-		categoryRepository.categoryInsert(categoryModel);
+	public void insertCategoryItem(Category category) {
+		categoryRepository.insertCategoryItem(category);
 	}
 
-	/* 카테고리 목록 가져오기 */
+	/**
+	 * @return {@link Category} 리스트 (List<Category>)
+	 */
 	@Cacheable("category")
-	public List<Category> categorySelectList() {
-		List<Category> category = categoryRepository.categorySelectList();
+	public List<Category> selectAllCategoryList() {
+		List<Category> category = categoryRepository.selectAllCategoryList();
 
 		List<Category> list = category.stream()
 			.filter(s -> s.getCategoryEnabled() != 0)
@@ -44,19 +47,30 @@ public class CategoryService {
 		return list;
 	}
 
-	/* 카테고리를 가진 게시물 개수 구하기 */
-	public int boardSelectCountOfCategory(Category categoryModel) {
-		return categoryRepository.boardSelectCountOfCategory(categoryModel);
+	/**
+	 * @param category 카테고리 번호
+	 * @return {@link Category}에 해당하는 {@link Board} 개수
+	 */
+	public int selectBoardCountOfCategory(Category category) {
+		return categoryRepository.selectBoardCountOfCategory(category);
 	}
 
-	/* 카테고리 삭제 */
-	public void categoryDelete(Category categoryModel) {
-		categoryRepository.categoryDelete(categoryModel);
+	/**
+	 * {@link Category} 항목 삭제
+	 * @param category 번호
+	 */
+	@CacheEvict(value = "category", allEntries = true)
+	public void deleteCategoryItem(Category category) {
+		categoryRepository.deleteCategoryItem(category);
 	}
 
-	/* 카테고리 중복 체크 */
-	public Integer categoryItemNameCheck(Category categoryModel) {
-		return categoryRepository.categoryItemNameCheck(categoryModel);
+	/**
+	 * {@link Category} 항목 이름 중복 체크
+	 * @param category 항목 이름
+	 * @return {@link Category} 항목 이름에 해당하는 이름이 있으면 1, 없으면 0
+	 */
+	public int checkCategoryItemNameDuplication(Category category) {
+		return categoryRepository.checkCategoryItemNameDuplication(category);
 	}
 
 }

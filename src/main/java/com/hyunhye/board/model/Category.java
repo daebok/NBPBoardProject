@@ -7,6 +7,11 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 카테고리 정보
+ * @author NAVER
+ *
+ */
 @SuppressWarnings("serial")
 @Data
 @EqualsAndHashCode

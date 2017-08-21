@@ -5,61 +5,117 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.hyunhye.board.model.Board;
-import com.hyunhye.board.model.Criteria;
+import com.hyunhye.board.model.BoardFile;
+import com.hyunhye.board.model.BookMark;
 import com.hyunhye.board.model.Home;
+import com.hyunhye.board.model.PageCriteria;
 import com.hyunhye.board.model.SearchCriteria;
 
+/**
+ * 게시판의 게시글 Repository
+ * @author NAVER
+ *
+ */
 @Repository
 public interface BoardRepository {
-	/** 홈 화면 **/
-	public List<Board> boardTop10SelectList(Home homeModel);
+	/**
+	 * 홈 화면에 보여줄 {@link Board} 리스트 가져오기
+	 * @param home
+	 * @return {@link Board} 리스트 10개 (최신순, 조회순, 답변순) (List<Board>)
+	 */
+	public List<Board> boardTop10SelectList(Home home);
 
-	/** 게시굴 작성하기 **/
-	public void boardInsert(Board boardModel);
+	/**
+	 * {@link Board} 작성하기
+	 * @param board 새로 작성한 {@link Board} 항목
+	 */
+	public void insertBoard(Board board);
 
-	/** 게시굴 상세보기  **/
-	public Board boardSelectOne(Board boardModel);
+	/**
+	 * @param board 게시글 번호
+	 * @return {@link Board} 상세보기
+	 */
+	public Board selectBoardDetail(Board board);
 
-	/** 게시굴 수정하기 **/
-	public Board boardUpdate(Board boardModel);
+	/**
+	 * {@link Board} 수정하기
+	 * @param board 수정한 {@link Board} 항목
+	 */
+	public void updateBoardDetail(Board board);
 
-	/** 게시굴 삭제하기 **/
-	public void boardDelete(int boardNo);
+	/**
+	 * {@link Board} 삭제하기
+	 * @param board {@link Board} 번호
+	 */
+	public void deleteBoardDetail(Board board);
 
-	/** 게시굴 전체 리스트 **/
-	public List<Board> boardSelectList(SearchCriteria cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return {@link Board} 리스트 (List<Board>)
+	 */
+	public List<Board> selectBoardList(SearchCriteria criteria);
 
-	/** 게시굴 전체 개수 **/
-	public int boardSelectListCount(SearchCriteria cri);
+	/**
+	 * @param criteria 검색 및 페이징 조건
+	 * @return {@link Board} 전체 개수 (int)
+	 */
+	public int selectBoardCount(SearchCriteria criteria);
 
-	/** 게시굴 작성자 확인 **/
+	/**
+	 * @param criteria 검색 및 페이징
+	 * @return 내가 작성한 {@link Board} 리스트 (List<Board>)
+	 */
+	public List<Board> myQuestionsSelectList(SearchCriteria criteria);
+
+	/**
+	 * @param criteria 검색 및 페이징
+	 * @return 내가 작성한 {@link Board} 리스트 중에서 {@link Comment} 달린 리스트 게시글  개수 (int)
+	 */
+	public int selectAnsweredMyBoardCount(SearchCriteria criteria);
+
+	/**
+	 * @param criteria 검색 및 페이징
+	 * @return {@link BookMark} 개수 (int)
+	 */
+	public int selectMyBookMarkCount(PageCriteria criteria);
+
+	/**
+	 * {@link Board} 조회수 증가
+	 * @param board 게시글 번호
+	 */
+	public void baordViewInsert(Board board);
+
+	/**
+	 * 내가 작성한 {@link Board} 개수 가져오기
+	 * @param userNo 사용자 번호
+	 * @return 내가 작성한 {@link Board} 개수 (int)
+	 */
+	public int selectMyBoardCount(int userNo);
+
+	/**
+	 * 해당 게시글이 존재하면, 해당 게시글의 사용자 번호 반환.
+	 * 그렇지 않으면, 0 반환
+	 * @param boardNo 게시글 번호
+	 * @return {@link Board} 작성자 사용자 번호
+	 */
 	public int checkUser(int boardNo);
 
-	/** 내 질문 전체 리스트  **/
-	public List<Board> myQuestionsSelectList(SearchCriteria cri);
+	/**
+	 * @param board 게시판 번호
+	 * @return {@link BoardFile} 리스트 (List<BoardFile>)
+	 */
+	public List<BoardFile> selectFileListByBoardId(Board board);
 
-	/** 내 질문 답변한 것만 리스트 **/
-	public List<Board> myQuestionsAnsweredSelectList(SearchCriteria cri);
+	/**
+	 * {@link BoardFile} 추가하기
+	 * @param file 파일 정보
+	 */
+	public void insertFile(BoardFile file);
 
-	/** 내 질문 답변한 것만 개수 **/
-	public int myQuestionsAnsweredSelectListCount(SearchCriteria cri);
-
-	/** 즐겨찾기 전체 개수 **/
-	public List<Board> myFavoriteSelectList(Criteria cri);
-
-	/** 즐겨찾기 전체 리스트 **/
-	public int myFavoriteSelectListCount(Criteria cri);
-
-	/** 조회 확인 **/
-	public int boardViewSelect(Board boardModel);
-
-	/** 조회수 추가 **/
-	public void baordViewInsert(Board boardModel);
-
-	public int isExistedBoard(int boardNo);
-
-	public int selectBoardCount(SearchCriteria cri);
-
-	public int selectMyBoardCount(int userNo);
+	/**
+	 * {@link BoardFile} 삭제
+	 * @param fileName 삭제하려는 파일 이름
+	 */
+	public void deleteFile(String fileName);
 
 }

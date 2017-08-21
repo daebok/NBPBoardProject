@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -13,26 +12,26 @@
 		<div class="container-fluid">
 			<div class="pull-right" style="margin-bottom:10px;">
 				<c:choose>
-					<c:when test="${model.bookmarkCheck eq 1}">
-						<div class="glyphicon glyphicon-check" id="book-mark-check" onclick="bookmarkCheck(${model.boardNo}, this)" style="font-size:25px; color:#FF3636;"></div>
+					<c:when test="${board.bookmarkCheck eq 1}">
+						<div class="glyphicon glyphicon-check" id="book-mark-check" onclick="bookmarkCheck(${board.boardNo}, this)" style="font-size:25px; color:#FF3636;"></div>
 					</c:when>
 					<c:otherwise>
-						<div class="glyphicon glyphicon-check" id="book-mark-uncheck"  onclick="bookmarkCheck(${model.boardNo}, this)" style="font-size:25px; color:#888;"></div>
+						<div class="glyphicon glyphicon-check" id="book-mark-uncheck"  onclick="bookmarkCheck(${board.boardNo}, this)" style="font-size:25px; color:#888;"></div>
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<div class="col-md-12">
-				<span class="label label-warning">${model.categoryItem} </span>
-				<h2><c:out value="${model.boardTitle}" escapeXml="true"/></h2>
-				<p><c:out value="${model.boardContent}" escapeXml="false"/></p>
-				<c:if test="${not empty attach}">
+				<span class="label label-warning">${board.categoryItem} </span>
+				<h2><c:out value="${board.boardTitle}" escapeXml="true"/></h2>
+				<p><c:out value="${board.boardContent}" escapeXml="false"/></p>
+				<c:if test="${not empty board.boardFileList}">
 					<div class="panel panel-default">
 						<div class="list-group">
 							<div class="list-group-item">
 								<div class="list-1"><b>파일명</b></div>
 								<div class="list-2"><b>크기</b></div>
 							</div>
-							<c:forEach var="attach" items="${attach}">
+							<c:forEach var="attach" items="${board.boardFileList}">
 								<div class="uploadedList">
 									<div class="list-group-item">
 										<div class="list-1"><a href='/board/downloadFile?fileName=${attach.fileName}'>${attach.fileOriginName}</a></div>
@@ -43,31 +42,32 @@
 						</div>
 					</div>
 				</c:if>
-				<div align="right" ><b>
-					<a class="board-writer"  href="javascript:otherQuestion('${model.userId}')">${model.userId}의 다른 게시물 보기
-					<span class="glyphicon glyphicon-hand-right"></span></a>
-				</b></div>
+				<div align="right" >
+					<b><a class="board-writer"  href="javascript:otherQuestion(<user:id no='${board.userNo}'/>)"><user:id no="${board.userNo}"/>의 다른 게시물 보기<span class="glyphicon glyphicon-hand-right"></span></a></b>
+				</div>
 				<hr>
 				<div class="pull-right">
-					<c:if test="${user.username == model.userId}">
-						<a href="<c:url value='/board/modify?boardNo=${model.boardNo}'/>" id="modify" class="btn btn-primary">Modify</a>
-						<button class="btn btn-primary" onclick="questionDelete(${model.boardNo})">Delete</button>
+					<c:if test="${user.userNo == board.userNo}">
+						<a href="<c:url value='/board/modify?boardNo=${board.boardNo}'/>" id="modify" class="btn btn-primary">Modify</a>
+						<button class="btn btn-primary" onclick="questionDelete(${board.boardNo})">Delete</button>
 					</c:if>
-					<c:if test="${user.username != model.userId}"> <!-- 관리자 권한 -->
+					<c:if test="${user.userNo != board.userNo}"> <!-- 관리자 권한 -->
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<button class="btn btn-primary" onclick="questionDelete(${model.boardNo})">Delete</button>
+							<button class="btn btn-primary" onclick="questionDelete(${board.boardNo})">Delete</button>
 						</sec:authorize>
 					</c:if>
 				</div>
 				<div class="pull-left">
 					<form:form name="list" action="${uri}" id="list-form"  method="get">
-						<input type="hidden" name="boardNo" value="${model.boardNo}" /> 
-						<input type="hidden" name="tab" value="${cri.tab}" /> 
-						<input type="hidden" name="page" value="${cri.page}" /> 
-						<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
-						<input type="hidden" name="searchType" value="${cri.searchType}" /> 
-						<input type="hidden" name="categoryType" value="${cri.categoryType}" />
-						<input type="hidden" name="keyword" value="${cri.keyword}" />
+						<input type="hidden" name="boardNo" value="${board.boardNo}" /> 
+						<input type="hidden" name="tab" value="${criteria.tab}" /> 
+						<input type="hidden" name="page" value="${criteria.page}" /> 
+						<input type="hidden" name="perPageNum" value="${criteria.perPageNum}" />
+						<input type="hidden" name="searchType" value="${criteria.searchType}" /> 
+						<input type="hidden" name="categoryType" value="${criteria.categoryType}" />
+						<input type="hidden" name="toDate" value="${criteria.toDate}" />
+						<input type="hidden" name="fromDate" value="${criteria.fromDate}" />
+						<input type="hidden" name="keyword" value="${criteria.keyword}" />
 						<input type="submit" name="listButton" class="btn btn-primary" value="List"/>
 					</form:form>
 				</div>
@@ -83,8 +83,8 @@
 			<form:form name="form" method="get" class="answer-form">
 				<label for="content">Your Answer</label>
 				<textarea class="answer-summernote" name="commentContent" id="comment-content"></textarea><br>
-				<input type="hidden" name="boardNo" value="${model.boardNo}">
-				<input type="hidden" name="userNo" value="${model.userNo}">
+				<input type="hidden" name="boardNo" value="${board.boardNo}">
+				<input type="hidden" name="userNo" value="${board.userNo}">
 				<input type="hidden" name="commentNo" id="answer-no" value="0">
 				<div class="pull-right">
 					<button id="answer-regist-button" onclick="answerRegist(this, event)" class="btn btn-default">Answer</button>

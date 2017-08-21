@@ -4,6 +4,11 @@ import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+/**
+ * 즐겨찾기 정보
+ * @author NAVER
+ *
+ */
 @Data
 @Alias("bookmark")
 public class BookMark {

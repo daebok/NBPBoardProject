@@ -3,7 +3,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 
 /* 섬머노트 */
 $(document).ready( function() {
-	$('.summernote').summernote({
+	$('.contact-summernote').summernote({
 		height : 200,
 		onImageUpload : function(files,editor, welEditable) {
 				sendFile(files[0], editor,welEditable);
@@ -27,14 +27,23 @@ function contactRegist() {
 		$("#title").focus();
 		return;
 	}
-
-	var htmlRemoveContent = content.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, "");
-	htmlRemoveContent.replace(/&nbsp;/g, "");
-	if (htmlRemoveContent.replace(/(\s*)/g, '') == '') {
-		alert("내용를 입력하세요.");
-		$("#content").focus();
+	
+	if($('.btn-codeview').hasClass('active')){
+		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
+		$('.note-editable').trigger('focus');
 		return;
 	}
+
+	var htmlRemoveContent = content.replace(/<(\/?)p>/gi,"");
+	htmlRemoveContent = htmlRemoveContent.replace(/<br[^>]*>/gi, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/&nbsp;/g, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/(\s*)/g, "");
+	if (htmlRemoveContent == "") {
+		alert("내용를 입력하세요.");
+		$('.note-editable').trigger('focus');
+		return;
+	}
+	
 
 	document.form.action = "/contact/regist/insert"
 	document.form.submit();
@@ -42,6 +51,25 @@ function contactRegist() {
 
 function contactCommentRegist(){
 	event.preventDefault();
+	
+	var content = $("#content").val();
+	if($('.btn-codeview').hasClass('active')){
+		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
+		$('.note-editable').trigger('focus');
+		return;
+	}
+
+	var htmlRemoveContent = content.replace(/<(\/?)p>/gi,"");
+	htmlRemoveContent = htmlRemoveContent.replace(/<br[^>]*>/gi, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/&nbsp;/g, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/(\s*)/g, "");
+	if (htmlRemoveContent == "") {
+		alert("내용를 입력하세요.");
+		$('.note-editable').trigger('focus');
+		return;
+	}
+	
+	
 	var data = $('.contact-comment-form').serialize()
 	$.ajax({
 		type : 'POST',
@@ -53,8 +81,9 @@ function contactCommentRegist(){
 		data : data,
 		success : function(result) {
 			alert('답변이 달렸습니다.');
+			$("#listComment *").remove();
 			$("#listComment").append(result);
-			$('.summernote').summernote('code', '');
+			$('.note-editable').empty();
 		}
 	});
 }

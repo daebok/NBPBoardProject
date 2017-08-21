@@ -8,21 +8,40 @@ import com.hyunhye.notice.model.Notice;
 
 @Repository
 public interface NoticeRepository {
-	/** 공지사항  추가 **/
-	public void noticeInsert(Notice noticeModel);
+	/**
+	 * {@link Notice} 추가하기
+	 * @param notice
+	 */
+	public void insertNotice(Notice notice);
 
-	/** 공지사항  리스트 가져오기 **/
-	public List<Notice> noticeListAll();
+	/**
+	 * @return {@link Notice} 전체 리스트
+	 */
+	public List<Notice> selectAllNoticeList();
 
-	/** 공지사항  상세보기**/
-	public Notice noticeSelectOne(Notice noticeModel);
+	/**
+	 * @param notice 공지사항 번호
+	 * @return {@link Notice} 상세보기
+	 */
+	public Notice selectNoticeDetail(Notice notice);
 
-	/** 공지사항  삭제하기 **/
-	public void noticeDelete(Notice noticeModel);
+	/**
+	 * {@link Notice} 삭제하기
+	 * @param notice 공지사항 번호
+	 */
+	public void deleteNotice(Notice notice);
 
-	/** 공지사항  수정하기 **/
-	public void noticeUpdate(Notice noticeModel);
+	/**
+	 * {@link Notice} 수정하기
+	 * @param notice 공지사항 번호
+	 */
+	public void updateNotice(Notice notice);
 
+	/**
+	 * {@link Notice} 존재 여부 판단
+	 * @param noticeNo 공지사항 번호
+	 * @return 공지사항이 존재하면 1, 없으면 0 (int)
+	 */
 	public int isExistedNotice(int noticeNo);
 
 }

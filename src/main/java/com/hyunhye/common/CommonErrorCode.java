@@ -1,4 +1,4 @@
-package com.hyunhye.user.model;
+package com.hyunhye.common;
 
 public enum CommonErrorCode {
 

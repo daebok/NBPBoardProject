@@ -3,13 +3,22 @@ package com.hyunhye.board.model;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.Data;
 
+/**
+ * 페이징에 필요한 계산 정보
+ * @author NAVER
+ *
+ */
 @Data
 public class PageMaker {
+	Logger logger = LoggerFactory.getLogger(PageMaker.class);
+	
 	/** 게시글 총 개수 **/
 	private int totalCount;
 	/** 시작 페이지 번호 **/
@@ -22,10 +31,10 @@ public class PageMaker {
 	private boolean next;
 	/** 화면에 보여지는 페이지 개수 **/
 	private int displayPageNum = 5;
-	private Criteria cri;
+	private PageCriteria criteria;
 
-	public void setCri(Criteria cri) {
-		this.cri = cri;
+	public void setCriteria(PageCriteria criteria) {
+		this.criteria = criteria;
 	}
 
 	public void setTotalCount(int totalCount) {
@@ -33,45 +42,50 @@ public class PageMaker {
 		calcData();
 	}
 
+	/**
+	 * 페이징 계산
+	 */
 	private void calcData() {
-		/*
-		 * 마지막 페이지 번호 = (현재 페에지/화면에 보여지는 페이지 개수)*화면에 보여지는 페이지 개수
-		 * 현재 페이지가 21이면, (21 / 10) * 10
-		 */
-		endPage = (int)(Math.ceil(cri.getPage() / (double)displayPageNum) * displayPageNum);
-		/* 시작페이지 번호 = (끝페이지 - 화면에 보여지는 페이지 개수) +1 */
+		endPage = (int)(Math.ceil(criteria.getPage() / (double)displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;
-		/* 마지막 페이지 번호가 총 페이지 개수보다 클 경우 처리 */
-		int tempEndPage = (int)(Math.ceil(totalCount / (double)cri.getPerPageNum()));
+		int tempEndPage = (int)(Math.ceil(totalCount / (double)criteria.getPerPageNum()));
 		if (endPage > tempEndPage) {
 			endPage = tempEndPage;
 		}
-		/* 시작 페이지 번호가 1인 경우, 이전 페이지 없음 */
 		prev = startPage == 1 ? false : true;
-		/* 뒤에 남아있는 데이터가 있는지 확인 */
-		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
+		next = endPage * criteria.getPerPageNum() >= totalCount ? false : true;
 	}
 
+	/**
+	 * 페이징을 할 때, 쿼리 생성
+	 * @param page 페이지 번호
+	 * @return 쿼리 스트링
+	 */
 	public String makeQuery(int page) {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
-			.queryParam("option", ((Criteria)cri).getOption())
+			.queryParam("option", criteria.getOption())
 			.queryParam("page", page)
-			.queryParam("perPageNum", cri.getPerPageNum())
+			.queryParam("perPageNum", criteria.getPerPageNum())
 			.build();
 
 		return uriComponents.toUriString();
 	}
 
-	/* 검색과 페이징을 위한 URI 생성 */
+	/**
+	 * 검색 할 때, 페이징을 위한 쿼리 생성
+	 * @param page 페이지 번호
+	 * @return 쿼리 스트링
+	 */
 	public String makeSearch(int page) {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
-			.queryParam("tab", ((SearchCriteria)cri).getTab())
+			.queryParam("tab", criteria.getTab())
 			.queryParam("page", page)
-			.queryParam("perPageNum", cri.getPerPageNum())
-			.queryParam("categoryType", ((SearchCriteria)cri).getCategoryType())
-			.queryParam("searchType", ((SearchCriteria)cri).getSearchType())
-			.queryParam("keyword", encoding(((SearchCriteria)cri).getKeyword()))
-			.queryParam("date", ((SearchCriteria)cri).getDate())
+			.queryParam("perPageNum", criteria.getPerPageNum())
+			.queryParam("categoryType", ((SearchCriteria)criteria).getCategoryType())
+			.queryParam("searchType", ((SearchCriteria)criteria).getSearchType())
+			.queryParam("keyword", encoding(((SearchCriteria)criteria).getKeyword()))
+			.queryParam("fromDate", ((SearchCriteria)criteria).getFromDate())
+			.queryParam("toDate", ((SearchCriteria)criteria).getToDate())
 			.build();
 
 		return uriComponents.toUriString();

@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <sec:csrfMetaTags/>
 <body>
@@ -28,7 +26,7 @@
 					<li class="disabled"><span><a href="/contact/list${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+					<li <c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
 						<a href="/contact/list${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>

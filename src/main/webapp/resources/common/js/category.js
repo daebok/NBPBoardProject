@@ -1,7 +1,7 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
-function categoryRegist() {
+function categoryRegist(categoryListLength) {
 	var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?<>]/gi;
 	var blank_pattern = /[\s]/g;
 	
@@ -16,6 +16,14 @@ function categoryRegist() {
 		$("#category-item").focus();
 		return;
 	}
+	
+	if(categoryListLength >= 15) {
+		alert('카테고리는 15개까지 설정할 수 있습니다.');
+		$("#category-item").val('');
+		$("#category-item").focus();
+		return;
+	}
+	
 	var result = confirm('카테고리를 추가하시겠습니까?');
 	if (result) {
 		$.ajax({

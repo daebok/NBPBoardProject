@@ -13,8 +13,6 @@
 	</context:component-scan>
 	
 	
-
-	
 	<!-- FileUpload -->
 	<beans:bean id="filterMultipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -22,13 +20,14 @@
 	</beans:bean>
 	
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<!-- <beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg> -->
-		<beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg>
+		<beans:constructor-arg value="\Desktop\upload"></beans:constructor-arg>
+		<!-- <beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg> -->
 	</beans:bean>
 	
-	<context:property-placeholder location="classpath:/config/database.properties" />
+	<context:property-placeholder location="classpath:/config/properties/database.properties" />
 	<beans:import resource="applicationContext-datasource.xml" />
 	<beans:import resource="applicationContext-security.xml" />
 	<beans:import resource="applicationContext-ehcache.xml" />
+	<beans:import resource="applicationContext-transaction.xml" />
 
 </beans:beans>

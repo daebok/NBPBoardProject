@@ -3,7 +3,7 @@ package com.hyunhye.naver.ouath.model;
 import lombok.Data;
 
 @Data
-public class NaverProfile {
+public class NaverLoginCode {
 
 	/** 요청 코드 **/
 	private String resultcode;

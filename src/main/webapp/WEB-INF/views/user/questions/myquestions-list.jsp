@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <title>My Questions</title>
@@ -13,12 +11,13 @@
 		<div class="container-fluid">
 			<%@include file="../../common/search/myquestions-search.jsp"%>
 			<div class="row">
-				<b>My Questions</b>&nbsp;
 				<c:choose>
 					<c:when test="${check eq 0 || check eq null}">
+						<b>My Questions</b>&nbsp;
 						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
 					</c:when>
 					<c:when test="${check eq 1}">
+						<b>My Questions (Answered)</b>&nbsp;
 						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
 					</c:when>
 				</c:choose>
@@ -32,7 +31,7 @@
 			<div class="col-md-12" style="margin-top:20px;">
 				<c:forEach var="board" items="${list}">
 					<h4>
-						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.cri.page)}&boardNo=${board.boardNo}" id="boardNo">
+						<a href="${path}/board/question${pageMaker.makeQuery(pageMaker.criteria.page)}&boardNo=${board.boardNo}" id="boardNo">
 							<c:out value="${board.boardTitle}" escapeXml="true"/>
 						</a>
 					</h4>
@@ -58,7 +57,7 @@
 		
 							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 								<li 
-									<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+									<c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
 									<a href="/board/myquestions${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
 								</li>
 							</c:forEach>
@@ -77,7 +76,7 @@
 		
 							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
 								<li 
-									<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+									<c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
 									<a href="/board/myquestions/answered${pageMaker.makeSearch(idx)}"><span>${idx}</span></a>
 								</li>
 							</c:forEach>

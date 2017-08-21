@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.hyunhye.user.model.UserModelDetails;
+import com.hyunhye.user.model.BoardUserDetails;
 import com.hyunhye.user.repository.UserRepository;
 
 @Service
@@ -23,13 +23,13 @@ public class UserAuthenticationService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Map<String, Object> user = repository.userSelect(userName);
+		Map<String, Object> user = repository.selectUser(userName);
 		if (user == null) {
 			throw new UsernameNotFoundException(userName);
 		}
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(user.get("authority").toString()));
-		return new UserModelDetails(
+		return new BoardUserDetails(
 			user.get("username").toString(),
 			user.get("password").toString(),
 			(Integer)user.get("enabled") == 1,

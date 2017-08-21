@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <body>
@@ -15,7 +13,7 @@
 				<form class="user-search-form" method="get">
 					<label>아이디</label>
 					<input type="text" name="userId" size="20">
-					<input type="button" onclick="userInfoSearch()" class="btn btn-default btn-sm" value="검색">
+					<input type="button" onclick="userInfoSearch()" id="user-search-button" class="btn btn-default btn-sm" value="검색">
 				</form>
 				<div id="user-info-search-dialog"></div>
 			</div>
@@ -60,7 +58,7 @@
 					<li class="disabled"><span><a href="/admin/user${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
 				</c:if>
 				<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-					<li <c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
+					<li <c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
 						<a href="/admin/user${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
 					</li>
 				</c:forEach>

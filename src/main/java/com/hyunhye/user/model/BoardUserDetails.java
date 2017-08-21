@@ -13,14 +13,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @SuppressWarnings("serial")
 @Alias("userDetails")
-public class UserModelDetails extends User {
+public class BoardUserDetails extends User {
 
 	/* 사용자 번호 */
 	private int userNo;
 	/* 사용자 이름 */
 	private String userName;
 
-	public UserModelDetails(
+	public BoardUserDetails(
 		String username,
 		String password,
 		boolean enabled,

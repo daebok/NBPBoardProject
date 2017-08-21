@@ -14,7 +14,7 @@ import org.springframework.util.ResourceUtils;
 
 public class BadWordFilteringUtils {
 	/** 비속어 리스트가 담긴 properties 파일 **/
-	private static String badwordsPropertiesFile = "classpath:config/badwords.properties";
+	private static String badwordsPropertiesFile = "classpath:config/properties/badwords.properties";
 
 	/** properties **/
 	private static Properties properties = readProperties();

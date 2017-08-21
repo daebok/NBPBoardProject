@@ -3,8 +3,6 @@ package com.hyunhye.user.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,16 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hyunhye.board.model.Criteria;
+import com.hyunhye.board.model.Board;
+import com.hyunhye.board.model.PageCriteria;
 import com.hyunhye.naver.ouath.model.NaverUser;
 import com.hyunhye.security.UserAuthenticationService;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.BoardUser;
 import com.hyunhye.user.repository.UserRepository;
 import com.hyunhye.utils.UserSessionUtils;
 
 @Service
 public class UserService {
-	Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -32,52 +30,46 @@ public class UserService {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
-	/***
-	 * 회원 가입
-	 * @param model
+	/**
+	 * {@link BoardUser} 추가하기 (회원가입)
+	 * @param user 사용자 정보
 	 */
-	public void userInsert(UserModel model) {
-		model.setUserPassword(encoder.encode(model.getUserPassword()));
-		userRepository.userInsert(model);
+	public void insertUser(BoardUser user) {
+		user.setUserPassword(encoder.encode(user.getUserPassword()));
+		userRepository.insertUser(user);
 	}
 
 	/**
-	 * 해당 아이디를 가진 사용자가 있으면
-	 * @param userId
-	 * @return 중복된 아이디 가 있으면 1
+	 * {@link BoardUser} 아이디 중복 확인
+	 * @param userId 사용자 아이디
+	 * @return 중복된 아이디가 있으면 1, 없으면 0
 	 */
-	public int checkIdDuplication(String userId) {
-		return userRepository.checkIdDuplication(userId);
+	public int checkUserIdDuplication(String userId) {
+		return userRepository.checkUserIdDuplication(userId);
 	}
 
 	/**
 	 * 네이버 아이디로 로그인 시, 회원가입 별도 처리
 	 * @param naverUser
 	 */
-	public void naverUserInsert(NaverUser naverUser) {
+	public void insertNaverUser(NaverUser naverUser) {
 
-		int check = userRepository.naverUserselect(naverUser.getEmail());
+		int check = userRepository.selectNaverUser(naverUser.getEmail());
 
-		/* 기존에 한번 로그인을 했던 사용자라면  */
 		if (check >= 1) {
-			/* 로그인 */
 			setAuthentication(naverUser);
 
 			return;
 		}
 
-		/* 회원 가입 */
-		UserModel userModel = new UserModel();
-		userModel.setUserId(naverUser.getEmail());
-		userModel.setUserName(naverUser.getName());
+		BoardUser user = new BoardUser();
+		user.setUserId(naverUser.getEmail());
+		user.setUserName(naverUser.getName());
 
 		UUID uuid = UUID.randomUUID();
-		userModel.setUserPassword(encoder.encode(uuid.toString()));
+		user.setUserPassword(encoder.encode(uuid.toString()));
 
-
-		userRepository.userInsert(userModel);
-
-		/* 로그인 */
+		userRepository.insertUser(user);
 		setAuthentication(naverUser);
 	}
 
@@ -93,63 +85,78 @@ public class UserService {
 	}
 
 	/**
-	 * 현재 비밀번호 확인
-	 * @param model
-	 * @return 일치하면 1
+	 * 현재 비밀번호 체크
+	 * @param user 현재 비밀번호
+	 * @return 일치하면 true, 그렇지 않으면 false
 	 */
-	public boolean passwordCheck(UserModel model) {
-		return encoder.matches(model.getUserPassword(), UserSessionUtils.currentUserPassword());
+	public boolean checkUserPassword(BoardUser user) {
+		return encoder.matches(user.getUserPassword(), UserSessionUtils.currentUserPassword());
 	}
 
 	/**
-	 * 비밀번호 변경
-	 * @param model
+	 * {@link BoardUser} 비밀번호 변경
+	 * @param user 변경된 비밀번호
 	 */
-	public void passwordUpdate(UserModel model) {
-		model.setUserPassword(encoder.encode(model.getUserPassword()));
-		model.setUserNo(UserSessionUtils.currentUserNo());
-		userRepository.passwordUpdate(model);
+	public void updatePassword(BoardUser user) {
+		user.setUserPassword(encoder.encode(user.getUserPassword()));
+		user.setUserNo(UserSessionUtils.currentUserNo());
+		userRepository.updatePassword(user);
 	}
 
 	/**
-	 * 사용자 리스트 가져오기
-	 * @return
+	 * @param criteria 페이징 정보
+	 * @return {@link BoardUser} 전체 리스트
 	 */
-	public List<UserModel> userSelectList(Criteria cri) {
-		return userRepository.userSelectList(cri);
+	public List<BoardUser> selectAllUserList(PageCriteria criteria) {
+		return userRepository.selectAllUserList(criteria);
 	}
 
 	/**
-	 * 회원 정보 변경
-	 * @param userModel
+	 * {@link BoardUser} 권한 변경
+	 * @param user 사용자 정보, 변경된 권한
 	 */
-	public void userAuthorityUpdate(UserModel userModel) {
-		userRepository.userAuthorityUpdate(userModel);
+	public void updateUserAuthority(BoardUser user) {
+		userRepository.updateUserAuthority(user);
 	}
 
 	/**
-	 * 회원 삭제
-	 * 1. 회원과 회원이 작성한 게시물 모두 삭제
-	 * @param userModel
+	 * {@link BoardUser}가 작성한 {@link Board}와 함께 사용자 삭제
+	 * @param user 사용자 번호
 	 */
-	public void userWithBoardDelete(UserModel userModel) {
-		userRepository.userWithBoardDelete(userModel);
+	public void deleteUserWithBoard(BoardUser user) {
+		userRepository.deleteUserWithBoard(user);
 	}
 
 	/**
-	 * 회원 삭제
-	 * 2. 회원만 삭제
-	 * @param userModel
+	 * {@link BoardUser}가 작성한 {@link Board}는 남겨두고 사용자만 삭제
+	 * @param user 사용자 번호
 	 */
-	public void onlyUserDelete(UserModel userModel) {
-		userRepository.onlyUserDelete(userModel);
+	public void deleteOnlyUser(BoardUser user) {
+		userRepository.deleteOnlyUser(user);
 	}
 
-	public int userSelectListCount(Criteria cri) {
-		return userRepository.userSelectListCount(cri);
+	/**
+	 * @param criteria 페이징 정보
+	 * @return {@link BoardUser} 전체 리스트 개수
+	 */
+	public int selectAllUserCount(PageCriteria criteria) {
+		return userRepository.selectAllUserCount(criteria);
 	}
 
-	public UserModel selectUserInfoSearch(UserModel userModel) {
-		return userRepository.selectUserInfoSearch(userModel);
+	/**
+	 * @param user 사용자 아이디
+	 * @return 검색한 {@link BoardUser} 정보
+	 */
+	public BoardUser searchUserInfo(BoardUser user) {
+		return userRepository.searchUserInfo(user);
+	}
+
+	/**
+	 * {@link BoardUser} 번호를 통해, 사용자 아이디 가져오기
+	 * @param userNo 사용자 번호
+	 * @return 사용자 아이디
+	 */
+	public String selectUserId(int userNo) {
+		return userRepository.selectUserId(userNo);
 	}
 }

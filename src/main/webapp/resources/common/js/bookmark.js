@@ -1,6 +1,15 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-	
+/* 섬머노트 */
+$(document).ready( function() {
+	$('.memo-summernote').summernote({
+		height : 300,
+		onImageUpload : function(files,editor, welEditable) {
+				sendFile(files[0], editor,welEditable);
+		}
+	});
+});
+
 function bookmarkCheck(boardNo, bookmarkCheck) {
 	var data = "boardNo=" + boardNo;
 	var check = $(bookmarkCheck).prop('id');

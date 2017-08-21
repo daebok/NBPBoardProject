@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <c:forEach var="answer" items="${answer}">
 	<div id="answer-wrapper-${answer.commentNo}">
 		<c:choose>
-			<c:when test="${answer.userNo eq 1}">
+			<c:when test="${answer.commentLike eq 1}">
 				<div class="glyphicon glyphicon-heart" id="answer-like-check" onclick="anwserLike(${answer.commentNo}, this)" style="font-size:15px; color:#FF3636;"></div>
 			</c:when>
 			<c:otherwise>
@@ -18,18 +17,18 @@
 					<c:out value="${answer.commentContent}" escapeXml="false"/>
 				</div>
 				<c:choose>
-					<c:when test="${model.userNo == answer.userNo || writer == answer.userNo}">
+					<c:when test="${board.userNo == answer.userNo || writer == answer.userNo}">
 						<span class="badge commentName" style='background-color:#d9534f;'>작성자</span>
 					</c:when>
 					<c:otherwise>
-						<span class="badge commentName">Answered By ${answer.userId} </span>
+						<span class="badge commentName">Answered By <user:id no="${answer.userNo}"/> </span>
 					</c:otherwise>
 				</c:choose>
 				<span class="badge answer-time" style="background-color:#ffffff; color:#8c8c8c">
 					<fmt:formatDate value="${answer.commentDate}" pattern="yyyy/MM/dd"/></span>
 				<div class="pull-right" class="answer-button"> 
 					<c:choose>
-						<c:when test="${user.username == answer.userId}">
+						<c:when test="${user.userNo == answer.userNo}">
 							<button type="button" class="answer-button btn btn-default" onclick="answerModify(${answer.commentNo})">Modify</button>
 							<button type="button" class="answer-button btn btn-default" onclick="answerDelete(${answer.commentNo})" >Delete</button>
 						</c:when>

@@ -17,36 +17,54 @@ public class NoticeService {
 	@Autowired
 	NoticeRepository noticeRepository;
 
-	/** 공지사항 **/
-	/* 공지사항  리스트 가져오기 */
+	/**
+	 * @return {@link Notice} 전체 리스트
+	 */
 	@Cacheable("notice")
-	public List<Notice> noticeListAll() {
-		return noticeRepository.noticeListAll();
+	public List<Notice> selectAllNoticeList() {
+		return noticeRepository.selectAllNoticeList();
 	}
 
-	/* 공지사항  추가 */
+	/**
+	 * {@link Notice} 추가하기.
+	 * 공지사항 추가 할 때마다, 캐시 삭제하고 다시 생성
+	 * @param notice
+	 */
 	@CacheEvict(value = "notice", allEntries = true)
-	public void noticeInsert(Notice noticeModel) {
-		noticeModel.setUserNo(UserSessionUtils.currentUserNo());
-
-		noticeRepository.noticeInsert(noticeModel);
+	public void insertNotice(Notice notice) {
+		notice.setUserNo(UserSessionUtils.currentUserNo());
+		noticeRepository.insertNotice(notice);
 	}
 
-	/* 공지사항  상세보기 */
-	public Notice noticeSelectOne(Notice noticeModel) {
-		return noticeRepository.noticeSelectOne(noticeModel);
+	/**
+	 * @param notice 문의사항 번호
+	 * @return {@link Notice} 상세보기
+	 */
+	public Notice selectNoticeDetail(Notice notice) {
+		return noticeRepository.selectNoticeDetail(notice);
 	}
 
-	/* 공지사항  삭제하기 */
-	public void noticeDelete(Notice noticeModel) {
-		noticeRepository.noticeDelete(noticeModel);
+	/**
+	 * {@link Notice} 삭제하기
+	 * @param notice 공지사항 번호
+	 */
+	public void deleteNotice(Notice notice) {
+		noticeRepository.deleteNotice(notice);
 	}
 
-	/* 공지사항  수정하기  */
-	public void noticeUpdate(Notice noticeModel) {
-		noticeRepository.noticeUpdate(noticeModel);
+	/**
+	 * {@link Notice} 수정하기
+	 * @param notice 공지사항 번호
+	 */
+	public void updateNotice(Notice notice) {
+		noticeRepository.updateNotice(notice);
 	}
 
+	/**
+	 * {@link Notice} 존재 여부 판단
+	 * @param noticeNo 공지사항 번호
+	 * @return 공지사항이 존재하면 1, 없으면 0 (int)
+	 */
 	public int isExistedNotice(int noticeNo) {
 		return noticeRepository.isExistedNotice(noticeNo);
 	}

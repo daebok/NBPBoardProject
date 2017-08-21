@@ -5,7 +5,7 @@
 		<c:forEach var="notice" items="${notice}">
 			<h6>
 				<span class="glyphicon glyphicon-bullhorn" style="color:#777;"></span>
-				<a href="${path}/admin/notice${pageMaker.makeSearch(pageMaker.cri.page)}&noticeNo=${notice.noticeNo}" class="notice-content">
+				<a href="${path}/admin/notice${pageMaker.makeSearch(pageMaker.criteria.page)}&noticeNo=${notice.noticeNo}" class="notice-content">
 					<c:out value="${notice.noticeTitle}" escapeXml="true"/>
 				</a>
 			</h6>

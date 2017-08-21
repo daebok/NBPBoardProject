@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -19,7 +17,7 @@
 						<label for="id" class="col-sm-2 control-label"><b>Add</b></label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control"  name="categoryItem" id="category-item" placeholder="Category Item" style="width:70%; float:left;"/>
-							<button type="button" class="btn btn-default" onclick="categoryRegist()" style="float:left;">Add</button>
+							<button type="button" class="btn btn-default" onclick="categoryRegist(${fn:length(categoryList) })" style="float:left;">Add</button>
 						</div>
 					</div>
 				</form:form>

@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <title>My Questions</title>
@@ -51,30 +49,52 @@
 						</form:form>
 					</div>
 					<div class="row">
-						<c:out value="${comment.commentContent}" escapeXml="false"></c:out>
+						<c:out value="${comment.commentContent}" escapeXml="false" />
 					</div>
 					<span class="badge" style="background-color:#ffffff; color:#8c8c8c">Posted <fmt:formatDate value="${comment.commentDate}" pattern="yyyy/MM/dd"/></span>
 					<hr>
 				</c:forEach>
 			</div>
-
-			<div class="page-nation">
-				<ul class="pagination pagination-large">
-					<c:if test="${pageMaker.prev}">
-						<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
-					</c:if>
-
-					<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-						<li 
-							<c:out value="${pageMaker.cri.page == idx? 'class=active' : '' }" />>
-							<a href="/board/myanswers${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
-						</li>
-					</c:forEach>
-					<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-						<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
-					</c:if>
-				</ul>
-			</div>
+			<c:choose>
+				<c:when test="${like eq 0 || like eq null}">
+					<div class="page-nation">
+						<ul class="pagination pagination-large">
+							<c:if test="${pageMaker.prev}">
+								<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+							</c:if>
+		
+							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+								<li 
+									<c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
+									<a href="/board/myanswers${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+								</li>
+							</c:forEach>
+							<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+								<li class="disabled"><span><a href="/board/myanswers${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+							</c:if>
+						</ul>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="page-nation">
+						<ul class="pagination pagination-large">
+							<c:if test="${pageMaker.prev}">
+								<li class="disabled"><span><a href="/board/answers/liked${pageMaker.makeQuery(pageMaker.startPage-1)}">&laquo;</a></span></li>
+							</c:if>
+		
+							<c:forEach var="idx" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+								<li 
+									<c:out value="${pageMaker.criteria.page == idx? 'class=active' : '' }" />>
+									<a href="/board/answers/liked${pageMaker.makeQuery(idx)}"><span>${idx}</span></a>
+								</li>
+							</c:forEach>
+							<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+								<li class="disabled"><span><a href="/board/answers/liked${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a></span></li>
+							</c:if>
+						</ul>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	

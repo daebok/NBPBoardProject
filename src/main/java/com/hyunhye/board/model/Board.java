@@ -1,11 +1,17 @@
 package com.hyunhye.board.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+/**
+ * 게시글 정보
+ * @author NAVER
+ *
+ */
 @Data
 @Alias("board")
 public class Board {
@@ -27,6 +33,8 @@ public class Board {
 	private String[] boardFilesDelete;
 	/** 파일 개수 **/
 	private int fileCount;
+	/** 파일 리스트 */
+	private List<BoardFile> boardFileList;
 	/** 조회수 **/
 	private int boardViewCount;
 	/** 게시글 개수 */
@@ -37,8 +45,6 @@ public class Board {
 	private String categoryItem;
 	/** 사용자 번호 **/
 	private int userNo;
-	/** 사용자 이름 **/
-	private String userName;
 	/** 사용자 아이디 **/
 	private String userId;
 	/** 답변 갯수 **/

@@ -6,6 +6,11 @@ import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+/**
+ * 문의사항 정보
+ * @author NAVER
+ *
+ */
 @Data
 @Alias("contact")
 public class Contact {
@@ -13,8 +18,6 @@ public class Contact {
 	private int contactNo;
 	/** 사용자 번호 **/
 	private int userNo;
-	/**  사용자 이름 **/
-	private String userId;
 	/** 문의사항 제목 **/
 	private String contactTitle;
 	/** 문의사항 내용 **/

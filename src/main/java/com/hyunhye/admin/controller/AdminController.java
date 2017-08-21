@@ -10,28 +10,34 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hyunhye.board.model.Board;
 import com.hyunhye.board.model.Category;
-import com.hyunhye.board.model.Criteria;
+import com.hyunhye.board.model.PageCriteria;
 import com.hyunhye.board.model.PageMaker;
 import com.hyunhye.board.service.CategoryService;
+import com.hyunhye.contact.model.Contact;
 import com.hyunhye.contact.model.ContactComment;
 import com.hyunhye.contact.service.ContactService;
 import com.hyunhye.notice.model.Notice;
 import com.hyunhye.notice.service.NoticeService;
-import com.hyunhye.user.model.UserModel;
+import com.hyunhye.user.model.BoardUser;
 import com.hyunhye.user.service.UserService;
 import com.hyunhye.utils.UriUtils;
 import com.hyunhye.utils.UserSessionUtils;
 
+/**
+ * 관리자 페이지를 위한 Controller
+ * @author NAVER
+ *
+ */
 @Controller
 @RequestMapping("admin")
 public class AdminController {
 
 	@Autowired
-	public NoticeService adminService;
+	public NoticeService noticeService;
 
 	@Autowired
 	private ContactService contactService;
@@ -44,253 +50,242 @@ public class AdminController {
 
 	/**
 	 * 관리자 페이지로 이동
+	 * 1.문의사항 리스트 불러옴
+	 * 2.현재 페이지에 대한 저장
+	 * @param criteria 문의사항 리스트 페이징
 	 * @param model
-	 * @return
+	 * @param request
+	 * @return 관리자 페이지
 	 */
-	@RequestMapping("admin")
-	public String goAdminPage(@ModelAttribute Criteria cri, Model model, HttpServletRequest request) {
+	@RequestMapping(value = "admin", method = RequestMethod.GET)
+	public String goAdminPage(@ModelAttribute PageCriteria criteria, Model model, HttpServletRequest request) {
 
-		/* 이전 uri에 대한 정보 저장 */
 		UriUtils.getUri(request);
-		System.out.println("test" + request.getSession().getAttribute("uri"));
 
-		/** 문의사항 리스트 보기 **/
-		model.addAttribute("contact", contactService.contactSelectListAll(cri));
+		model.addAttribute("contact", contactService.selectAllContactList(criteria));
 
 		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(contactService.contactSelectListCount(cri));
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(contactService.selectAllContactCount(criteria));
 
-		model.addAttribute("cri", cri);
+		model.addAttribute("criteria", criteria);
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/admin";
 	}
 
 	/**
-	 * 카테고리 목록 가져오기
+	 * 관리자 페이지에서 카테고리 전체 목록 가져오기
 	 * @param model
-	 * @return
+	 * @return 카테고리 관리 페이지
 	 */
-	@RequestMapping("category")
-	public String categorySelectList(Model model) {
-		model.addAttribute("categoryList", categoryService.categorySelectList());
+	@RequestMapping(value = "category", method = RequestMethod.GET)
+	public String selectAllCategoryList(Model model) {
+		model.addAttribute("categoryList", categoryService.selectAllCategoryList());
 		return "admin/category/category-manage";
 	}
 
 	/**
-	 * 해당 카테고리를 가진 게시물 개수 가져오기
-	 * @param categoryModel
-	 * @return
+	 * 해당 {@link Category}를 가진 게시물 개수 가져오기
+	 * @param category
 	 */
 	@ResponseBody
-	@RequestMapping("categoryCount")
-	public ResponseEntity<Integer> boardSelectCountOfCategory(@ModelAttribute Category categoryModel) {
-		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(
-			categoryService.boardSelectCountOfCategory(categoryModel),
-			HttpStatus.OK);
-
-		return entity;
+	@RequestMapping(value = "categoryCount", method = RequestMethod.GET)
+	public ResponseEntity<Integer> selectBoardCountOfCategory(@ModelAttribute Category category) {
+		return new ResponseEntity<Integer>(categoryService.selectBoardCountOfCategory(category), HttpStatus.OK);
 	}
 
 	/**
-	 * 카테고리 추가하기
-	 * @param categoryModel
+	 * {@link Category} 추가하기
+	 * @param category
 	 * @return 카테고리 리스트 페이지
 	 */
 	@RequestMapping(value = "categoryAdd", method = RequestMethod.POST)
-	public String categoryInsert(@ModelAttribute Category categoryModel) {
-		categoryService.categoryInsert(categoryModel);
+	public String insertCategoryItem(@ModelAttribute Category category) {
+		categoryService.insertCategoryItem(category);
 		return "redirect:/admin/category";
 	}
 
 	/**
-	 * 카테고리 삭제하기
+	 * {@link Category} 삭제하기.
 	 * 해당 카테고리에 게시물이 있으면, category_enabled에 삭제 여부 설정
-	 * @param categoryModel
-	 * @return
+	 * @param category
+	 * @return 카테고리 관리 페이지 Redirect
 	 */
-	@RequestMapping(value = "categoryDelete", method = {RequestMethod.POST, RequestMethod.GET})
-	public String categoryDelete(@ModelAttribute Category categoryModel) {
-		categoryService.categoryDelete(categoryModel);
+	@RequestMapping(value = "categoryDelete", method = RequestMethod.GET)
+	public String deleteCategoryItem(@ModelAttribute Category category) {
+		categoryService.deleteCategoryItem(category);
 		return "redirect:/admin/category";
 	}
 
 	/**
 	 * 현재 같은 카테고리의 이름이 있는지 체크
-	 * @param categoryModel
-	 * @return
+	 * @param category
+	 * @return 현재 해당 카테고리가 있으면 1, 그렇지 않으면 0
 	 */
 	@ResponseBody
 	@RequestMapping(value = "categoryCheck", method = RequestMethod.POST)
-	public ResponseEntity<Integer> categoryItemNameCheck(@ModelAttribute Category categoryModel) {
-		ResponseEntity<Integer> entity = new ResponseEntity<Integer>(
-			categoryService.categoryItemNameCheck(categoryModel),
+	public ResponseEntity<Integer> checkCategoryItemNameDuplication(@ModelAttribute Category category) {
+		return new ResponseEntity<Integer>(categoryService.checkCategoryItemNameDuplication(category),
 			HttpStatus.OK);
-
-		return entity;
 	}
 
 	/**
-	 * 회원 리스트 가져오기
+	 * {@link BoardUser} 리스트 가져오기
+	 * @param criteria 회원 리스트 페이징
 	 * @param model
-	 * @return
+	 * @return 회원 관리 페이지
 	 */
-	@RequestMapping("user")
-	public String userSelectList(@ModelAttribute Criteria cri, Model model) {
-		model.addAttribute("userList", userService.userSelectList(cri));
+	@RequestMapping(value = "user", method = RequestMethod.GET)
+	public String selectAllUserList(@ModelAttribute PageCriteria criteria, Model model) {
+		model.addAttribute("userList", userService.selectAllUserList(criteria));
 
-		/* 페이징 계산하기 */
 		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(userService.userSelectListCount(cri));
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(userService.selectAllUserCount(criteria));
 
-		/* 페이징 정보 */
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/user/user-manage";
 	}
 
 	/**
-	 * 회원 권한 수정
-	 * @param userModel
-	 * @return
+	 * {@link BoardUser} 권한 수정
+	 * @param user 사용자 번호
 	 */
-	@RequestMapping("userModify")
-	public ResponseEntity<String> userAuthorityUpdate(@ModelAttribute UserModel userModel) {
-		userService.userAuthorityUpdate(userModel);
+	@RequestMapping(value = "userModify", method = RequestMethod.GET)
+	public ResponseEntity<String> updateUserAuthority(@ModelAttribute BoardUser user) {
+		userService.updateUserAuthority(user);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/**
-	 * 회원과 게시물 함께 삭제
-	 * @param userModel
-	 * @return
+	 * {@link BoardUser}삭제 시, 해당 사용자가 작성한  {@link Board}와 함께 삭제
+	 * @param user 사용자 번호
 	 */
-	@RequestMapping("userDelete")
-	public ResponseEntity<String> userWithBoardDelete(@ModelAttribute UserModel userModel) {
-		userService.userWithBoardDelete(userModel);
+	@RequestMapping(value = "userDelete", method = RequestMethod.GET)
+	public ResponseEntity<String> deleteUserWithBoard(@ModelAttribute BoardUser user) {
+		userService.deleteUserWithBoard(user);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	@RequestMapping("userSearch")
-	public String userSearch(@ModelAttribute UserModel userModel, Model model) {
-		model.addAttribute("user", userService.selectUserInfoSearch(userModel));
+	@RequestMapping(value = "userSearch", method = RequestMethod.GET)
+	public String searchUserInfo(@ModelAttribute BoardUser userModel, Model model) {
+		model.addAttribute("user", userService.searchUserInfo(userModel));
 		return "admin/user/user-info-search";
 	}
 
 	/**
-	 * 게시물은 남기고 회원만 삭제
-	 * @param userModel
-	 * @return
+	 * 헤당 {@link BoardUser}가 작성한 게시물은 남기고 사용자만 삭제
+	 * @param user 사용자 번호
 	 */
-	@RequestMapping("onlyUserDelete")
-	public ResponseEntity<String> onlyUserDelete(@ModelAttribute UserModel userModel) {
-		userService.onlyUserDelete(userModel);
+	@RequestMapping(value = "onlyUserDelete", method = RequestMethod.GET)
+	public ResponseEntity<String> deleteOnlyUser(@ModelAttribute BoardUser user) {
+		userService.deleteOnlyUser(user);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/**
-	 * 공지사항 리스트 가져오기
+	 * {@link Notice} 리스트 가져오기
 	 * @param model
-	 * @return
+	 * @return 공지사항 관리 페이지 (공지사항 리스트)
 	 */
 	@RequestMapping("notice/list")
-	public String notice(Model model) {
-		model.addAttribute("noticeList", adminService.noticeListAll());
+	public String selectAllNoticeList(Model model) {
+		model.addAttribute("noticeList", noticeService.selectAllNoticeList());
 		return "admin/notice/notice-list";
 	}
 
 	/**
-	 * 공지사항 상세보기
-	 * @param noticeModel
+	 * {@link Notice} 상세보기
+	 * @param notice 공지사항 번호
 	 * @param model
-	 * @return
+	 * @return 공지사항 상세보기 페이지
 	 */
-	@RequestMapping("notice")
-	public String noticeSelectOne(Notice noticeModel, Model model) {
-		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
+	@RequestMapping(value = "notice", method = RequestMethod.GET)
+	public String selectNoticeDetail(Notice notice, Model model) {
+		model.addAttribute("model", noticeService.selectNoticeDetail(notice));
 		return "admin/notice/notice-view";
 	}
 
 	/**
-	 * 공지사항 등록하기 페이지 이동
-	 * @return
+	 * {@link Notice} 등록하기 페이지 이동
+	 * @return 공지사항 등록하기 페이지
 	 */
 	@RequestMapping("noticeRegist")
-	public String goNoticeInsertPage() {
+	public String goNoticeRegistPage() {
 		return "admin/notice/notice-regist";
 	}
 
 	/**
-	 * 공지사항 등록하기
-	 * @param noticeModel
-	 * @return
+	 * {@link Notice} 등록하기
+	 * @param notice 공지사항 번호
+	 * @return 공지사항 관리 페이지로 Redirect
 	 */
-	@RequestMapping("notice/regist")
-	public String noticeInsert(Notice noticeModel) {
-		adminService.noticeInsert(noticeModel);
+	@RequestMapping(value = "notice/regist", method = RequestMethod.POST)
+	public String insertNotice(Notice notice) {
+		noticeService.insertNotice(notice);
 		return "redirect:/admin/notice/list";
 	}
 
 	/**
-	 * 공지사항 삭제하기
-	 * @param noticeModel
-	 * @return
+	 * {@link Notice} 삭제하기
+	 * @param notice 공지사항 번호
 	 */
-	@RequestMapping("notice/delete")
-	public String noticeDelete(Notice noticeModel) {
-		adminService.noticeDelete(noticeModel);
+	@RequestMapping(value = "notice/delete", method = RequestMethod.GET)
+	public String deleteNotice(Notice notice) {
+		noticeService.deleteNotice(notice);
 		return "redirect:/admin/notice/list";
 	}
 
 	/**
-	 * 공지사항 수정페이지 이동
-	 * @param noticeModel
+	 * {@link Notice} 수정페이지 이동
+	 * @param notice 공지사항 번호
 	 * @param model
-	 * @return
+	 * @return 공지사항 수정페이지
 	 */
 	@RequestMapping("notice/modifyPage")
-	public String goNoticeUpdatePage(Notice noticeModel, Model model) {
-		model.addAttribute("model", adminService.noticeSelectOne(noticeModel));
+	public String goNoticeUpdatePage(Notice notice, Model model) {
+		model.addAttribute("model", noticeService.selectNoticeDetail(notice));
 		return "admin/notice/notice-modify";
 	}
 
 	/**
-	 * 공지사항 수정하기
-	 * @param noticeModel
+	 * {@link Notice} 수정하기
+	 * @param notice 공지사항 수정 사항
 	 * @param model
-	 * @return
+	 * @return 공지사항 관리 페이지로 Redirect
 	 */
-	@RequestMapping("notice/modify")
-	public String noticeUpdate(Notice noticeModel, Model model) {
-		adminService.noticeUpdate(noticeModel);
+	@RequestMapping(value = "notice/modify", method = RequestMethod.POST)
+	public String updateNotice(Notice notice, Model model) {
+		noticeService.updateNotice(notice);
 		return "redirect:/admin/notice/list";
 	}
 
 	/**
-	 * 문의사항에 댓글 달기
-	 * @param contactCommentModel
+	 * {@link Contact}에 {@link ContactComment} 달기.
+	 * 마지막에 달린 {@link ContactComment} 가져옴
+	 * @param contactComment 공지 사항 댓글
 	 * @param model
+	 * @return 공지항 댓글 폼
 	 */
-	@RequestMapping("comment/regist")
-	public String contactCommentInsert(@ModelAttribute ContactComment contactCommentModel, Model model) {
-		contactService.contactCommentInsert(contactCommentModel);
+	@RequestMapping(value = "comment/regist", method = RequestMethod.POST)
+	public String insertContactComment(@ModelAttribute ContactComment contactComment, Model model) {
+		contactService.insertContactComment(contactComment);
 
-		/* 세션에 저장된 사용자 정보 */
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("comment", contactService.contactCommentLastSelect());
+		model.addAttribute("contactComment", contactService.selectAllContactCommentList(contactComment.getContactNo()));
 
 		return "contact/contact-comment-form";
 	}
 
 	/**
-	 * 문의사항 삭제하기
-	 * @param contactCommentNo
+	 * {@link Contact} 삭제하기
+	 * @param contactCommentNo 공지사항 번호
 	 */
 	@RequestMapping(value = "comment/delete", method = RequestMethod.GET)
-	public ResponseEntity<String> contactCommentDelete(@RequestParam("contactCommentNo") int contactCommentNo) {
-		contactService.contactCommentDelete(contactCommentNo);
+	public ResponseEntity<String> deleteContactComment(@ModelAttribute ContactComment contactComment) {
+		contactService.deleteContactComment(contactComment);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 }

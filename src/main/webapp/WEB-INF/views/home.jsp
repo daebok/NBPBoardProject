@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <script>
 	var error = "${requestScope['errorMessage']}";
@@ -23,6 +22,7 @@
 		<!-- top tab -->
 		<div style="margin:20px 0;" >
 			<h5><b>★Top Questions</b></h5>
+			<a class="top10-update pull-right" href="<c:out value='/board/home/update'/>">5분마다 업데이트<span class="glyphicon glyphicon-refresh"></span></a>
 			<div role="tabpanel">
 				<ul class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#newest" aria-controls="newest" role="tab" data-toggle="tab">Newest</a></li>
@@ -42,4 +42,3 @@
 	<%@include file="common/footer.jsp"%>
 </body>
 </html>
-<script src="<c:url value="/resources/common/js/home.js" />"></script>

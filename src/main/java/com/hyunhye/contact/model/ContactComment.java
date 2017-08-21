@@ -6,6 +6,11 @@ import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+/**
+ * 문의사항에 달린 답변 정보
+ * @author NAVER
+ *
+ */
 @Data
 @Alias("contactComment")
 public class ContactComment {

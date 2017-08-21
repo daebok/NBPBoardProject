@@ -33,6 +33,24 @@ function answerRegist(answerButton, event){
 
 	event.preventDefault();
 	var commentContent = $('#comment-content').val();
+
+	if($('.btn-codeview').hasClass('active')){
+		alert('codeView 상태에서는 저장을 하실 수 없습니다.')
+		
+		$('.note-editable').trigger('focus');
+		return;
+	}
+
+	var htmlRemoveContent = commentContent.replace(/<(\/?)p>/gi,"");
+	htmlRemoveContent = htmlRemoveContent.replace(/<br[^>]*>/gi, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/&nbsp;/g, "");
+	htmlRemoveContent = htmlRemoveContent.replace(/(\s*)/g, "");
+	if (htmlRemoveContent == "") {
+		alert("내용를 입력하세요.");
+		$('.note-editable').trigger('focus');
+		return;
+	}
+	
 	var data = $('.answer-form').serialize()
 	var answerButton = $(answerButton);
 	if(answerButton.html() == 'Answer'){
@@ -76,7 +94,6 @@ function answerRegist(answerButton, event){
 			}
 	});
 	}
-	
 	return false;
 }
 
@@ -120,7 +137,7 @@ function answerModify(commentNo){
 				$('.answer-button').prop("disabled",true);
 				answerRegistButton.empty().html('Modify');
 				answerRegistButton.prop('comment-no',commentNo);
-				summernoteEditor.empty().html(list.comment);
+				summernoteEditor.empty().html(list.commentContent);
 				summernoteEditor.trigger('focus');
 			}
 		});
@@ -149,11 +166,11 @@ function commentRegist(commentNo, event){
 			},
 			data : data,
 			success : function(result) {
-				var count = parseInt($('#comment-view-'+commentNo).html());
-				var commentViewButton = $('#comment-view-'+commentNo);
 				$('#answer-'+commentNo+' > .comment-wrapper').children().remove();
 				$('.comment-write').remove();
 				$('.comment-add').prop("disabled",false);
+				var commentViewButton = $('#comment-view-'+commentNo);
+				var count = parseInt(commentViewButton.html());
 				commentViewButton.val('closed');
 				commentViewButton.empty().html((count+1) + " Comment ▲");
 				commentViewButton.click();
@@ -210,7 +227,7 @@ function goToCommentModify(commentNo){
 			str += '<div class="comment-write">';
 			str += '<form name="form" id="comment-form">';
 			str += '<input type="hidden" name="commentNo" value="'+commentNo+'">';
-			str += '<textarea cols="40" size="5" class="comment-textarea" id="comment-textarea" name="commentContent">'+list.comment+'</textarea><br>';
+			str += '<textarea cols="40" size="5" class="comment-textarea" id="comment-textarea" name="commentContent">'+list.commentContent+'</textarea><br>';
 			str += '<div class="pull-right"><button type="button" class="btn btn-default btn-sm" onclick="commentModify('+commentNo+')">Ok</button>';
 			str += '<button type="button" class="btn btn-default btn-sm" onclick="commentCancel('+commentNo+')">Cancel</button></div>';
 			str += '</form></div>';
@@ -241,19 +258,22 @@ function commentModify(commentNo){
 	});
 }
 
-function commentDelete(commentNo) {
+function commentDelete(answerNo, commentNo) {
 	var data = "commentNo=" + commentNo;
 	var result = confirm('댓글을 삭제하시겠습니까?');
 	if (result) {
 		$.ajax({
 			type : 'GET',
-			url : '/comment/comment/delete',
+			url : '/comment/delete',
 			dataType : 'text',
 			processData : false,
 			contentType : false,
 			data : data,
 			success : function(result) {
 				$("#answer-comment-"+commentNo).remove();
+				var commentViewButton = $('#comment-view-'+answerNo);
+				var count = parseInt(commentViewButton.html());
+				commentViewButton.empty().html((count-1) + " Comment ▲");
 			}
 		});
 	}

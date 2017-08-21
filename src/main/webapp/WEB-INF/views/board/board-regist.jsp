@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
 <html>
 <head>
 <sec:csrfMetaTags/>
@@ -15,13 +13,13 @@
 			<form:form action="/board/question/ask" method="post" name="form" id="register-form" class="form-horizontal" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="boardTitle" maxlength="100" id="title" size="20" class="form-control" />
+					<input type="text" name="boardTitle" id="title" maxlength="100" size="15" class="form-control" placeholder="제목을 입력하세요" />
 				</div>
 				<div class="form-group">
 					<label for="category">Category</label>
 					<category:category />
 				</div>
-				<textarea class="board-summernote" name="boardContent" id="content"></textarea>
+				<textarea class="board-summernote" name="boardContent" id="content" placeholder="내용을 입력하세요"></textarea>
 				<br /> 
 				<div class="form-group">
 					<div class="filebox"> 

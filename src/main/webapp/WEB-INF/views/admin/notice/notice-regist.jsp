@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/include.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <body>
@@ -11,7 +9,7 @@
 		<form:form name="form" action="/admin/notice/regist" method="post" class="form-horizontal" id="category-add-form">
 			<div class="form-group">
 				<label for="title">Title</label>
-				<input type="text" name="noticeTitle" maxlength="100" id="title" size="20" class="form-control" />
+				<input type="text" name="noticeTitle" maxlength="100" id="title" size="15" class="form-control" placeholder="제목을 입력하세요"/>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-10">

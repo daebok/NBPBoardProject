@@ -21,12 +21,12 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.hyunhye.naver.ouath.model.NaverLoginApi;
-import com.hyunhye.naver.ouath.model.NaverProfile;
+import com.hyunhye.naver.ouath.model.NaverLoginCode;
 import com.hyunhye.naver.ouath.model.NaverUser;
 
 @Service
 public class NaverLoginService {
-	private static final String naverLoginropertiesFile = "classpath:config/naver-login.properties";
+	private static final String naverLoginropertiesFile = "classpath:config/properties/naver-login.properties";
 	private static String CLIENT_ID;
 	private static String CLIENT_SECRET;
 	private static String REDIRECT_URI;
@@ -158,9 +158,9 @@ public class NaverLoginService {
 	private NaverUser getNaverUser(String profileResponse)
 		throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		NaverProfile naverProfileResponse = null;
+		NaverLoginCode naverProfileResponse = null;
 
-		naverProfileResponse = mapper.readValue(profileResponse, NaverProfile.class);
+		naverProfileResponse = mapper.readValue(profileResponse, NaverLoginCode.class);
 
 		if (naverProfileResponse != null) {
 			return naverProfileResponse.getResponse();

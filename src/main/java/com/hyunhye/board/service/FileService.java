@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hyunhye.board.model.Board;
-import com.hyunhye.board.model.FileModel;
-import com.hyunhye.board.repository.FileRepository;
+import com.hyunhye.board.model.BoardFile;
+import com.hyunhye.board.repository.BoardRepository;
 import com.hyunhye.utils.MediaUtils;
 import com.hyunhye.utils.UploadFileUtils;
 
@@ -32,22 +32,24 @@ public class FileService {
 	Logger logger = LoggerFactory.getLogger(FileService.class);
 
 	@Autowired
-	private FileRepository fileRepository;
+	private BoardRepository boardRepository;
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	/* 파일 등록 */
-	public void fileRegist(Board boardModel, MultipartFile[] files) throws Exception {
+	/**
+	 * {@link BoardFile} 추가
+	 * @param board 번호
+	 * @param files 정보
+	 * @throws Exception
+	 */
+	public void insertFile(Board board, MultipartFile[] files) throws Exception {
 
-		/* 삭제된 첨부파일 번호 가져오기 */
-		int[] filesNo = boardModel.getBoardFilesNo();
+		int[] filesNo = board.getBoardFilesNo();
 		int index2 = 0;
 
-		/* 파일 업로드 */
 		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 		for (int index = 0; index < files.length; index++) {
-			/* 삭제 버튼으로 삭제된 파일은 업로드 하지 않는다. */
 			if (filesNo != null && index <= filesNo.length && (index - 1) == filesNo[index2]) {
 				index2++;
 				continue;
@@ -58,29 +60,28 @@ public class FileService {
 			long fileSize = file.getSize();
 			String fileContentType = fileOriginalName.substring(fileOriginalName.lastIndexOf(".") + 1);
 
-			/* 파일을 첨부하지 않았을 때 */
 			if (fileContentType.equals("")) {
 				continue;
 			}
 
-			/* 1. 서버에 업로드 */
 			String fileName = UploadFileUtils.uploadFile(homePath + uploadPath, fileOriginalName, fileContentType,
 				file.getBytes());
-			FileModel fileModel = new FileModel();
+			BoardFile fileModel = new BoardFile();
 			fileModel.setFileName(fileName);
 			fileModel.setFileOriginName(fileOriginalName);
 			fileModel.setFileExtension(fileContentType);
 			fileModel.setFileSize(fileSize);
 
-			/* 2. 데이터베이스에 저장 */
-			fileRepository.fileInsert(fileModel);
+			boardRepository.insertFile(fileModel);
 		}
 	}
 
-	/* 파일 삭제 (삭제 버튼으로 눌린 파일 삭제) */
-	public void fileDelete(Board boardModel) {
-		/* 삭제된 첨부파일  가져오기 */
-		String[] filesDelete = boardModel.getBoardFilesDelete();
+	/**
+	 * {@link BoardFile} 삭제
+	 * @param board 번호
+	 */
+	public void deleteFile(Board board) {
+		String[] filesDelete = board.getBoardFilesDelete();
 
 		if (Objects.isNull(filesDelete)) {
 			return;
@@ -88,49 +89,52 @@ public class FileService {
 
 		List<String> filesDeletList = Arrays.asList(filesDelete);
 		filesDeletList.stream().forEach(f -> {
-			/* 1. 서버에서 삭제 */
 			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 			new File(homePath + uploadPath + f.replace('/', File.separatorChar)).delete();
 
-			/* 2. 데이버베이스에서 삭제*/
-			fileRepository.fileDelete(f);
+			boardRepository.deleteFile(f);
 		});
 
 	}
 
-	/* 파일 삭제 (게시물에 첨부된 file 모두 삭제) - 게시글 삭제 시 */
-	public void fileDeletFromDatabase(int boardNo) {
-		/* 삭제된 첨부파일  가져오기 */
-		List<FileModel> filesDelete = fileRepository.fileSelect(boardNo);
+	/**
+	 * 삭제된 {@link Board}의 {@link BoardFile} 모두 삭제
+	 * @param board
+	 */
+	public void deleteFileFromDatabase(Board board) {
+		List<BoardFile> filesDelete = boardRepository.selectFileListByBoardId(board);
 
 		if (Objects.isNull(filesDelete)) {
 			return;
 		}
 
 		filesDelete.stream().forEach(f -> {
-			/* 서버에서 삭제 */
 			String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 			new File(homePath + uploadPath + f.getFileName().replace('/', File.separatorChar)).delete();
 		});
 
 	}
 
-	/* 파일 다운로드 */
-	public ResponseEntity<byte[]> fileDownload(String fileName) throws IOException {
+	/**
+	 * @param fileName 다운로드 하려는 파일 이름
+	 * @return {@link BoardFile} 다운로드용 파일
+	 * @throws IOException
+	 */
+	public ResponseEntity<byte[]> downloadFile(String fileName) throws IOException {
 		ResponseEntity<byte[]> entity = null;
 
-		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
-		MediaType mediaType = MediaUtils.getMediaType(formatName); // MediaUtils에서 이미지 파일 여부 검사
-		HttpHeaders headers = new HttpHeaders(); // 헤더 구성 객체
+		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+		MediaType mediaType = MediaUtils.getMediaType(formatName);
+		HttpHeaders headers = new HttpHeaders();
 		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 
 		try (InputStream in = new FileInputStream(homePath + uploadPath + fileName);) {
 
-			if (mediaType != null) { // 이미지 파일이면...
+			if (mediaType != null) {
 				headers.setContentType(mediaType);
-			} else { // 이미지 파일이 아니면...
+			} else {
 				fileName = fileName.substring(fileName.indexOf("_") + 1);
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 다운로드 용 확장자 구성
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 				headers.add("Content-Disposition",
 					"attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "iso-8859-1") + "\"");
 			}

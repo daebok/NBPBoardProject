@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyunhye.contact.repository.ContactRepository">
 
 	<resultMap id="contactList" type="contact">
 		<result property="contactNo" column="contact_no" />
 		<result property="userNo" column="user_no" />
-		<result property="userId" column="user_id" />
 		<result property="contactTitle" column="contact_title" />
 		<result property="contactContent" column="contact_content" />
 		<result property="contactPassword" column="contact_password" />
@@ -24,7 +21,8 @@
 		<result property="contactCommentDate" column="contact_comment_date" />
 	</resultMap>
 
-	<insert id="contactUsInsert">
+	<!-- 문의사항 추가 -->
+	<insert id="insertContact">
 		INSERT INTO CONTACT (
 			user_no,
 			contact_title,
@@ -38,12 +36,12 @@
 		)
 	</insert>
 	
-	<select id="contactSelectListAll" resultMap="contactList">
+	<!-- 문의사항 전체 리스트 -->
+	<select id="selectAllContactList" resultMap="contactList">
 		SELECT 
 			C.contact_no,
 			C.contact_no as no,
 			C.user_no,
-			C.user_id,
 			C.contact_title,
 			C.contact_content,
 			C.contact_password,
@@ -54,15 +52,12 @@
 					contact_no,
 					contact_no as no,
 					CONTACT.user_no,
-					USER.user_id,
 					contact_title,
 					contact_content,
 					contact_password,
 					contact_date,
 					(select count(1) from CONTACT_COMMENT where CONTACT_COMMENT.contact_no = no) as contact_comment_count
 				FROM CONTACT
-				JOIN USER
-					ON USER.user_no = CONTACT.user_no
 				ORDER BY
 					CONTACT.contact_no desc
 				<if test="option != 2"> <!-- 전체 문의사항 -->
@@ -76,7 +71,8 @@
 			
 	</select>
 	
-	<select id="contactSelectListCount" resultType="int">
+	<!-- 문의사항 개수 -->
+	<select id="selectAllContactCount" resultType="int">
 		SELECT COUNT(C.contact_no) 
 		<choose>
 			<when test="option == 2">
@@ -87,7 +83,7 @@
 						(SELECT count(1) FROM CONTACT_COMMENT WHERE CONTACT_COMMENT.contact_no = no) as contact_comment_count
 					FROM CONTACT 
 				) C
-			WHERE C.contact_comment_count = 0;
+				WHERE C.contact_comment_count = 0;
 			</when>
 			<otherwise>
 				FROM CONTACT as C
@@ -95,7 +91,8 @@
 		</choose>
 	</select>
 	
-	<select id="contactUsSelectOne" resultMap="contactList">
+	<!-- 문의사항 상세보기 -->
+	<select id="selectContactDetail" resultMap="contactList">
 		SELECT 
 			contact_no,
 			user_no,
@@ -108,28 +105,23 @@
 			contact_no = #{contactNo}	
 	</select>
 
-	<select id="contactUsPasswordSelectCount" resultType="int">
-		SELECT COUNT(contact_password)
+	<!-- 문의사항 비밀번호 확인 -->
+	<select id="checkContactPassword"  resultType="String">
+		SELECT contact_password
 		FROM CONTACT
 		WHERE
 			contact_no = #{contactNo}
 	</select>
 	
-	<select id="contactUsPasswordCheck"  resultType="int">
-		SELECT COUNT(contact_password)
-		FROM CONTACT
-		WHERE
-			contact_no = #{contactNo} AND
-			contact_password = #{contactPassword}
-	</select>
-	
-	<delete id="contactUsDelete">
+	<!-- 문의사항 삭제 -->
+	<delete id="deleteContact">
 		DELETE FROM CONTACT
 		WHERE
 			contact_no = #{contactNo}
 	</delete>
 	
-	<insert id="contactCommentInsert">
+	<!-- 문의사항 답변 추가 -->
+	<insert id="insertContactComment">
 		INSERT INTO CONTACT_COMMENT (
 			user_no,
 			contact_no,
@@ -139,21 +131,10 @@
 			#{contactNo},
 			#{contactCommentContent}
 		)
-			
 	</insert>
 	
-	<select id="contactCommentLastSelect" resultMap="contactCommentList">
-		SELECT
-			contact_no,
-			contact_comment_no,
-			contact_comment_content,
-			contact_comment_date
-		FROM CONTACT_COMMENT
-		ORDER BY contact_comment_no desc 
-		LIMIT 1
-	</select>
-	
-	<select id="contactCommentSelectListAll" resultMap="contactCommentList">
+	<!-- 문의사항 답변 리스트  -->
+	<select id="selectAllContactCommentList" resultMap="contactCommentList">
 		SELECT
 			contact_no,
 			contact_comment_no,
@@ -161,14 +142,16 @@
 			contact_comment_date
 		FROM CONTACT_COMMENT
 		WHERE
-		 	contact_no = #{contactNo}	
+		 	contact_no = #{contactNo}
 	</select>
 	
-	<delete id="contactCommentDelete">
+	<!-- 문의사항 답변 삭제 -->
+	<delete id="deleteContactComment">
 		DELETE FROM CONTACT_COMMENT
 		WHERE contact_comment_no = #{contactCommentNo}	
 	</delete>
 	
+	<!-- 문의사항 작성자 확인 (없으면 0 반환) -->
 	<select id="checkUser" resultType="int">
 		SELECT 
 			IF(COUNT(user_no) = 0, 0, user_no) as user_no

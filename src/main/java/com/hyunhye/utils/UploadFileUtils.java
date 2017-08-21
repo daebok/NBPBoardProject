@@ -20,13 +20,6 @@ public class UploadFileUtils {
 		String savedPath = calcPath(uploadPath); // 폴더 경로 생성
 		File target = new File(uploadPath + savedPath, savedName); // 파일 객체 생성
 
-		/* permission denied 해결 */
-		/*Runtime.getRuntime().exec("chmod 777 " + uploadPath + savedPath + savedName);
-		target.setExecutable(true, false);
-		target.setReadable(true, false);
-		target.setWritable(true, false);
-		target.createNewFile();*/
-
 		FileCopyUtils.copy(fileData, target); // 폴더에 디렉토리 복사
 		String uploadedFileName = null;
 		uploadedFileName = makeIcon(uploadPath, savedPath, savedName);
