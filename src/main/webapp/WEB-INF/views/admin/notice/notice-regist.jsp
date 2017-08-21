@@ -6,20 +6,21 @@
 	<%@include file="../../common/header.jsp"%>
 
 	<div class="container">
-		<form:form name="form" action="/admin/notice/regist" method="post" class="form-horizontal" id="category-add-form">
-			<div class="form-group">
-				<label for="title">Title</label>
-				<input type="text" name="noticeTitle" maxlength="100" id="title" size="15" class="form-control" placeholder="제목을 입력하세요"/>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-10">
-					<textarea class="notice-summernote" name="noticeContent" id="content"></textarea>
+		<div class="col-sm-12">
+			<form:form name="form" action="/admin/notice/regist" method="post" class="form-horizontal" id="category-add-form">
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input type="text" name="noticeTitle" maxlength="100" id="title" size="15" class="form-control" placeholder="제목을 입력하세요"/>
 				</div>
-			</div>
-			<div class="pull-right">
-				<button type="button" onclick="noticeRegist()" class="btn btn-default" style="float:left;">Add</button>
-			</div>
-		</form:form>
+				<div class="form-group">
+						<textarea class="notice-summernote" name="noticeContent" id="content"></textarea>
+					
+				</div>
+				<div class="pull-left">
+					<button type="button" onclick="noticeRegist()" class="btn btn-default" style="float:left;">Add</button>
+				</div>
+			</form:form>
+		</div>
 	</div>
 	
 	<!-- footer -->

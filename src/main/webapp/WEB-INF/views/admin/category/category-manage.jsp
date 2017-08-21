@@ -29,13 +29,13 @@
 					</div>
 				</div>
 				<c:forEach var="category" items="${categoryList}">
-					<div class="category-list-group-item">
+					<div class="category-list list-group-item">
 						<form:form name="${category.categoryNo}" method="get" action="/admin/categoryDelete" class="form-horizontal" id="form-${category.categoryNo}">
 							<div class="category-list-1">
 								<span>${category.categoryItem}</span>
 							</div>
 							<div class="category-list-2">
-								<button type="button" class="btn btn-success"  onclick="categoryDelete(${category.categoryNo})">Delete</button>
+								<button type="button" class="btn btn-success btn-sm"  onclick="categoryDelete(${category.categoryNo})">Delete</button>
 							</div>
 							<input type="hidden" name="categoryNo" value="${category.categoryNo}"/>
 						</form:form>

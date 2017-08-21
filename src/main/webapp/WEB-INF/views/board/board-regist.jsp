@@ -41,6 +41,10 @@
 						</div>
 					</div>
 				</div>
+				<div class="pull-left">
+					<a href="javascript:history.back()" class="btn btn-default">Back</a>
+				
+				</div>
 				<div class="pull-right">
 					<button type="button" class="btn btn-default" onclick="questionRegist()">Question</button>
 				</div>

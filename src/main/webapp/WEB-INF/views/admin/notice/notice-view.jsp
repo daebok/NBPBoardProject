@@ -12,6 +12,9 @@
 				<p><c:out value="${model.noticeContent}" escapeXml="false"/></p>
 				
 				<hr>
+				<div class="pull-left">
+					<a href="javascript:history.back()" class="btn btn-default">Back</a>
+				</div>
 				<div class="pull-right">
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a href="<c:url value='/admin/notice/modifyPage?noticeNo=${model.noticeNo}'/>" id="modify" class="btn btn-primary">Modify</a>
