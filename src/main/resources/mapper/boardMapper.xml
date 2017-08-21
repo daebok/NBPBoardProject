@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyunhye.board.repository.BoardRepository">
 
 	<resultMap id="boardList" type="board">
-		<result property="userNo" column="user_no" />
-		<result property="userId" column="user_id" />
-		<result property="userName" column="user_name" />
-		<result property="categoryNo" column="category_no" />
-		<result property="categoryItem" column="category_item" />
 		<result property="boardNo" column="board_no" />
 		<result property="boardTitle" column="board_title" />
 		<result property="boardContent" column="board_content" />
 		<result property="boardDate" column="board_date"/>
-		<result property="boardViewCount" column="board_view_cnt" />
 		<result property="boardContentSummary" column="board_content_summary" />
+		<result property="categoryNo" column="category_no" />
+		<result property="categoryItem" column="category_item" />
+		<result property="bookmarkCheck" column="bookmark_check" />
+		<result property="boardViewCount" column="board_view_cnt" />
 		<result property="boardCount" column="board_count" />
 		<result property="commentCount" column="comment_count" />
 		<result property="fileCount" column="file_count" />
-		<result property="bookmarkCheck" column="bookmark_check" />
+		<result property="userNo" column="user_no" />
+		<result property="userId" column="user_id" />
+		<collection property="boardFileList" column="board_no" javaType="java.util.List" ofType="file" select="selectFileListByBoardId"/>
 	</resultMap>
+	
+	<resultMap id="fileList" type="file">
+		<result property="boardNo" column="board_no" />
+		<result property="fileNo" column="file_no" />
+		<result property="fileName" column="file_name" />
+		<result property="fileOriginName" column="file_origin_name" />
+		<result property="fileExtension" column="file_extension" />
+		<result property="fileSize" column="file_size" />
+	</resultMap>	
 	
 	<resultMap id="bookmarkList" type="bookmark">
 		<result property="boardNo" column="board_no" />
@@ -34,8 +41,7 @@
 	<select id="boardTop10SelectList" resultMap="boardList">
 		SELECT 
 			B.board_no,
-			USER.user_name, 
-			USER.user_id, 
+			B.user_no, 
 			CATEGORY.category_item, 
 			B.category_no,
 			B.board_title, 
@@ -65,13 +71,10 @@
 			) B
 		JOIN CATEGORY
 			ON B.category_no = CATEGORY.category_no
-		JOIN USER
-			ON B.user_no = USER.user_no
 	</select>
-	
 
-	<!-- 게시글 등록  -->
-	<insert id="boardInsert">
+	<!-- 게시물 등록  -->
+	<insert id="insertBoard">
 		INSERT INTO BOARD (
 			user_no, 
 			category_no, 
@@ -87,14 +90,11 @@
 		)
 	</insert>
 
-	<!-- 게시글 상세 보기 -->
-	<select id="boardSelectOne" resultMap="boardList">
+	<!-- 게시물 상세 보기 -->
+	<select id="selectBoardDetail" resultMap="boardList">
 		SELECT 
 			BOARD.board_no, 
 			BOARD.user_no, 
-			USER.user_name, 
-			USER.user_id,
-			USER.user_no,
 			CATEGORY.category_item,
 			BOARD.category_no,  
 			BOARD.board_title, 
@@ -104,16 +104,14 @@
 		FROM BOARD 
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
-		JOIN  USER
-			ON BOARD.user_no = USER.user_no
 		LEFT JOIN BOARD.BOOKMARK
 			ON BOARD.board_no = BOOKMARK.board_no
 		WHERE 
 			BOARD.board_no = #{boardNo}
 	</select>
 
-	<!-- 게시글 수정 -->
-	<select id="boardUpdate" resultMap="boardList">
+	<!-- 게시물 수정 -->
+	<select id="updateBoardDetail" resultMap="boardList">
 		UPDATE BOARD SET
 			board_title = #{boardTitle},
 			board_content = #{boardContent},
@@ -123,55 +121,15 @@
 			board_no = #{boardNo}
 	</select>
 
-	<!-- 게시글 삭제 -->
-	<delete id="boardDelete"> 
+	<!-- 게시물 삭제 -->
+	<delete id="deleteBoardDetail"> 
 		DELETE FROM BOARD 
 		WHERE 
 			board_no = #{boardNo} 
 	</delete>
-
-	<!-- 즐겨찾기 -->
-	<update id="bookmarkMemoUpdate">
-		UPDATE BOOKMARK
-		SET 
-			bookmark_memo = #{bookmarkMemo}
-		WHERE
-			board_no = #{boardNo}
-			AND
-			user_no = #{userNo}
-	</update>
 	
-	<insert id="bookmarkInsert">
-		INSERT INTO BOOKMARK (
-			user_no,
-			board_no
-		) VALUES (
-			#{userNo},
-			#{boardNo}
-		)
-	</insert>
-	
-	<delete id="bookmarkDelete">
-		DELETE FROM BOOKMARK 
-		WHERE
-			user_no = #{userNo}
-			AND
-			board_no =#{boardNo}
-	</delete>
-
-	<select id="bookmarkMemoSelect" resultMap="bookmarkList">
-		SELECT
-			bookmark_memo
-		FROM
-			BOOKMARK
-		WHERE
-			user_no = #{userNo}
-			AND
-			board_no = #{boardNo}
-	</select>
-	
-	<!-- 게시글 리스트 -->	
-	<select id="boardSelectList" resultMap="boardList">
+	<!-- 게시물 리스트 -->	
+	<select id="selectBoardList" resultMap="boardList">
 		SELECT 
 			BOARD.board_no, 
 			BOARD.board_no as number, 
@@ -182,8 +140,6 @@
 			BOARD.board_date, 
 			BOARD.board_content,
 			CATEGORY.category_item,
-			USER.user_name, 
-			USER.user_id,
 			<include refid="commentCount" />,
 			<include refid="fileCount" />,
 			<include refid="boardViewCount" /> 
@@ -192,18 +148,27 @@
 			ON BOARD.category_no = CATEGORY.category_no
 		JOIN  USER
 			ON BOARD.user_no = USER.user_no
-		<if test="option == 1"> <!-- 전체 리스트 -->
-			<include refid="search"></include>
-		</if>
-		<if test="option == 2"> <!-- 내 질문 리스트 -->
-			WHERE BOARD.user_no = #{userNo} 
-			<include refid="search2"></include>
-		</if>
-		<if test="option == 4"> <!-- 즐겨찾기 리스트 -->
-			JOIN BOOKMARK
-				ON BOARD.board_no = BOOKMARK.board_no
-			WHERE BOOKMARK.user_no = #{userNo} 
-		</if>
+		<choose>
+			<when test="option == 1"><!-- 전체 리스트 -->
+				where board_no != 0
+				<include refid="search"></include>
+			</when>
+			<when test="option == 2"> <!-- 내 질문 리스트 -->
+				WHERE BOARD.user_no = #{userNo} 
+				<include refid="search"></include>
+			</when>
+			<when test="option == 3"> <!-- 답변 달린 게시물 리스트 -->
+				JOIN COMMENT
+					ON BOARD.board_no = COMMENT.board_no
+				WHERE BOARD.user_no = #{userNo} AND COMMENT.comment_parent_no = 0
+				GROUP BY BOARD.board_no
+			</when>
+			<when test="option == 4"> <!-- 즐겨찾기 리스트 -->
+				JOIN BOOKMARK
+					ON BOARD.board_no = BOOKMARK.board_no
+				WHERE BOOKMARK.user_no = #{userNo} 
+			</when>
+		</choose>
 		<choose>
 			<when test="tab == 2"> <!-- 조회수 순 -->
 				ORDER BY board_view_cnt desc 
@@ -217,90 +182,52 @@
 		</choose>
 		LIMIT #{startBoardNo}, #{perPageNum}
 	</select>
-	
-	<select id="selectBoardCount" resultType="int">
-		SELECT count(board_no)
-		FROM BOARD
-		JOIN CATEGORY
-			ON BOARD.category_no = CATEGORY.category_no
-		JOIN  USER
-			ON BOARD.user_no = USER.user_no
-		<include refid="search" />
-	</select>
-	
+
+	<!-- 내가 질문한 게시물 개수 -->
 	<select id="selectMyBoardCount" resultType="int">
 		SELECT count(board_no)
 		FROM BOARD
 		WHERE user_no = #{userNo}
 	</select>
-	
-	<select id="myQuestionsAnsweredSelectList" resultMap="boardList">
-		SELECT 
-			B.board_no,
-			CATEGORY.category_item, 
-			B.category_no,
-			B.board_title, 
-			B.board_content_summary, 
-			B.board_date, 
-			B.board_view_cnt,
-			B.file_count,
-			B.comment_count
-		FROM (
-				SELECT 
-					BOARD.board_no, 
-					BOARD.board_no as number,
-					BOARD.user_no, 
-					BOARD.category_no, 
-					BOARD.board_title, 
-					BOARD.board_content_summary, 
-					BOARD.board_date, 
-					BOARD.board_content, 
-					count(COMMENT.comment_no) as comment_count,
-					<include refid="boardViewCount" />,
-					<include refid="fileCount" />
-				FROM BOARD
-				JOIN COMMENT
-					ON BOARD.board_no = COMMENT.board_no
-				WHERE BOARD.user_no = #{userNo} AND COMMENT.comment_parent_no = 0
-				GROUP BY BOARD.board_no
-				ORDER BY BOARD.board_no desc 
-				LIMIT #{startBoardNo}, #{perPageNum}
-		) B
-		JOIN CATEGORY
-			ON B.category_no = CATEGORY.category_no
-	</select>
 
-	<!-- 페이징을 위한 게시글 개수 구하기 -->	
-	<select id="boardSelectListCount" resultType="int">
+	<!-- 페이징을 위한 게시물 개수 구하기 -->	
+	<select id="selectBoardCount" resultType="int">
 		SELECT COUNT(board_no) 
 		FROM BOARD
 		JOIN CATEGORY
 			ON BOARD.category_no = CATEGORY.category_no
 		JOIN  USER
 			ON BOARD.user_no = USER.user_no
-		<if test="option == 1">
+		<if test="option == 1"> <!-- 전체 리스트 -->
+			where board_no != 0
 			<include refid="search" />
 		</if>
-		<if test="option == 2">
-		WHERE
-			BOARD.user_no = #{userNo} 
-			<include refid="search2" />
+		<if test="option == 2"> <!-- 내 질문 리스트 -->
+			WHERE
+				BOARD.user_no = #{userNo} 
+			<include refid="search" />
 		</if>
 	</select>
 	
-	<select id="myQuestionsAnsweredSelectListCount" resultType="int">
+	<!-- 답변 달린 게시물 개수  -->
+	<select id="selectAnsweredMyBoardCount" resultType="int">
 		SELECT COUNT(B.board_count) 
 		FROM (
-				SELECT BOARD.board_no as board_count
-				FROM BOARD.BOARD
+				SELECT 
+					BOARD.board_no as board_count
+				FROM 
+					BOARD.BOARD
 				JOIN BOARD.COMMENT
 					ON BOARD.board_no = COMMENT.board_no
-				WHERE BOARD.user_no = #{userNo}  
-				GROUP BY BOARD.board_no
+				WHERE 
+					BOARD.user_no = #{userNo}  
+				GROUP BY
+					 BOARD.board_no
 			) B
 	</select>
 	
-	<select id="myFavoriteSelectListCount" resultType="int">
+	<!-- 즐겨찾기 리스트 개수 -->
+	<select id="selectMyBookMarkCount" resultType="int">
 		SELECT COUNT(BOOKMARK.board_no) 
 		FROM BOOKMARK
 		WHERE
@@ -327,47 +254,63 @@
 		)
 	</insert>
 	
-	<!-- 검색 조건 -->
-	<sql id="search">
-		<if test="categoryType != 'all' " >
-			WHERE
-			<include refid="categoryType_search"></include>
-		</if>
-		<if test="searchType != null ">
-			<choose>
-				<when test="categoryType != 'all'">AND</when>
-				<otherwise>WHERE</otherwise>
-			</choose>
-			<include refid="searchType_search"></include>
-		</if> 
-		<if test="fromDate != null and toDate != null">
-			<choose>
-				<when test="categoryType != 'all'|| searchType != null"> AND</when>
-				<otherwise>WHERE</otherwise>
-			</choose>
-			<include refid="date_search"></include>
-		</if> 
-	</sql>
+	<!-- 해당 게시물의 파일 리스트 -->
+	<select id="selectFileListByBoardId" resultMap="fileList">
+		SELECT 
+			file_no, 
+			file_name, 
+			file_origin_name,
+			file_size
+		FROM FILE 
+		WHERE 
+			board_no = #{boardNo}; 
+	</select>
 	
-	<sql id="search2">
+	<!-- 파일 추가 -->
+	<insert id="insertFile">
+		INSERT INTO FILE (
+			board_no, 
+			file_name, 
+			file_origin_name, 
+			file_extension,
+			file_size
+		) VALUES ( 
+			(SELECT board_no FROM BOARD ORDER BY board_no desc limit 1), 
+			#{fileName}, 
+			#{fileOriginName}, 
+			#{fileExtension}, 
+			#{fileSize} 
+		)
+	</insert>
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile">
+		DELETE FROM FILE 
+		WHERE 
+			file_name = #{fileName}
+	</delete>
+	
+	<sql id="search">
 		<if test="categoryType != 'all' ">
 			AND
-			<include refid="categoryType_search"></include>
+			<include refid="categoryType_search" />
 		</if>
 		<if test="searchType != null">
 			AND
-			<include refid="searchType_search"></include>
+			<include refid="searchType_search" />
 		</if> 
 		<if test="fromDate != null and toDate != null">
 			AND
-			<include refid="date_search"></include>
+			<include refid="date_search" />
 		</if> 
 	</sql>
 
+	<!-- 카테고리 검색  -->
 	<sql id="categoryType_search">
 		CATEGORY.category_item = #{categoryType}
 	</sql>
 	
+	<!-- 검색타입 -->
 	<sql id="searchType_search">
 		<choose>
 			<when test="searchType == 'title_content'">
@@ -386,16 +329,19 @@
 		</choose>
 	</sql>
 	
+	<!-- 날짜 검색 -->
 	<sql id="date_search">
 		DATE(BOARD.board_date) BETWEEN #{fromDate} AND #{toDate}
 	</sql>
 
+	<!-- 파일 개수 -->
 	<sql id="fileCount">
 		(SELECT count(file_no) 
 		FROM FILE
 		WHERE FILE.board_no = number)  as file_count
 	</sql>
 	
+	<!-- 답변 개수 -->
 	<sql id="commentCount">
 		(SELECT count(comment_no) 
 		FROM COMMENT 
@@ -405,6 +351,7 @@
 		) as comment_count
 	</sql>
 	
+	<!-- 조회수 -->
 	<sql id="boardViewCount">
 		(SELECT 
 			COUNT(board_no) 
