@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hyunhye.board.service.BoardService;
 import com.hyunhye.comment.model.Comment;
 import com.hyunhye.comment.service.CommentService;
 import com.hyunhye.utils.UserSessionUtils;
@@ -25,6 +26,9 @@ import com.hyunhye.utils.UserSessionUtils;
 public class CommentController {
 
 	@Autowired
+	BoardService boardService;
+
+	@Autowired
 	CommentService commentService;
 
 	/**
@@ -37,7 +41,7 @@ public class CommentController {
 		commentService.insertAnswer(comment);
 
 		model.addAttribute("user", UserSessionUtils.currentUserInfo());
-		model.addAttribute("writer", comment.getCommentNo());
+		model.addAttribute("writer", boardService.checkUser(comment.getBoardNo()));
 		model.addAttribute("answerCount", commentService.selectAnswerCountOfBoard(comment.getBoardNo()));
 		model.addAttribute("answer", commentService.selectAllAnswerList(comment, 1));
 
