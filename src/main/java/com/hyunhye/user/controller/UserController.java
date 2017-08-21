@@ -60,6 +60,15 @@ public class UserController {
 	}
 
 	/**
+	 * 중복 로그인 했을 경우
+	 * @return 로그인 화면으로 이동
+	 */
+	@RequestMapping("login/duplicate")
+	public String loginDuplicated() {
+		return "user/user/login";
+	}
+
+	/**
 	 * 네이버 아이디로 로그인
 	 */
 	@RequestMapping("callback")

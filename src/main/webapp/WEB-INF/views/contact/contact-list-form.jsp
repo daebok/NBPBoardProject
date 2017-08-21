@@ -11,11 +11,11 @@
 			<div  class="list-1">
 				<c:choose>
 					<c:when test="${contact.contactPassword ne null}">
-						<a class="contact-title" href="javascript:passwordIsCheck(${contact.contactNo})"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
+						<a class="contact-title" href="javascript:passwordIsCheck(${contact.contactNo})"><c:out value="${contact.contactTitle}" escapeXml="true"></c:out></a>
 						<span class="label label-danger" id="secret-label">비밀글</span>
 					</c:when>
 					<c:otherwise>
-						<a class="contact-title" href="${path}/contact/view${pageMaker.makeQuery(pageMaker.criteria.page)}&contactNo=${contact.contactNo}"><c:out value="${contact.contactTitle}" escapeXml="false"></c:out></a>
+						<a class="contact-title" href="${path}/contact/view${pageMaker.makeQuery(pageMaker.criteria.page)}&contactNo=${contact.contactNo}"><c:out value="${contact.contactTitle}" escapeXml="true"></c:out></a>
 					</c:otherwise>
 				</c:choose>
 				<c:if test="${contact.contactCommentCount > 0}">

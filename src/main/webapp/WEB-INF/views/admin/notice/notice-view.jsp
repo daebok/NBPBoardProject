@@ -5,7 +5,7 @@
 	<!-- header -->
 	<%@include file="../../common/header.jsp"%>
 	
-	<div class="container" style="height:100%;">
+	<div class="container">
 		<div class="container-fluid" >
 			<div class="col-md-12">
 				<h2><c:out value="${model.noticeTitle}" escapeXml="true"/></h2>
