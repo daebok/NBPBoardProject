@@ -13,7 +13,7 @@
 			<div class="pull-right" style="margin-bottom:10px;">
 				<c:choose>
 					<c:when test="${board.bookmarkCheck eq 1}">
-						<div class="glyphicon glyphicon-check" id="book-mark-check" onclick="bookmarkCheck(${board.boardNo}, this)" style="font-size:25px; color:#FF3636;"></div>
+						<div class="glyphicon glyphicon-check" id="book-mark-check" onclick="bookMarkUnCheck(${board.boardNo}, this)" style="font-size:25px; color:#FF3636;"></div>
 					</c:when>
 					<c:otherwise>
 						<div class="glyphicon glyphicon-check" id="book-mark-uncheck"  onclick="bookmarkCheck(${board.boardNo}, this)" style="font-size:25px; color:#888;"></div>

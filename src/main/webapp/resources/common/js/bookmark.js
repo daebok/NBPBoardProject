@@ -24,7 +24,13 @@ function bookmarkCheck(boardNo, bookmarkCheck) {
 			dataType : 'text',
 			processData : false,
 			contentType : false,
-			data : data
+			data : data,
+			success : function () {
+				var result = confirm('즐겨찾기 페이지로 이동하시겠습니까?');
+				if(result) {
+					location.href="/board/myfavorite";
+				}
+			}
 		});
 	} else {
 		var result = confirm('즐겨찾기를  해제 하시겠습니까? \n기존에 저장한 메모도 삭제 됩니다.');
@@ -37,7 +43,10 @@ function bookmarkCheck(boardNo, bookmarkCheck) {
 				dataType : 'text',
 				processData : false,
 				contentType : false,
-				data : data
+				data : data,
+				success : function () {
+					location.href="/board/myfavorite";
+				}
 			});
 		}
 	}

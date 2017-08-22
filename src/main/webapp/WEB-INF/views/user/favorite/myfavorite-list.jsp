@@ -19,7 +19,7 @@
 					<div id="bookmark-list-${board.boardNo}">
 						<div id="book-mark" class="pull-right glyphicon glyphicon-check" style="font-size:25px; color:#FF3636;" onclick="bookMarkUnCheck('${board.boardNo}')"></div>
 						<h4>
-							<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.criteria.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="false"></c:out></a>
+							<a href="${path}/board/myfavorite/memo${pageMaker.makeQuery(pageMaker.criteria.page)}&boardNo=${board.boardNo}" id="boardNo"><c:out value="${board.boardTitle}" escapeXml="true"></c:out></a>
 						</h4>
 						<!-- board list -->
 						<%@include file="../../board/board-list-form.jsp"%>

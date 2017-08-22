@@ -44,7 +44,7 @@
 					</textarea>
 					<br />
 					<div class="pull-right">
-						<button class="btn btn-default" onclick="bookmarkMemoRegist(event)">Save</button>
+						<button class="memo-save-btn btn btn-default" onclick="bookmarkMemoRegist(event)">Save</button>
 					</div>
 				</form:form>
 			</div>
