@@ -88,10 +88,10 @@ public class BoardService {
 	public String createSummary(String originalContent) {
 		originalContent = originalContent.replaceAll("<(/)?([a-zA-Z]*)([0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
-		if (originalContent.length() > 300) {
-			originalContent = originalContent.substring(0, 300);
-		}
-
+		/*		if (originalContent.length() > 300) {
+					originalContent = originalContent.substring(0, 300);
+				}
+		*/
 		return originalContent;
 	}
 

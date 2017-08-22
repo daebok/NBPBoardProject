@@ -314,14 +314,14 @@
 	<sql id="searchType_search">
 		<choose>
 			<when test="searchType == 'title_content'">
-				( BOARD.board_content like CONCAT('%',#{keyword},'%')
+				( BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
 				OR BOARD.board_title like CONCAT('%',#{keyword},'%') )
 			</when>
 			<when test="searchType == 'content'">
-				BOARD.board_content like CONCAT('%',#{keyword},'%')
+				BOARD.board_content_summary like CONCAT('%',#{keyword},'%')
 			</when>
 			<when test="searchType == 'title'">
-				BOARD.board_content like CONCAT('%',#{keyword},'%') 
+				BOARD.board_title like CONCAT('%',#{keyword},'%') 
 			</when>
 			<when test="searchType == 'writer'">
 				USER.user_id = #{keyword} OR USER.user_id like CONCAT(#{keyword}, '@naver.com')

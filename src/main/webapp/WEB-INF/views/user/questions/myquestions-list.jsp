@@ -13,11 +13,13 @@
 				<c:choose>
 					<c:when test="${check eq 0 || check eq null}">
 						<b>My Questions</b>&nbsp;
+						<a href="<c:url value='/board/myquestions'/>" class="btn btn-warning btn-sm">All Questions</a>
 						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
 					</c:when>
 					<c:when test="${check eq 1}">
 						<b>My Questions (Answered)</b>&nbsp;
 						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
+						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-warning btn-sm">Answered</a>
 					</c:when>
 				</c:choose>
 				<div class="pull-right">

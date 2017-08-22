@@ -85,11 +85,11 @@ function answerRegist(answerButton, event){
 			success : function(result) {
 				alert('답변이 수정되었습니다.');
 				$("#content-"+commentNo).empty().html(commentContent);
-				$('.note-editable').empty();
+				$('.note-editable').empty().html('');
 				answerButton.html('Answer')
 				$('#answer-content-'+commentNo).css('background-color','#ffffff');
 				$('.answer-button').prop("disabled",false);
-				
+				$('#answer-no').val('0');
 				$('#answer-tab a[href="#newest"]').tab('show');
 			}
 	});
@@ -110,6 +110,7 @@ function answerDelete(commentNo){
 			data : data,
 			success : function(result) {
 				$('#answer-tab a[href="#newest"]').tab('show');
+				$('#answer-no').val('0');
 				$("#answer-wrapper-"+commentNo).remove();
 			}
 		});

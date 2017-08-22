@@ -49,7 +49,7 @@
 				<div class="pull-right">
 					<c:if test="${user.userNo == board.userNo}">
 						<a href="<c:url value='/board/modify?boardNo=${board.boardNo}'/>" id="modify" class="btn btn-primary">Modify</a>
-						<button class="btn btn-primary" onclick="questionDelete(${board.boardNo})">Delete</button>
+						<button class="btn btn-primary" onclick="questionDelete(${board.boardNo}, ${answerCount.commentCount})">Delete</button>
 					</c:if>
 					<c:if test="${user.userNo != board.userNo}"> <!-- 관리자 권한 -->
 						<sec:authorize access="hasRole('ROLE_ADMIN')">

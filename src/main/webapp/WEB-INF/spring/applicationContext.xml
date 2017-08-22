@@ -24,8 +24,6 @@
 		<beans:constructor-arg value="/hyunhye/upload"></beans:constructor-arg>
 	</beans:bean>
 
-	<beans:bean id="CommonExceptionHandlerController" class="com.hyunhye.common.CommonExceptionHandlerController" />
-	
 	<context:property-placeholder location="classpath:/config/properties/database.properties" />
 	<beans:import resource="applicationContext-datasource.xml" />
 	<beans:import resource="applicationContext-security.xml" />

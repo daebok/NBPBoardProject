@@ -19,21 +19,17 @@
 					</c:otherwise>
 				</c:choose>
 				&nbsp;
-				<c:choose>
-					<c:when test="${check eq 0 || check eq null}">
-						<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
-					</c:when>
-					<c:otherwise>
-						<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
-					</c:otherwise>
-				</c:choose>
+				<a href="<c:url value='/board/myquestions'/>" class="btn btn-default btn-sm">All Questions</a>
+				<a href="<c:url value='/board/myquestions/answered'/>" class="btn btn-default btn-sm">Answered</a>
 				<div class="pull-right">
 					<c:choose>
 						<c:when test="${like eq 0 || like eq null}">
+							<a href="<c:url value='/board/myanswers/'/>" class="btn btn-warning btn-sm">My Answers</a>
 							<a href="<c:url value='/board/answers/liked'/>" class="btn btn-default btn-sm">Liked Answers</a>
 						</c:when>
 						<c:otherwise>
 							<a href="<c:url value='/board/myanswers/'/>" class="btn btn-default btn-sm">My Answers</a>
+							<a href="<c:url value='/board/answers/liked'/>" class="btn btn-warning btn-sm">Liked Answers</a>
 						</c:otherwise>
 					</c:choose>
 				</div>

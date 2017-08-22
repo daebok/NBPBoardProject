@@ -46,6 +46,13 @@
 						<option value="40"	<c:out value="${pageMaker.criteria.perPageNum eq 40 ?'selected':''}"/>>40개</option>
 						<option value="50"	<c:out value="${pageMaker.criteria.perPageNum eq 50 ?'selected':''}"/>>50개</option>
 					</select>
+					<input type="hidden" name="tab" value="${criteria.tab}" /> 
+					<input type="hidden" name="page" value="${criteria.page}" /> 
+					<input type="hidden" name="searchType" value="${criteria.searchType}" /> 
+					<input type="hidden" name="categoryType" value="${criteria.categoryType}" />
+					<input type="hidden" name="toDate" value="${criteria.toDate}" />
+					<input type="hidden" name="fromDate" value="${criteria.fromDate}" />
+					<input type="hidden" name="keyword" value="${criteria.keyword}" />
 				</form>
 			</div>
 			<div class="board-list-wrapper">
