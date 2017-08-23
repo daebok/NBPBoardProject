@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -156,6 +157,7 @@ public class UserService {
 	 * @param userNo 사용자 번호
 	 * @return 사용자 아이디
 	 */
+	@Cacheable("user")
 	public String selectUserId(int userNo) {
 		return userRepository.selectUserId(userNo);
 	}

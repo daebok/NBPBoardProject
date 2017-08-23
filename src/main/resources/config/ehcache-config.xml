@@ -18,6 +18,11 @@
 			maxElementsInMemory="300"
 			eternal="true"
 			overflowToDisk="false"  />
+			
+		<cache name="user" 
+			maxElementsInMemory="300"
+			eternal="true"
+			overflowToDisk="false"  />
 
 </ehcache>
 

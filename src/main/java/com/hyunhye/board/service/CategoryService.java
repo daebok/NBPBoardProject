@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +19,7 @@ import com.hyunhye.board.repository.CategoryRepository;
 
 @Service
 public class CategoryService {
+	Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
 	@Autowired
 	public CategoryRepository categoryRepository;
@@ -38,6 +41,7 @@ public class CategoryService {
 	 */
 	@Cacheable("category")
 	public List<Category> selectAllCategoryList() {
+		logger.info("select Category List");
 		List<Category> category = categoryRepository.selectAllCategoryList();
 
 		List<Category> list = category.stream()
