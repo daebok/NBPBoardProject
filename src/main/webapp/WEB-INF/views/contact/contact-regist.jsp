@@ -12,8 +12,7 @@
 			<form:form name="form" method="post" class="form-horizontal">
 				<div class="form-group">
 					<label for="title">Title</label>
-					<input type="text" name="contactTitle" class="form-control" id="title"  placeholder="문의사항 제목을 입력하세요"/>
-				
+					<input type="text" name="contactTitle" class="form-control" id="title"  placeholder="문의사항 제목을 입력하세요"/> <br>
 				<div class="form-group">
 						<textarea class="contact-summernote" name="contactContent" id="content" placeHolder="문의사항을 작성해 주세요"></textarea>
 					</div>

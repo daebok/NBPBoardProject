@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/views/common">
+	<decorator name="footer" page="footer.jsp" />
+
+	<decorator name="header" page="header.jsp" />
+	
+	<decorator name="nav" page="nav.jsp" />
+	
+</decorators>
+
+
+

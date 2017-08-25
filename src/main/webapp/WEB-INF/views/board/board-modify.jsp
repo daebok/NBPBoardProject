@@ -28,7 +28,6 @@
 						<label for="input-file">업로드</label> 
 						<input type="file" name="files" multiple="multiple" class="file upload-hidden" id="input-file" onchange="fileUpload()" maxlength="5">
 					</div>
-					<c:if test="${not empty board.boardFileList}">
 						<div class="panel panel-default">
 							<div class="list-group">
 								<div class="list-group-item">
@@ -36,20 +35,21 @@
 									<div class="list-2"><b>크기</b></div>
 									<div class="list-3"><b>삭제</b></div>
 								</div>
-								<c:forEach var="attach" items="${board.boardFileList}">
-									<div class="uploadedList">
-										<div class="list-group-item">
-											<div class="list-1">${attach.fileOriginName}</div>
-											<div class="list-2"><file:size value = "${attach.fileSize}" /> </div>
-											<div class="list-3"><a onclick="uploadedFileDelete('${attach.fileName}', this)" >[삭제]</a></div>
+								<c:if test="${not empty board.boardFileList}">
+									<c:forEach var="attach" items="${board.boardFileList}">
+										<div class="uploadedList">
+											<div class="list-group-item">
+												<div class="list-1">${attach.fileOriginName}</div>
+												<div class="list-2"><file:size value = "${attach.fileSize}" /> </div>
+												<div class="list-3"><a onclick="uploadedFileDelete('${attach.fileName}', this)" >[삭제]</a></div>
+											</div>
 										</div>
-									</div>
-								</c:forEach>
+									</c:forEach>
+								</c:if>
 								<div class="newUploadedList"></div>
 								<div class="summernoteUploadedList"></div>
 							</div>
 						</div>
-					</c:if>
 				</div>
 				<input type="hidden" name="boardNo" value="${board.boardNo}">
 				<div class="pull-right">

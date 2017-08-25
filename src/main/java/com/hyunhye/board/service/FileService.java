@@ -52,8 +52,8 @@ public class FileService {
 
 		String homePath = System.getProperty("user.home").replaceAll("\\\\", "/");
 		for (int index = 0; index < files.length; index++) {
-			if (index2 <= index) {
-				if (!Objects.isNull(filesNo) && (index - 1) == filesNo[index2]) {
+			if (!Objects.isNull(filesNo) && index2 <= index) {
+				if (index2 < filesNo.length && (index - 1) == filesNo[index2]) {
 					index2++;
 					continue;
 				}

@@ -242,9 +242,14 @@
 			<artifactId>cglib</artifactId>
 			<version>2.2.2</version>
 		</dependency>
-
-
 		
+		<!-- SiteMesh -->
+<!-- 		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+			 -->
 	</dependencies>
 	<build>
 		<plugins>
